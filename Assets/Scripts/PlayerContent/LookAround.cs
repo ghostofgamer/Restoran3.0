@@ -6,21 +6,19 @@ namespace PlayerContent
     public class LookAround : MonoBehaviour
     {
         [SerializeField] private PlayerInput _playerInput;
-
-        public Transform playerBody;
-        public float lookSpeed = 2f;
+        [SerializeField] private Transform _playerBody;
+        [SerializeField] private float _lookSpeed;
 
         private float _verticalLookLimit = 80f;
-        private float rotationX = 0;
-        private bool isRotating = false;
+        private float _rotationX = 0;
 
         public void Looking(float x, float y)
         {
-            rotationX -= y * lookSpeed;
-            rotationX = Mathf.Clamp(rotationX, -_verticalLookLimit, _verticalLookLimit);
-            float rotationY = x * lookSpeed;
-            transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-            playerBody.Rotate(Vector3.up * rotationY);
+            _rotationX -= y * _lookSpeed;
+            _rotationX = Mathf.Clamp(_rotationX, -_verticalLookLimit, _verticalLookLimit);
+            float rotationY = x * _lookSpeed;
+            transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
+            _playerBody.Rotate(Vector3.up * rotationY);
         }
     }
 }
