@@ -19,7 +19,7 @@ namespace InputContent
             if (_isRotating)
                 _lookAround.Looking(Input.GetAxis(MouseX), Input.GetAxis(MouseY));
 
-            _playerMovement.Move(_joystick.Horizontal, _joystick.Vertical);
+            _playerMovement.MovePlayer(_joystick.Horizontal, _joystick.Vertical);
         }
 
         public void OnPointerDown()=> _isRotating = true;

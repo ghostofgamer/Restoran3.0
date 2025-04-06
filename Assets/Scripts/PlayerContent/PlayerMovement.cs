@@ -17,7 +17,7 @@ namespace PlayerContent
             _controller = GetComponent<CharacterController>();
         }
         
-        public void Move(float horizontal,float vertical)
+        public void MovePlayer(float horizontal,float vertical)
         {
             _moveDirection = new Vector3(horizontal, 0, vertical);
             _moveDirection = transform.TransformDirection(_moveDirection);
