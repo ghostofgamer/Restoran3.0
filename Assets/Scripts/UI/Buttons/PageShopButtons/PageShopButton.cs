@@ -1,0 +1,35 @@
+using UI.Screens;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace UI.Buttons.PageShopButtons
+{
+    public class PageShopButton : AbstractButton
+    {
+        [SerializeField] private int _index;
+        [SerializeField] private Color _activeButtonColor;
+        [SerializeField] private Color _notActiveButtonColor;
+        [SerializeField] private Image _imageButton;
+        [SerializeField] private ShopScreen _shopScreen;
+
+        public override void OnClick()
+        {
+            _shopScreen.OpenPage(_index);
+        }
+
+        public void ActivateButton()
+        {
+            ChangeColorButton(_activeButtonColor);
+        }
+
+        public void DeactivateButton()
+        {
+            ChangeColorButton(_notActiveButtonColor);
+        }
+
+        private void ChangeColorButton(Color color)
+        {
+            _imageButton.color = color;
+        }
+    }
+}
