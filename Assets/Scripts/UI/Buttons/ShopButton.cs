@@ -9,7 +9,7 @@ namespace UI.Buttons
 
         public override void OnClick()
         {
-            _shopScreen.Open();
+            _shopScreen.OpenScreen();
         }
     }
 }

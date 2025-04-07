@@ -1,26 +1,27 @@
 using UI.Buttons.PageShopButtons;
 using UI.Screens.ShopContent.ShopPages;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UI.Screens.ShopContent
 {
-    public class ShopScreen : MonoBehaviour
+    public class ShopScreen : AbstractScreen
     {
         [SerializeField] private PageShopButton[] _pageShopButtons;
-        [SerializeField] private ShopPage[] _shopScreens;
+        [SerializeField] private ShopPage[] _shopPages;
 
-        public virtual void Open()
+        public override void OpenScreen()
         {
-            gameObject.SetActive(true);
+            base.OpenScreen();
             ActivateShopButton(0);
-            _shopScreens[0].Open(0);
+            OpenPage(0);
         }
 
         public virtual void OpenPage(int index)
         {
             DeactivateShopPages();
             ActivateShopButton(index);
-            _shopScreens[index].Open(0);
+            _shopPages[index].Open(0);
         }
         
         private void ActivateShopButton(int index)
@@ -37,7 +38,7 @@ namespace UI.Screens.ShopContent
 
         private void DeactivateShopPages()
         {
-            foreach (var screen in _shopScreens)
+            foreach (var screen in _shopPages)
                 screen.Close();
         }
     }
