@@ -6,16 +6,20 @@ namespace UI.Screens
     public class ShopScreen : MonoBehaviour
     {
         [SerializeField] private PageShopButton[] _pageShopButtons;
-        // [SerializeField]private 
+        [SerializeField] private ShopPage[] _shopScreens;
 
-        public void Open()
+        public virtual void Open()
         {
+            gameObject.SetActive(true);
             ActivateShopButton(0);
+            _shopScreens[0].Open(0);
         }
 
-        public void OpenPage(int index)
+        public virtual void OpenPage(int index)
         {
+            DeactivateShopPages();
             ActivateShopButton(index);
+            _shopScreens[index].Open(0);
         }
         
         private void ActivateShopButton(int index)
@@ -28,6 +32,12 @@ namespace UI.Screens
         {
             foreach (var pageShopButton in _pageShopButtons)
                 pageShopButton.DeactivateButton();
+        }
+
+        private void DeactivateShopPages()
+        {
+            foreach (var screen in _shopScreens)
+                screen.Close();
         }
     }
 }

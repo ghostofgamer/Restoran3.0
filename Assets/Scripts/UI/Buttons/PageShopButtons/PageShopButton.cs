@@ -12,6 +12,8 @@ namespace UI.Buttons.PageShopButtons
         [SerializeField] private Image _imageButton;
         [SerializeField] private ShopScreen _shopScreen;
 
+        protected int Index => _index;
+
         public override void OnClick()
         {
             _shopScreen.OpenPage(_index);
