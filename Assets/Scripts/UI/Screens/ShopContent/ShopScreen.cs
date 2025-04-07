@@ -1,7 +1,8 @@
 using UI.Buttons.PageShopButtons;
+using UI.Screens.ShopContent.ShopPages;
 using UnityEngine;
 
-namespace UI.Screens
+namespace UI.Screens.ShopContent
 {
     public class ShopScreen : MonoBehaviour
     {

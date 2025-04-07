@@ -1,13 +1,15 @@
-using UI.Buttons;
-using UI.Screens;
+using UI.Screens.ShopContent;
 using UnityEngine;
 
-public class ShopButton : AbstractButton
+namespace UI.Buttons
 {
-    [SerializeField] private ShopScreen _shopScreen;
-
-    public override void OnClick()
+    public class ShopButton : AbstractButton
     {
-        _shopScreen.Open();
+        [SerializeField] private ShopScreen _shopScreen;
+
+        public override void OnClick()
+        {
+            _shopScreen.Open();
+        }
     }
 }

@@ -1,17 +1,18 @@
 using UI.Buttons.PageShopButtons;
 using UnityEngine;
 
-namespace UI.Screens
+namespace UI.Screens.ShopContent.ShopPages
 {
     public class ShopPage : MonoBehaviour
     {
         [SerializeField] private PageButton[] _pageButtons;
+        [SerializeField] private PageContent[] _pageContents;
         
         public virtual void Open(int index)
         {
             gameObject.SetActive(true);
-            DeactivatePagesButton();
-            ActivatePageButton(index);
+            DeactivatePages();
+            ActivatePage(index);
         }
 
         public void Close()
@@ -19,16 +20,20 @@ namespace UI.Screens
             gameObject.SetActive(false);
         }
 
-        public void DeactivatePagesButton()
+        public void DeactivatePages()
         {
             foreach (var pageShopButton in _pageButtons)
                 pageShopButton.DeactivateButton();
+
+            foreach (var page in _pageContents)
+                page.Close();
         }
 
-        public void ActivatePageButton(int index)
+        public void ActivatePage(int index)
         {
-            DeactivatePagesButton();
+            DeactivatePages();
             _pageButtons[index].ActivateButton();
+            _pageContents[index].Open();
         }
     }
 }
