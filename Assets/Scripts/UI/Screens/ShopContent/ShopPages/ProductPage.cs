@@ -14,10 +14,5 @@ namespace UI.Screens.ShopContent.ShopPages
             _halfBackgroundImage.SetActive(index == 0);
             _fullBackgroundImage.SetActive(index != 0);
         }
-
-        private void OpenScroll(int index)
-        {
-            
-        }
     }
 }

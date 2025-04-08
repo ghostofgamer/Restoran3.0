@@ -1,4 +1,5 @@
 using UI.Buttons.PageShopButtons;
+using UI.Screens.ShopContent.ShopPages.PageContents;
 using UnityEngine;
 
 namespace UI.Screens.ShopContent.ShopPages
@@ -6,8 +7,8 @@ namespace UI.Screens.ShopContent.ShopPages
     public class ShopPage : MonoBehaviour
     {
         [SerializeField] private PageButton[] _pageButtons;
-        [SerializeField] private PageContent[] _pageContents;
-        
+        [SerializeField] private PageScrollContent[] _pageContents;
+
         public virtual void Open(int index)
         {
             gameObject.SetActive(true);
@@ -26,14 +27,19 @@ namespace UI.Screens.ShopContent.ShopPages
                 pageShopButton.DeactivateButton();
 
             foreach (var page in _pageContents)
-                page.Close();
+                page.CloseScreen();
         }
 
         public void ActivatePage(int index)
         {
             DeactivatePages();
             _pageButtons[index].ActivateButton();
-            _pageContents[index].Open();
+            _pageContents[index].OpenScreen();
+        }
+        
+        protected void OpenScroll(int index)
+        {
+            _pageContents[index].Init();
         }
     }
 }

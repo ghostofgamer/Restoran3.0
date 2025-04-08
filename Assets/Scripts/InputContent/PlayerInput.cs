@@ -25,7 +25,7 @@ namespace InputContent
 
         private void Update()
         {
-            if (Application.isMobilePlatform)
+            if (!Application.isMobilePlatform)
             {
                 HandleMouseInput();
                 _playerMovement.MovePlayer(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
