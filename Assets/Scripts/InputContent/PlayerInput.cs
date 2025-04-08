@@ -1,5 +1,6 @@
 using PlayerContent;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace InputContent
 {
@@ -8,22 +9,70 @@ namespace InputContent
         private const string MouseX = "Mouse X";
         private const string MouseY = "Mouse Y";
 
+        [SerializeField] private LookAroundEventTrigger _lookAroundEventTrigger;
         [SerializeField] private PlayerMovement _playerMovement;
         [SerializeField] private LookAround _lookAround;
         [SerializeField] private Joystick _joystick;
 
         private bool _isRotating;
+        private Vector2 _lastPointerPosition;
+        private bool _isTouchActive;
+
+        private void Start()
+        {
+            _lookAroundEventTrigger.InitPointer(OnDown, OnDrag, OnUp);
+        }
 
         private void Update()
         {
-            if (_isRotating)
-                _lookAround.Looking(Input.GetAxis(MouseX), Input.GetAxis(MouseY));
+            if (Application.isMobilePlatform)
+            {
+                HandleMouseInput();
+                _playerMovement.MovePlayer(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            }
 
             _playerMovement.MovePlayer(_joystick.Horizontal, _joystick.Vertical);
         }
 
-        public void OnPointerDown()=> _isRotating = true;
+        private void HandleMouseInput()
+        {
+            float x = Input.GetAxis("Mouse X") * _lookAround.LookSpeed;
+            float y = Input.GetAxis("Mouse Y") * _lookAround.LookSpeed;
+            _lookAround.Looking(x, y);
+        }
 
-        public void OnPointerUp()=> _isRotating = false;
+        private void OnDown(PointerEventData eventData)
+        {
+            if (!_isTouchActive)
+            {
+                _isRotating = true;
+                _lastPointerPosition = eventData.position;
+                _isTouchActive = true;
+            }
+        }
+
+        private void OnUp(PointerEventData eventData)
+        {
+            if (_isTouchActive)
+            {
+                _isRotating = false;
+                _isTouchActive = false;
+            }
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (_isTouchActive)
+            {
+                if (_isRotating)
+                {
+                    Vector2 delta = eventData.position - _lastPointerPosition;
+                    _lastPointerPosition = eventData.position;
+                    float x = delta.x * _lookAround.LookSpeed * Time.deltaTime;
+                    float y = delta.y * _lookAround.LookSpeed * Time.deltaTime;
+                    _lookAround.Looking(x, y);
+                }
+            }
+        }
     }
 }

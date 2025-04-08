@@ -16,7 +16,7 @@ namespace PlayerContent
         {
             _controller = GetComponent<CharacterController>();
         }
-        
+
         public void MovePlayer(float horizontal,float vertical)
         {
             _moveDirection = new Vector3(horizontal, 0, vertical);

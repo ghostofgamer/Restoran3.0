@@ -4351,7 +4351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerInput: {fileID: 1080682587}
   _playerBody: {fileID: 1080682590}
-  _lookSpeed: 3
+  _lookSpeed: 13
 --- !u!1001 &335744500
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9519,7 +9519,7 @@ Transform:
   m_GameObject: {fileID: 741966352}
   serializedVersion: 2
   m_LocalRotation: {x: -0.70710677, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -14.7, y: -1.71, z: -165.13}
+  m_LocalPosition: {x: -13.79, y: -1.71, z: -165.13}
   m_LocalScale: {x: 0.05, y: 3.1484, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11531,8 +11531,9 @@ GameObject:
   m_Component:
   - component: {fileID: 851673982}
   - component: {fileID: 851673985}
-  - component: {fileID: 851673986}
-  - component: {fileID: 851673987}
+  - component: {fileID: 851673988}
+  - component: {fileID: 851673990}
+  - component: {fileID: 851673991}
   m_Layer: 5
   m_Name: LookArondTrigger
   m_TagString: Untagged
@@ -11567,7 +11568,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 851673981}
   m_CullTransparentMesh: 1
---- !u!114 &851673986
+--- !u!114 &851673988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851673981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471fe7fee1d8a014abe41147a9942b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &851673990
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11583,36 +11596,8 @@ MonoBehaviour:
   - eventID: 2
     callback:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1080682587}
-          m_TargetAssemblyTypeName: InputContent.PlayerInput, Assembly-CSharp
-          m_MethodName: OnPointerDown
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1080682587}
-          m_TargetAssemblyTypeName: InputContent.PlayerInput, Assembly-CSharp
-          m_MethodName: OnPointerUp
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
---- !u!114 &851673987
+        m_Calls: []
+--- !u!114 &851673991
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12758,7 +12743,7 @@ Transform:
   m_GameObject: {fileID: 914734081}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.15, y: 0, z: 0}
+  m_LocalPosition: {x: -24.54, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13806,7 +13791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1011668164
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14351,6 +14336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc47981bffd77274f9214eb162eedc33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lookAroundEventTrigger: {fileID: 851673988}
   _playerMovement: {fileID: 1080682591}
   _lookAround: {fileID: 330585548}
   _joystick: {fileID: 922709746}
@@ -22797,11 +22783,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca67926493b01784e9c1682590abb595, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.35
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca67926493b01784e9c1682590abb595, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.65
+      value: 1.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca67926493b01784e9c1682590abb595, type: 3}
       propertyPath: m_LocalPosition.x
