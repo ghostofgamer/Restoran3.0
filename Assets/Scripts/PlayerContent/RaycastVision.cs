@@ -5,10 +5,12 @@ namespace PlayerContent
 {
     public class RaycastVision : MonoBehaviour
     {
-        public LayerMask interactableLayer;
-        public float maxDistance = 10f;
+        [SerializeField]private  LayerMask _interactableLayer;
+        [SerializeField] private float _maxDistance;
+        
         private IInteractable _currentInteractable;
-
+        private GameObject _currentInteractableObject;
+        
         private void FixedUpdate()
         {
             CheckOutline();
@@ -19,7 +21,7 @@ namespace PlayerContent
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
             RaycastHit hit;
             
-            if (Physics.Raycast(ray, out hit, maxDistance, interactableLayer))
+            if (Physics.Raycast(ray, out hit, _maxDistance, _interactableLayer))
             {
                 IInteractable interactable = hit.collider.GetComponent<IInteractable>();
                 
@@ -31,8 +33,10 @@ namespace PlayerContent
                         {
                             _currentInteractable.DisableOutline();
                         }
+                        
                         _currentInteractable = interactable;
                         _currentInteractable.EnableOutline();
+                        _currentInteractableObject = hit.collider.gameObject;
                     }
                 }
                 else
@@ -52,6 +56,7 @@ namespace PlayerContent
             {
                 _currentInteractable.DisableOutline();
                 _currentInteractable = null;
+                _currentInteractableObject = null;
             }
         }
     }
