@@ -29,6 +29,9 @@ namespace InputContent
         {
             if (Input.GetKeyDown(KeyCode.E))
                 _playerInteraction.Action();
+            
+            if (Input.GetKeyDown(KeyCode.F))
+                _playerInteraction.ThrowItem();
 
             if (!Application.isMobilePlatform)
             {
