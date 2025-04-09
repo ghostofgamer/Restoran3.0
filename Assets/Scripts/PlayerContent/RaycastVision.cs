@@ -7,9 +7,9 @@ namespace PlayerContent
     {
         [SerializeField]private  LayerMask _interactableLayer;
         [SerializeField] private float _maxDistance;
+        [SerializeField] private PlayerInteraction _playerInteraction;
         
         private IInteractable _currentInteractable;
-        private GameObject _currentInteractableObject;
         
         private void FixedUpdate()
         {
@@ -30,13 +30,11 @@ namespace PlayerContent
                     if (_currentInteractable != interactable)
                     {
                         if (_currentInteractable != null)
-                        {
                             _currentInteractable.DisableOutline();
-                        }
                         
                         _currentInteractable = interactable;
                         _currentInteractable.EnableOutline();
-                        _currentInteractableObject = hit.collider.gameObject;
+                        _playerInteraction.SetCurrentInteractableObject(_currentInteractable);
                     }
                 }
                 else
@@ -56,7 +54,6 @@ namespace PlayerContent
             {
                 _currentInteractable.DisableOutline();
                 _currentInteractable = null;
-                _currentInteractableObject = null;
             }
         }
     }

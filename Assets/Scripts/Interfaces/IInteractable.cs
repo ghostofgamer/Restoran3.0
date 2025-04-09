@@ -1,3 +1,5 @@
+using PlayerContent;
+
 namespace Interfaces
 {
     public interface IInteractable
@@ -6,6 +8,6 @@ namespace Interfaces
         
         void DisableOutline();
         
-        void Action();
+        void Action(PlayerInteraction playerInteraction);
     }
 }

@@ -10,9 +10,11 @@ namespace InputContent
         private const string MouseY = "Mouse Y";
 
         [SerializeField] private LookAroundEventTrigger _lookAroundEventTrigger;
+        [SerializeField] private ActionTriggerEvent _actionEventTrigger;
         [SerializeField] private PlayerMovement _playerMovement;
         [SerializeField] private LookAround _lookAround;
         [SerializeField] private Joystick _joystick;
+        [SerializeField] private PlayerInteraction _playerInteraction;
 
         private bool _isRotating;
         private Vector2 _lastPointerPosition;
@@ -21,10 +23,13 @@ namespace InputContent
         private void Start()
         {
             _lookAroundEventTrigger.InitPointer(OnDown, OnDrag, OnUp);
+            _actionEventTrigger.InitPointer(Action);
         }
-
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.E))
+                _playerInteraction.Action();
+
             if (!Application.isMobilePlatform)
             {
                 HandleMouseInput();
@@ -36,8 +41,8 @@ namespace InputContent
 
         private void HandleMouseInput()
         {
-            float x = Input.GetAxis("Mouse X") * _lookAround.LookSpeed;
-            float y = Input.GetAxis("Mouse Y") * _lookAround.LookSpeed;
+            float x = Input.GetAxis(MouseX) * _lookAround.LookSpeed;
+            float y = Input.GetAxis(MouseY) * _lookAround.LookSpeed;
             _lookAround.Looking(x, y);
         }
 
@@ -60,7 +65,7 @@ namespace InputContent
             }
         }
 
-        public void OnDrag(PointerEventData eventData)
+        private void OnDrag(PointerEventData eventData)
         {
             if (_isTouchActive)
             {
@@ -73,6 +78,11 @@ namespace InputContent
                     _lookAround.Looking(x, y);
                 }
             }
+        }
+
+        private void Action(PointerEventData eventData)
+        {
+            _playerInteraction.Action();
         }
     }
 }
