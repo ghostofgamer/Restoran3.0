@@ -1,7 +1,7 @@
+using InputContent;
 using UI.Buttons.PageShopButtons;
 using UI.Screens.ShopContent.ShopPages;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UI.Screens.ShopContent
 {
@@ -15,6 +15,11 @@ namespace UI.Screens.ShopContent
             base.OpenScreen();
             ActivateShopButton(0);
             OpenPage(0);
+        }
+
+        public override void CloseScreen()
+        {
+            base.CloseScreen();
         }
 
         public virtual void OpenPage(int index)
