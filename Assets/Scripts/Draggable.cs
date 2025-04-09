@@ -22,7 +22,6 @@ public class Draggable : MonoBehaviour, IDraggable
         if (playerInteraction.CurrentDraggable != null)
         {
             Debug.Log("Return");
-            return;
         }
         else
         {

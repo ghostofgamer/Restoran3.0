@@ -40,11 +40,13 @@ namespace PlayerContent
                 else
                 {
                     DisableCurrentOutline();
+                    _playerInteraction.SetCurrentInteractableObject(null);
                 }
             }
             else
             {
                 DisableCurrentOutline();
+                _playerInteraction.SetCurrentInteractableObject(null);
             }
         }
         
@@ -54,6 +56,7 @@ namespace PlayerContent
             {
                 _currentInteractable.DisableOutline();
                 _currentInteractable = null;
+                _playerInteraction.SetCurrentInteractableObject(null);
             }
         }
     }

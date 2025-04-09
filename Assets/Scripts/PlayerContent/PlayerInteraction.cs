@@ -1,3 +1,4 @@
+using InputContent;
 using Interfaces;
 using UnityEngine;
 
@@ -6,18 +7,32 @@ namespace PlayerContent
     public class PlayerInteraction : MonoBehaviour
     {
         [SerializeField] private Transform _draggablePosition;
+        [SerializeField] private GameObject _throwButton;
 
         private IInteractable _currentInteractable;
         private Vector3 _originalScale;
+        private PlayerInput _playerInput;
 
         public Draggable CurrentDraggable { get; private set; }
 
         public Transform DraggablePosition => _draggablePosition;
 
-        private Vector3 originalScale;
-        private Vector3 originalPosition;
-        private Quaternion originalRotation;
+        private void Awake()
+        {
+            _playerInput = GetComponent<PlayerInput>();
+        }
 
+        private void OnEnable()
+        {
+            _playerInput.ActionEvent += Action;
+            _playerInput.ThrowEvent += ThrowItem;
+        }
+
+        private void OnDisable()
+        {
+            _playerInput.ActionEvent -= Action;
+            _playerInput.ThrowEvent -= ThrowItem;
+        }
 
         public void SetCurrentInteractableObject(IInteractable iInteractable)
         {
@@ -33,15 +48,9 @@ namespace PlayerContent
         public void SetDraggableObject(Draggable draggable)
         {
             CurrentDraggable = draggable;
-            // draggable.transform.parent = _draggablePosition.transform;
             draggable.transform.SetParent(_draggablePosition);
             draggable.GetComponent<Rigidbody>().isKinematic = true;
-        }
-
-        public void ClearDraggableObject()
-        {
-            CurrentDraggable.transform.SetParent(null);
-            CurrentDraggable = null;
+            _throwButton.SetActive(true);
         }
 
         public void ThrowItem()
@@ -50,8 +59,15 @@ namespace PlayerContent
                 return;
             
             CurrentDraggable.GetComponent<Rigidbody>().isKinematic = false;
-            CurrentDraggable.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 10f, ForceMode.Impulse);
+            CurrentDraggable.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 16f, ForceMode.Impulse);
             ClearDraggableObject();
+            _throwButton.SetActive(false);
+        }
+
+        private void ClearDraggableObject()
+        {
+            CurrentDraggable.transform.SetParent(null);
+            CurrentDraggable = null;
         }
     }
 }

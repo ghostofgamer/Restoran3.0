@@ -1,3 +1,4 @@
+using System;
 using PlayerContent;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,27 +12,32 @@ namespace InputContent
 
         [SerializeField] private LookAroundEventTrigger _lookAroundEventTrigger;
         [SerializeField] private ActionTriggerEvent _actionEventTrigger;
+        [SerializeField] private ActionTriggerEvent _throwEventTrigger;
         [SerializeField] private PlayerMovement _playerMovement;
         [SerializeField] private LookAround _lookAround;
         [SerializeField] private Joystick _joystick;
-        [SerializeField] private PlayerInteraction _playerInteraction;
 
         private bool _isRotating;
         private Vector2 _lastPointerPosition;
         private bool _isTouchActive;
 
+        public event Action ActionEvent;
+        public event Action ThrowEvent;
+
         private void Start()
         {
             _lookAroundEventTrigger.InitPointer(OnDown, OnDrag, OnUp);
             _actionEventTrigger.InitPointer(Action);
+            _throwEventTrigger.InitPointer(Throw);
         }
+        
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.E))
-                _playerInteraction.Action();
+                ActionEvent?.Invoke();
             
             if (Input.GetKeyDown(KeyCode.F))
-                _playerInteraction.ThrowItem();
+                ThrowEvent?.Invoke();
 
             if (!Application.isMobilePlatform)
             {
@@ -85,7 +91,12 @@ namespace InputContent
 
         private void Action(PointerEventData eventData)
         {
-            _playerInteraction.Action();
+            ActionEvent?.Invoke();
+        }
+
+        private void Throw(PointerEventData eventData)
+        {
+            ThrowEvent?.Invoke();
         }
     }
 }
