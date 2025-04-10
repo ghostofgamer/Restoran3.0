@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Draggable : MonoBehaviour, IDraggable
 {
+    [SerializeField] private Transform _parentObject;
     [SerializeField] private InteractableObject _interactableObject;
 
     private void OnEnable()
@@ -26,8 +27,10 @@ public class Draggable : MonoBehaviour, IDraggable
         else
         {
             Debug.Log("DRAG");
-            transform.position = playerInteraction.DraggablePosition.position;
-            transform.rotation = playerInteraction.DraggablePosition.rotation;
+            // transform.position = playerInteraction.DraggablePosition.position;
+            _parentObject.position = playerInteraction.DraggablePosition.position;
+            // transform.rotation = playerInteraction.DraggablePosition.rotation;
+            _parentObject.rotation = playerInteraction.DraggablePosition.rotation;
             playerInteraction.SetDraggableObject(this);
         }
     }
