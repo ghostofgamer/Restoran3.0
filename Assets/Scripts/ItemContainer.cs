@@ -11,17 +11,24 @@ namespace InteractableContent
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private Item[] _items;
         [SerializeField] private Transform[] _positions;
+        [SerializeField] private ItemType _currentItemContainer;
+        [SerializeField] private AssemblyTable _assemblyTable;
+
+        public ItemType CurrentItemContainer => _currentItemContainer;
 
         private void OnEnable()
         {
-            _interactableObject.OnAction += LayProducts;
+            // _interactableObject.OnAction += LayProducts;
+            _interactableObject.OnAction += _assemblyTable.HandlePlayerInteraction;
         }
 
         private void OnDisable()
         {
-            _interactableObject.OnAction -= LayProducts;
+            // _interactableObject.OnAction -= LayProducts;
+            _interactableObject.OnAction -= _assemblyTable.HandlePlayerInteraction;
         }
 
+        /*
         public virtual void LayProducts(PlayerInteraction playerInteraction)
         {
             if (playerInteraction.CurrentDraggable != null)
@@ -60,6 +67,7 @@ namespace InteractableContent
                 Debug.Log("DRAG");
             }
         }
+        */
 
         public void Click()
         {
