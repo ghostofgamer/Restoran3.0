@@ -5,5 +5,8 @@ public enum ItemType
   Cheese,
   Bun,
   BunTop,
-  BunLow
+  BunLow,
+  Tomato,
+  Onion,
+  Cabbage,
 }
