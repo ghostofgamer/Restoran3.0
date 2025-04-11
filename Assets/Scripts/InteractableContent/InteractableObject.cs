@@ -13,12 +13,14 @@ namespace InteractableContent
     
         public void EnableOutline()
         {
-            _outline.enabled = true;
+            // _outline.enabled = true;
+            _outline.OutlineWidth = 10;
         }
 
         public void DisableOutline()
         {
-            _outline.enabled = false;
+            // _outline.enabled = false;
+            _outline.OutlineWidth = 0;
         }
 
         public virtual void Action(PlayerInteraction playerInteraction)

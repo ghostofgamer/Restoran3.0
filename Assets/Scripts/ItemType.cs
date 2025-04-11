@@ -9,4 +9,5 @@ public enum ItemType
   Tomato,
   Onion,
   Cabbage,
+  PackageBurgerPaper,
 }
