@@ -2,5 +2,8 @@
 public enum ItemType 
 {
   Cutlet,
-  Cheese
+  Cheese,
+  Bun,
+  BunTop,
+  BunLow
 }

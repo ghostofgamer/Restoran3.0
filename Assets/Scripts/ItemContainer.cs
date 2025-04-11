@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using PlayerContent;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
@@ -11,63 +11,35 @@ namespace InteractableContent
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private Item[] _items;
         [SerializeField] private Transform[] _positions;
+
+        [SerializeField] private Item[] _additionalItems;
+        [SerializeField] private Transform[] _additioanlPositions;
+
         [SerializeField] private ItemType _currentItemContainer;
         [SerializeField] private AssemblyTable _assemblyTable;
+        [SerializeField] private bool _isAdditionalItemsContainer;
+
+        [SerializeField] private ItemType[] _currentItemsType;
+        [SerializeField] private Item[][] _itemsAdditionalArray;
 
         public ItemType CurrentItemContainer => _currentItemContainer;
 
+        public bool IsAdditionalItemsContainer => _isAdditionalItemsContainer;
+
         private void OnEnable()
         {
-            // _interactableObject.OnAction += LayProducts;
             _interactableObject.OnAction += _assemblyTable.HandlePlayerInteraction;
         }
 
         private void OnDisable()
         {
-            // _interactableObject.OnAction -= LayProducts;
             _interactableObject.OnAction -= _assemblyTable.HandlePlayerInteraction;
         }
 
-        /*
-        public virtual void LayProducts(PlayerInteraction playerInteraction)
+        private void Start()
         {
-            if (playerInteraction.CurrentDraggable != null)
-            {
-                ItemBasket basket = playerInteraction.CurrentDraggable.GetComponent<ItemBasket>();
-
-                if (basket != null)
-                {
-                    int emptyPosition = GetEmptyPosition();
-                    int activeItems = basket.GetActiveValueItems();
-
-                    if (emptyPosition > 0 && activeItems > 0)
-                    {
-                        int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
-                        ActivateItems(itemsToPlace);
-                        basket.RemoveItem(itemsToPlace);
-                        Debug.Log($"Mathf.Min {itemsToPlace} ");
-                    }
-                    else
-                    {
-                        Debug.Log($"В контейнере свободно {emptyPosition} , в корзине {activeItems}");
-                    }
-                }
-                else
-                {
-                    Debug.Log("Непойми что в руках");
-                }
-            }
-
-            if (playerInteraction.CurrentDraggable != null)
-            {
-                Debug.Log("Return");
-            }
-            else
-            {
-                Debug.Log("DRAG");
-            }
+            _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
         }
-        */
 
         public void Click()
         {
@@ -93,6 +65,29 @@ namespace InteractableContent
             return notActiveCount;
         }
 
+        public int[] GetEmptyPositions()
+        {
+            int[] emptyPositions = new int[_itemsAdditionalArray.Length];
+
+            for (int i = 0; i < _itemsAdditionalArray.Length; i++)
+            {
+                Item[] itemsToCheck = _itemsAdditionalArray[i];
+                int emptyCount = 0;
+
+                foreach (var item in itemsToCheck)
+                {
+                    if (item != null && !item.gameObject.activeSelf)
+                    {
+                        emptyCount++;
+                    }
+                }
+
+                emptyPositions[i] = emptyCount;
+            }
+
+            return emptyPositions;
+        }
+
         public void ActivateItems(int value)
         {
             if (_items == null)
@@ -100,8 +95,24 @@ namespace InteractableContent
                 Debug.LogError("_items array is not initialized.");
                 return;
             }
-            
-            List<Item> inactiveItems = _items.Where(p=> !p.gameObject.activeSelf).ToList();
+
+            List<Item> inactiveItems = _items.Where(p => !p.gameObject.activeSelf).ToList();
+
+            for (int i = 0; i < value; i++)
+            {
+                inactiveItems[i].gameObject.SetActive(true);
+            }
+        }
+
+        public void ActivateItems(int value, int index)
+        {
+            if (_itemsAdditionalArray[index] == null)
+            {
+                Debug.LogError("_items array is not initialized.");
+                return;
+            }
+
+            List<Item> inactiveItems = _itemsAdditionalArray[index].Where(p => !p.gameObject.activeSelf).ToList();
 
             for (int i = 0; i < value; i++)
             {
