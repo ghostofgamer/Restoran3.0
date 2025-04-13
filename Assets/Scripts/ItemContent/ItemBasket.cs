@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ItemContent;
@@ -5,13 +6,14 @@ using UnityEngine;
 
 public class ItemBasket : MonoBehaviour
 {
+    [SerializeField] private Draggable _draggable;
     [SerializeField] private ItemType _itemType;
     [SerializeField] private Item[] _items;
     [SerializeField] private ActivityItem[] _itemsActivity;
-    
+
     [SerializeField] private Item[] _additionalItems;
     [SerializeField] private ActivityItem[] _additionalItemsActivity;
-    
+
     [SerializeField] private bool _isAdditionalItemsBasket;
     [SerializeField] private ItemType[] _currentItemsType;
     public ItemType ItemType => _itemType;
@@ -21,10 +23,23 @@ public class ItemBasket : MonoBehaviour
     [SerializeField] private Item[][] _itemsAdditionalArray;
     [SerializeField] private ActivityItem[][] _itemsActivityAdditionalArray;
 
+    private void OnEnable()
+    {
+        _draggable.DraggablePicked += ActivateItems;
+        _draggable.DraggableThrowed += DeactivateItems;
+    }
+
+    private void OnDisable()
+    {
+        _draggable.DraggablePicked -= ActivateItems;
+        _draggable.DraggableThrowed -= DeactivateItems;
+    }
+
     private void Start()
     {
         _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
         _itemsActivityAdditionalArray = new ActivityItem[][] { _itemsActivity, _additionalItemsActivity };
+        DeactivateItems();
     }
 
     public int GetActiveValueItems()
@@ -36,7 +51,7 @@ public class ItemBasket : MonoBehaviour
             if (item != null && item.gameObject.activeSelf)
                 activeCount++;
         }*/
-        
+
         foreach (var item in _itemsActivity)
         {
             if (item != null && item.IsActive)
@@ -68,7 +83,7 @@ public class ItemBasket : MonoBehaviour
 
         Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
         return activeCounts;
-        
+
         /*int[] activeCounts = new int[_itemsAdditionalArray.Length];
 
         for (int i = 0; i < _itemsAdditionalArray.Length; i++)
@@ -102,13 +117,13 @@ public class ItemBasket : MonoBehaviour
 
         // List<Item> inactiveItems = _items.Where(p => p.gameObject.activeSelf).ToList();
         List<ActivityItem> inactiveItems = _itemsActivity.Where(p => p.IsActive).ToList();
-        
+
         if (value > inactiveItems.Count)
             value = inactiveItems.Count;
-        
+
         /*for (int i = 0; i < value; i++)
             inactiveItems[i].gameObject.SetActive(false);*/
-        
+
         for (int i = inactiveItems.Count - 1; i >= inactiveItems.Count - value; i--)
         {
             Debug.Log("ААА " + i);
@@ -135,7 +150,7 @@ public class ItemBasket : MonoBehaviour
             Debug.Log("ААА " + i);
             inactiveItems[i].SetValue(false);
         }
-        
+
         /*if (_itemsAdditionalArray[index] == null)
         {
             Debug.LogError("_items array is not initialized.");
@@ -155,5 +170,24 @@ public class ItemBasket : MonoBehaviour
             Debug.Log("ААА " + i);
             inactiveItems[i].gameObject.SetActive(false);
         }*/
+    }
+
+    public void SetActiveValue(bool value)
+    {
+        foreach (var item in _items)
+            item.gameObject.SetActive(value);
+
+        foreach (var item in _additionalItems)
+            item.gameObject.SetActive(value);
+    }
+
+    private void ActivateItems()
+    {
+        SetActiveValue(true);
+    }
+
+    private void DeactivateItems()
+    {
+        SetActiveValue(false);
     }
 }
