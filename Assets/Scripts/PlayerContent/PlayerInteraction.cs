@@ -58,6 +58,7 @@ namespace PlayerContent
             if (CurrentDraggable == null)
                 return;
             
+            CurrentDraggable.Throw();
             CurrentDraggable.GetComponent<Rigidbody>().isKinematic = false;
             CurrentDraggable.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 16f, ForceMode.Impulse);
             ClearDraggableObject();
