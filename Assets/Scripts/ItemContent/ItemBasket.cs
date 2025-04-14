@@ -16,6 +16,11 @@ public class ItemBasket : MonoBehaviour
 
     [SerializeField] private bool _isAdditionalItemsBasket;
     [SerializeField] private ItemType[] _currentItemsType;
+
+    [SerializeField] private Transform[] _positions;
+
+    public Transform[] Positions => _positions;
+    
     public ItemType ItemType => _itemType;
 
     public bool IsAdditionalItemsBasket => _isAdditionalItemsBasket;

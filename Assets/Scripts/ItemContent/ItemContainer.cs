@@ -22,6 +22,8 @@ namespace InteractableContent
         [SerializeField] private ItemType[] _currentItemsType;
         [SerializeField] private Item[][] _itemsAdditionalArray;
 
+        public Transform[] Positions => _positions;
+        
         public ItemType CurrentItemContainer => _currentItemContainer;
 
         public bool IsAdditionalItemsContainer => _isAdditionalItemsContainer;
