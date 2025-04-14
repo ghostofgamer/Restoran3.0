@@ -57,9 +57,11 @@ public class AssemblyTable : MonoBehaviour
                                 if (emptyPositions[i] > 0 && activeItems[i] > 0)
                                 {
                                     int itemsToPlace = Mathf.Min(emptyPositions[i], activeItems[i]);
-                                    targetContainer.ActivateItems(itemsToPlace, i);
-                                    basket.RemoveItem(itemsToPlace, i);
                                     Debug.Log("itemsToPlace " + itemsToPlace);
+                                    
+                                    basket.RemoveItem(itemsToPlace, i);
+                                    basket.TransferProduct(itemsToPlace,i,targetContainer.AdditionalArrayPositions);
+                                    targetContainer.ActivateItems(itemsToPlace, i);
                                 }
                                 else
                                 {
@@ -76,22 +78,8 @@ public class AssemblyTable : MonoBehaviour
                         if (emptyPosition > 0 && activeItems > 0)
                         {
                             int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
-
-                            for (int i = 0; i < itemsToPlace; i++)
-                            {
-                                Item item = _burgerIngridientSpawner.SpawnItem(basket.ItemType);
-                                item.transform.position = basket.Positions[i].transform.position;
-                                item.transform.rotation = basket.Positions[i].transform.rotation;
-                                item.transform.localScale = new Vector3(3, 3, 3);
-                                item.gameObject.SetActive(true);
-                                item.transform.DOMove(targetContainer.Positions[i].transform.position, 0.15f)
-                                    .SetEase(Ease.InOutQuad)
-                                    .OnComplete(() => item.gameObject.SetActive(false));
-                            }
-
-
+                            basket.TransferProduct(itemsToPlace,targetContainer.Positions);
                             targetContainer.ActivateItems(itemsToPlace);
-                            basket.RemoveItem(itemsToPlace);
                             Debug.Log($"Placed {itemsToPlace} items in container for {basket.ItemType}");
                         }
                         else

@@ -10,6 +10,7 @@ namespace ItemContent
         {
             IsActive = value;
             gameObject.SetActive(value);
+            Debug.Log("ВЫКЛЮЧАЕЕЕЕМ " + value);
         }
     }
 }

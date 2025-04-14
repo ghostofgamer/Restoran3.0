@@ -21,6 +21,7 @@ namespace InteractableContent
 
         [SerializeField] private ItemType[] _currentItemsType;
         [SerializeField] private Item[][] _itemsAdditionalArray;
+        public Transform[][] AdditionalArrayPositions { get; private set; }
 
         public Transform[] Positions => _positions;
         
@@ -41,6 +42,7 @@ namespace InteractableContent
         private void Start()
         {
             _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
+            AdditionalArrayPositions = new Transform[][] {_positions,_additioanlPositions };
         }
 
         public void Click()

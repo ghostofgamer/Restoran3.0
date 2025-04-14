@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using ItemContent;
 using UnityEngine;
 
@@ -24,6 +25,8 @@ public class ItemBasket : MonoBehaviour
     public ItemType ItemType => _itemType;
 
     public bool IsAdditionalItemsBasket => _isAdditionalItemsBasket;
+    
+    public ItemType[] CurrentItemsTypes => _currentItemsType;
 
     [SerializeField] private Item[][] _itemsAdditionalArray;
     [SerializeField] private ActivityItem[][] _itemsActivityAdditionalArray;
@@ -137,6 +140,56 @@ public class ItemBasket : MonoBehaviour
         }
     }
 
+    public void TransferProduct(int value, Transform[] positions)
+    {
+        if (_items == null)
+        {
+            Debug.LogError("_items array is not initialized.");
+            return;
+        }
+        
+        List<ActivityItem> inactiveItems = _itemsActivity.Where(p => p.IsActive).ToList();
+
+        if (value > inactiveItems.Count)
+            value = inactiveItems.Count;
+
+        for (int i = inactiveItems.Count - 1; i >= inactiveItems.Count - value; i--)
+        {
+            Debug.Log("ААА " + i);
+
+            int index = i; // Создаем локальную переменную для индекса
+
+            inactiveItems[index].transform.DOMove(positions[index].transform.position, 0.15f)
+                .SetEase(Ease.InOutQuad)
+                .OnComplete(() => inactiveItems[index].SetValue(false));
+        }
+    }
+    
+    public void TransferProduct(int value, int index, Transform[][] positions)
+    {
+        if (_itemsActivityAdditionalArray == null || _itemsActivityAdditionalArray[index] == null)
+        {
+            Debug.LogError("_itemsActivityAdditionalArray array is not initialized.");
+            return;
+        }
+
+        List<ActivityItem> inactiveItems = _itemsActivityAdditionalArray[index].Where(p => p.IsActive).ToList();
+
+        if (value > inactiveItems.Count)
+            value = inactiveItems.Count;
+
+        for (int i = inactiveItems.Count - 1; i >= inactiveItems.Count - value; i--)
+        {
+            Debug.Log("ААА " + i);
+
+            int itemIndex = i; // Создаем локальную переменную для индекса
+
+            inactiveItems[itemIndex].transform.DOMove(positions[index][itemIndex].transform.position, 0.15f)
+                .SetEase(Ease.InOutQuad)
+                .OnComplete(() => inactiveItems[itemIndex].SetValue(false));
+        }
+    }
+
     public void RemoveItem(int value, int index)
     {
         if (_itemsActivityAdditionalArray[index] == null)
@@ -176,6 +229,9 @@ public class ItemBasket : MonoBehaviour
             inactiveItems[i].gameObject.SetActive(false);
         }*/
     }
+    
+    
+    
 
     public void SetActiveValue(bool value)
     {
