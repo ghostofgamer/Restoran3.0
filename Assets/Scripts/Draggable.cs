@@ -27,21 +27,17 @@ public class Draggable : MonoBehaviour, IDraggable
 
     public virtual void Drag(PlayerInteraction playerInteraction)
     {
-        if (playerInteraction.CurrentDraggable != null)
+        if (playerInteraction.CurrentDraggable != null || playerInteraction.PlayerTray.IsActive)
         {
             Debug.Log("Return");
         }
         else
         {
             Debug.Log("DRAG");
-            
-            /*_parentObject.position = playerInteraction.DraggablePosition.position;
-            _parentObject.rotation = playerInteraction.DraggablePosition.rotation;*/
-            
             _parentObject.transform.parent = playerInteraction.DraggablePosition;
             _parentObject.DOLocalMove(Vector3.zero, 0.15f).SetEase(Ease.InOutQuad);
             _parentObject.DOLocalRotate(Vector3.zero, 0.15f).SetEase(Ease.InOutQuad);
-            
+
             playerInteraction.SetDraggableObject(this);
             DraggablePicked.Invoke();
         }

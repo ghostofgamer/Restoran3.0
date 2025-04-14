@@ -58,9 +58,9 @@ public class AssemblyTable : MonoBehaviour
                                 {
                                     int itemsToPlace = Mathf.Min(emptyPositions[i], activeItems[i]);
                                     Debug.Log("itemsToPlace " + itemsToPlace);
-                                    
+
                                     basket.RemoveItem(itemsToPlace, i);
-                                    basket.TransferProduct(itemsToPlace,i,targetContainer.AdditionalArrayPositions);
+                                    basket.TransferProduct(itemsToPlace, i, targetContainer.AdditionalArrayPositions);
                                     targetContainer.ActivateItems(itemsToPlace, i);
                                 }
                                 else
@@ -78,7 +78,7 @@ public class AssemblyTable : MonoBehaviour
                         if (emptyPosition > 0 && activeItems > 0)
                         {
                             int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
-                            basket.TransferProduct(itemsToPlace,targetContainer.Positions);
+                            basket.TransferProduct(itemsToPlace, targetContainer.Positions);
                             targetContainer.ActivateItems(itemsToPlace);
                             Debug.Log($"Placed {itemsToPlace} items in container for {basket.ItemType}");
                         }
@@ -97,6 +97,31 @@ public class AssemblyTable : MonoBehaviour
             else
             {
                 Debug.LogError("The draggable object is not an ItemBasket.");
+            }
+        }
+        else if (playerInteraction.PlayerTray.IsActive)
+        {
+            ItemContainer targetContainer = GetContainerForItemType(playerInteraction.PlayerTray.CurrentType);
+            
+            if (targetContainer != null)
+            {
+                int emptyPosition = targetContainer.GetEmptyPosition();
+                int activeItems =
+                    playerInteraction.PlayerTray.GetActivePositionValue(playerInteraction.PlayerTray.CurrentType);
+
+                if (emptyPosition > 0 && activeItems > 0)
+                {
+                    int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
+                    
+                    // basket.TransferProduct(itemsToPlace, targetContainer.Positions);
+                    playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType,itemsToPlace);
+                    targetContainer.ActivateItems(itemsToPlace);
+                }
+                else
+                {
+                    Debug.Log(
+                        $"No space in container or no active items in basket. Container empty positions: {emptyPosition}, Basket active items: {activeItems}");
+                }
             }
         }
         else

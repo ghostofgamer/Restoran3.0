@@ -1,6 +1,7 @@
 
 public enum ItemType 
 {
+  Empty,
   Cutlet,
   Cheese,
   Bun,

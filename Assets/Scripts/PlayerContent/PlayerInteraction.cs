@@ -8,10 +8,13 @@ namespace PlayerContent
     {
         [SerializeField] private Transform _draggablePosition;
         [SerializeField] private GameObject _throwButton;
+        [SerializeField] private PlayerTray _playerTray;
 
         private IInteractable _currentInteractable;
         private Vector3 _originalScale;
         private PlayerInput _playerInput;
+        
+        public PlayerTray PlayerTray =>_playerTray;
 
         public Draggable CurrentDraggable { get; private set; }
 
@@ -51,6 +54,11 @@ namespace PlayerContent
             draggable.transform.SetParent(_draggablePosition);
             draggable.GetComponent<Rigidbody>().isKinematic = true;
             _throwButton.SetActive(true);
+        }
+
+        public void SetCurrentDraggable(Draggable draggable)
+        {
+            CurrentDraggable = draggable;
         }
 
         public void ThrowItem()

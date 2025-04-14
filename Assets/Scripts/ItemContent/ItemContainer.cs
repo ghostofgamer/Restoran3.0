@@ -21,11 +21,11 @@ namespace InteractableContent
 
         [SerializeField] private ItemType[] _currentItemsType;
         [SerializeField] private Item[][] _itemsAdditionalArray;
-        
+
         public Transform[][] AdditionalArrayPositions { get; private set; }
 
         public Transform[] Positions => _positions;
-        
+
         public ItemType CurrentItemContainer => _currentItemContainer;
 
         public bool IsAdditionalItemsContainer => _isAdditionalItemsContainer;
@@ -43,7 +43,7 @@ namespace InteractableContent
         private void Start()
         {
             _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
-            AdditionalArrayPositions = new Transform[][] {_positions,_additioanlPositions };
+            AdditionalArrayPositions = new Transform[][] { _positions, _additioanlPositions };
         }
 
         public virtual void ActionContainer(PlayerInteraction playerInteraction)
@@ -68,6 +68,21 @@ namespace InteractableContent
 
             Debug.Log("notActiveCount " + notActiveCount);
             return notActiveCount;
+        }
+
+        public int GetActiveItemsValue()
+        {
+            int activeCount = 0;
+
+            foreach (var item in _items)
+            {
+                if (item != null && item.gameObject.activeSelf)
+                    activeCount++;
+            }
+
+            Debug.Log("activeCount " + activeCount);
+
+            return activeCount;
         }
 
         public int[] GetEmptyPositions()
@@ -122,6 +137,22 @@ namespace InteractableContent
             for (int i = 0; i < value; i++)
             {
                 inactiveItems[i].gameObject.SetActive(true);
+            }
+        }
+
+        public void DeactivateItems(int value)
+        {
+            if (_items == null)
+            {
+                Debug.LogError("_items array is not initialized.");
+                return;
+            }
+
+            List<Item> inactiveItems = _items.Where(p => p.gameObject.activeSelf).ToList();
+
+            for (int i = inactiveItems.Count - 1; i >= inactiveItems.Count - value && i >= 0; i--)
+            {
+                inactiveItems[i].gameObject.SetActive(false);
             }
         }
     }
