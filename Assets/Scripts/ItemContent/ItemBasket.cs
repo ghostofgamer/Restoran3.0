@@ -21,11 +21,11 @@ public class ItemBasket : MonoBehaviour
     [SerializeField] private Transform[] _positions;
 
     public Transform[] Positions => _positions;
-    
+
     public ItemType ItemType => _itemType;
 
     public bool IsAdditionalItemsBasket => _isAdditionalItemsBasket;
-    
+
     public ItemType[] CurrentItemsTypes => _currentItemsType;
 
     [SerializeField] private Item[][] _itemsAdditionalArray;
@@ -147,7 +147,7 @@ public class ItemBasket : MonoBehaviour
             Debug.LogError("_items array is not initialized.");
             return;
         }
-        
+
         List<ActivityItem> inactiveItems = _itemsActivity.Where(p => p.IsActive).ToList();
 
         if (value > inactiveItems.Count)
@@ -164,7 +164,7 @@ public class ItemBasket : MonoBehaviour
                 .OnComplete(() => inactiveItems[index].SetValue(false));
         }
     }
-    
+
     public void TransferProduct(int value, int index, Transform[][] positions)
     {
         if (_itemsActivityAdditionalArray == null || _itemsActivityAdditionalArray[index] == null)
@@ -229,17 +229,16 @@ public class ItemBasket : MonoBehaviour
             inactiveItems[i].gameObject.SetActive(false);
         }*/
     }
-    
-    
-    
 
     public void SetActiveValue(bool value)
     {
-        foreach (var item in _items)
-            item.gameObject.SetActive(value);
+        foreach (var item in _itemsActivity)
+            if (item != null & item.IsActive)
+                item.gameObject.SetActive(value);
 
-        foreach (var item in _additionalItems)
-            item.gameObject.SetActive(value);
+        foreach (var item in _additionalItemsActivity)
+            if (item != null & item.IsActive)
+                item.gameObject.SetActive(value);
     }
 
     private void ActivateItems()

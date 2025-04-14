@@ -10,4 +10,5 @@ public enum ItemType
   Onion,
   Cabbage,
   PackageBurgerPaper,
+  RawCutlet,
 }
