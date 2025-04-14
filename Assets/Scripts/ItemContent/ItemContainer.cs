@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
+using PlayerContent;
 
 namespace InteractableContent
 {
@@ -21,6 +21,7 @@ namespace InteractableContent
 
         [SerializeField] private ItemType[] _currentItemsType;
         [SerializeField] private Item[][] _itemsAdditionalArray;
+        
         public Transform[][] AdditionalArrayPositions { get; private set; }
 
         public Transform[] Positions => _positions;
@@ -31,12 +32,12 @@ namespace InteractableContent
 
         private void OnEnable()
         {
-            _interactableObject.OnAction += _assemblyTable.HandlePlayerInteraction;
+            _interactableObject.OnAction += ActionContainer;
         }
 
         private void OnDisable()
         {
-            _interactableObject.OnAction -= _assemblyTable.HandlePlayerInteraction;
+            _interactableObject.OnAction -= ActionContainer;
         }
 
         private void Start()
@@ -45,9 +46,9 @@ namespace InteractableContent
             AdditionalArrayPositions = new Transform[][] {_positions,_additioanlPositions };
         }
 
-        public void Click()
+        public virtual void ActionContainer(PlayerInteraction playerInteraction)
         {
-            Debug.Log("НАЖИМАЮ НА КОНТЕЙНЕР");
+            _assemblyTable.HandlePlayerInteraction(playerInteraction);
         }
 
         public void OnPointerClick(PointerEventData eventData)

@@ -161,7 +161,11 @@ public class ItemBasket : MonoBehaviour
 
             inactiveItems[index].transform.DOMove(positions[index].transform.position, 0.15f)
                 .SetEase(Ease.InOutQuad)
-                .OnComplete(() => inactiveItems[index].SetValue(false));
+                .OnComplete(() =>
+                {
+                    inactiveItems[index].transform.localPosition = Vector3.zero;
+                    inactiveItems[index].SetValue(false);
+                });
         }
     }
 
@@ -186,7 +190,11 @@ public class ItemBasket : MonoBehaviour
 
             inactiveItems[itemIndex].transform.DOMove(positions[index][itemIndex].transform.position, 0.15f)
                 .SetEase(Ease.InOutQuad)
-                .OnComplete(() => inactiveItems[itemIndex].SetValue(false));
+                .OnComplete(() =>
+                {
+                    inactiveItems[itemIndex].transform.localPosition = Vector3.zero;
+                    inactiveItems[itemIndex].SetValue(false);
+                });
         }
     }
 
