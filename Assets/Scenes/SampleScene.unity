@@ -25030,7 +25030,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!1 &1080536943626305551
 GameObject:
@@ -25560,12 +25560,13 @@ GameObject:
   - component: {fileID: 5098774977173410113}
   - component: {fileID: 5031375757867284555}
   - component: {fileID: 5098774977173410114}
+  - component: {fileID: 5098774977173410115}
   m_Layer: 6
   m_Name: LOD01_kitchen_furniture_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!1001 &1734712427211541546
 PrefabInstance:
@@ -26812,12 +26813,13 @@ GameObject:
   - component: {fileID: 8162896384530564179}
   - component: {fileID: 490622342791676630}
   - component: {fileID: 8162896384530564180}
+  - component: {fileID: 8162896384530564181}
   m_Layer: 6
   m_Name: LOD00_kitchen_furniture_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2829398682902505188
 Transform:
@@ -27474,7 +27476,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3903564165237986141
 Transform:
@@ -28113,7 +28115,7 @@ MonoBehaviour:
   profileSync: 0
   camerasLayerMask:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 4294967295
   effectGroup: 1
   effectTarget: {fileID: 0}
   effectGroupLayer:
@@ -28297,6 +28299,28 @@ MonoBehaviour:
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 1, b: 1, a: 1}
   hitFxRadius: 0.5
+--- !u!64 &5098774977173410115
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717333886630505697}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4031575487072123883, guid: 5b73ff8189e56674e89f8a0ec4cf159d, type: 3}
 --- !u!4 &5119970435897659951
 Transform:
   m_ObjectHideFlags: 0
@@ -28824,7 +28848,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5539579560243537639
 Transform:
@@ -30098,6 +30122,28 @@ MonoBehaviour:
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 1, b: 1, a: 1}
   hitFxRadius: 0.5
+--- !u!64 &8162896384530564181
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2796372799873497772}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3349919466556716135, guid: 5b73ff8189e56674e89f8a0ec4cf159d, type: 3}
 --- !u!23 &8242283783602989993
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -30189,7 +30235,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!1 &8475073348413612888
 GameObject:
@@ -30682,12 +30728,13 @@ GameObject:
   - component: {fileID: 8928514918940030484}
   - component: {fileID: 8928514918940030485}
   - component: {fileID: 8928514918940030486}
+  - component: {fileID: 8928514918940030487}
   m_Layer: 6
   m_Name: kitchen_range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &8928514918940030483
 MonoBehaviour:
@@ -30951,6 +30998,28 @@ MonoBehaviour:
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 1, b: 1, a: 1}
   hitFxRadius: 0.5
+--- !u!64 &8928514918940030487
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8928514918940030481}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 96357992279104483, guid: b05d2583a0a84c44cb8d2c5a5c35d342, type: 3}
 --- !u!1001 &8993273397748728725
 PrefabInstance:
   m_ObjectHideFlags: 0
