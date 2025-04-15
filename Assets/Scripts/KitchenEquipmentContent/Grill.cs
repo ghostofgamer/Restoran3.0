@@ -13,6 +13,7 @@ namespace KitchenEquipmentContent
         [SerializeField] private Item[] _readyCutletItems;
         [SerializeField] private ItemType _currentType;
         [SerializeField] private Animator _animator;
+        [SerializeField] private BoxCollider _boxCollider;
 
         private void OnEnable()
         {
@@ -219,7 +220,7 @@ namespace KitchenEquipmentContent
         private IEnumerator StartFryCutlets()
         {
             _animator.SetBool("FryCutlet",true);
-            
+            _boxCollider.enabled = false;
             yield return new WaitForSeconds(1.5f);
             
             _animator.SetBool("FryCutlet",false);
@@ -233,6 +234,7 @@ namespace KitchenEquipmentContent
                 _readyCutletItems[i].gameObject.SetActive(true);
 
             _currentType = ItemType.Cutlet;
+            _boxCollider.enabled = true;
         }
     }
 }
