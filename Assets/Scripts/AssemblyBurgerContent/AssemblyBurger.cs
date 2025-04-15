@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using InteractableContent;
+using SoContent.AssemblyBurger;
 using UnityEngine;
 
 namespace AssemblyBurgerContent
 {
     public class AssemblyBurger : MonoBehaviour
     {
-        private Stack<Item> _ingredientStack = new Stack<Item>();
         [SerializeField] private BurgerBoard _burgerBoard;
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
+        [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
 
+        private Stack<Item> _ingredientStack = new Stack<Item>();
         private Camera _camera;
 
         private void Start()
@@ -67,7 +69,7 @@ namespace AssemblyBurgerContent
             Item item = _burgerIngridientSpawner.SpawnItem(type);
             item.transform.position = _burgerBoard.CenterPosition.position;
             item.transform.rotation = _burgerBoard.CenterPosition.rotation;
-            item.transform.localScale = new Vector3(3,3,3);
+            item.transform.localScale = _assemblyBurgerItemConfig.GetScale(type);
             item.gameObject.SetActive(true);
             
             _ingredientStack.Push(item);
