@@ -7,6 +7,7 @@ namespace UI.Screens
     {
         [SerializeField] private GameObject _input;
         [SerializeField] private CameraPositionChanger _cameraPositionChanger;
+        [SerializeField] private AssemblyTable _assemblyTable;
         
         public override void OpenScreen()
         {
@@ -19,6 +20,7 @@ namespace UI.Screens
         {
             _cameraPositionChanger.ReturnDefaultPosition();
             base.CloseScreen();
+            _assemblyTable.SetValueCollider(true);
             _input.SetActive(true);
         }
     }

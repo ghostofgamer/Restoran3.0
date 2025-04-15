@@ -84,6 +84,29 @@ namespace InteractableContent
 
             return activeCount;
         }
+        
+        public int[] GetActivePositions()
+        {
+            int[] activePositions = new int[_itemsAdditionalArray.Length];
+
+            for (int i = 0; i < _itemsAdditionalArray.Length; i++)
+            {
+                Item[] itemsToCheck = _itemsAdditionalArray[i];
+                int activeCount = 0;
+
+                foreach (var item in itemsToCheck)
+                {
+                    if (item != null && item.gameObject.activeSelf)
+                    {
+                        activeCount++;
+                    }
+                }
+
+                activePositions[i] = activeCount;
+            }
+
+            return activePositions;
+        }
 
         public int[] GetEmptyPositions()
         {

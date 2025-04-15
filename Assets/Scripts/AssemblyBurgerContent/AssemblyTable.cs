@@ -1,17 +1,22 @@
 using System;
 using System.Collections.Generic;
+using AssemblyBurgerContent;
 using CameraContent;
 using DG.Tweening;
 using InteractableContent;
 using PlayerContent;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class AssemblyTable : MonoBehaviour
 {
     [SerializeField] private ItemContainer[] _itemContainers;
     [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
     [SerializeField] private InteractableObject _interactableObject;
-    
+    [SerializeField] private Collider _collider;
+   [SerializeField] private Collider[] _containerColliders;
+   [SerializeField] private AssemblyBurger _assemblyBurger;
+
     [SerializeField] private Transform _cameraCurrentPosition;
     [SerializeField] private CameraPositionChanger _cameraPositionChanger;
 
@@ -145,12 +150,25 @@ public class AssemblyTable : MonoBehaviour
         else
         {
             BurgerAssemblyBeginig?.Invoke();
+            SetValueCollider(false);
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
             Debug.Log("No draggable object in player's hands.");
         }
     }
 
-    private ItemContainer GetContainerForItemType(ItemType itemType)
+    public void SetValueCollider(bool value)
+    {
+          _collider.enabled = value;
+          _assemblyBurger.enabled = !value;
+              
+          foreach (var containerCollidder in _containerColliders)
+          {
+              containerCollidder.enabled = !value;
+              Debug.Log("value " + !value);
+          }
+    }
+
+private ItemContainer GetContainerForItemType(ItemType itemType)
     {
         if (_containersByItemType.TryGetValue(itemType, out var container))
         {
