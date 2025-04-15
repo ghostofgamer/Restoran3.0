@@ -45,17 +45,25 @@ namespace ItemContent
                         int activeItems = GetActiveItemsValue();
                         int emptyPos = playerInteraction.PlayerTray.GetEmptyPositionValue(CurrentItemContainer);
                         int itemsToPlace = Mathf.Min(activeItems, emptyPos);
-                        DeactivateItems(itemsToPlace);
-                        playerInteraction.PlayerTray.Put(CurrentItemContainer, itemsToPlace);
-                        Debug.Log($"itemsToPlace " + itemsToPlace);
+
+                        if (itemsToPlace > 0)
+                        {
+                            DeactivateItems(itemsToPlace);
+                            playerInteraction.PlayerTray.Put(CurrentItemContainer, itemsToPlace);
+                            Debug.Log($"itemsToPlace " + itemsToPlace);
+                        }
                     }
                     else
                     {
                         int emptyPosition = GetEmptyPosition();
                         int activeItems = playerInteraction.PlayerTray.GetActivePositionValue(CurrentItemContainer);
                         int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
-                        ActivateItems(itemsToPlace);
-                        playerInteraction.PlayerTray.PutAway(CurrentItemContainer, itemsToPlace);
+
+                        if (itemsToPlace > 0)
+                        {
+                            ActivateItems(itemsToPlace);
+                            playerInteraction.PlayerTray.PutAway(CurrentItemContainer, itemsToPlace);
+                        }
                     }
                 }
             }

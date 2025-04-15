@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CameraContent;
 using DG.Tweening;
 using InteractableContent;
 using PlayerContent;
@@ -10,8 +11,13 @@ public class AssemblyTable : MonoBehaviour
     [SerializeField] private ItemContainer[] _itemContainers;
     [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
     [SerializeField] private InteractableObject _interactableObject;
+    
+    [SerializeField] private Transform _cameraCurrentPosition;
+    [SerializeField] private CameraPositionChanger _cameraPositionChanger;
 
     private Dictionary<ItemType, ItemContainer> _containersByItemType;
+
+    public event Action BurgerAssemblyBeginig;
 
     private void Awake()
     {
@@ -138,6 +144,8 @@ public class AssemblyTable : MonoBehaviour
         }
         else
         {
+            BurgerAssemblyBeginig?.Invoke();
+            _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
             Debug.Log("No draggable object in player's hands.");
         }
     }

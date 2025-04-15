@@ -2,7 +2,9 @@ using System.Collections;
 using System.Linq;
 using InteractableContent;
 using PlayerContent;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KitchenEquipmentContent
 {
@@ -13,7 +15,13 @@ namespace KitchenEquipmentContent
         [SerializeField] private Item[] _readyCutletItems;
         [SerializeField] private ItemType _currentType;
         [SerializeField] private Animator _animator;
-        [SerializeField] private BoxCollider _boxCollider;
+        [SerializeField] private Collider _boxCollider;
+        [SerializeField] private GameObject _progressFryUI;
+
+        public TMP_Text grillText;
+        public Image fillImage;
+        public float grillTime = 3f;
+        private bool _isClosed;
 
         private void OnEnable()
         {
@@ -27,6 +35,15 @@ namespace KitchenEquipmentContent
 
         public void Action(PlayerInteraction playerInteraction)
         {
+            if (playerInteraction.CurrentDraggable != null)
+                return;
+
+            if (_isClosed)
+            {
+                OpenGrill();
+                return;
+            }
+
             ItemType itemType = playerInteraction.PlayerTray.CurrentType;
             Item[] item = GetItemsByType(itemType);
 
@@ -34,6 +51,7 @@ namespace KitchenEquipmentContent
             {
                 if (playerInteraction.PlayerTray.CurrentType == ItemType.Cutlet)
                 {
+                    Debug.Log("1");
                     int activePos = playerInteraction.PlayerTray.GetActivePositionValue(ItemType.Cutlet);
                     int activeCount = CountNotActiveItems(_readyCutletItems);
                     int itemsToPlace = Mathf.Min(activeCount, activePos);
@@ -45,12 +63,13 @@ namespace KitchenEquipmentContent
                         ActivateItems(_readyCutletItems, itemsToPlace);
                     }
                 }
-
-                if (playerInteraction.PlayerTray.CurrentType == ItemType.Empty)
+                else if (playerInteraction.PlayerTray.CurrentType == ItemType.Empty)
                 {
                     int emptyPos = playerInteraction.PlayerTray.GetEmptyPositionValue(ItemType.Cutlet);
                     int activeCount = CountActiveItems(_readyCutletItems);
                     int itemsToPlace = Mathf.Min(activeCount, emptyPos);
+
+                    Debug.Log("3");
 
                     if (itemsToPlace > 0)
                     {
@@ -81,7 +100,7 @@ namespace KitchenEquipmentContent
                 else if (playerInteraction.PlayerTray.CurrentType == ItemType.Empty)
                 {
                     FryCutlets();
-                    
+
                     /*int activeCount = CountActiveItems(_rawCutletItems);
 
                     foreach (var rawItem in _rawCutletItems)
@@ -215,16 +234,32 @@ namespace KitchenEquipmentContent
         private void FryCutlets()
         {
             StartCoroutine(StartFryCutlets());
-        }        
-        
+        }
+
         private IEnumerator StartFryCutlets()
         {
-            _animator.SetBool("FryCutlet",true);
+            _isClosed = true;
+
+            _animator.SetBool("FryCutlet", true);
             _boxCollider.enabled = false;
-            yield return new WaitForSeconds(1.5f);
-            
-            _animator.SetBool("FryCutlet",false);
-            
+
+            yield return new WaitForSeconds(1f);
+            _progressFryUI.SetActive(true);
+            grillText.text = "Grill <color=yellow>Raw</color>";
+            fillImage.fillAmount = 0f;
+
+            float elapsedTime = 0f;
+            while (elapsedTime < grillTime)
+            {
+                elapsedTime += Time.deltaTime;
+                fillImage.fillAmount = elapsedTime / grillTime;
+                yield return null;
+            }
+
+            grillText.text = "Grill <color=green>Medium</color>";
+
+            // _animator.SetBool("FryCutlet",false);
+
             int activeCount = CountActiveItems(_rawCutletItems);
 
             foreach (var rawItem in _rawCutletItems)
@@ -235,6 +270,13 @@ namespace KitchenEquipmentContent
 
             _currentType = ItemType.Cutlet;
             _boxCollider.enabled = true;
+        }
+
+        private void OpenGrill()
+        {
+            _isClosed = false;
+            _animator.SetBool("FryCutlet", false);
+            _progressFryUI.SetActive(false);
         }
     }
 }
