@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using InteractableContent;
@@ -8,6 +9,7 @@ public class AssemblyTable : MonoBehaviour
 {
     [SerializeField] private ItemContainer[] _itemContainers;
     [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
+    [SerializeField] private InteractableObject _interactableObject;
 
     private Dictionary<ItemType, ItemContainer> _containersByItemType;
 
@@ -19,6 +21,16 @@ public class AssemblyTable : MonoBehaviour
         {
             _containersByItemType[container.CurrentItemContainer] = container;
         }
+    }
+
+    private void OnEnable()
+    {
+        _interactableObject.OnAction += HandlePlayerInteraction;
+    }
+
+    private void OnDisable()
+    {
+        _interactableObject.OnAction -= HandlePlayerInteraction;
     }
 
     public void HandlePlayerInteraction(PlayerInteraction playerInteraction)
@@ -102,7 +114,7 @@ public class AssemblyTable : MonoBehaviour
         else if (playerInteraction.PlayerTray.IsActive)
         {
             ItemContainer targetContainer = GetContainerForItemType(playerInteraction.PlayerTray.CurrentType);
-            
+
             if (targetContainer != null)
             {
                 int emptyPosition = targetContainer.GetEmptyPosition();
@@ -112,9 +124,9 @@ public class AssemblyTable : MonoBehaviour
                 if (emptyPosition > 0 && activeItems > 0)
                 {
                     int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
-                    
+
                     // basket.TransferProduct(itemsToPlace, targetContainer.Positions);
-                    playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType,itemsToPlace);
+                    playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType, itemsToPlace);
                     targetContainer.ActivateItems(itemsToPlace);
                 }
                 else

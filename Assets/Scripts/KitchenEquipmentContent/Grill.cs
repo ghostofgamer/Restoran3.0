@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using InteractableContent;
 using PlayerContent;
@@ -11,6 +12,7 @@ namespace KitchenEquipmentContent
         [SerializeField] private Item[] _rawCutletItems;
         [SerializeField] private Item[] _readyCutletItems;
         [SerializeField] private ItemType _currentType;
+        [SerializeField] private Animator _animator;
 
         private void OnEnable()
         {
@@ -77,7 +79,9 @@ namespace KitchenEquipmentContent
                 }
                 else if (playerInteraction.PlayerTray.CurrentType == ItemType.Empty)
                 {
-                    int activeCount = CountActiveItems(_rawCutletItems);
+                    FryCutlets();
+                    
+                    /*int activeCount = CountActiveItems(_rawCutletItems);
 
                     foreach (var rawItem in _rawCutletItems)
                         rawItem.gameObject.SetActive(false);
@@ -85,7 +89,7 @@ namespace KitchenEquipmentContent
                     for (int i = 0; i < activeCount; i++)
                         _readyCutletItems[i].gameObject.SetActive(true);
 
-                    _currentType = ItemType.Cutlet;
+                    _currentType = ItemType.Cutlet;*/
                 }
                 else
                 {
@@ -205,6 +209,30 @@ namespace KitchenEquipmentContent
             }
 
             return count;
+        }
+
+        private void FryCutlets()
+        {
+            StartCoroutine(StartFryCutlets());
+        }        
+        
+        private IEnumerator StartFryCutlets()
+        {
+            _animator.SetBool("FryCutlet",true);
+            
+            yield return new WaitForSeconds(1.5f);
+            
+            _animator.SetBool("FryCutlet",false);
+            
+            int activeCount = CountActiveItems(_rawCutletItems);
+
+            foreach (var rawItem in _rawCutletItems)
+                rawItem.gameObject.SetActive(false);
+
+            for (int i = 0; i < activeCount; i++)
+                _readyCutletItems[i].gameObject.SetActive(true);
+
+            _currentType = ItemType.Cutlet;
         }
     }
 }
