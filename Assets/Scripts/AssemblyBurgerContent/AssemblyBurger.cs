@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using InteractableContent;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ namespace AssemblyBurgerContent
 {
     public class AssemblyBurger : MonoBehaviour
     {
+        private Stack<Item> _ingredientStack = new Stack<Item>();
         [SerializeField] private BurgerBoard _burgerBoard;
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
 
@@ -49,6 +51,13 @@ namespace AssemblyBurgerContent
                             HandleContainerSelection(activeItems, selectedContainer.CurrentItemContainer);
                         }
                     }
+                    
+                    BurgerBoard selectedBoard = hit.collider.GetComponent<BurgerBoard>();
+                    
+                    if (selectedBoard != null)
+                    {
+                        UndoLastSelection();
+                    }
                 }
             }
         }
@@ -60,6 +69,23 @@ namespace AssemblyBurgerContent
             item.transform.rotation = _burgerBoard.CenterPosition.rotation;
             item.transform.localScale = new Vector3(3,3,3);
             item.gameObject.SetActive(true);
+            
+            _ingredientStack.Push(item);
+        }
+        
+        public void UndoLastSelection()
+        {
+            if (_ingredientStack.Count > 0)
+            {
+                Item lastItem = _ingredientStack.Pop();
+                lastItem.transform.position = Vector3.zero;
+                lastItem.gameObject.SetActive(false);
+                // Destroy(lastItem.gameObject);
+            }
+            else
+            {
+                Debug.Log("No ingredients to undo.");
+            }
         }
     }
 }
