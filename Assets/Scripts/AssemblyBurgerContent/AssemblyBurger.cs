@@ -6,6 +6,7 @@ namespace AssemblyBurgerContent
     public class AssemblyBurger : MonoBehaviour
     {
         [SerializeField] private BurgerBoard _burgerBoard;
+        [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
 
         private Camera _camera;
 
@@ -32,7 +33,7 @@ namespace AssemblyBurgerContent
                         if (selectedContainer.IsAdditionalItemsContainer)
                         {
                             int[] activeItems = selectedContainer.GetActivePositions();
-                            
+
                             for (int i = 0; i < activeItems.Length; i++)
                             {
                                 Debug.Log("Active count in sub-array " + i + ": " + activeItems[i]);
@@ -42,18 +43,23 @@ namespace AssemblyBurgerContent
                         {
                             int activeItems = selectedContainer.GetActiveItemsValue();
                             Debug.Log("activeItems: " + activeItems);
-                        }
+                            Debug.Log("selectedContainer: " + selectedContainer.name);
+                            Debug.Log("ItemType: " + selectedContainer.CurrentItemContainer);
 
-                        // Дополнительная логика для обработки выбранного контейнера
-                        // HandleContainerSelection(selectedContainer);
+                            HandleContainerSelection(activeItems, selectedContainer.CurrentItemContainer);
+                        }
                     }
                 }
             }
         }
 
-        private void HandleContainerSelection(GameObject selectedContainer)
+        private void HandleContainerSelection(int value, ItemType type)
         {
-            selectedContainer.GetComponent<Renderer>().material.color = Color.green;
+            Item item = _burgerIngridientSpawner.SpawnItem(type);
+            item.transform.position = _burgerBoard.CenterPosition.position;
+            item.transform.rotation = _burgerBoard.CenterPosition.rotation;
+            item.transform.localScale = new Vector3(3,3,3);
+            item.gameObject.SetActive(true);
         }
     }
 }

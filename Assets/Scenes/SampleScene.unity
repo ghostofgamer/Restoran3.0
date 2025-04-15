@@ -15299,7 +15299,7 @@ Transform:
   m_GameObject: {fileID: 1080682586}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.05769053, z: -0, w: -0.9983346}
-  m_LocalPosition: {x: 17.06, y: 1.42, z: -176.25}
+  m_LocalPosition: {x: 17.73, y: 1.42, z: -159.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19034,7 +19034,7 @@ Transform:
   m_GameObject: {fileID: 1433277149}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.026, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -30225,6 +30225,7 @@ MonoBehaviour:
   - {fileID: 1974485682}
   - {fileID: 2146347852}
   - {fileID: 2007803316}
+  - {fileID: 6889233372094464841}
   _assemblyBurger: {fileID: 6594452681770470177}
   _cameraCurrentPosition: {fileID: 431657974}
   _cameraPositionChanger: {fileID: 1000317408}
@@ -30614,6 +30615,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6889233372094464839}
   - component: {fileID: 6889233372094464840}
+  - component: {fileID: 6889233372094464841}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -31144,7 +31146,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!1 &5226555348059423151
 GameObject:
@@ -31998,6 +32000,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f97d01fc34358b4f8e57b187d14023d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _burgerBoard: {fileID: 6889233372094464840}
+  _burgerIngridientSpawner: {fileID: 684338500}
 --- !u!4 &6680766661201672836
 Transform:
   m_ObjectHideFlags: 0
@@ -32075,6 +32079,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _centerPosition: {fileID: 1433277150}
+--- !u!65 &6889233372094464841
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5042437443618302688}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5059948, y: 0.020262284, z: 0.3079582}
+  m_Center: {x: 0.00058078766, y: 0.003815471, z: -0.00016032657}
 --- !u!114 &7016846113664207283
 MonoBehaviour:
   m_ObjectHideFlags: 0
