@@ -12,7 +12,7 @@ namespace ItemContent
             {
                 ItemBasket basket = playerInteraction.CurrentDraggable.GetComponent<ItemBasket>();
 
-                if (basket != null)
+                if (basket != null && basket.ItemType == ItemType.RawCutlet)
                 {
                     int emptyPosition = GetEmptyPosition();
                     int activeItems = basket.GetActiveValueItems();

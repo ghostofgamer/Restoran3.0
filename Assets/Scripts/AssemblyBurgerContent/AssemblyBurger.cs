@@ -38,10 +38,22 @@ namespace AssemblyBurgerContent
                         {
                             int[] activeItems = selectedContainer.GetActivePositions();
 
-                            for (int i = 0; i < activeItems.Length; i++)
+                            if (_ingredientStack.Count > 0)
+                            {
+                                Debug.Log("selectedContainer.CurrentItemsType[0] " + selectedContainer.CurrentItemsType[0]);
+                                HandleContainerSelection(activeItems[0], selectedContainer.CurrentItemsType[0]);
+                                
+                            }
+                            else
+                            {
+                                Debug.Log("selectedContainer.CurrentItemsType[1] " + selectedContainer.CurrentItemsType[1]);
+                                HandleContainerSelection(activeItems[1], selectedContainer.CurrentItemsType[1]);
+                            }
+                            
+                            /*for (int i = 0; i < activeItems.Length; i++)
                             {
                                 Debug.Log("Active count in sub-array " + i + ": " + activeItems[i]);
-                            }
+                            }*/
                         }
                         else
                         {
@@ -53,9 +65,9 @@ namespace AssemblyBurgerContent
                             HandleContainerSelection(activeItems, selectedContainer.CurrentItemContainer);
                         }
                     }
-                    
+
                     BurgerBoard selectedBoard = hit.collider.GetComponent<BurgerBoard>();
-                    
+
                     if (selectedBoard != null)
                     {
                         UndoLastSelection();
@@ -67,14 +79,34 @@ namespace AssemblyBurgerContent
         private void HandleContainerSelection(int value, ItemType type)
         {
             Item item = _burgerIngridientSpawner.SpawnItem(type);
-            item.transform.position = _burgerBoard.CenterPosition.position;
+
+            Vector3 position = _burgerBoard.CenterPosition.position;
+            Quaternion rotation = _burgerBoard.CenterPosition.rotation;
+            Vector3 scale = _assemblyBurgerItemConfig.GetScale(type);
+
+            if (_ingredientStack.Count > 0)
+            {
+                Item previousItem = _ingredientStack.Peek();
+                AssemblyIngredient assemblyIngredient = previousItem.GetComponent<AssemblyIngredient>();
+
+                if (assemblyIngredient != null)
+                {
+                    position = assemblyIngredient.PositionUpIngredient.position;
+                }
+            }
+
+            item.transform.position = position;
+            item.transform.rotation = rotation;
+            item.transform.localScale = scale;
+
+            /*item.transform.position = _burgerBoard.CenterPosition.position;
             item.transform.rotation = _burgerBoard.CenterPosition.rotation;
-            item.transform.localScale = _assemblyBurgerItemConfig.GetScale(type);
+            item.transform.localScale = _assemblyBurgerItemConfig.GetScale(type);*/
             item.gameObject.SetActive(true);
-            
+
             _ingredientStack.Push(item);
         }
-        
+
         public void UndoLastSelection()
         {
             if (_ingredientStack.Count > 0)

@@ -27,7 +27,10 @@ namespace InteractableContent
         public Transform[] Positions => _positions;
 
         public ItemType CurrentItemContainer => _currentItemContainer;
-
+        
+        public ItemType[] CurrentItemsType => _currentItemsType;
+        
+        
         public bool IsAdditionalItemsContainer => _isAdditionalItemsContainer;
 
         private void OnEnable()
