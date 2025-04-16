@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using InteractableContent;
+using RecipesContent;
 using SoContent.AssemblyBurger;
 using UnityEngine;
 
@@ -10,9 +11,11 @@ namespace AssemblyBurgerContent
         [SerializeField] private BurgerBoard _burgerBoard;
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
-
+        [SerializeField] private List<Recipe> _recipes; 
+        
         private Stack<Item> _ingredientStack = new Stack<Item>();
         private Camera _camera;
+        private int _maxIngredients = 15;
 
         private void Start()
         {
@@ -32,24 +35,29 @@ namespace AssemblyBurgerContent
 
                     ItemContainer selectedContainer = hit.collider.GetComponent<ItemContainer>();
 
-                    if (selectedContainer != null)
+                    if (selectedContainer != null &&
+                        selectedContainer.CurrentItemContainer != ItemType.PackageBurgerPaper)
                     {
+                        if (_ingredientStack.Count > _maxIngredients)
+                            return;
+
                         if (selectedContainer.IsAdditionalItemsContainer)
                         {
                             int[] activeItems = selectedContainer.GetActivePositions();
 
                             if (_ingredientStack.Count > 0)
                             {
-                                Debug.Log("selectedContainer.CurrentItemsType[0] " + selectedContainer.CurrentItemsType[0]);
+                                Debug.Log("selectedContainer.CurrentItemsType[0] " +
+                                          selectedContainer.CurrentItemsType[0]);
                                 HandleContainerSelection(activeItems[0], selectedContainer.CurrentItemsType[0]);
-                                
                             }
                             else
                             {
-                                Debug.Log("selectedContainer.CurrentItemsType[1] " + selectedContainer.CurrentItemsType[1]);
+                                Debug.Log("selectedContainer.CurrentItemsType[1] " +
+                                          selectedContainer.CurrentItemsType[1]);
                                 HandleContainerSelection(activeItems[1], selectedContainer.CurrentItemsType[1]);
                             }
-                            
+
                             /*for (int i = 0; i < activeItems.Length; i++)
                             {
                                 Debug.Log("Active count in sub-array " + i + ": " + activeItems[i]);
@@ -65,6 +73,10 @@ namespace AssemblyBurgerContent
                             HandleContainerSelection(activeItems, selectedContainer.CurrentItemContainer);
                         }
                     }
+                    else if (selectedContainer.CurrentItemContainer == ItemType.PackageBurgerPaper)
+                    {
+                        Debug.Log("пробуем собрать бургер по рецепту");
+                    }
 
                     BurgerBoard selectedBoard = hit.collider.GetComponent<BurgerBoard>();
 
@@ -78,8 +90,6 @@ namespace AssemblyBurgerContent
 
         private void HandleContainerSelection(int value, ItemType type)
         {
-            Item item = _burgerIngridientSpawner.SpawnItem(type);
-
             Vector3 position = _burgerBoard.CenterPosition.position;
             Quaternion rotation = _burgerBoard.CenterPosition.rotation;
             Vector3 scale = _assemblyBurgerItemConfig.GetScale(type);
@@ -91,9 +101,14 @@ namespace AssemblyBurgerContent
 
                 if (assemblyIngredient != null)
                 {
-                    position = assemblyIngredient.PositionUpIngredient.position;
+                    if (assemblyIngredient.PositionUpIngredient != null)
+                        position = assemblyIngredient.PositionUpIngredient.position;
+                    else
+                        return;
                 }
             }
+
+            Item item = _burgerIngridientSpawner.SpawnItem(type);
 
             item.transform.position = position;
             item.transform.rotation = rotation;

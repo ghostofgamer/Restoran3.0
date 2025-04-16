@@ -12,4 +12,10 @@ public enum ItemType
   Cabbage,
   PackageBurgerPaper,
   RawCutlet,
+  FinishSmallBurger,
+  FinishCheeseburger,
+  FinishMiddleBurger,
+  FinishStarBurger,
+  FinishBigBurger,
+  FinishMegaBurger,
 }
