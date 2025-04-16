@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Enums;
 using InteractableContent;
 using RecipesContent;
 using SoContent.AssemblyBurger;
@@ -13,7 +14,8 @@ namespace AssemblyBurgerContent
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
         [SerializeField] private List<Recipe> _recipes;
-        [SerializeField] private Dictionary<ItemType, GameObject> _burgerPrefabs;
+        [SerializeField] private List<BurgerPrefabPair> _burgerPrefabPairs;
+        [SerializeField] private List<Transform> _burgerPositions;
         
         private Stack<Item> _ingredientStack = new Stack<Item>();
         private Camera _camera;
@@ -83,7 +85,7 @@ namespace AssemblyBurgerContent
                         
                         if (burgerType != ItemType.Empty)
                         {
-                            // CreateBurger(burgerType);
+                            CreateBurger(burgerType);
                             Debug.Log("Бургер " + burgerType);
                         }
                         else
@@ -165,6 +167,39 @@ namespace AssemblyBurgerContent
             }
             
             return ItemType.Empty;
+        }
+        
+        private void CreateBurger(ItemType burgerType)
+        {
+            GameObject burgerPrefab = _burgerPrefabPairs.FirstOrDefault(pair => pair.BurgerType == burgerType)?.BurgerPrefab;
+            
+            if (burgerPrefab != null)
+            {
+                Transform availablePosition = _burgerPositions.FirstOrDefault(position => position.childCount == 0);
+                
+                if (availablePosition != null)
+                {
+                    GameObject burgerInstance = Instantiate(burgerPrefab, availablePosition.position, Quaternion.identity);
+                    burgerInstance.transform.SetParent(availablePosition);
+                    // burgerInstance.transform.position = Vector3.zero;
+                    Debug.Log("Бургер создан: " + burgerType);
+                    
+                    while (_ingredientStack.Count > 0)
+                    {
+                        Item lastItem = _ingredientStack.Pop();
+                        lastItem.gameObject.SetActive(false);
+                        // Destroy(lastItem.gameObject);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Нет места, если хотите создать новый, освободите  место или сделайте бургер из нынешнего заказа");
+                }
+            }
+            else
+            {
+                Debug.LogError("Префаб для бургера типа " + burgerType + " не найден.");
+            }
         }
     }
 }

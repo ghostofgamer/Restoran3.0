@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
+using Enums;
 using PlayerContent;
 
 namespace InteractableContent

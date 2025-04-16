@@ -1,21 +1,26 @@
 
-public enum ItemType 
+namespace Enums
 {
-  Empty,
-  Cutlet,
-  Cheese,
-  Bun,
-  BunTop,
-  BunLow,
-  Tomato,
-  Onion,
-  Cabbage,
-  PackageBurgerPaper,
-  RawCutlet,
-  FinishSmallBurger,
-  FinishCheeseburger,
-  FinishMiddleBurger,
-  FinishStarBurger,
-  FinishBigBurger,
-  FinishMegaBurger,
+  public enum ItemType 
+  {
+    Empty,
+    Cutlet,
+    Cheese,
+    Bun,
+    BunTop,
+    BunLow,
+    Tomato,
+    Onion,
+    Cabbage,
+    PackageBurgerPaper,
+    RawCutlet,
+    FinishSmallBurger,
+    FinishCheeseburger,
+    FinishMiddleBurger,
+    FinishStarBurger,
+    FinishBigBurger,
+    FinishMegaBurger,
+    Ketchup,
+    Mustard,
+  }
 }

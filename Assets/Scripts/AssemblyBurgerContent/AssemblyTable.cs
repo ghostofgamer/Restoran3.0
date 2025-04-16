@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AssemblyBurgerContent;
 using CameraContent;
 using DG.Tweening;
+using Enums;
 using InteractableContent;
 using PlayerContent;
 using UnityEngine;

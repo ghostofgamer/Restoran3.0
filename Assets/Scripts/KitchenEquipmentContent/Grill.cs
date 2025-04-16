@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using Enums;
 using InteractableContent;
 using PlayerContent;
 using TMPro;
