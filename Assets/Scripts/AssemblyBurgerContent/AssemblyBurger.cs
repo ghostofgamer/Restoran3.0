@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using InteractableContent;
 using RecipesContent;
 using SoContent.AssemblyBurger;
@@ -11,7 +12,8 @@ namespace AssemblyBurgerContent
         [SerializeField] private BurgerBoard _burgerBoard;
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
-        [SerializeField] private List<Recipe> _recipes; 
+        [SerializeField] private List<Recipe> _recipes;
+        [SerializeField] private Dictionary<ItemType, GameObject> _burgerPrefabs;
         
         private Stack<Item> _ingredientStack = new Stack<Item>();
         private Camera _camera;
@@ -73,9 +75,22 @@ namespace AssemblyBurgerContent
                             HandleContainerSelection(activeItems, selectedContainer.CurrentItemContainer);
                         }
                     }
-                    else if (selectedContainer.CurrentItemContainer == ItemType.PackageBurgerPaper)
+                    else if (selectedContainer != null &&
+                             selectedContainer.CurrentItemContainer == ItemType.PackageBurgerPaper)
                     {
                         Debug.Log("пробуем собрать бургер по рецепту");
+                        ItemType burgerType = GetMatchingRecipe();
+                        
+                        if (burgerType != ItemType.Empty)
+                        {
+                            // CreateBurger(burgerType);
+                            Debug.Log("Бургер " + burgerType);
+                        }
+                        else
+                        {
+                            Debug.Log("Не правильная сборка Бургер ");
+                        }
+                       
                     }
 
                     BurgerBoard selectedBoard = hit.collider.GetComponent<BurgerBoard>();
@@ -135,6 +150,21 @@ namespace AssemblyBurgerContent
             {
                 Debug.Log("No ingredients to undo.");
             }
+        }
+        
+        private ItemType GetMatchingRecipe()
+        {
+            List<ItemType> itemTypes = _ingredientStack.Select(item => item.ItemType).ToList();
+
+            foreach (var recipe in _recipes)
+            {
+                if (recipe.ItemTypes.SequenceEqual(itemTypes))
+                {
+                    return recipe.BurgerType;
+                }
+            }
+            
+            return ItemType.Empty;
         }
     }
 }
