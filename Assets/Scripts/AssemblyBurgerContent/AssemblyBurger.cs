@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Enums;
 using InteractableContent;
 using SoContent.AssemblyBurger;
@@ -24,7 +25,8 @@ namespace AssemblyBurgerContent
         private int _maxIngredients = 15;
         private ItemContainer _lastItemContainer;
         private int _lastIndexBun = -1;
-
+        private bool _isAnimationInProgress = false;
+        
         private void Start()
         {
             _camera = Camera.main;
@@ -127,6 +129,12 @@ namespace AssemblyBurgerContent
             int index = -1,
             bool isAdditional = false)
         {
+            if (_isAnimationInProgress)
+            {
+                return;
+            }
+            
+            
             Vector3 position = _burgerBoard.CenterPosition.position;
             Quaternion rotation = _burgerBoard.CenterPosition.rotation;
             Vector3 scale = _assemblyBurgerItemConfig.GetScale(type);
@@ -148,7 +156,8 @@ namespace AssemblyBurgerContent
             Item item = _burgerIngridientSpawner.SpawnItem(type);
 
             _lastItemContainer = itemContainer;
-
+            item.gameObject.SetActive(true);
+            
             if (itemContainer != null)
             {
                 if (!isAdditional)
@@ -160,30 +169,115 @@ namespace AssemblyBurgerContent
                     itemContainer.DeactivateItems(1, index);
                     _lastIndexBun = index;
                 }
+                
+                Debug.Log("НУУУ");
+                item.transform.position = itemContainer.transform.position;
+                // item.gameObject.SetActive(true);
+                item.transform.localScale = scale;
+            
+                _isAnimationInProgress = true;
+            
+                Sequence sequence = DOTween.Sequence();
+                sequence.Append(item.transform.DOMove(position, 0.3f).SetEase(Ease.InOutQuad));
+                sequence.Join(item.transform.DORotate(rotation.eulerAngles, 0.3f).SetEase(Ease.InOutQuad));
+                sequence.OnComplete(() =>
+                {
+                    // Сбрасываем флаг после завершения анимации
+                    _isAnimationInProgress = false;
+                });
+            }
+            else
+            {
+                item.transform.position = position;
+            item.transform.rotation = rotation;
+            item.transform.localScale = scale;
             }
 
-            item.transform.position = position;
+
+            /*item.transform.position = itemContainer.transform.position;
+            item.gameObject.SetActive(true);
+            item.transform.localScale = scale;
+            
+            _isAnimationInProgress = true;
+            
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(item.transform.DOMove(position, 0.3f).SetEase(Ease.InOutQuad));
+            sequence.Join(item.transform.DORotate(rotation.eulerAngles, 0.3f).SetEase(Ease.InOutQuad));
+            sequence.OnComplete(() =>
+            {
+                // Сбрасываем флаг после завершения анимации
+                _isAnimationInProgress = false;
+            });*/
+            
+                _ingredientStack.Push((item, itemContainer));
+                
+                
+            /*item.transform.DOMove(position, 0.5f).SetEase(Ease.InOutQuad);
+            item.transform.DORotate(rotation.eulerAngles, 0.5f).SetEase(Ease.InOutQuad);*/
+            
+            /*item.transform.position = position;
             item.transform.rotation = rotation;
             item.transform.localScale = scale;
 
-            /*item.transform.position = _burgerBoard.CenterPosition.position;
-            item.transform.rotation = _burgerBoard.CenterPosition.rotation;
-            item.transform.localScale = _assemblyBurgerItemConfig.GetScale(type);*/
-            item.gameObject.SetActive(true);
+       
+            item.gameObject.SetActive(true);*/
 
-            _ingredientStack.Push((item, itemContainer));
+            // _ingredientStack.Push((item, itemContainer));
         }
 
         public void UndoLastSelection()
         {
+            if (_isAnimationInProgress)
+            {
+                return;
+            }
+            
             if (_ingredientStack.Count > 0)
             {
                 var (lastItem, container) = _ingredientStack.Pop();
-                lastItem.transform.position = Vector3.zero;
-                lastItem.gameObject.SetActive(false);
-
-                // _lastItemContainer.ActivateItems(1);
+                // lastItem.transform.position = Vector3.zero;
+                // lastItem.gameObject.SetActive(false);
                 if (container != null)
+                {
+                    _isAnimationInProgress = true;
+                    Sequence sequence = DOTween.Sequence();
+
+                    sequence.Append(lastItem.transform.DOMove(container.transform.position, 0.3f)
+                        .SetEase(Ease.InOutQuad));
+                    sequence.Join(lastItem.transform.DORotate(container.transform.eulerAngles, 0.3f)
+                        .SetEase(Ease.InOutQuad));
+                    sequence.OnComplete(() =>
+                    {
+                        _isAnimationInProgress = false;
+                        lastItem.transform.position = Vector3.zero;
+                        lastItem.gameObject.SetActive(false);
+
+                        if (container != null)
+                        {
+                            switch (lastItem.ItemType)
+                            {
+                                case ItemType.BunTop:
+                                    container.ActivateItems(1, 0);
+                                    break;
+                                case ItemType.BunLow:
+                                    container.ActivateItems(1, 1);
+                                    break;
+                                default:
+                                    container.ActivateItems(1);
+                                    break;
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    lastItem.transform.position = Vector3.zero;
+                    lastItem.gameObject.SetActive(false);
+                }
+                
+                // _lastItemContainer.ActivateItems(1);
+                
+                /*if (container != null)
                 {
                     switch (lastItem.ItemType)
                     {
@@ -197,7 +291,7 @@ namespace AssemblyBurgerContent
                             container.ActivateItems(1);
                             break;
                     }
-                }
+                }*/
             }
             else
             {
