@@ -16,9 +16,14 @@ namespace AssemblyBurgerContent
         [SerializeField] private List<BurgerPrefabPair> _burgerPrefabPairs;
         [SerializeField] private List<Transform> _burgerPositions;
 
-        private Stack<Item> _ingredientStack = new Stack<Item>();
+        // private Stack<Item> _ingredientStack = new Stack<Item>();
+
+        private Stack<(Item item, ItemContainer container)> _ingredientStack = new Stack<(Item, ItemContainer)>();
+
         private Camera _camera;
         private int _maxIngredients = 15;
+        private ItemContainer _lastItemContainer;
+        private int _lastIndexBun = -1;
 
         private void Start()
         {
@@ -52,13 +57,15 @@ namespace AssemblyBurgerContent
                             {
                                 Debug.Log("selectedContainer.CurrentItemsType[0] " +
                                           selectedContainer.CurrentItemsType[0]);
-                                HandleContainerSelection(activeItems[0], selectedContainer.CurrentItemsType[0]);
+                                HandleContainerSelection(selectedContainer.CurrentItemsType[0], selectedContainer,
+                                    0, true);
                             }
                             else
                             {
                                 Debug.Log("selectedContainer.CurrentItemsType[1] " +
                                           selectedContainer.CurrentItemsType[1]);
-                                HandleContainerSelection(activeItems[1], selectedContainer.CurrentItemsType[1]);
+                                HandleContainerSelection(selectedContainer.CurrentItemsType[1], selectedContainer,
+                                    1, true);
                             }
 
                             /*for (int i = 0; i < activeItems.Length; i++)
@@ -73,7 +80,14 @@ namespace AssemblyBurgerContent
                             Debug.Log("selectedContainer: " + selectedContainer.name);
                             Debug.Log("ItemType: " + selectedContainer.CurrentItemContainer);
 
-                            HandleContainerSelection(activeItems, selectedContainer.CurrentItemContainer);
+                            if (activeItems > 0)
+                            {
+                                HandleContainerSelection(selectedContainer.CurrentItemContainer, selectedContainer);
+                            }
+                            else
+                            {
+                                Debug.Log("Нету ингридиентов этого типа " + selectedContainer.CurrentItemContainer);
+                            }
                         }
                     }
                     else if (selectedContainer != null &&
@@ -98,9 +112,9 @@ namespace AssemblyBurgerContent
 
                     if (sauce != null)
                     {
-                        HandleContainerSelection(0,sauce.ItemType);
+                        HandleContainerSelection(sauce.ItemType);
                     }
-                    
+
                     if (selectedBoard != null)
                     {
                         UndoLastSelection();
@@ -109,7 +123,9 @@ namespace AssemblyBurgerContent
             }
         }
 
-        private void HandleContainerSelection(int value, ItemType type)
+        private void HandleContainerSelection(ItemType type, ItemContainer itemContainer = null,
+            int index = -1,
+            bool isAdditional = false)
         {
             Vector3 position = _burgerBoard.CenterPosition.position;
             Quaternion rotation = _burgerBoard.CenterPosition.rotation;
@@ -117,7 +133,7 @@ namespace AssemblyBurgerContent
 
             if (_ingredientStack.Count > 0)
             {
-                Item previousItem = _ingredientStack.Peek();
+                Item previousItem = _ingredientStack.Peek().item;
                 AssemblyIngredient assemblyIngredient = previousItem.GetComponent<AssemblyIngredient>();
 
                 if (assemblyIngredient != null)
@@ -131,6 +147,21 @@ namespace AssemblyBurgerContent
 
             Item item = _burgerIngridientSpawner.SpawnItem(type);
 
+            _lastItemContainer = itemContainer;
+
+            if (itemContainer != null)
+            {
+                if (!isAdditional)
+                {
+                    itemContainer.DeactivateItems(1);
+                }
+                else
+                {
+                    itemContainer.DeactivateItems(1, index);
+                    _lastIndexBun = index;
+                }
+            }
+
             item.transform.position = position;
             item.transform.rotation = rotation;
             item.transform.localScale = scale;
@@ -140,17 +171,33 @@ namespace AssemblyBurgerContent
             item.transform.localScale = _assemblyBurgerItemConfig.GetScale(type);*/
             item.gameObject.SetActive(true);
 
-            _ingredientStack.Push(item);
+            _ingredientStack.Push((item, itemContainer));
         }
 
         public void UndoLastSelection()
         {
             if (_ingredientStack.Count > 0)
             {
-                Item lastItem = _ingredientStack.Pop();
+                var (lastItem, container) = _ingredientStack.Pop();
                 lastItem.transform.position = Vector3.zero;
                 lastItem.gameObject.SetActive(false);
-                // Destroy(lastItem.gameObject);
+
+                // _lastItemContainer.ActivateItems(1);
+                if (container != null)
+                {
+                    switch (lastItem.ItemType)
+                    {
+                        case ItemType.BunTop:
+                            container.ActivateItems(1, 0);
+                            break;
+                        case ItemType.BunLow:
+                            container.ActivateItems(1, 1);
+                            break;
+                        default:
+                            container.ActivateItems(1);
+                            break;
+                    }
+                }
             }
             else
             {
@@ -160,7 +207,7 @@ namespace AssemblyBurgerContent
 
         private ItemType GetMatchingRecipe()
         {
-            List<ItemType> itemTypes = _ingredientStack.Select(item => item.ItemType).ToList();
+            List<ItemType> itemTypes = _ingredientStack.Select(tuple => tuple.item.ItemType).ToList();
 
             foreach (var recipe in _burgerRecipeConfig.recipes)
             {
@@ -186,13 +233,14 @@ namespace AssemblyBurgerContent
                 {
                     GameObject burgerInstance =
                         Instantiate(burgerPrefab, availablePosition.position, Quaternion.identity);
+
                     burgerInstance.transform.SetParent(availablePosition);
                     // burgerInstance.transform.position = Vector3.zero;
                     Debug.Log("Бургер создан: " + burgerType);
 
                     while (_ingredientStack.Count > 0)
                     {
-                        Item lastItem = _ingredientStack.Pop();
+                        var (lastItem, container) = _ingredientStack.Pop();
                         lastItem.gameObject.SetActive(false);
                         // Destroy(lastItem.gameObject);
                     }

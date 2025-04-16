@@ -182,5 +182,22 @@ namespace InteractableContent
                 inactiveItems[i].gameObject.SetActive(false);
             }
         }
+        
+        public void DeactivateItems(int value,int index)
+        {
+            if (_items == null)
+            {
+                Debug.LogError("_items array is not initialized.");
+                return;
+            }
+
+            Debug.Log("Deactivation Index " + index);
+            List<Item> inactiveItems = _itemsAdditionalArray[index].Where(p => p.gameObject.activeSelf).ToList();
+
+            for (int i = inactiveItems.Count - 1; i >= inactiveItems.Count - value && i >= 0; i--)
+            {
+                inactiveItems[i].gameObject.SetActive(false);
+            }
+        }
     }
 }
