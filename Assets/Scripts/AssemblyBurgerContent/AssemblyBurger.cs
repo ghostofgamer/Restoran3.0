@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Enums;
 using InteractableContent;
-using RecipesContent;
 using SoContent.AssemblyBurger;
 using UnityEngine;
 
@@ -13,10 +12,10 @@ namespace AssemblyBurgerContent
         [SerializeField] private BurgerBoard _burgerBoard;
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
-        [SerializeField] private List<Recipe> _recipes;
+        [SerializeField] private BurgerRecipeConfig _burgerRecipeConfig;
         [SerializeField] private List<BurgerPrefabPair> _burgerPrefabPairs;
         [SerializeField] private List<Transform> _burgerPositions;
-        
+
         private Stack<Item> _ingredientStack = new Stack<Item>();
         private Camera _camera;
         private int _maxIngredients = 15;
@@ -82,7 +81,7 @@ namespace AssemblyBurgerContent
                     {
                         Debug.Log("пробуем собрать бургер по рецепту");
                         ItemType burgerType = GetMatchingRecipe();
-                        
+
                         if (burgerType != ItemType.Empty)
                         {
                             CreateBurger(burgerType);
@@ -92,11 +91,16 @@ namespace AssemblyBurgerContent
                         {
                             Debug.Log("Не правильная сборка Бургер ");
                         }
-                       
                     }
 
                     BurgerBoard selectedBoard = hit.collider.GetComponent<BurgerBoard>();
+                    Sauce sauce = hit.collider.GetComponent<Sauce>();
 
+                    if (sauce != null)
+                    {
+                        HandleContainerSelection(0,sauce.ItemType);
+                    }
+                    
                     if (selectedBoard != null)
                     {
                         UndoLastSelection();
@@ -153,37 +157,39 @@ namespace AssemblyBurgerContent
                 Debug.Log("No ingredients to undo.");
             }
         }
-        
+
         private ItemType GetMatchingRecipe()
         {
             List<ItemType> itemTypes = _ingredientStack.Select(item => item.ItemType).ToList();
 
-            foreach (var recipe in _recipes)
+            foreach (var recipe in _burgerRecipeConfig.recipes)
             {
                 if (recipe.ItemTypes.SequenceEqual(itemTypes))
                 {
                     return recipe.BurgerType;
                 }
             }
-            
+
             return ItemType.Empty;
         }
-        
+
         private void CreateBurger(ItemType burgerType)
         {
-            GameObject burgerPrefab = _burgerPrefabPairs.FirstOrDefault(pair => pair.BurgerType == burgerType)?.BurgerPrefab;
-            
+            GameObject burgerPrefab =
+                _burgerPrefabPairs.FirstOrDefault(pair => pair.BurgerType == burgerType)?.BurgerPrefab;
+
             if (burgerPrefab != null)
             {
                 Transform availablePosition = _burgerPositions.FirstOrDefault(position => position.childCount == 0);
-                
+
                 if (availablePosition != null)
                 {
-                    GameObject burgerInstance = Instantiate(burgerPrefab, availablePosition.position, Quaternion.identity);
+                    GameObject burgerInstance =
+                        Instantiate(burgerPrefab, availablePosition.position, Quaternion.identity);
                     burgerInstance.transform.SetParent(availablePosition);
                     // burgerInstance.transform.position = Vector3.zero;
                     Debug.Log("Бургер создан: " + burgerType);
-                    
+
                     while (_ingredientStack.Count > 0)
                     {
                         Item lastItem = _ingredientStack.Pop();
@@ -193,7 +199,8 @@ namespace AssemblyBurgerContent
                 }
                 else
                 {
-                    Debug.Log("Нет места, если хотите создать новый, освободите  место или сделайте бургер из нынешнего заказа");
+                    Debug.Log(
+                        "Нет места, если хотите создать новый, освободите  место или сделайте бургер из нынешнего заказа");
                 }
             }
             else

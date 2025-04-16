@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AssemblyBurgerContent
 {
-    public class Souce : MonoBehaviour
+    public class Sauce : MonoBehaviour
     {
         [SerializeField] private ItemType _itemType;
 
