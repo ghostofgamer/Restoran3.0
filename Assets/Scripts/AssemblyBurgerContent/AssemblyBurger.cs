@@ -134,7 +134,6 @@ namespace AssemblyBurgerContent
                 return;
             }
             
-            
             Vector3 position = _burgerBoard.CenterPosition.position;
             Quaternion rotation = _burgerBoard.CenterPosition.rotation;
             Vector3 scale = _assemblyBurgerItemConfig.GetScale(type);
@@ -325,10 +324,19 @@ namespace AssemblyBurgerContent
 
                 if (availablePosition != null)
                 {
-                    GameObject burgerInstance =
-                        Instantiate(burgerPrefab, availablePosition.position, Quaternion.identity);
+                    /*GameObject burgerInstance =
+                        Instantiate(burgerPrefab, availablePosition.position, Quaternion.identity);*/
 
+                    GameObject burgerInstance =
+                        Instantiate(burgerPrefab, _burgerBoard.CenterPosition.position, Quaternion.identity);
+                    
+                    Sequence sequence = DOTween.Sequence();
+                    sequence.Append(burgerInstance.transform.DOScale(1.3f, 0.5f).SetEase(Ease.InOutQuad));
+                    sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.5f).SetEase(Ease.InOutQuad));
+                    sequence.Append(burgerInstance.transform.DOMove(availablePosition.position, 0.5f).SetEase(Ease.InOutQuad));
+                    
                     burgerInstance.transform.SetParent(availablePosition);
+                    
                     // burgerInstance.transform.position = Vector3.zero;
                     Debug.Log("Бургер создан: " + burgerType);
 
