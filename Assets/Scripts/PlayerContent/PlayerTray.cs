@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using Enums;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PlayerContent
 {
@@ -10,6 +12,9 @@ namespace PlayerContent
         [SerializeField] private Item[] _readyCutlets;
         [SerializeField] private GameObject _rawCutletTray;
         [SerializeField] private GameObject _cutletTray;
+        [SerializeField] private Transform[] _positions;
+
+        public Transform[] Positions => _positions;
 
         public ItemType CurrentType { get; private set; }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using Enums;
 using InteractableContent;
 using PlayerContent;
+using SoContent.AssemblyBurger;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +19,9 @@ namespace KitchenEquipmentContent
         [SerializeField] private Animator _animator;
         [SerializeField] private Collider _boxCollider;
         [SerializeField] private GameObject _progressFryUI;
-
+        /*[SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
+        [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;*/
+        
         public TMP_Text grillText;
         public Image fillImage;
         public float grillTime = 3f;
