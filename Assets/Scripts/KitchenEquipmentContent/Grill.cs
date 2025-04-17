@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using DG.Tweening;
 using Enums;
 using InteractableContent;
 using PlayerContent;
@@ -19,8 +20,8 @@ namespace KitchenEquipmentContent
         [SerializeField] private Animator _animator;
         [SerializeField] private Collider _boxCollider;
         [SerializeField] private GameObject _progressFryUI;
-        /*[SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
-        [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;*/
+        [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
+        [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
         
         public TMP_Text grillText;
         public Image fillImage;
@@ -63,8 +64,40 @@ namespace KitchenEquipmentContent
                     if (itemsToPlace > 0)
                     {
                         playerInteraction.PlayerTray.PutAway(ItemType.Cutlet, itemsToPlace);
-                        // DeactivateItems(_readyCutletItems, itemsToPlace);
-                        ActivateItems(_readyCutletItems, itemsToPlace);
+                        
+                        int completedAnimations = 0;
+                        Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.Cutlet);
+                        
+                        for (int i = 0; i < itemsToPlace; i++)
+                        {
+                            Debug.Log("ТУТА!!!!");
+                            
+                            Item newItem = _burgerIngridientSpawner.SpawnItem(ItemType.Cutlet);
+                            newItem.gameObject.SetActive(true);
+                            newItem.transform.position = playerInteraction.PlayerTray.Positions[i].position;
+                            newItem.transform.localScale = scale;
+                            
+                            Sequence sequence = DOTween.Sequence();
+                            sequence.Append(newItem.transform
+                                .DOMove(_readyCutletItems[i].transform.position, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.Join(newItem.transform
+                                .DORotate(_readyCutletItems[i].transform.eulerAngles, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.OnComplete(() =>
+                            {
+                                completedAnimations++;
+                                newItem.transform.position = Vector3.zero;
+                                newItem.gameObject.SetActive(false);
+
+                                if (completedAnimations == itemsToPlace)
+                                {
+                                    ActivateItems(_readyCutletItems, itemsToPlace);
+                                }
+                            });
+                        }
+                        
+                        // ActivateItems(_readyCutletItems, itemsToPlace);
                     }
                 }
                 else if (playerInteraction.PlayerTray.CurrentType == ItemType.Empty)
@@ -73,12 +106,41 @@ namespace KitchenEquipmentContent
                     int activeCount = CountActiveItems(_readyCutletItems);
                     int itemsToPlace = Mathf.Min(activeCount, emptyPos);
 
-                    Debug.Log("3");
-
                     if (itemsToPlace > 0)
                     {
-                        playerInteraction.PlayerTray.Put(ItemType.Cutlet, itemsToPlace);
                         DeactivateItems(_readyCutletItems, itemsToPlace);
+                        
+                        int completedAnimations = 0;
+                        Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.Cutlet);
+
+                        for (int i = 0; i < itemsToPlace; i++)
+                        {
+                            Item newItem = _burgerIngridientSpawner.SpawnItem(ItemType.Cutlet);
+                            newItem.gameObject.SetActive(true);
+                            newItem.transform.position = _readyCutletItems[i].transform.position;
+                            newItem.transform.localScale = scale;
+                            
+                            Sequence sequence = DOTween.Sequence();
+                            sequence.Append(newItem.transform
+                                .DOMove(playerInteraction.PlayerTray.transform.position, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.Join(newItem.transform
+                                .DORotate(playerInteraction.PlayerTray.transform.eulerAngles, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.OnComplete(() =>
+                            {
+                                completedAnimations++;
+                                newItem.transform.position = Vector3.zero;
+                                newItem.gameObject.SetActive(false);
+
+                                if (completedAnimations == itemsToPlace)
+                                {
+                                    playerInteraction.PlayerTray.Put(ItemType.Cutlet, itemsToPlace);
+                                }
+                            });
+                        }
+                        
+                        // playerInteraction.PlayerTray.Put(ItemType.Cutlet, itemsToPlace);
                     }
                 }
             }
@@ -98,22 +160,45 @@ namespace KitchenEquipmentContent
                     if (itemsToPlace > 0)
                     {
                         playerInteraction.PlayerTray.PutAway(ItemType.RawCutlet, itemsToPlace);
-                        ActivateItems(item, itemsToPlace);
+                        
+                        int completedAnimations = 0;
+                        Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.RawCutlet);
+                        
+                        for (int i = 0; i < itemsToPlace; i++)
+                        {
+                            Debug.Log("ТУТА!!!! " + playerInteraction.PlayerTray.CurrentType);
+                            
+                            Item newItem = _burgerIngridientSpawner.SpawnItem(ItemType.RawCutlet);
+                            newItem.gameObject.SetActive(true);
+                            newItem.transform.position = playerInteraction.PlayerTray.Positions[i].position;
+                            newItem.transform.localScale = scale;
+                            
+                            Sequence sequence = DOTween.Sequence();
+                            sequence.Append(newItem.transform
+                                .DOMove(_readyCutletItems[i].transform.position, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.Join(newItem.transform
+                                .DORotate(_readyCutletItems[i].transform.eulerAngles, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.OnComplete(() =>
+                            {
+                                completedAnimations++;
+                                newItem.transform.position = Vector3.zero;
+                                newItem.gameObject.SetActive(false);
+
+                                if (completedAnimations == itemsToPlace)
+                                {
+                                    ActivateItems(item, itemsToPlace);
+                                }
+                            });
+                        }
+                        
+                        // ActivateItems(item, itemsToPlace);
                     }
                 }
                 else if (playerInteraction.PlayerTray.CurrentType == ItemType.Empty)
                 {
                     FryCutlets();
-
-                    /*int activeCount = CountActiveItems(_rawCutletItems);
-
-                    foreach (var rawItem in _rawCutletItems)
-                        rawItem.gameObject.SetActive(false);
-
-                    for (int i = 0; i < activeCount; i++)
-                        _readyCutletItems[i].gameObject.SetActive(true);
-
-                    _currentType = ItemType.Cutlet;*/
                 }
                 else
                 {
@@ -137,7 +222,41 @@ namespace KitchenEquipmentContent
                     {
                         _currentType = playerInteraction.PlayerTray.CurrentType;
                         playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType, itemsToPlace);
-                        ActivateItems(item, itemsToPlace);
+                        
+                        int completedAnimations = 0;
+                        Vector3 scale = _assemblyBurgerItemConfig.GetScale(playerInteraction.PlayerTray.CurrentType);
+                        
+                        for (int i = 0; i < itemsToPlace; i++)
+                        {
+                            Debug.Log("ТУТА!!!! " + playerInteraction.PlayerTray.CurrentType);
+                            
+                            Item newItem = _burgerIngridientSpawner.SpawnItem(_currentType);
+                            newItem.gameObject.SetActive(true);
+                            newItem.transform.position = playerInteraction.PlayerTray.Positions[i].position;
+                            newItem.transform.localScale = scale;
+                            
+                            Sequence sequence = DOTween.Sequence();
+                            sequence.Append(newItem.transform
+                                .DOMove(_readyCutletItems[i].transform.position, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.Join(newItem.transform
+                                .DORotate(_readyCutletItems[i].transform.eulerAngles, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.OnComplete(() =>
+                            {
+                                completedAnimations++;
+                                newItem.transform.position = Vector3.zero;
+                                newItem.gameObject.SetActive(false);
+
+                                if (completedAnimations == itemsToPlace)
+                                {
+                                    ActivateItems(item, itemsToPlace);
+                                }
+                            });
+                        }
+                        
+                        
+                        // ActivateItems(item, itemsToPlace);
                     }
                 }
                 else
