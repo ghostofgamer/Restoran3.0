@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SoContent
 {
-    [CreateAssetMenu(fileName = "NewItemConfig", menuName = "Configs/ItemConfig")]
+    [CreateAssetMenu(fileName = "NewItemsConfig", menuName = "Configs/ItemsConfig")]
     public class ItemsConfig : ScriptableObject
     {
         public List<ItemConfig> items;
@@ -14,6 +14,7 @@ namespace SoContent
         public void Initialize()
         {
             _itemDictionary = new Dictionary<ItemType, ItemConfig>();
+            
             foreach (var item in items)
             {
                 _itemDictionary[item.itemType] = item;

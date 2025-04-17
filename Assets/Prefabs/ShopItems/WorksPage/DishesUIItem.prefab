@@ -555,6 +555,7 @@ GameObject:
   - component: {fileID: 6452340220087766816}
   - component: {fileID: 129101180732224522}
   - component: {fileID: 153429844291501514}
+  - component: {fileID: 3774968781993354450}
   m_Layer: 5
   m_Name: DishesUIItem
   m_TagString: Untagged
@@ -625,6 +626,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3774968781993354450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037085084115986066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb3e82f5dada90c47b4d652ff31f07de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _menuScrollContent: {fileID: 0}
+  _itemType: 11
 --- !u!1 &3614329823623401336
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,6 +1095,7 @@ GameObject:
   - component: {fileID: 7826396147861641738}
   - component: {fileID: 1999813541889679907}
   - component: {fileID: 3368944365479521749}
+  - component: {fileID: 2265415737621706693}
   m_Layer: 5
   m_Name: AddButton
   m_TagString: Untagged
@@ -1189,6 +1205,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2265415737621706693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7156106188254685508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 014150eac44c66c43ad9cefbba4badb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dishesUIItem: {fileID: 3774968781993354450}
 --- !u!1 &7996363046985912435
 GameObject:
   m_ObjectHideFlags: 0
