@@ -25,5 +25,9 @@ namespace Enums
     BurgerItemOrder,
     DrinkItemOrder,
     ExtraItemOrder,
+    Coffee,
+    SodaLemon,
+    SodaOrange,
+    SodaBarberry,
   }
 }

@@ -9,5 +9,5 @@ public class ItemConfig
     public ItemType category;
     public DollarValue price;
     public string itemName;
-    public Sprite _sprite;
+    public Sprite sprite;
 }
