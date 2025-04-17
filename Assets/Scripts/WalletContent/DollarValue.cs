@@ -1,12 +1,19 @@
 using System;
+using UnityEngine;
 
 namespace WalletContent
 {
+    [Serializable]
     public class DollarValue
     {
+        [SerializeField]
+        private int dollars;
+        [SerializeField]
+        private int cents;
+        
         public int Dollars { get; private set; }
         public int Cents { get; private set; }
-        
+
         public DollarValue(int dollars, int cents)
         {
             if (cents < 0 || cents > 99)

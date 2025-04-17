@@ -22,5 +22,8 @@ namespace Enums
     FinishMegaBurger,
     Ketchup,
     Mustard,
+    BurgerItemOrder,
+    DrinkItemOrder,
+    ExtraItemOrder,
   }
 }
