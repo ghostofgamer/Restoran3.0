@@ -1,6 +1,7 @@
 using System.Collections;
 using OrdersContent;
-using RestorantContent;
+using RestaurantContent;
+using RestaurantContent.TableContent;
 using SpawnContent;
 using UnityEngine;
 
@@ -12,20 +13,34 @@ namespace ClientsContent
         [SerializeField] private OrderCreator _orderCreator;
         [SerializeField] private QueueCashRegister _queueCashRegister;
         [SerializeField] private Restaurant _restaurant;
+        [SerializeField] private TablesCounter _tablesCounter;
 
         [ContextMenu("Create New Client")]
-        
         private void CreateClients()
         {
+            if (_queueCashRegister.IsQueueFull())
+            {
+                Debug.Log("Очередь заполнена");
+                return;
+            }
+
+            if (_tablesCounter.GetFreeTableCount() <= 0)
+            {
+                Debug.Log("Свободных столов нету");
+                return;
+            }
+            
             StartCoroutine(Create());
         }
 
         private IEnumerator Create()
         {
-            yield return new WaitForSeconds(1f);
+            Table table = _tablesCounter.GetAvailableTable();
+            table.SetBusyValue(true);
             Client client = _clientsSpawner.SpawnRandomClient();
-            client.Init(_orderCreator.CreateOrder(),_restaurant);
+            client.Init(_orderCreator.CreateOrder(),_restaurant,table);
             _queueCashRegister.AddClientToQueue(client);
+            yield return null;
         }
     }
 }
