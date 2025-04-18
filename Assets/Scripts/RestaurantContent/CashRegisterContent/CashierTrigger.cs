@@ -1,20 +1,20 @@
 using ClientsContent;
 using UnityEngine;
 
-namespace RestaurantContent
+namespace RestaurantContent.CashRegisterContent
 {
     public class CashierTrigger : MonoBehaviour
     {
-        [SerializeField] private Restaurant _restaurant;
-        
+        [SerializeField] private CashRegister _cashRegister;
+
         private void OnTriggerEnter(Collider other)
         {
             Client client = other.GetComponent<Client>();
-        
+
             if (client != null && client.CanInteractWithCashier())
             {
-                client.Paid();
-                _restaurant.AcceptOrder();
+                Debug.Log("Клиент готов платить");
+                _cashRegister.SetClient(client);
             }
         }
     }
