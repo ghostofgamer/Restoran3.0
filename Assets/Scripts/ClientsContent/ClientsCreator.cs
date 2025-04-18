@@ -1,5 +1,6 @@
 using System.Collections;
 using OrdersContent;
+using RestorantContent;
 using SpawnContent;
 using UnityEngine;
 
@@ -10,11 +11,7 @@ namespace ClientsContent
         [SerializeField] private ClientsSpawner _clientsSpawner;
         [SerializeField] private OrderCreator _orderCreator;
         [SerializeField] private QueueCashRegister _queueCashRegister;
-
-        private void Start()
-        {
-            // CreateClients();
-        }
+        [SerializeField] private Restaurant _restaurant;
 
         [ContextMenu("Create New Client")]
         
@@ -27,7 +24,7 @@ namespace ClientsContent
         {
             yield return new WaitForSeconds(1f);
             Client client = _clientsSpawner.SpawnRandomClient();
-            client.Init(_orderCreator.CreateOrder());
+            client.Init(_orderCreator.CreateOrder(),_restaurant);
             _queueCashRegister.AddClientToQueue(client);
         }
     }

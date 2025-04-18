@@ -7,7 +7,7 @@ namespace OrdersContent
 {
     public class OrderCreator : MonoBehaviour
     {
-        [SerializeField] private Restorant _restorant;
+        [SerializeField] private Restaurant restaurant;
         [SerializeField] private MenuCounter _menuCounter;
 
         private List<ItemType> _cachedBurgers;

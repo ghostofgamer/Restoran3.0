@@ -4756,6 +4756,7 @@ MonoBehaviour:
   _clientsSpawner: {fileID: 1669106059}
   _orderCreator: {fileID: 707215733}
   _queueCashRegister: {fileID: 174178909}
+  _restaurant: {fileID: 715113177}
 --- !u!1 &402138950
 GameObject:
   m_ObjectHideFlags: 0
@@ -4765,6 +4766,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 402138951}
+  - component: {fileID: 402138952}
   m_Layer: 0
   m_Name: Table (2)
   m_TagString: Untagged
@@ -4789,6 +4791,18 @@ Transform:
   - {fileID: 1629516471}
   m_Father: {fileID: 1976640981}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &402138952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402138950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b20a8fb70bc23b469ed7e39a089a50f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &406070565
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8928,7 +8942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74e11366db26d2343b83f7f2a608c8ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _restorant: {fileID: 715113177}
+  restaurant: {fileID: 715113177}
   _menuCounter: {fileID: 715113176}
 --- !u!1001 &710282938
 PrefabInstance:
@@ -23484,6 +23498,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1964305510}
+  - component: {fileID: 1964305511}
   m_Layer: 0
   m_Name: Table (1)
   m_TagString: Untagged
@@ -23508,6 +23523,18 @@ Transform:
   - {fileID: 1030204295}
   m_Father: {fileID: 1976640981}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1964305511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964305509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b20a8fb70bc23b469ed7e39a089a50f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1970960118
 GameObject:
   m_ObjectHideFlags: 0
@@ -25304,6 +25331,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2135016135}
+  - component: {fileID: 2135016136}
   m_Layer: 0
   m_Name: Table
   m_TagString: Untagged
@@ -25328,6 +25356,18 @@ Transform:
   - {fileID: 1472550753}
   m_Father: {fileID: 1976640981}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2135016136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135016134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b20a8fb70bc23b469ed7e39a089a50f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2146198010 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: cbd36e67fcffdf347a8b69495f1345fa, type: 3}
@@ -26631,6 +26671,10 @@ PrefabInstance:
       propertyPath: m_Icon
       value: 
       objectReference: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+    - target: {fileID: 1106060508409853757, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: _queueCashRegister
+      value: 
+      objectReference: {fileID: 174178909}
     - target: {fileID: 1496750555587898074, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
       propertyPath: m_Icon
       value: 
