@@ -1,0 +1,34 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+namespace ClientsContent
+{
+    public class QueueCashRegister : MonoBehaviour
+    {
+        [SerializeField] public Transform[] _queuePositions;
+        
+        private Queue<GameObject> clientQueue = new Queue<GameObject>();
+        private GameObject currentClient;
+        
+        public void AddClientToQueue(GameObject client)
+        {
+            clientQueue.Enqueue(client);
+            UpdateQueuePositions();
+        }
+
+        private void UpdateQueuePositions()
+        {
+            int index = 0;
+            foreach (var client in clientQueue)
+            {
+                if (index < _queuePositions.Length)
+                {
+                    NavMeshAgent agent = client.GetComponent<NavMeshAgent>();
+                    agent.SetDestination(_queuePositions[index].position);
+                    index++;
+                }
+            }
+        }
+    }
+}

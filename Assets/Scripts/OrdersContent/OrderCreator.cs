@@ -15,7 +15,7 @@ namespace OrdersContent
         private List<ItemType> _cachedExtras;
 
         [ContextMenu("CreateOrder")]
-        public void CreateOrder()
+        public Order CreateOrder()
         {
             _cachedBurgers = _menuCounter.GetBurgers();
             _cachedDrinks = _menuCounter.GetDrinks();
@@ -25,48 +25,30 @@ namespace OrdersContent
                       $" drinks {_cachedDrinks.Count} ," +
                       $" extras {_cachedExtras.Count}");
 
-            /*if (_cachedBurgers.Count > 0)
-            {
-                int randomIndex = Random.Range(0, _cachedBurgers.Count);
-                ItemType burgerType = _cachedBurgers[randomIndex];
-                Debug.Log($"а закажука я {burgerType}");
-            }
-            else
-            {
-                Debug.Log("!В меню нету бургеров");
-            }
-
-            if (_cachedDrinks.Count > 0)
-            {
-                int randomIndex = Random.Range(0, _cachedDrinks.Count);
-                ItemType burgerType = _cachedDrinks[randomIndex];
-                Debug.Log($"а закажука я {burgerType}");
-            }
-            else
-            {
-                Debug.Log("!В меню нету попить");
-            }*/
-
             ItemType burgerType = GetRandomItemType(_cachedBurgers, "бургеров");
-            
+
             if (burgerType != ItemType.Empty)
             {
                 Debug.Log($"а закажука я {burgerType}");
             }
 
             ItemType drinkType = GetRandomItemType(_cachedDrinks, "попить");
-            
+
             if (drinkType != ItemType.Empty)
             {
                 Debug.Log($"а закажука я {drinkType}");
             }
 
             ItemType extraType = GetRandomItemType(_cachedExtras, "допов");
-            
+
             if (extraType != ItemType.Empty)
             {
                 Debug.Log($"а закажука я {extraType}");
             }
+
+            Order order = new Order(burgerType, drinkType, extraType);
+            
+            return order;
         }
 
         private ItemType GetRandomItemType(List<ItemType> itemList, string itemName)
