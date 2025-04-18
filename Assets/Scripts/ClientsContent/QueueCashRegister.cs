@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace ClientsContent
 {
@@ -25,8 +24,10 @@ namespace ClientsContent
             {
                 if (index < _queuePositions.Length)
                 {
-                    NavMeshAgent agent = client.GetComponent<NavMeshAgent>();
-                    agent.SetDestination(_queuePositions[index].position);
+                    /*NavMeshAgent agent = client.GetComponent<NavMeshAgent>();
+                    agent.SetDestination(_queuePositions[index].position);*/
+                    client.GoToQueuePosition(_queuePositions[index].position);
+                    
                     index++;
                 }
             }
