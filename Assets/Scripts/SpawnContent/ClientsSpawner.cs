@@ -1,3 +1,4 @@
+using System.Collections;
 using ClientsContent;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace SpawnContent
     {
         [SerializeField] private Client[] _clientPrefabs; 
         [SerializeField] private Transform _container;
+        [SerializeField] private Transform _spawnPosition;
         
         private ObjectPool<Client> _clientPool;
         
@@ -14,6 +16,20 @@ namespace SpawnContent
         {
             _clientPool = new ObjectPool<Client>(_clientPrefabs[0], 15, _container);
             _clientPool.EnableAutoExpand();
+            StartCoroutine(StartSpawns());
+        }
+
+        private IEnumerator StartSpawns()
+        {
+            int value = 0;
+            
+            while (value <5)
+            {
+                yield return new WaitForSeconds(1f);
+                value++;
+                SpawnRandomClient();
+                
+            }
         }
         
         public Client SpawnRandomClient()
@@ -28,8 +44,8 @@ namespace SpawnContent
             }
             else
             {
-                client.transform.position = _container.position;
-                client.transform.rotation = _container.rotation;
+                client.transform.position = _spawnPosition.position;
+                client.transform.rotation = _spawnPosition.rotation;
                 client.gameObject.SetActive(true);
             }
 

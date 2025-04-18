@@ -36,8 +36,6 @@ namespace RestorantContent
             {
                 Debug.Log($"{itemType} is already in the menu.");
             }
-
-            // CategorizeMenuItems();
         }
 
         public void RemoveItem(ItemType itemType)
@@ -51,7 +49,6 @@ namespace RestorantContent
             {
                 Debug.Log($"{itemType} is not in the menu.");
             }
-            // CategorizeMenuItems();
         }
         
         private void UpdateCachedList(List<ItemType> cachedList, ItemType itemType, bool isAdding)
