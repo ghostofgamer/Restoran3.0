@@ -8,10 +8,10 @@ namespace ClientsContent
     {
         [SerializeField] public Transform[] _queuePositions;
         
-        private Queue<GameObject> clientQueue = new Queue<GameObject>();
-        private GameObject currentClient;
+        private Queue<Client> clientQueue = new Queue<Client>();
+        private Client currentClient;
         
-        public void AddClientToQueue(GameObject client)
+        public void AddClientToQueue(Client client)
         {
             clientQueue.Enqueue(client);
             UpdateQueuePositions();
@@ -20,6 +20,7 @@ namespace ClientsContent
         private void UpdateQueuePositions()
         {
             int index = 0;
+            
             foreach (var client in clientQueue)
             {
                 if (index < _queuePositions.Length)
