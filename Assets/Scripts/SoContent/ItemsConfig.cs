@@ -17,7 +17,7 @@ namespace SoContent
             
             foreach (var item in items)
             {
-                _itemDictionary[item.itemType] = item;
+                _itemDictionary[item.ItemType] = item;
             }
         }
 
