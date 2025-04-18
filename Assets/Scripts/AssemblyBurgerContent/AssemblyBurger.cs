@@ -291,9 +291,12 @@ namespace AssemblyBurgerContent
                     sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.5f).SetEase(Ease.InOutQuad));
                     sequence.Append(burgerInstance.transform.DOMove(availablePosition.position, 0.5f)
                         .SetEase(Ease.InOutQuad));
-
+                    
                     burgerInstance.transform.SetParent(availablePosition);
 
+                    sequence.Join(burgerInstance.transform.DOLocalRotate(new Vector3(0,0,0), 0.5f, RotateMode.FastBeyond360)
+                        .SetEase(Ease.Linear));
+                    
                     // burgerInstance.transform.position = Vector3.zero;
                     Debug.Log("Бургер создан: " + burgerType);
 
