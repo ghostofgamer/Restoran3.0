@@ -13,10 +13,10 @@ namespace RestaurantContent
         [SerializeField] private TablesCounter _tablesCounter;
         [SerializeField] private OrdersCounter _ordersCounter;
 
-        public void AcceptOrder(Order order)
+        public void AcceptOrder(Order order,Client client)
         {
             _queueCashRegister.ClientFinishedOrder();
-            _ordersCounter.AddOrder(order);
+            _ordersCounter.AddOrder(order,client);
         }
     }
 }

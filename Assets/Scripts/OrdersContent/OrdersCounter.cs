@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ClientsContent;
 using RestaurantContent;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace OrdersContent
     public class OrdersCounter : MonoBehaviour
     {
         [SerializeField] private Tray[] _trays;
+        [SerializeField] private List<Client> _activeOrderWaitClients;
 
         private const int MaxActiveOrders = 4;
 
@@ -20,12 +22,13 @@ namespace OrdersContent
             _orderQueue = new Queue<Order>();
         }
 
-        public void AddOrder(Order order)
+        public void AddOrder(Order order, Client client)
         {
             if (_currentOrders.Count < MaxActiveOrders)
             {
                 _currentOrders.Add(order);
-                UpdateTrays(order.IndexTable);
+                _activeOrderWaitClients.Add(client);
+                UpdateTrays(order);
                 Debug.Log("Добавлен новый активный заказ: " + order.IndexTable);
             }
             else
@@ -35,11 +38,20 @@ namespace OrdersContent
             }
         }
 
-        public void CompleteOrder(Order order)
+        public void CompleteOrder(Order order,Transform positionTray)
         {
             if (_currentOrders.Contains(order))
             {
                 _currentOrders.Remove(order);
+                
+                Client client = _activeOrderWaitClients.FirstOrDefault(c => c.Order == order);
+                
+                if (client != null)
+                {
+                    _activeOrderWaitClients.Remove(client);
+                    client.OrderCompleted(positionTray);
+                }
+                
                 TryActivateOrder();
             }
         }
@@ -50,12 +62,12 @@ namespace OrdersContent
             {
                 Order nextOrder = _orderQueue.Dequeue();
                 _currentOrders.Add(nextOrder);
-                UpdateTrays(nextOrder.IndexTable);
+                UpdateTrays(nextOrder);
                 Debug.Log("Активирован новый заказ: " + nextOrder.IndexTable);
             }
         }
 
-        private void UpdateTrays(int indexTable)
+        private void UpdateTrays(Order order)
         {
             int freeTraysCount = _trays.Count(tray => !tray.IsBusy);
             Debug.Log("Количество свободных подносов: " + freeTraysCount);
@@ -64,7 +76,7 @@ namespace OrdersContent
             if (freeTray != null)
             {
                 freeTray.SetBusy(true);
-                freeTray.SetIndex(indexTable + 1);
+                freeTray.SetOrder(order);
             }
         }
     }

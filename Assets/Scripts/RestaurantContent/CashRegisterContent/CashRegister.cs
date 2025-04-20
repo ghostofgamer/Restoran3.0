@@ -34,7 +34,7 @@ namespace RestaurantContent.CashRegisterContent
                 return;
             
             _currentClient.Paid();
-            _restaurant.AcceptOrder(_currentClient.Order);
+            _restaurant.AcceptOrder(_currentClient.Order,_currentClient);
             _currentClient = null;
         }
     }

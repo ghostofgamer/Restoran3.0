@@ -1,10 +1,14 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace RestaurantContent.TableContent
 {
     public class Table : MonoBehaviour
     {
         [SerializeField] private int _index;
+        [SerializeField] private Transform _clientPosition;
+
+        public Transform ClientPosition => _clientPosition;
         
         public bool IsBusy { get; private set; }
 

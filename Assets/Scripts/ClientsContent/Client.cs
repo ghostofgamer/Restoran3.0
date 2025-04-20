@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Enums;
 using OrdersContent;
 using RestaurantContent;
@@ -21,6 +22,16 @@ namespace ClientsContent
 
         public Table Table { get; private set; }
 
+        /*private void Update()
+        {
+            if (_navMeshAgent.remainingDistance < 0.1f && _currentState == ClientState.PickUpOrder)
+            {
+                _currentState = ClientState.Eat;
+                _navMeshAgent.SetDestination(Table.transform.position);
+                Debug.Log("Клиент " + gameObject.name + " вернулся за стол.");
+            }
+        }*/
+        
         public void Init(Order order, Restaurant restaurant, Table table)
         {
             Order = order;
@@ -46,11 +57,78 @@ namespace ClientsContent
             });
         }
 
+        public void OrderCompleted(Transform position)
+        {
+            /*_navMeshAgent.SetDestination(position.position);
+            _currentState = ClientState.PickUpOrder;*/
+            
+            StartCoroutine(PickUpOrder(position));
+        }
+        
+        private IEnumerator PickUpOrder(Transform position)
+        {
+            Debug.Log("Текущая позиция агента: " + _navMeshAgent.transform.position);
+            Debug.Log("Целевая позиция: " + position.position);
+            
+            _navMeshAgent.SetDestination(position.position);
+            _currentState = ClientState.PickUpOrder;
+            
+            Debug.Log("Клиент идет за заказом " + _navMeshAgent.remainingDistance);
+            Debug.Log("Клиент идет за заказом " + position.name);
+            Debug.Log("pathPending: " + _navMeshAgent.pathPending);
+            Debug.Log("remainingDistance: " + _navMeshAgent.remainingDistance);
+            Debug.Log("stoppingDistance: " + _navMeshAgent.stoppingDistance);
+            
+            
+            while (_navMeshAgent.pathPending)
+            {
+                Debug.Log("Вычисляется путь...");
+                yield return null;
+            }
+
+            // Ждем, пока клиент дойдет до подноса
+            while (_navMeshAgent.remainingDistance > 0.1f)
+            {
+                Debug.Log("Клиент " + gameObject.name + " идет к подносу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
+                yield return null;
+            }
+            
+            // Ждем, пока клиент дойдет до подноса
+            /*while (_navMeshAgent.remainingDistance > 1f)
+            {
+                Debug.Log("Клиент " + gameObject.name + " идет к подносу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
+                yield return null;
+            }*/
+            Debug.Log("Клиент дошел до заказом " + _navMeshAgent.remainingDistance);
+            // Клиент дошел до подноса, теперь он берет заказ
+            _currentState = ClientState.Eat;
+            _navMeshAgent.SetDestination(Table.transform.position);
+            Debug.Log("Клиент идет за стол " + _navMeshAgent.remainingDistance);
+            // Ждем, пока клиент дойдет до стола
+            
+            while (_navMeshAgent.pathPending)
+            {
+                Debug.Log("Вычисляется путь...");
+                yield return null;
+            }
+            
+            while (_navMeshAgent.remainingDistance > 0.1f)
+            {
+                Debug.Log("Клиент " + gameObject.name + " идет к столу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
+                yield return null;
+            }
+            
+            _currentState = ClientState.Eat;
+            Debug.Log("Клиент " + gameObject.name + " вернулся за стол.");
+        }
+        
+        
         [ContextMenu("Completed")]
         public void Paid()
         {
             _currentState = ClientState.WaitingForOrder;
-            _navMeshAgent.SetDestination(Table.transform.position);
+            _navMeshAgent.SetDestination(Table.ClientPosition.transform.position);
+            Debug.Log("Клиент идет за стол " + _navMeshAgent.remainingDistance);
         }
 
         public void SetDestination(Vector3 position, Action<Client> reachAction)
