@@ -5,6 +5,7 @@ using RestaurantContent;
 using RestaurantContent.TableContent;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 namespace ClientsContent
 {
@@ -12,26 +13,29 @@ namespace ClientsContent
     {
         [SerializeField] private NavMeshAgent _navMeshAgent;
 
-        private Order _order;
-        private Table _table;
         private Restaurant _restaurant;
         private Action<Client> _reachAction;
         private ClientState _currentState;
-        
-        public void Init(Order order, Restaurant restaurant,Table table)
+
+        public Order Order { get; private set; }
+
+        public Table Table { get; private set; }
+
+        public void Init(Order order, Restaurant restaurant, Table table)
         {
-            _order = order;
+            Order = order;
             _restaurant = restaurant;
             _currentState = ClientState.InQueue;
-            _table = table;
+            Table = table;
+            Order.SetTable(Table.Index);
         }
 
         public void GoToQueuePosition(Vector3 position, int index)
         {
-            if(index==0)
+            if (index == 0)
                 _currentState = ClientState.AtCashier;
-            
-            SetDestination(position,(b) =>
+
+            SetDestination(position, (b) =>
             {
                 Debug.Log("Встал в очередь " + gameObject.name);
 
@@ -46,7 +50,7 @@ namespace ClientsContent
         public void Paid()
         {
             _currentState = ClientState.WaitingForOrder;
-            _navMeshAgent.SetDestination(_table.transform.position);
+            _navMeshAgent.SetDestination(Table.transform.position);
         }
 
         public void SetDestination(Vector3 position, Action<Client> reachAction)
@@ -61,7 +65,7 @@ namespace ClientsContent
             if (reachAction != null)
                 _reachAction = reachAction;
         }
-        
+
         public bool CanInteractWithCashier()
         {
             return _currentState == ClientState.AtCashier;

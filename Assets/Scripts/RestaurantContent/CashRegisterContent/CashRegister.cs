@@ -27,14 +27,15 @@ namespace RestaurantContent.CashRegisterContent
             _currentClient = client;
         }
         
+        [ContextMenu("AcceptOrder")]
         private void AcceptOrder(PlayerInteraction playerInteraction)
         {
             if (_currentClient == null)
                 return;
             
             _currentClient.Paid();
+            _restaurant.AcceptOrder(_currentClient.Order);
             _currentClient = null;
-            _restaurant.AcceptOrder();
         }
     }
 }
