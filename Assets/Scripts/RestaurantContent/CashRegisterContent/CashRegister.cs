@@ -1,3 +1,4 @@
+using System.Collections;
 using ClientsContent;
 using InteractableContent;
 using PlayerContent;
@@ -11,7 +12,8 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private InteractableObject _interactableObject;
 
         private Client _currentClient;
-
+        private Coroutine _coroutine;
+        
         private void OnEnable()
         {
             _interactableObject.OnAction += AcceptOrder;
@@ -33,9 +35,23 @@ namespace RestaurantContent.CashRegisterContent
             if (_currentClient == null)
                 return;
             
-            _currentClient.Paid();
+            if(_coroutine!=null)
+                StopCoroutine(_coroutine);
+
+            _coroutine = StartCoroutine(StartAcceptOrder());
+            
+            /*_currentClient.Paid();
             _restaurant.AcceptOrder(_currentClient.Order,_currentClient);
-            _currentClient = null;
+            _currentClient = null;*/
         }
+        
+        private IEnumerator StartAcceptOrder()
+       {
+           _currentClient.Paid();
+           
+           yield return new WaitForSeconds(1f);
+           _restaurant.AcceptOrder(_currentClient.Order,_currentClient);
+           _currentClient = null;
+       }
     }
 }
