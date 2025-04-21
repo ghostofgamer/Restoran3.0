@@ -14,6 +14,7 @@ namespace ClientsContent
         [SerializeField] private QueueCashRegister _queueCashRegister;
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private TablesCounter _tablesCounter;
+        [SerializeField] private Transform _exitPosition;
 
         [ContextMenu("Create New Client")]
         private void CreateClients()
@@ -38,7 +39,7 @@ namespace ClientsContent
             Table table = _tablesCounter.GetAvailableTable();
             table.SetBusyValue(true);
             Client client = _clientsSpawner.SpawnRandomClient();
-            client.Init(_orderCreator.CreateOrder(),_restaurant,table);
+            client.Init(_orderCreator.CreateOrder(),_restaurant,table,_exitPosition);
             _queueCashRegister.AddClientToQueue(client);
             yield return null;
         }

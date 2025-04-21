@@ -8,12 +8,13 @@ namespace SpawnContent
         [SerializeField] private Client[] _clientPrefabs;
         [SerializeField] private Transform _container;
         [SerializeField] private Transform _spawnPosition;
+        [SerializeField] private int _spawnAmount;
 
         private ObjectPool<Client> _clientPool;
 
         private void Start()
         {
-            _clientPool = new ObjectPool<Client>(_clientPrefabs[0], 15, _container);
+            _clientPool = new ObjectPool<Client>(_clientPrefabs[0], _spawnAmount, _container);
             _clientPool.EnableAutoExpand();
         }
 

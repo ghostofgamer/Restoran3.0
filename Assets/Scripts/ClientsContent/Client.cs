@@ -19,22 +19,20 @@ namespace ClientsContent
         private Action<Client> _reachAction;
         private ClientState _currentState;
         private Coroutine _coroutine;
+        private Transform _exitPosition;
 
         public Order Order { get; private set; }
 
         public Table Table { get; private set; }
 
-        private void Update()
-        {
-        }
-
-        public void Init(Order order, Restaurant restaurant, Table table)
+        public void Init(Order order, Restaurant restaurant, Table table, Transform exitPosition)
         {
             Order = order;
             _restaurant = restaurant;
             _currentState = ClientState.InQueue;
             Table = table;
             Order.SetTable(Table.Index);
+            _exitPosition = exitPosition;
         }
 
         public void GoToQueuePosition(Vector3 position, int index)
@@ -81,11 +79,11 @@ namespace ClientsContent
 
             // _navMeshAgent.SetDestination(Table.ClientPosition.transform.position);
 
-            SetDestination(Table.ClientPosition.transform.position, () =>
+            SetDestination(Table.ClientSitPosition.transform.position, () =>
             {
                 _navMeshAgent.enabled = false;
-                transform.position = Table.ClientPosition.transform.position;
-                transform.rotation = Table.ClientPosition.transform.rotation;
+                transform.position = Table.ClientSitPosition.transform.position;
+                transform.rotation = Table.ClientSitPosition.transform.rotation;
                 _animator.SetBool("Sit", true);
                 Debug.Log("Вернулся за стол с едой");
                 Eat(tray);
@@ -97,72 +95,42 @@ namespace ClientsContent
             Debug.Log("ЕМ");
             _currentState = ClientState.Eat;
             Debug.Log("Клиент " + gameObject.name + " вернулся за стол.");
-            tray.SetActivity(false);
-            tray.DefaultReturn();
+            tray.transform.parent = Table.transform;
+            tray.transform.position = Table.TrayPosition.position;
+            tray.transform.rotation = Table.TrayPosition.rotation;
+
+            if (_coroutine != null)
+                StopCoroutine(_coroutine);
+
+            _coroutine = StartCoroutine(EatOrder(tray));
         }
 
-
-        /*private IEnumerator PickUpOrder(Tray tray)
+        private IEnumerator EatOrder(Tray tray)
         {
-            // _navMeshAgent.SetDestination(tray.transform.position);
-
-            SetDestination(tray.transform.position, () => { Debug.Log("Встал в очередь " + gameObject.name); });
-
-
-            _currentState = ClientState.PickUpOrder;
-
-            while (_navMeshAgent.pathPending)
-            {
-                Debug.Log("Вычисляется путь...");
-                yield return null;
-            }
-
-            while (_navMeshAgent.remainingDistance > 0.1f)
-            {
-                // Debug.Log("Клиент " + gameObject.name + " идет к подносу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
-                yield return null;
-            }
-
-            Debug.Log("Клиент дошел до заказом " + _navMeshAgent.remainingDistance);
-
-            tray.transform.parent = this.transform;
-
-            _restaurant.RemoveClientTray(tray);
-            _currentState = ClientState.Eat;
-            _navMeshAgent.SetDestination(Table.ClientPosition.transform.position);
-            Debug.Log("Клиент идет за стол " + _navMeshAgent.remainingDistance);
-
-            while (_navMeshAgent.pathPending)
-            {
-                // Debug.Log("Вычисляется путь...");
-                yield return null;
-            }
-
-            while (_navMeshAgent.remainingDistance > 0.1f)
-            {
-                // Debug.Log("Клиент " + gameObject.name + " идет к столу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
-                yield return null;
-            }
-
-            _currentState = ClientState.Eat;
-            Debug.Log("Клиент " + gameObject.name + " вернулся за стол.");
+            _animator.SetBool("Eat", true);
+            yield return new WaitForSeconds(6f);
+            _animator.SetBool("Eat", false);
             tray.SetActivity(false);
             tray.DefaultReturn();
-        }*/
 
+            GoAway();
+        }
+
+        private void GoAway()
+        {
+            Table.SetBusyValue(false);
+            _animator.SetBool("Sit", false);
+
+            SetDestination(_exitPosition.transform.position, () => { gameObject.SetActive(false); });
+        }
 
         [ContextMenu("Completed")]
         public void Paid()
         {
-            StartCoroutine(StartPaid());
+            if (_coroutine != null)
+                StopCoroutine(_coroutine);
 
-            /*_currentState = ClientState.WaitingForOrder;
-            Debug.Log("Пошел ждать заказ");
-
-            SetDestination(Table.ClientPosition.transform.position, () =>
-            {
-                Debug.Log("Жду за столом ");
-            });*/
+            _coroutine = StartCoroutine(StartPaid());
         }
 
         private IEnumerator StartPaid()
@@ -174,23 +142,16 @@ namespace ClientsContent
             Debug.Log("Пошел ждать заказ");
             _animator.SetBool("Give", false);
 
-            SetDestination(Table.ClientPosition.transform.position, () => { Debug.Log("Жду за столом "); });
+            SetDestination(Table.ClientSitPosition.transform.position, () =>
+            {
+                _navMeshAgent.enabled = false;
+                _animator.SetBool("Sit", true);
+                transform.position = Table.ClientSitPosition.transform.position;
+                transform.rotation = Table.ClientSitPosition.transform.rotation;
+                Debug.Log("Жду за столом ");
+            });
         }
 
-        /*public void SetDestination(Vector3 position, Action<Client> reachAction)
-        {
-            /*this.goal = goal;
-            anim.SetBool("Walking", true);
-
-            obstacle.enabled = false;
-            agent.enabled = true;#1#
-
-            _navMeshAgent.SetDestination(position);
-            _animator.SetBool("Walking",true);
-
-            if (reachAction != null)
-                _reachAction = reachAction;
-        } */
         public void SetDestination(Vector3 position, System.Action callback)
         {
             /*this.goal = goal;
@@ -207,6 +168,21 @@ namespace ClientsContent
 
         private IEnumerator MoveToPosition(Vector3 position, System.Action callback)
         {
+            Debug.Log("_navMeshAgent.enabled " + _navMeshAgent.enabled);
+            Debug.Log("_currentState " + _currentState);
+
+            if (!_navMeshAgent.enabled)
+            {
+                _navMeshAgent.enabled = true;
+                transform.position = Table.ClientStandPosition.position;
+                transform.rotation = Table.ClientStandPosition.rotation;
+            }
+
+            if (_animator.GetBool("Sit"))
+            {
+                _animator.SetBool("Sit", false);
+            }
+
             _navMeshAgent.SetDestination(position);
             _animator.SetBool("Walking", true);
             Debug.Log("Начал идти ");
