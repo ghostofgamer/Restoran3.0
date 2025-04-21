@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using ClientsContent;
 using RestaurantContent;
+using RestaurantContent.TrayContent;
 using UnityEngine;
 
 namespace OrdersContent
 {
     public class OrdersCounter : MonoBehaviour
     {
-        [SerializeField] private Tray[] _trays;
+        [SerializeField] private TrayCounter _trayCounter;
         [SerializeField] private List<Client> _activeOrderWaitClients;
 
         private const int MaxActiveOrders = 4;
@@ -38,20 +39,20 @@ namespace OrdersContent
             }
         }
 
-        public void CompleteOrder(Order order,Transform positionTray)
+        public void CompleteOrder(Order order, Tray tray)
         {
             if (_currentOrders.Contains(order))
             {
                 _currentOrders.Remove(order);
-                
+
                 Client client = _activeOrderWaitClients.FirstOrDefault(c => c.Order == order);
-                
+
                 if (client != null)
                 {
                     _activeOrderWaitClients.Remove(client);
-                    client.OrderCompleted(positionTray);
+                    client.OrderCompleted(tray);
                 }
-                
+
                 TryActivateOrder();
             }
         }
@@ -69,14 +70,22 @@ namespace OrdersContent
 
         private void UpdateTrays(Order order)
         {
-            int freeTraysCount = _trays.Count(tray => !tray.IsBusy);
+            int freeTraysCount = _trayCounter.GetFreeTrayCount();
             Debug.Log("Количество свободных подносов: " + freeTraysCount);
-            Tray freeTray = _trays.FirstOrDefault(tray => !tray.IsBusy);
 
+            if (freeTraysCount <= 0)
+                return;
+            
+            Tray freeTray = _trayCounter.GetTray();
+            
             if (freeTray != null)
             {
                 freeTray.SetBusy(true);
                 freeTray.SetOrder(order);
+            }
+            else
+            {
+                Debug.Log("Поднос Null у тебя");
             }
         }
     }

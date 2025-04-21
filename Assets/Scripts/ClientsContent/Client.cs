@@ -4,6 +4,7 @@ using Enums;
 using OrdersContent;
 using RestaurantContent;
 using RestaurantContent.TableContent;
+using RestaurantContent.TrayContent;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
@@ -57,27 +58,27 @@ namespace ClientsContent
             });
         }
 
-        public void OrderCompleted(Transform position)
+        public void OrderCompleted(Tray tray)
         {
             /*_navMeshAgent.SetDestination(position.position);
             _currentState = ClientState.PickUpOrder;*/
             
-            StartCoroutine(PickUpOrder(position));
+            StartCoroutine(PickUpOrder(tray));
         }
         
-        private IEnumerator PickUpOrder(Transform position)
+        private IEnumerator PickUpOrder(Tray tray)
         {
-            Debug.Log("Текущая позиция агента: " + _navMeshAgent.transform.position);
-            Debug.Log("Целевая позиция: " + position.position);
+            /*Debug.Log("Текущая позиция агента: " + _navMeshAgent.transform.position);
+            Debug.Log("Целевая позиция: " + tray.transform.position);*/
             
-            _navMeshAgent.SetDestination(position.position);
+            _navMeshAgent.SetDestination(tray.transform.position);
             _currentState = ClientState.PickUpOrder;
             
-            Debug.Log("Клиент идет за заказом " + _navMeshAgent.remainingDistance);
-            Debug.Log("Клиент идет за заказом " + position.name);
+            /*Debug.Log("Клиент идет за заказом " + _navMeshAgent.remainingDistance);
+            Debug.Log("Клиент идет за заказом " + tray.name);
             Debug.Log("pathPending: " + _navMeshAgent.pathPending);
             Debug.Log("remainingDistance: " + _navMeshAgent.remainingDistance);
-            Debug.Log("stoppingDistance: " + _navMeshAgent.stoppingDistance);
+            Debug.Log("stoppingDistance: " + _navMeshAgent.stoppingDistance);*/
             
             
             while (_navMeshAgent.pathPending)
@@ -89,32 +90,25 @@ namespace ClientsContent
             // Ждем, пока клиент дойдет до подноса
             while (_navMeshAgent.remainingDistance > 0.1f)
             {
-                Debug.Log("Клиент " + gameObject.name + " идет к подносу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
+                // Debug.Log("Клиент " + gameObject.name + " идет к подносу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
                 yield return null;
             }
-            
-            // Ждем, пока клиент дойдет до подноса
-            /*while (_navMeshAgent.remainingDistance > 1f)
-            {
-                Debug.Log("Клиент " + gameObject.name + " идет к подносу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
-                yield return null;
-            }*/
+     
             Debug.Log("Клиент дошел до заказом " + _navMeshAgent.remainingDistance);
-            // Клиент дошел до подноса, теперь он берет заказ
+            _restaurant.RemoveClientTray(tray);
             _currentState = ClientState.Eat;
             _navMeshAgent.SetDestination(Table.transform.position);
             Debug.Log("Клиент идет за стол " + _navMeshAgent.remainingDistance);
-            // Ждем, пока клиент дойдет до стола
             
             while (_navMeshAgent.pathPending)
             {
-                Debug.Log("Вычисляется путь...");
+                // Debug.Log("Вычисляется путь...");
                 yield return null;
             }
             
             while (_navMeshAgent.remainingDistance > 0.1f)
             {
-                Debug.Log("Клиент " + gameObject.name + " идет к столу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
+                // Debug.Log("Клиент " + gameObject.name + " идет к столу. Осталось: " + _navMeshAgent.remainingDistance.ToString("F2") + " метров.");
                 yield return null;
             }
             
