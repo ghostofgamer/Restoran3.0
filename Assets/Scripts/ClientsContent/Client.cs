@@ -3,6 +3,7 @@ using System.Collections;
 using Enums;
 using OrdersContent;
 using RestaurantContent;
+using RestaurantContent.CashRegisterContent;
 using RestaurantContent.TableContent;
 using RestaurantContent.TrayContent;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace ClientsContent
         [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private NavMeshObstacle _meshObstacle;
         [SerializeField] private Animator _animator;
+        [SerializeField] private CashRegister _cashRegister;
 
         private Restaurant _restaurant;
         private Action<Client> _reachAction;
@@ -26,7 +28,8 @@ namespace ClientsContent
 
         public Table Table { get; private set; }
 
-        public void Init(Order order, Restaurant restaurant, Table table, Transform exitPosition)
+        public void Init(Order order, Restaurant restaurant, Table table, Transform exitPosition,
+            CashRegister cashRegister)
         {
             Order = order;
             _restaurant = restaurant;
@@ -34,23 +37,36 @@ namespace ClientsContent
             Table = table;
             Order.SetTable(Table.Index);
             _exitPosition = exitPosition;
+            _cashRegister = cashRegister;
         }
 
         public void GoToQueuePosition(Vector3 position, int index)
         {
             if (index == 0)
+            {
+                Debug.Log("1");
+
                 _currentState = ClientState.AtCashier;
 
-            SetDestination(position, () =>
-            {
-                // Debug.Log("Встал в очередь " + gameObject.name);
-
-                if (index == 0)
+                SetDestination(_cashRegister.ClientPosition.position, () =>
                 {
-                    // Debug.Log("Первый");
-                    // Дополнительные действия, если клиент первый в очереди
-                }
-            });
+                    Debug.Log("Дошел до кассы");
+                    _cashRegister.SetClient(this);
+                });
+            }
+            else
+            {
+                SetDestination(position, () =>
+                {
+                    // Debug.Log("Встал в очередь " + gameObject.name);
+
+                    if (index == 0)
+                    {
+                        // Debug.Log("Первый");
+                        // Дополнительные действия, если клиент первый в очереди
+                    }
+                });
+            }
         }
 
         public void OrderCompleted(Tray tray)
@@ -172,7 +188,7 @@ namespace ClientsContent
             /*Debug.Log("_navMeshAgent.enabled " + _navMeshAgent.enabled);
             Debug.Log("_currentState " + _currentState);*/
             _meshObstacle.enabled = false;
-            
+
             if (!_navMeshAgent.enabled)
             {
                 _navMeshAgent.enabled = true;
@@ -195,12 +211,14 @@ namespace ClientsContent
 
             while (_navMeshAgent.remainingDistance > 0.1f)
             {
+                // Debug.Log("_navMeshAgent.remainingDistance  " + _navMeshAgent.remainingDistance);
                 yield return null;
             }
-            
+
             _meshObstacle.enabled = true;
-            // Debug.Log("Завершил идти ");
+            Debug.Log("Завершил идти ");
             _animator.SetBool("Walking", false);
+
             callback.Invoke();
         }
 

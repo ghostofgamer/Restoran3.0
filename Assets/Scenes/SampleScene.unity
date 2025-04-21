@@ -3690,6 +3690,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!4 &294052735 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7115596277495136916, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+  m_PrefabInstance: {fileID: 9090675501837596142}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &311841074 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: d1055ffc38825ae4ab6e4dfdf574052a, type: 3}
@@ -4877,6 +4882,7 @@ MonoBehaviour:
   _restaurant: {fileID: 715113177}
   _tablesCounter: {fileID: 199217617}
   _exitPosition: {fileID: 1080776660}
+  _cashRegister: {fileID: 758493154}
 --- !u!1 &402138950
 GameObject:
   m_ObjectHideFlags: 0
@@ -10572,6 +10578,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 42d27dc60ea77a647ad129ea118a782d, type: 3}
   m_PrefabInstance: {fileID: 651808831}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &758493154 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5026436550587719663, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+  m_PrefabInstance: {fileID: 9090675501837596142}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5fbec20b732ead48b00038c8625ca55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &759975084
 GameObject:
   m_ObjectHideFlags: 0
@@ -23384,8 +23401,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 0.96116954}
+  m_Center: {x: -7.1295504e-17, y: 0, z: 0.019415231}
 --- !u!23 &1837603836
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -28507,6 +28524,10 @@ PrefabInstance:
       propertyPath: _ordersCounter
       value: 
       objectReference: {fileID: 2021766260}
+    - target: {fileID: 5026436550587719663, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: _clientPosition
+      value: 
+      objectReference: {fileID: 294052735}
     - target: {fileID: 5475990046822252339, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
       propertyPath: '_tables.Array.data[0]'
       value: 
@@ -28583,6 +28604,18 @@ PrefabInstance:
       propertyPath: _burgerIngridientSpawner
       value: 
       objectReference: {fileID: 684338500}
+    - target: {fileID: 7115596277495136916, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.083
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115596277495136916, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.443
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115596277495136916, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 8597223052438075538, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
       propertyPath: m_Name
       value: Restaraunt
