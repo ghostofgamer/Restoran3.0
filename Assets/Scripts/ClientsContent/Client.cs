@@ -42,11 +42,11 @@ namespace ClientsContent
 
             SetDestination(position, () =>
             {
-                Debug.Log("Встал в очередь " + gameObject.name);
+                // Debug.Log("Встал в очередь " + gameObject.name);
 
                 if (index == 0)
                 {
-                    Debug.Log("Первый");
+                    // Debug.Log("Первый");
                     // Дополнительные действия, если клиент первый в очереди
                 }
             });
@@ -61,11 +61,11 @@ namespace ClientsContent
         private void GoToOrderTray(Tray tray)
         {
             _currentState = ClientState.PickUpOrder;
-            Debug.Log("GoToOrderTray");
+            // Debug.Log("GoToOrderTray");
 
             SetDestination(tray.transform.position, () =>
             {
-                Debug.Log("Дошенл до подноса ");
+                // Debug.Log("Дошенл до подноса ");
                 GoToTableWithTray(tray);
             });
         }
@@ -85,7 +85,7 @@ namespace ClientsContent
                 transform.position = Table.ClientSitPosition.transform.position;
                 transform.rotation = Table.ClientSitPosition.transform.rotation;
                 _animator.SetBool("Sit", true);
-                Debug.Log("Вернулся за стол с едой");
+                // Debug.Log("Вернулся за стол с едой");
                 Eat(tray);
             });
         }
@@ -139,7 +139,7 @@ namespace ClientsContent
             yield return new WaitForSeconds(1f);
 
             _currentState = ClientState.WaitingForOrder;
-            Debug.Log("Пошел ждать заказ");
+            // Debug.Log("Пошел ждать заказ");
             _animator.SetBool("Give", false);
 
             SetDestination(Table.ClientSitPosition.transform.position, () =>
@@ -168,8 +168,8 @@ namespace ClientsContent
 
         private IEnumerator MoveToPosition(Vector3 position, System.Action callback)
         {
-            Debug.Log("_navMeshAgent.enabled " + _navMeshAgent.enabled);
-            Debug.Log("_currentState " + _currentState);
+            /*Debug.Log("_navMeshAgent.enabled " + _navMeshAgent.enabled);
+            Debug.Log("_currentState " + _currentState);*/
 
             if (!_navMeshAgent.enabled)
             {
@@ -185,7 +185,7 @@ namespace ClientsContent
 
             _navMeshAgent.SetDestination(position);
             _animator.SetBool("Walking", true);
-            Debug.Log("Начал идти ");
+            // Debug.Log("Начал идти ");
             while (_navMeshAgent.pathPending)
             {
                 yield return null;
@@ -196,7 +196,7 @@ namespace ClientsContent
                 yield return null;
             }
 
-            Debug.Log("Завершил идти ");
+            // Debug.Log("Завершил идти ");
             _animator.SetBool("Walking", false);
             callback.Invoke();
         }

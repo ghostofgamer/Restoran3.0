@@ -18,7 +18,7 @@ namespace OrdersContent
         private List<Order> _currentOrders;
         private Queue<Order> _orderQueue;
         private Queue<Client> _clientQueue;
-        
+
         private void Start()
         {
             _currentOrders = new List<Order>();
@@ -64,11 +64,15 @@ namespace OrdersContent
         public void TryActivateOrder()
         {
             Debug.Log("_currentOrders.Count < MaxActiveOrders " + (_currentOrders.Count < MaxActiveOrders));
+            Debug.Log("_currentOrders.Count " + (_currentOrders.Count));
             Debug.Log("_orderQueue.Count > 0 " + (_orderQueue.Count > 0));
-            
-            
+            Debug.Log("_orderQueue.Count " + (_orderQueue.Count));
+
             while (_currentOrders.Count < MaxActiveOrders && _orderQueue.Count > 0)
             {
+                if (_trayCounter.GetFreeTrayCount() <= 0)
+                    return;
+
                 Order nextOrder = _orderQueue.Dequeue();
                 Client nextClient = _clientQueue.Dequeue();
                 _currentOrders.Add(nextOrder);
@@ -85,9 +89,9 @@ namespace OrdersContent
 
             if (freeTraysCount <= 0)
                 return;
-            
+
             Tray freeTray = _trayCounter.GetTray();
-            
+
             if (freeTray != null)
             {
                 freeTray.SetBusy(true);

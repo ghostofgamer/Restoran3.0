@@ -17,7 +17,7 @@ namespace ClientsContent
         [SerializeField] private Transform _exitPosition;
 
         [ContextMenu("Create New Client")]
-        private void CreateClients()
+        public void CreateClients()
         {
             if (_queueCashRegister.IsQueueFull())
             {
