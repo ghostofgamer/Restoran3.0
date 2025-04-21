@@ -13,6 +13,7 @@ namespace ClientsContent
     public class Client : MonoBehaviour
     {
         [SerializeField] private NavMeshAgent _navMeshAgent;
+        [SerializeField] private NavMeshObstacle _meshObstacle;
         [SerializeField] private Animator _animator;
 
         private Restaurant _restaurant;
@@ -170,7 +171,8 @@ namespace ClientsContent
         {
             /*Debug.Log("_navMeshAgent.enabled " + _navMeshAgent.enabled);
             Debug.Log("_currentState " + _currentState);*/
-
+            _meshObstacle.enabled = false;
+            
             if (!_navMeshAgent.enabled)
             {
                 _navMeshAgent.enabled = true;
@@ -195,7 +197,8 @@ namespace ClientsContent
             {
                 yield return null;
             }
-
+            
+            _meshObstacle.enabled = true;
             // Debug.Log("Завершил идти ");
             _animator.SetBool("Walking", false);
             callback.Invoke();
