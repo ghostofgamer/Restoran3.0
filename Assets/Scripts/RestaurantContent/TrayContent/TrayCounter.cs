@@ -25,7 +25,7 @@ namespace RestaurantContent.TrayContent
             for (int i = 0; i < _trayPositions.Length; i++)
             {
                 Tray tray = _traySpawner.SpawnTray();
-                tray.Init(_ordersCounter);
+                tray.Init(_ordersCounter,_traySpawner.transform);
                 tray.Clear();
                 _activeTrays.Add(tray);
                 _trayToPositionMap[tray] = i;
@@ -42,22 +42,20 @@ namespace RestaurantContent.TrayContent
                 int positionIndex = _trayToPositionMap[takenTray];
 
                 // Remove the taken tray from the active list and dictionary
-                takenTray.DefaultReturn();
-                takenTray.gameObject.SetActive(false);
+                // takenTray.DefaultReturn();
                 _activeTrays.Remove(takenTray);
                 _trayToPositionMap.Remove(takenTray);
                 
-                
-
                 // Spawn a new tray and place it at the position of the taken tray
                 Tray newTray = _traySpawner.SpawnTray();
-                newTray.Init(_ordersCounter);
+                newTray.Init(_ordersCounter,_traySpawner.transform);
                 newTray.Clear();
                 _activeTrays.Add(newTray);
                 _trayToPositionMap[newTray] = positionIndex;
                 newTray.gameObject.SetActive(true);
                 newTray.transform.position = _trayPositions[positionIndex].position;
                 newTray.transform.rotation = _trayPositions[positionIndex].rotation;
+                _ordersCounter.TryActivateOrder();
             }
         }
 

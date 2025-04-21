@@ -95,9 +95,12 @@ namespace ClientsContent
             }
      
             Debug.Log("Клиент дошел до заказом " + _navMeshAgent.remainingDistance);
+
+            tray.transform.parent = this.transform;
+            
             _restaurant.RemoveClientTray(tray);
             _currentState = ClientState.Eat;
-            _navMeshAgent.SetDestination(Table.transform.position);
+            _navMeshAgent.SetDestination(Table.ClientPosition.transform.position);
             Debug.Log("Клиент идет за стол " + _navMeshAgent.remainingDistance);
             
             while (_navMeshAgent.pathPending)
@@ -114,6 +117,8 @@ namespace ClientsContent
             
             _currentState = ClientState.Eat;
             Debug.Log("Клиент " + gameObject.name + " вернулся за стол.");
+            tray.SetActivity(false);
+            tray.DefaultReturn();
         }
         
         

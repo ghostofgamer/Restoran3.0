@@ -6,6 +6,7 @@ namespace RestaurantContent.TrayContent
 {
     public class Tray : MonoBehaviour
     {
+        [SerializeField] private GameObject _check;
         [SerializeField] private TMP_Text _indexTable;
         [SerializeField] private OrdersCounter _ordersCounter;
         [SerializeField] private Transform _defaultParent;
@@ -14,9 +15,10 @@ namespace RestaurantContent.TrayContent
 
         public bool IsBusy { get; private set; }
 
-        public void Init(OrdersCounter ordersCounter)
+        public void Init(OrdersCounter ordersCounter,Transform defaultParent)
         {
             _ordersCounter = ordersCounter;
+            _defaultParent = defaultParent;
         }
         
         public void SetBusy(bool value)
@@ -27,7 +29,7 @@ namespace RestaurantContent.TrayContent
         public void SetOrder(Order order)
         {
             _order = order;
-            _indexTable.gameObject.SetActive(true);
+            _check.SetActive(true);
             _indexTable.text = (order.IndexTable + 1).ToString();
         }
 
@@ -39,14 +41,21 @@ namespace RestaurantContent.TrayContent
 
         public void Clear()
         {
+            SetBusy(false);
             _order = null;
-            _indexTable.gameObject.SetActive(false);
+            _check.SetActive(false);
         }
 
         public void DefaultReturn()
         {
+            Debug.Log("Вернули в пул");
             Clear();
             transform.parent = _defaultParent;
+        }
+
+        public void SetActivity(bool value)
+        {
+            gameObject.SetActive(value);
         }
     }
 }

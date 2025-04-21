@@ -16,11 +16,13 @@ namespace OrdersContent
 
         private List<Order> _currentOrders;
         private Queue<Order> _orderQueue;
-
+        private Queue<Client> _clientQueue;
+        
         private void Start()
         {
             _currentOrders = new List<Order>();
             _orderQueue = new Queue<Order>();
+            _clientQueue = new Queue<Client>();
         }
 
         public void AddOrder(Order order, Client client)
@@ -35,6 +37,7 @@ namespace OrdersContent
             else
             {
                 _orderQueue.Enqueue(order);
+                _clientQueue.Enqueue(client);
                 Debug.Log("Добавлен новый заказ в очередь: " + order.IndexTable);
             }
         }
@@ -53,16 +56,22 @@ namespace OrdersContent
                     client.OrderCompleted(tray);
                 }
 
-                TryActivateOrder();
+                // TryActivateOrder();
             }
         }
 
-        private void TryActivateOrder()
+        public void TryActivateOrder()
         {
+            Debug.Log("_currentOrders.Count < MaxActiveOrders " + (_currentOrders.Count < MaxActiveOrders));
+            Debug.Log("_orderQueue.Count > 0 " + (_orderQueue.Count > 0));
+            
+            
             while (_currentOrders.Count < MaxActiveOrders && _orderQueue.Count > 0)
             {
                 Order nextOrder = _orderQueue.Dequeue();
+                Client nextClient = _clientQueue.Dequeue();
                 _currentOrders.Add(nextOrder);
+                _activeOrderWaitClients.Add(nextClient);
                 UpdateTrays(nextOrder);
                 Debug.Log("Активирован новый заказ: " + nextOrder.IndexTable);
             }
