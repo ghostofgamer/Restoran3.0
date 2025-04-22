@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,11 @@ namespace OrdersContent
         private Queue<Order> _orderQueue;
         private Queue<Client> _clientQueue;
 
+        // public event Action<Order> OrdersChanged;
+        public event Action<List<Order>> OrdersChanged;
+        
+        // public event Action<Order> OrderDeleted;
+
         private void Start()
         {
             _currentOrders = new List<Order>();
@@ -35,6 +41,8 @@ namespace OrdersContent
                 _activeOrderWaitClients.Add(client);
                 UpdateTrays(order);
                 Debug.Log("Добавлен новый активный заказ: " + order.IndexTable);
+                OrdersChanged?.Invoke(_currentOrders);
+                // OrdersChanged?.Invoke(order);
             }
             else
             {
@@ -49,7 +57,10 @@ namespace OrdersContent
             if (_currentOrders.Contains(order))
             {
                 _currentOrders.Remove(order);
-
+                // OrderDeleted?.Invoke(order);
+                
+                OrdersChanged?.Invoke(_currentOrders);
+                
                 Client client = _activeOrderWaitClients.FirstOrDefault(c => c.Order == order);
 
                 if (client != null)
@@ -79,6 +90,9 @@ namespace OrdersContent
                 _currentOrders.Add(nextOrder);
                 _activeOrderWaitClients.Add(nextClient);
                 UpdateTrays(nextOrder);
+                
+                // OrdersChanged?.Invoke(nextOrder);
+                OrdersChanged?.Invoke(_currentOrders);
                 Debug.Log("Активирован новый заказ: " + nextOrder.IndexTable);
             }
         }

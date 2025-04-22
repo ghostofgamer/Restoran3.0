@@ -1,0 +1,55 @@
+using System.Collections.Generic;
+using OrdersContent;
+using UI.Screens;
+using UnityEngine;
+
+namespace RestaurantContent
+{
+    public class KitchenOrdersScreen : MonoBehaviour
+    {
+        [SerializeField] private OrdersCounter _ordersCounter;
+        [SerializeField] private OrderUIScreen[] _orderUiScreens;
+
+        private void OnEnable()
+        {
+            _ordersCounter.OrdersChanged += UpdateScreenOrders;
+        }
+
+        private void OnDisable()
+        {
+            _ordersCounter.OrdersChanged -= UpdateScreenOrders;
+        }
+
+        /*private void UpdateScreenOrders(Order order)
+        {
+            foreach (var orderScreen in _orderUiScreens)
+            {
+                if (!orderScreen.gameObject.activeSelf)
+                {
+                    orderScreen.Init(order);
+                    return;
+                }
+            }
+        }*/
+        
+        private void UpdateScreenOrders(List<Order> orders)
+        {
+            // Деактивируем все экраны заказов
+            foreach (var orderScreen in _orderUiScreens)
+            {
+                orderScreen.Deactivate();
+                orderScreen.gameObject.SetActive(false);
+            }
+
+            // Активируем экраны для активных заказов
+            for (int i = 0; i < orders.Count; i++)
+            {
+                if (i < _orderUiScreens.Length)
+                {
+                    _orderUiScreens[i].gameObject.SetActive(true);
+                    _orderUiScreens[i].Init(orders[i]);
+                }
+            }
+        }
+    }
+}
