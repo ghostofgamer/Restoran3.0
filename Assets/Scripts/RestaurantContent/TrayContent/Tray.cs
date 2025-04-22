@@ -9,9 +9,11 @@ namespace RestaurantContent.TrayContent
     {
         [SerializeField] private GameObject _check;
         [SerializeField] private TMP_Text _indexTable;
-        [SerializeField] private OrdersCounter _ordersCounter;
-        [SerializeField] private Transform _defaultParent;
         [SerializeField] private Transform[] _itemPositions;
+
+        private Transform _defaultParent;
+        private OrdersCounter _ordersCounter;
+        private BurgersCounter _burgersCounter;
 
         private List<Item> _items = new List<Item>();
 
@@ -21,10 +23,11 @@ namespace RestaurantContent.TrayContent
 
         public Transform[] ItemPositions => _itemPositions;
 
-        public void Init(OrdersCounter ordersCounter, Transform defaultParent)
+        public void Init(OrdersCounter ordersCounter, Transform defaultParent,BurgersCounter burgersCounter)
         {
             _ordersCounter = ordersCounter;
             _defaultParent = defaultParent;
+            _burgersCounter = burgersCounter;
         }
 
         public void SetBusy(bool value)
@@ -56,7 +59,7 @@ namespace RestaurantContent.TrayContent
         {
             foreach (var item in _items)
                 item.ReturnDefaultParent();
-            
+
             _items.Clear();
 
             Debug.Log("Вернули в пул");
@@ -72,6 +75,7 @@ namespace RestaurantContent.TrayContent
         public void SetBurger(Item item)
         {
             _items.Add(item);
+            _burgersCounter.RemoveBurger(item);
             Order.SetBurgerCompleted(true);
         }
 

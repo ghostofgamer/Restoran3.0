@@ -11,6 +11,7 @@ namespace RestaurantContent.TrayContent
         [SerializeField] private TraySpawner _traySpawner;
         [SerializeField] private Transform[] _trayPositions;
         [SerializeField] private OrdersCounter _ordersCounter;
+        [SerializeField] private BurgersCounter _burgersCounter;
 
         private List<Tray> _activeTrays = new List<Tray>();
         private Dictionary<Tray, int> _trayToPositionMap = new Dictionary<Tray, int>();
@@ -25,7 +26,7 @@ namespace RestaurantContent.TrayContent
             for (int i = 0; i < _trayPositions.Length; i++)
             {
                 Tray tray = _traySpawner.SpawnTray();
-                tray.Init(_ordersCounter, _traySpawner.transform);
+                tray.Init(_ordersCounter, _traySpawner.transform, _burgersCounter);
                 tray.Clear();
                 _activeTrays.Add(tray);
                 _trayToPositionMap[tray] = i;
@@ -48,7 +49,7 @@ namespace RestaurantContent.TrayContent
 
                 // Spawn a new tray and place it at the position of the taken tray
                 Tray newTray = _traySpawner.SpawnTray();
-                newTray.Init(_ordersCounter, _traySpawner.transform);
+                newTray.Init(_ordersCounter, _traySpawner.transform,_burgersCounter);
                 newTray.Clear();
                 _activeTrays.Add(newTray);
                 _trayToPositionMap[newTray] = positionIndex;

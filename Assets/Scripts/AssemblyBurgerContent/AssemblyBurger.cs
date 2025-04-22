@@ -19,6 +19,7 @@ namespace AssemblyBurgerContent
         [SerializeField] private List<BurgerPrefabPair> _burgerPrefabPairs;
         [SerializeField] private List<Transform> _burgerPositions;
         [SerializeField] private Restaurant _restaurant;
+        [SerializeField] private BurgersCounter _burgersCounter;
 
         // private Stack<Item> _ingredientStack = new Stack<Item>();
 
@@ -327,7 +328,8 @@ namespace AssemblyBurgerContent
 
                         sequence.Join(burgerInstance.transform
                             .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
-                            .SetEase(Ease.Linear));
+                            .SetEase(Ease.Linear))
+                            .OnComplete(() => _burgersCounter.AddBurger(burgerInstance));
                     }
 
 

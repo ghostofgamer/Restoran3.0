@@ -27,20 +27,12 @@ namespace RestaurantContent
             _trayCounter.UpdateTrayList(tray);
         }
 
-        /*public void CheckOrderBurger(ItemType itemType)
-        {
-            Order order = _ordersCounter.GetOrderByBurger(itemType);
-            Debug.Log("Order " + (order.IndexTable + 1));
-            Tray tray = _trayCounter.GetTrayByTableIndex(order);
-            tray.SetBurger();
-        }*/
-
-        public bool TryGetTrayOrder(ItemType itemType,Item item, out Tray tray)
+        public bool TryGetTrayOrder(ItemType itemType, Item item, out Tray tray)
         {
             Order order = _ordersCounter.GetOrderByBurger(itemType);
             Debug.Log("Order " + (order?.IndexTable + 1));
             tray = null;
-            
+
             if (order != null)
                 tray = _trayCounter.GetTrayByTableIndex(order);
 

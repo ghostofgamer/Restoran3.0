@@ -14,6 +14,8 @@ namespace OrdersContent
     {
         [SerializeField] private TrayCounter _trayCounter;
         [SerializeField] private List<Client> _activeOrderWaitClients;
+        [SerializeField] private Restaurant _restaurant;
+        [SerializeField] private BurgersCounter _burgersCounter;
 
         private const int MaxActiveOrders = 4;
 
@@ -43,6 +45,7 @@ namespace OrdersContent
                 Debug.Log("Добавлен новый активный заказ: " + order.IndexTable);
                 OrdersChanged?.Invoke(_currentOrders);
                 // OrdersChanged?.Invoke(order);
+                _burgersCounter.CheckWaitNeedBurgers(order.BurgerItemOrder);
             }
             else
             {
@@ -93,6 +96,9 @@ namespace OrdersContent
                 
                 // OrdersChanged?.Invoke(nextOrder);
                 OrdersChanged?.Invoke(_currentOrders);
+                
+                _burgersCounter.CheckWaitNeedBurgers(nextOrder.BurgerItemOrder);
+                
                 Debug.Log("Активирован новый заказ: " + nextOrder.IndexTable);
             }
         }
