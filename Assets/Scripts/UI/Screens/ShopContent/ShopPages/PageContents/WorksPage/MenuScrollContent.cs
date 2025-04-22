@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Enums;
 using RestorantContent;
@@ -22,7 +21,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.WorksPage
 
         private void Awake()
         {
-            Init();
+            // Init();
         }
 
         public override void Init()
@@ -41,13 +40,6 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.WorksPage
                 _menuDictionary[menuItem.ItemType] = menuItem;
                 menuItem.Init(_itemsConfig);
             }
-        }
-
-        private void Start()
-        {
-            AddItem(ItemType.FinishSmallBurger);
-            /*AddItem(ItemType.FinishCheeseburger);
-            AddItem(ItemType.FinishMiddleBurger);*/
         }
 
         public void AddItem(ItemType type)
