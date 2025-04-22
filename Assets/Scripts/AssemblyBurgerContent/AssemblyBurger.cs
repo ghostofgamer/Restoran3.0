@@ -3,6 +3,8 @@ using System.Linq;
 using DG.Tweening;
 using Enums;
 using InteractableContent;
+using RestaurantContent;
+using RestaurantContent.TrayContent;
 using SoContent.AssemblyBurger;
 using UnityEngine;
 
@@ -16,6 +18,7 @@ namespace AssemblyBurgerContent
         [SerializeField] private BurgerRecipeConfig _burgerRecipeConfig;
         [SerializeField] private List<BurgerPrefabPair> _burgerPrefabPairs;
         [SerializeField] private List<Transform> _burgerPositions;
+        [SerializeField] private Restaurant _restaurant;
 
         // private Stack<Item> _ingredientStack = new Stack<Item>();
 
@@ -170,10 +173,10 @@ namespace AssemblyBurgerContent
                 }
 
                 Debug.Log("НУУУ");
-                
+
                 Vector3 initialPosition = itemContainer.transform.position;
                 initialPosition.y += 0.3f;
-                
+
                 item.transform.position = initialPosition;
                 // item.gameObject.SetActive(true);
                 item.transform.localScale = scale;
@@ -209,7 +212,7 @@ namespace AssemblyBurgerContent
             if (_ingredientStack.Count > 0)
             {
                 var (lastItem, container) = _ingredientStack.Pop();
-                
+
                 if (container != null)
                 {
                     _isAnimationInProgress = true;
@@ -283,22 +286,67 @@ namespace AssemblyBurgerContent
                     /*GameObject burgerInstance =
                         Instantiate(burgerPrefab, availablePosition.position, Quaternion.identity);*/
 
-                    GameObject burgerInstance =
-                        Instantiate(burgerPrefab, _burgerBoard.CenterPosition.position, Quaternion.identity);
+                    Item burgerInstance = _burgerIngridientSpawner.SpawnItem(burgerType);
+                    burgerInstance.SetParenContainer(_burgerIngridientSpawner.transform);
+                    burgerInstance.gameObject.SetActive(true);
+                    burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
+                    burgerInstance.transform.rotation = Quaternion.identity;
+                    
+                    /*GameObject burgerInstance =
+                        Instantiate(burgerPrefab, _burgerBoard.CenterPosition.position, Quaternion.identity);*/
 
                     Sequence sequence = DOTween.Sequence();
-                    sequence.Append(burgerInstance.transform.DOScale(1.3f, 0.5f).SetEase(Ease.InOutQuad));
-                    sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.5f).SetEase(Ease.InOutQuad));
+
+                    if (_restaurant.TryGetTrayOrder(burgerType, burgerInstance, out Tray tray))
+                    {
+                        Debug.Log("TRUE");
+                        Transform position = tray.GetFirstAvailablePosition();
+
+                        sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOMove(position.position, 1f)
+                            .SetEase(Ease.InOutQuad));
+
+                        burgerInstance.transform.SetParent(position);
+
+                        sequence.Join(burgerInstance.transform
+                                .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
+                                .SetEase(Ease.Linear))
+                            .OnComplete(() => tray.TryCompletedOrder());
+                    }
+                    else
+                    {
+                        Debug.Log("FALSE");
+
+                        sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOMove(availablePosition.position, 0.5f)
+                            .SetEase(Ease.InOutQuad));
+
+                        burgerInstance.transform.SetParent(availablePosition);
+
+                        sequence.Join(burgerInstance.transform
+                            .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
+                            .SetEase(Ease.Linear));
+                    }
+
+
+                    /*Sequence sequence = DOTween.Sequence();
+                    sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+                    sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
                     sequence.Append(burgerInstance.transform.DOMove(availablePosition.position, 0.5f)
                         .SetEase(Ease.InOutQuad));
-                    
+
                     burgerInstance.transform.SetParent(availablePosition);
 
                     sequence.Join(burgerInstance.transform.DOLocalRotate(new Vector3(0,0,0), 0.5f, RotateMode.FastBeyond360)
-                        .SetEase(Ease.Linear));
-                    
+                        .SetEase(Ease.Linear));*/
+
                     // burgerInstance.transform.position = Vector3.zero;
                     Debug.Log("Бургер создан: " + burgerType);
+
+                    // _restaurant.CheckOrderBurger(burgerType);
+
 
                     while (_ingredientStack.Count > 0)
                     {

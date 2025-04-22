@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ClientsContent;
+using Enums;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using UnityEngine;
@@ -102,5 +103,19 @@ namespace OrdersContent
                 Debug.Log("Поднос Null у тебя");
             }
         }
+        
+        /*public bool ContainsBurger(ItemType burgerType)
+        {
+            Order order = _currentOrders.Any(order => order.BurgerItemOrder == burgerType;
+            
+            return _currentOrders.Any(order => order.BurgerItemOrder == burgerType);
+        }*/
+        
+        public Order GetOrderByBurger(ItemType burgerType)
+        {
+            // return _currentOrders.FirstOrDefault(order => order.BurgerItemOrder == burgerType);
+            return _currentOrders.FirstOrDefault(order => order.BurgerItemOrder == burgerType&&!order.IsBurgerCompleted);
+        }
+
     }
 }
