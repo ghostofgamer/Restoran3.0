@@ -292,14 +292,16 @@ namespace AssemblyBurgerContent
                     burgerInstance.gameObject.SetActive(true);
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                     burgerInstance.transform.rotation = Quaternion.identity;
-                    
+
                     /*GameObject burgerInstance =
                         Instantiate(burgerPrefab, _burgerBoard.CenterPosition.position, Quaternion.identity);*/
 
                     Sequence sequence = DOTween.Sequence();
 
-                    if (_restaurant.TryGetTrayOrder(burgerType, burgerInstance, out Tray tray))
+                    if (_restaurant.TryGetTrayOrder(burgerType, out Tray tray))
                     {
+                        _restaurant.SetBurgerOrder(tray, burgerInstance);
+
                         Debug.Log("TRUE");
                         Transform position = tray.GetFirstAvailablePosition();
 
@@ -327,8 +329,8 @@ namespace AssemblyBurgerContent
                         burgerInstance.transform.SetParent(availablePosition);
 
                         sequence.Join(burgerInstance.transform
-                            .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
-                            .SetEase(Ease.Linear))
+                                .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
+                                .SetEase(Ease.Linear))
                             .OnComplete(() => _burgersCounter.AddBurger(burgerInstance));
                     }
 
@@ -359,8 +361,45 @@ namespace AssemblyBurgerContent
                 }
                 else
                 {
-                    Debug.Log(
-                        "Нет места, если хотите создать новый, освободите  место или сделайте бургер из нынешнего заказа");
+                    if (_restaurant.TryGetTrayOrder(burgerType, out Tray tray))
+                    {
+                        Item burgerInstance = _burgerIngridientSpawner.SpawnItem(burgerType);
+                        burgerInstance.SetParenContainer(_burgerIngridientSpawner.transform);
+                        burgerInstance.gameObject.SetActive(true);
+                        burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
+                        burgerInstance.transform.rotation = Quaternion.identity;
+
+                        _restaurant.SetBurgerOrder(tray, burgerInstance);
+
+                        Sequence sequence = DOTween.Sequence();
+                        Debug.Log("TRUE");
+                        Transform position = tray.GetFirstAvailablePosition();
+
+                        sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOMove(position.position, 1f)
+                            .SetEase(Ease.InOutQuad));
+
+                        burgerInstance.transform.SetParent(position);
+
+                        sequence.Join(burgerInstance.transform
+                                .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
+                                .SetEase(Ease.Linear))
+                            .OnComplete(() => tray.TryCompletedOrder());
+                        
+                        while (_ingredientStack.Count > 0)
+                        {
+                            var (lastItem, container) = _ingredientStack.Pop();
+                            lastItem.gameObject.SetActive(false);
+                            // Destroy(lastItem.gameObject);
+                        }
+                    }
+
+                    else
+                    {
+                        Debug.Log(
+                            "Нет места, если хотите создать новый, освободите  место или сделайте бургер из нынешнего заказа");
+                    }
                 }
             }
             else

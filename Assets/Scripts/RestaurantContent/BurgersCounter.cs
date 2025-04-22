@@ -24,15 +24,17 @@ namespace RestaurantContent
 
         public void CheckWaitNeedBurgers(ItemType itemType)
         {
-            if (TryFindNeedBurger(itemType,out Item burger))
+            if (TryFindNeedBurger(itemType, out Item burger))
             {
                 Sequence sequence = DOTween.Sequence();
-                
-                if (_restaurant.TryGetTrayOrder(itemType, burger, out Tray tray))
+
+                if (_restaurant.TryGetTrayOrder(itemType, out Tray tray))
                 {
+                    _restaurant.SetBurgerOrder(tray, burger);
+
                     Debug.Log("TRUE Автоматическое");
                     Transform position = tray.GetFirstAvailablePosition();
-                    
+
                     sequence.Append(burger.transform.DOMove(position.position, 1f)
                         .SetEase(Ease.InOutQuad));
 
@@ -49,7 +51,7 @@ namespace RestaurantContent
                 Debug.Log("FALSE Автоматическое");
             }
         }
-        
+
         public bool TryFindNeedBurger(ItemType itemType, out Item burger)
         {
             burger = _burgers.FirstOrDefault(b => b.ItemType == itemType);

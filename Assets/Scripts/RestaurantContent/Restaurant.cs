@@ -27,7 +27,7 @@ namespace RestaurantContent
             _trayCounter.UpdateTrayList(tray);
         }
 
-        public bool TryGetTrayOrder(ItemType itemType, Item item, out Tray tray)
+        public bool TryGetTrayOrder(ItemType itemType, out Tray tray)
         {
             Order order = _ordersCounter.GetOrderByBurger(itemType);
             Debug.Log("Order " + (order?.IndexTable + 1));
@@ -38,11 +38,16 @@ namespace RestaurantContent
 
             if (tray != null)
             {
-                tray.SetBurger(item);
+                // tray.SetBurger(item);
                 return true;
             }
 
             return false;
+        }
+
+        public void SetBurgerOrder(Tray tray, Item item)
+        {
+                tray.SetBurger(item);
         }
     }
 }
