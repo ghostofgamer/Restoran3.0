@@ -6,6 +6,7 @@ using RestaurantContent;
 using RestaurantContent.CashRegisterContent;
 using RestaurantContent.TableContent;
 using RestaurantContent.TrayContent;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,6 +18,7 @@ namespace ClientsContent
         [SerializeField] private NavMeshObstacle _meshObstacle;
         [SerializeField] private Animator _animator;
         [SerializeField] private CashRegister _cashRegister;
+        [SerializeField] private Transform _trayPositionHand;
 
         private Restaurant _restaurant;
         private Action<Client> _reachAction;
@@ -90,7 +92,9 @@ namespace ClientsContent
         private void GoToTableWithTray(Tray tray)
         {
             tray.transform.parent = this.transform;
-
+            tray.transform.position = _trayPositionHand.position;
+            tray.transform.localRotation = _trayPositionHand.localRotation;
+            
             _restaurant.RemoveClientTray(tray);
             _currentState = ClientState.Eat;
 
@@ -137,6 +141,7 @@ namespace ClientsContent
         {
             Table.SetBusyValue(false);
             _animator.SetBool("Sit", false);
+            _currentState = ClientState.GoAway;
 
             SetDestination(_exitPosition.transform.position, () => { gameObject.SetActive(false); });
         }
@@ -202,7 +207,16 @@ namespace ClientsContent
             }
 
             _navMeshAgent.SetDestination(position);
-            _animator.SetBool("Walking", true);
+
+
+            if (_currentState == ClientState.Eat)
+            {
+                _animator.SetBool("WalkTray", true);
+            }
+            else
+            {
+                _animator.SetBool("Walking", true);
+            }
             // Debug.Log("Начал идти ");
             while (_navMeshAgent.pathPending)
             {
@@ -217,7 +231,15 @@ namespace ClientsContent
 
             _meshObstacle.enabled = true;
             Debug.Log("Завершил идти ");
-            _animator.SetBool("Walking", false);
+            
+            if (_currentState == ClientState.Eat)
+            {
+                _animator.SetBool("WalkTray", false);
+            }
+            else
+            {
+                _animator.SetBool("Walking", false);
+            }
 
             callback.Invoke();
         }

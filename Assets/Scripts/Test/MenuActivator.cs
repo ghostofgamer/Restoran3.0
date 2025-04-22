@@ -10,7 +10,7 @@ public class MenuActivator : MonoBehaviour
     {
         _menuScrollContent.Init();
         _menuScrollContent.AddItem(ItemType.FinishSmallBurger);
-        _menuScrollContent.AddItem(ItemType.FinishCheeseburger);
-        _menuScrollContent.AddItem(ItemType.FinishMiddleBurger);
+        /*_menuScrollContent.AddItem(ItemType.FinishCheeseburger);
+        _menuScrollContent.AddItem(ItemType.FinishMiddleBurger);*/
     }
 }

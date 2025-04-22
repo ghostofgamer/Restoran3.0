@@ -35,6 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8641070164948042936}
+  - {fileID: 2205749120223156976}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &489112818314894095
@@ -53,6 +54,7 @@ MonoBehaviour:
   _meshObstacle: {fileID: 5519442007429256531}
   _animator: {fileID: 8641070164938500906}
   _cashRegister: {fileID: 0}
+  _trayPositionHand: {fileID: 2205749120223156976}
 --- !u!195 &8392335507766718544
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -141,6 +143,37 @@ CapsuleCollider:
   m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7233771286163255003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2205749120223156976}
+  m_Layer: 0
+  m_Name: TrayPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2205749120223156976
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7233771286163255003}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.70710915, z: -0, w: -0.70710444}
+  m_LocalPosition: {x: 0, y: 0.311, z: 0.935}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2772523648359894414}
+  m_LocalEulerAnglesHint: {x: 0, y: -270, z: 0}
 --- !u!1001 &8641070164947918410
 PrefabInstance:
   m_ObjectHideFlags: 0
