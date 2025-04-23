@@ -1,12 +1,19 @@
+using System;
+using DG.Tweening;
 using InteractableContent;
 using Interfaces;
 using PlayerContent;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 public class Draggable : MonoBehaviour, IDraggable
 {
     [SerializeField] private Transform _parentObject;
     [SerializeField] private InteractableObject _interactableObject;
+
+    public event Action DraggablePicked;
+
+    public event Action DraggableThrowed;
 
     private void OnEnable()
     {
@@ -20,18 +27,24 @@ public class Draggable : MonoBehaviour, IDraggable
 
     public virtual void Drag(PlayerInteraction playerInteraction)
     {
-        if (playerInteraction.CurrentDraggable != null)
+        if (playerInteraction.CurrentDraggable != null || playerInteraction.PlayerTray.IsActive)
         {
             Debug.Log("Return");
         }
         else
         {
             Debug.Log("DRAG");
-            // transform.position = playerInteraction.DraggablePosition.position;
-            _parentObject.position = playerInteraction.DraggablePosition.position;
-            // transform.rotation = playerInteraction.DraggablePosition.rotation;
-            _parentObject.rotation = playerInteraction.DraggablePosition.rotation;
+            _parentObject.transform.parent = playerInteraction.DraggablePosition;
+            _parentObject.DOLocalMove(Vector3.zero, 0.15f).SetEase(Ease.InOutQuad);
+            _parentObject.DOLocalRotate(Vector3.zero, 0.15f).SetEase(Ease.InOutQuad);
+
             playerInteraction.SetDraggableObject(this);
+            DraggablePicked.Invoke();
         }
+    }
+
+    public void Throw()
+    {
+        DraggableThrowed.Invoke();
     }
 }

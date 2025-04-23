@@ -1,0 +1,405 @@
+using System.Collections;
+using System.Linq;
+using DG.Tweening;
+using Enums;
+using InteractableContent;
+using PlayerContent;
+using SoContent.AssemblyBurger;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace KitchenEquipmentContent
+{
+    public class Grill : MonoBehaviour
+    {
+        [SerializeField] private InteractableObject _interactableObject;
+        [SerializeField] private Item[] _rawCutletItems;
+        [SerializeField] private Item[] _readyCutletItems;
+        [SerializeField] private ItemType _currentType;
+        [SerializeField] private Animator _animator;
+        [SerializeField] private Collider _boxCollider;
+        [SerializeField] private GameObject _progressFryUI;
+        [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
+        [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
+        
+        public TMP_Text grillText;
+        public Image fillImage;
+        public float grillTime = 3f;
+        private bool _isClosed;
+
+        private void OnEnable()
+        {
+            _interactableObject.OnAction += Action;
+        }
+
+        private void OnDisable()
+        {
+            _interactableObject.OnAction -= Action;
+        }
+
+        public void Action(PlayerInteraction playerInteraction)
+        {
+            if (playerInteraction.CurrentDraggable != null)
+                return;
+
+            if (_isClosed)
+            {
+                OpenGrill();
+                return;
+            }
+
+            ItemType itemType = playerInteraction.PlayerTray.CurrentType;
+            Item[] item = GetItemsByType(itemType);
+
+            if (_currentType == ItemType.Cutlet)
+            {
+                if (playerInteraction.PlayerTray.CurrentType == ItemType.Cutlet)
+                {
+                    Debug.Log("1");
+                    int activePos = playerInteraction.PlayerTray.GetActivePositionValue(ItemType.Cutlet);
+                    int activeCount = CountNotActiveItems(_readyCutletItems);
+                    int itemsToPlace = Mathf.Min(activeCount, activePos);
+
+                    if (itemsToPlace > 0)
+                    {
+                        playerInteraction.PlayerTray.PutAway(ItemType.Cutlet, itemsToPlace);
+                        
+                        int completedAnimations = 0;
+                        Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.Cutlet);
+                        
+                        for (int i = 0; i < itemsToPlace; i++)
+                        {
+                            Debug.Log("ТУТА!!!!");
+                            
+                            Item newItem = _burgerIngridientSpawner.SpawnItem(ItemType.Cutlet);
+                            newItem.gameObject.SetActive(true);
+                            newItem.transform.position = playerInteraction.PlayerTray.Positions[i].position;
+                            newItem.transform.localScale = scale;
+                            
+                            Sequence sequence = DOTween.Sequence();
+                            sequence.Append(newItem.transform
+                                .DOMove(_readyCutletItems[i].transform.position, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.Join(newItem.transform
+                                .DORotate(_readyCutletItems[i].transform.eulerAngles, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.OnComplete(() =>
+                            {
+                                completedAnimations++;
+                                newItem.transform.position = Vector3.zero;
+                                newItem.gameObject.SetActive(false);
+
+                                if (completedAnimations == itemsToPlace)
+                                {
+                                    ActivateItems(_readyCutletItems, itemsToPlace);
+                                }
+                            });
+                        }
+                        
+                        // ActivateItems(_readyCutletItems, itemsToPlace);
+                    }
+                }
+                else if (playerInteraction.PlayerTray.CurrentType == ItemType.Empty)
+                {
+                    int emptyPos = playerInteraction.PlayerTray.GetEmptyPositionValue(ItemType.Cutlet);
+                    int activeCount = CountActiveItems(_readyCutletItems);
+                    int itemsToPlace = Mathf.Min(activeCount, emptyPos);
+
+                    if (itemsToPlace > 0)
+                    {
+                        DeactivateItems(_readyCutletItems, itemsToPlace);
+                        
+                        int completedAnimations = 0;
+                        Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.Cutlet);
+
+                        for (int i = 0; i < itemsToPlace; i++)
+                        {
+                            Item newItem = _burgerIngridientSpawner.SpawnItem(ItemType.Cutlet);
+                            newItem.gameObject.SetActive(true);
+                            newItem.transform.position = _readyCutletItems[i].transform.position;
+                            newItem.transform.localScale = scale;
+                            
+                            Sequence sequence = DOTween.Sequence();
+                            sequence.Append(newItem.transform
+                                .DOMove(playerInteraction.PlayerTray.transform.position, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.Join(newItem.transform
+                                .DORotate(playerInteraction.PlayerTray.transform.eulerAngles, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.OnComplete(() =>
+                            {
+                                completedAnimations++;
+                                newItem.transform.position = Vector3.zero;
+                                newItem.gameObject.SetActive(false);
+
+                                if (completedAnimations == itemsToPlace)
+                                {
+                                    playerInteraction.PlayerTray.Put(ItemType.Cutlet, itemsToPlace);
+                                }
+                            });
+                        }
+                        
+                        // playerInteraction.PlayerTray.Put(ItemType.Cutlet, itemsToPlace);
+                    }
+                }
+            }
+            else if (_currentType == ItemType.RawCutlet)
+            {
+                if (playerInteraction.PlayerTray.CurrentType == ItemType.RawCutlet)
+                {
+                    int emptyPositions =
+                        playerInteraction.PlayerTray.GetActivePositionValue(playerInteraction.PlayerTray.CurrentType);
+                    int inactiveCount = CountNotActiveItems(item);
+                    int itemsToPlace = Mathf.Min(inactiveCount, emptyPositions);
+
+                    Debug.Log("СТОЛ " + itemsToPlace);
+                    Debug.Log("emptyPositions " + emptyPositions);
+                    Debug.Log("activeCount " + inactiveCount);
+
+                    if (itemsToPlace > 0)
+                    {
+                        playerInteraction.PlayerTray.PutAway(ItemType.RawCutlet, itemsToPlace);
+                        
+                        int completedAnimations = 0;
+                        Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.RawCutlet);
+                        
+                        for (int i = 0; i < itemsToPlace; i++)
+                        {
+                            Debug.Log("ТУТА!!!! " + playerInteraction.PlayerTray.CurrentType);
+                            
+                            Item newItem = _burgerIngridientSpawner.SpawnItem(ItemType.RawCutlet);
+                            newItem.gameObject.SetActive(true);
+                            newItem.transform.position = playerInteraction.PlayerTray.Positions[i].position;
+                            newItem.transform.localScale = scale;
+                            
+                            Sequence sequence = DOTween.Sequence();
+                            sequence.Append(newItem.transform
+                                .DOMove(_readyCutletItems[i].transform.position, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.Join(newItem.transform
+                                .DORotate(_readyCutletItems[i].transform.eulerAngles, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.OnComplete(() =>
+                            {
+                                completedAnimations++;
+                                newItem.transform.position = Vector3.zero;
+                                newItem.gameObject.SetActive(false);
+
+                                if (completedAnimations == itemsToPlace)
+                                {
+                                    ActivateItems(item, itemsToPlace);
+                                }
+                            });
+                        }
+                        
+                        // ActivateItems(item, itemsToPlace);
+                    }
+                }
+                else if (playerInteraction.PlayerTray.CurrentType == ItemType.Empty)
+                {
+                    FryCutlets();
+                }
+                else
+                {
+                    Debug.Log("Нельзя положить готовые котлеты, когда на гриле сырые.");
+                }
+            }
+            else
+            {
+                if (playerInteraction.PlayerTray.CurrentType == ItemType.RawCutlet ||
+                    playerInteraction.PlayerTray.CurrentType == ItemType.Cutlet)
+                {
+                    int inactiveCount = CountNotActiveItems(item);
+                    Debug.Log("Гриль колличество не активных " + inactiveCount);
+                    int emptyPositions =
+                        playerInteraction.PlayerTray.GetActivePositionValue(playerInteraction.PlayerTray.CurrentType);
+                    Debug.Log("TRA колличество сырых " + emptyPositions);
+                    int itemsToPlace = Mathf.Min(inactiveCount, emptyPositions);
+                    Debug.Log("СКОЛЬКО " + itemsToPlace);
+
+                    if (itemsToPlace > 0)
+                    {
+                        _currentType = playerInteraction.PlayerTray.CurrentType;
+                        playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType, itemsToPlace);
+                        
+                        int completedAnimations = 0;
+                        Vector3 scale = _assemblyBurgerItemConfig.GetScale(playerInteraction.PlayerTray.CurrentType);
+                        
+                        for (int i = 0; i < itemsToPlace; i++)
+                        {
+                            Debug.Log("ТУТА!!!! " + playerInteraction.PlayerTray.CurrentType);
+                            
+                            Item newItem = _burgerIngridientSpawner.SpawnItem(_currentType);
+                            newItem.gameObject.SetActive(true);
+                            newItem.transform.position = playerInteraction.PlayerTray.Positions[i].position;
+                            newItem.transform.localScale = scale;
+                            
+                            Sequence sequence = DOTween.Sequence();
+                            sequence.Append(newItem.transform
+                                .DOMove(_readyCutletItems[i].transform.position, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.Join(newItem.transform
+                                .DORotate(_readyCutletItems[i].transform.eulerAngles, 0.15f)
+                                .SetEase(Ease.InOutQuad));
+                            sequence.OnComplete(() =>
+                            {
+                                completedAnimations++;
+                                newItem.transform.position = Vector3.zero;
+                                newItem.gameObject.SetActive(false);
+
+                                if (completedAnimations == itemsToPlace)
+                                {
+                                    ActivateItems(item, itemsToPlace);
+                                }
+                            });
+                        }
+                        
+                        
+                        // ActivateItems(item, itemsToPlace);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Нельзя положить готовые котлеты на пустой гриль.");
+                }
+            }
+        }
+
+        private Item[] GetItemsByType(ItemType itemType)
+        {
+            return itemType switch
+            {
+                ItemType.RawCutlet => _rawCutletItems,
+                ItemType.Cutlet => _readyCutletItems,
+                _ => null
+            };
+        }
+
+        private void ActivateItems(Item[] items, int value)
+        {
+            if (items == null)
+            {
+                Debug.LogError("Items array is null.");
+                return;
+            }
+
+            int activatedCount = 0;
+
+            foreach (var item in items)
+            {
+                if (!item.gameObject.activeSelf)
+                {
+                    item.gameObject.SetActive(true);
+                    activatedCount++;
+
+                    if (activatedCount >= value)
+                        break;
+                }
+            }
+        }
+
+        private void DeactivateItems(Item[] items, int value)
+        {
+            if (items == null)
+            {
+                Debug.LogError("Items array is null.");
+                return;
+            }
+
+            int deactivatedCount = 0;
+
+            for (int i = items.Length - 1; i >= 0; i--)
+            {
+                if (items[i].gameObject.activeSelf)
+                {
+                    items[i].gameObject.SetActive(false);
+                    deactivatedCount++;
+
+                    if (deactivatedCount >= value)
+                        break;
+                }
+            }
+
+            if (items.All(item => !item.gameObject.activeSelf))
+                _currentType = ItemType.Empty;
+        }
+
+        private int CountActiveItems(Item[] items)
+        {
+            int count = 0;
+            foreach (var item in items)
+            {
+                if (item.gameObject.activeSelf)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private int CountNotActiveItems(Item[] items)
+        {
+            int count = 0;
+
+            foreach (var item in items)
+            {
+                if (!item.gameObject.activeSelf)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private void FryCutlets()
+        {
+            StartCoroutine(StartFryCutlets());
+        }
+
+        private IEnumerator StartFryCutlets()
+        {
+            _isClosed = true;
+
+            _animator.SetBool("FryCutlet", true);
+            _boxCollider.enabled = false;
+
+            yield return new WaitForSeconds(1f);
+            _progressFryUI.SetActive(true);
+            grillText.text = "Grill <color=yellow>Raw</color>";
+            fillImage.fillAmount = 0f;
+
+            float elapsedTime = 0f;
+            while (elapsedTime < grillTime)
+            {
+                elapsedTime += Time.deltaTime;
+                fillImage.fillAmount = elapsedTime / grillTime;
+                yield return null;
+            }
+
+            grillText.text = "Grill <color=green>Medium</color>";
+
+            // _animator.SetBool("FryCutlet",false);
+
+            int activeCount = CountActiveItems(_rawCutletItems);
+
+            foreach (var rawItem in _rawCutletItems)
+                rawItem.gameObject.SetActive(false);
+
+            for (int i = 0; i < activeCount; i++)
+                _readyCutletItems[i].gameObject.SetActive(true);
+
+            _currentType = ItemType.Cutlet;
+            _boxCollider.enabled = true;
+        }
+
+        private void OpenGrill()
+        {
+            _isClosed = false;
+            _animator.SetBool("FryCutlet", false);
+            _progressFryUI.SetActive(false);
+        }
+    }
+}
