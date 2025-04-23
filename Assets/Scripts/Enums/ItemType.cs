@@ -29,5 +29,8 @@ namespace Enums
     SodaLemon,
     SodaOrange,
     SodaBarberry,
+    CupSodaEmpty,
+    CupCoffeeEmpty,
+    SodaPlum,
   }
 }
