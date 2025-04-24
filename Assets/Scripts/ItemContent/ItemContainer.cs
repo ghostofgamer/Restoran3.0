@@ -28,20 +28,22 @@ namespace InteractableContent
         public Transform[] Positions => _positions;
 
         public ItemType CurrentItemContainer => _currentItemContainer;
-        
+
         public ItemType[] CurrentItemsType => _currentItemsType;
-        
-        
+
+
         public bool IsAdditionalItemsContainer => _isAdditionalItemsContainer;
 
         private void OnEnable()
         {
-            _interactableObject.OnAction += ActionContainer;
+            if (_interactableObject != null)
+                _interactableObject.OnAction += ActionContainer;
         }
 
         private void OnDisable()
         {
-            _interactableObject.OnAction -= ActionContainer;
+            if (_interactableObject != null)
+                _interactableObject.OnAction -= ActionContainer;
         }
 
         private void Start()
@@ -88,7 +90,7 @@ namespace InteractableContent
 
             return activeCount;
         }
-        
+
         public int[] GetActivePositions()
         {
             int[] activePositions = new int[_itemsAdditionalArray.Length];
@@ -182,8 +184,8 @@ namespace InteractableContent
                 inactiveItems[i].gameObject.SetActive(false);
             }
         }
-        
-        public void DeactivateItems(int value,int index)
+
+        public void DeactivateItems(int value, int index)
         {
             if (_items == null)
             {

@@ -15,8 +15,8 @@ public class AssemblyTable : MonoBehaviour
     [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
     [SerializeField] private InteractableObject _interactableObject;
     [SerializeField] private Collider _collider;
-   [SerializeField] private Collider[] _containerColliders;
-   [SerializeField] private AssemblyBurger _assemblyBurger;
+    [SerializeField] private Collider[] _containerColliders;
+    [SerializeField] private AssemblyBurger _assemblyBurger;
 
     [SerializeField] private Transform _cameraCurrentPosition;
     [SerializeField] private CameraPositionChanger _cameraPositionChanger;
@@ -159,17 +159,17 @@ public class AssemblyTable : MonoBehaviour
 
     public void SetValueCollider(bool value)
     {
-          _collider.enabled = value;
-          _assemblyBurger.enabled = !value;
-              
-          foreach (var containerCollidder in _containerColliders)
-          {
-              containerCollidder.enabled = !value;
-              Debug.Log("value " + !value);
-          }
+        _collider.enabled = value;
+        _assemblyBurger.enabled = !value;
+
+        foreach (var containerCollidder in _containerColliders)
+        {
+            containerCollidder.enabled = !value;
+            Debug.Log("value " + !value);
+        }
     }
 
-private ItemContainer GetContainerForItemType(ItemType itemType)
+    private ItemContainer GetContainerForItemType(ItemType itemType)
     {
         if (_containersByItemType.TryGetValue(itemType, out var container))
         {
