@@ -3828,6 +3828,7 @@ GameObject:
   - component: {fileID: 118459861}
   - component: {fileID: 118459860}
   - component: {fileID: 118459859}
+  - component: {fileID: 118459862}
   m_Layer: 0
   m_Name: CoffeeItemPackage
   m_TagString: Untagged
@@ -3892,6 +3893,20 @@ Transform:
   - {fileID: 543450653074616047}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &118459862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118459858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b4ab0bc63895ac4b96c896cac852b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _draggable: {fileID: 118459859}
+  _itemType: 22
 --- !u!1001 &121151047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35081,6 +35096,7 @@ GameObject:
   - component: {fileID: 1352800651}
   - component: {fileID: 1352800653}
   - component: {fileID: 1352800652}
+  - component: {fileID: 1352800654}
   m_Layer: 0
   m_Name: CanistraBarberryItem
   m_TagString: Untagged
@@ -35145,6 +35161,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1352800654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352800650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b4ab0bc63895ac4b96c896cac852b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _draggable: {fileID: 1352800652}
+  _itemType: 25
 --- !u!1 &1353031143
 GameObject:
   m_ObjectHideFlags: 0
@@ -45357,6 +45387,7 @@ GameObject:
   - component: {fileID: 1734867224}
   - component: {fileID: 1734867226}
   - component: {fileID: 1734867225}
+  - component: {fileID: 1734867227}
   m_Layer: 0
   m_Name: CanistraOrangeItem
   m_TagString: Untagged
@@ -45421,6 +45452,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1734867227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734867223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b4ab0bc63895ac4b96c896cac852b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _draggable: {fileID: 1734867225}
+  _itemType: 24
 --- !u!1 &1736181224
 GameObject:
   m_ObjectHideFlags: 0
@@ -51092,6 +51137,7 @@ GameObject:
   - component: {fileID: 1955685750}
   - component: {fileID: 1955685752}
   - component: {fileID: 1955685751}
+  - component: {fileID: 1955685753}
   m_Layer: 0
   m_Name: CanistraPlumItem
   m_TagString: Untagged
@@ -51156,6 +51202,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1955685753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955685749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b4ab0bc63895ac4b96c896cac852b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _draggable: {fileID: 1955685751}
+  _itemType: 28
 --- !u!1001 &1959392515
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57083,6 +57143,7 @@ GameObject:
   - component: {fileID: 2146111721}
   - component: {fileID: 2146111723}
   - component: {fileID: 2146111722}
+  - component: {fileID: 2146111724}
   m_Layer: 0
   m_Name: 'CanistraLemonItem '
   m_TagString: Untagged
@@ -57147,6 +57208,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2146111724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146111720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b4ab0bc63895ac4b96c896cac852b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _draggable: {fileID: 2146111722}
+  _itemType: 23
 --- !u!1 &1087579996896227
 GameObject:
   m_ObjectHideFlags: 0
