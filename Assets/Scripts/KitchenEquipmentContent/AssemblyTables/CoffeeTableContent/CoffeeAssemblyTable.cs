@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Enums;
+using InteractableContent;
+using RestaurantContent;
+using RestaurantContent.TrayContent;
 using SoContent.AssemblyBurger;
 using UnityEngine;
 
@@ -15,11 +18,19 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
         [SerializeField] private CoffeeCounter _coffeeCounter;
         [SerializeField] private List<Transform> _wellPositions;
+        [SerializeField] private Restaurant _restaurant;
 
         private Coroutine _coroutine;
+        private bool _isWorking = false;
 
         public void PourCoffee()
         {
+            if (_isWorking || ItemContainer.GetActiveItemsValue() <= 0)
+                return;
+
+            Debug.Log("КОФЕ");
+            _isWorking = true;
+
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
@@ -32,6 +43,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
 
             if (availablePosition != null)
             {
+                ItemContainer.DeactivateItems(1);
                 _emptyCup.SetActive(true);
                 yield return new WaitForSeconds(1f);
                 _emptyCup.SetActive(false);
@@ -41,36 +53,24 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
                 coffeeInstance.transform.position = _emptyCup.transform.position;
                 coffeeInstance.transform.rotation = Quaternion.identity;
                 coffeeInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(ItemType.Coffee);
-                
+
                 Sequence sequence = DOTween.Sequence();
-                sequence.Append(coffeeInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
-                sequence.Append(coffeeInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
-                sequence.Append(coffeeInstance.transform.DOMove(availablePosition.position, 0.5f)
-                    .SetEase(Ease.InOutQuad));
 
-                coffeeInstance.transform.SetParent(availablePosition);
-
-                sequence.Join(coffeeInstance.transform
-                        .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
-                        .SetEase(Ease.Linear))
-                    .OnComplete(() => _coffeeCounter.AddCoffee(coffeeInstance));
-                
-                
-                /*if (_restaurant.TryGetTrayOrder(burgerType, out Tray tray))
+                if (_restaurant.TryGetTrayDrinkOrder(ItemType.Coffee, out Tray tray))
                 {
-                    _restaurant.SetBurgerOrder(tray, burgerInstance);
+                    _restaurant.SetDrinkOrder(tray, coffeeInstance);
 
                     Debug.Log("TRUE");
                     Transform position = tray.GetFirstAvailablePosition();
 
-                    sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
-                    sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
-                    sequence.Append(burgerInstance.transform.DOMove(position.position, 1f)
+                    sequence.Append(coffeeInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+                    sequence.Append(coffeeInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
+                    sequence.Append(coffeeInstance.transform.DOMove(position.position, 1f)
                         .SetEase(Ease.InOutQuad));
 
-                    burgerInstance.transform.SetParent(position);
+                    coffeeInstance.transform.SetParent(position);
 
-                    sequence.Join(burgerInstance.transform
+                    sequence.Join(coffeeInstance.transform
                             .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
                             .SetEase(Ease.Linear))
                         .OnComplete(() => tray.TryCompletedOrder());
@@ -79,24 +79,26 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
                 {
                     Debug.Log("FALSE");
 
-                    sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
-                    sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
-                    sequence.Append(burgerInstance.transform.DOMove(availablePosition.position, 0.5f)
+                    sequence.Append(coffeeInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+                    sequence.Append(coffeeInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
+                    sequence.Append(coffeeInstance.transform.DOMove(availablePosition.position, 0.5f)
                         .SetEase(Ease.InOutQuad));
 
-                    burgerInstance.transform.SetParent(availablePosition);
+                    coffeeInstance.transform.SetParent(availablePosition);
 
-                    sequence.Join(burgerInstance.transform
+                    sequence.Join(coffeeInstance.transform
                             .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
                             .SetEase(Ease.Linear))
-                        .OnComplete(() => _burgersCounter.AddBurger(burgerInstance));
-                }*/
-
+                        .OnComplete(() => _coffeeCounter.AddCoffee(coffeeInstance));
+                }
             }
             else
             {
                 Debug.Log("нету пустых позиций");
             }
+
+            yield return new WaitForSeconds(1f);
+            _isWorking = false;
         }
     }
 }

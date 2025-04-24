@@ -44,10 +44,33 @@ namespace RestaurantContent
 
             return false;
         }
+        
+        public bool TryGetTrayDrinkOrder(ItemType itemType, out Tray tray)
+        {
+            Order order = _ordersCounter.GetOrderByDrink(itemType);
+            Debug.Log("Order " + (order?.IndexTable + 1));
+            tray = null;
+
+            if (order != null)
+                tray = _trayCounter.GetTrayByTableIndex(order);
+
+            if (tray != null)
+            {
+                // tray.SetBurger(item);
+                return true;
+            }
+
+            return false;
+        }
 
         public void SetBurgerOrder(Tray tray, Item item)
         {
-                tray.SetBurger(item);
+            tray.SetBurger(item);
+        }
+        
+        public void SetDrinkOrder(Tray tray, Item item)
+        {
+            tray.SetDrink(item);
         }
     }
 }

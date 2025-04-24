@@ -14,9 +14,10 @@ namespace KitchenEquipmentContent
         [SerializeField] private Transform _cameraCurrentPosition;
         [SerializeField] private Collider _collider;
         
-        
         public event Action DrinkAssemblyBeginig;
 
+        public ItemContainer ItemContainer => _itemContainer;
+        
         private void OnEnable()
         {
             _interactableObject.OnAction += Action;

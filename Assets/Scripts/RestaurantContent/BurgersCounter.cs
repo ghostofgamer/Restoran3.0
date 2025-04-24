@@ -10,6 +10,7 @@ namespace RestaurantContent
     public class BurgersCounter : MonoBehaviour
     {
         [SerializeField] private Restaurant _restaurant;
+        
         private List<Item> _burgers = new List<Item>();
 
         public void AddBurger(Item item)
