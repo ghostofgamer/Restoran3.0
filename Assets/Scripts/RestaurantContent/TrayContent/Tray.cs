@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using KitchenEquipmentContent.AssemblyTables.CoffeeTableContent;
+using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
 using OrdersContent;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace RestaurantContent.TrayContent
         private OrdersCounter _ordersCounter;
         private BurgersCounter _burgersCounter;
         private CoffeeCounter _coffeeCounter;
+        private SodaCounter _sodaCounter;
 
         private List<Item> _items = new List<Item>();
 
@@ -25,13 +27,14 @@ namespace RestaurantContent.TrayContent
 
         public Transform[] ItemPositions => _itemPositions;
 
-        public void Init(OrdersCounter ordersCounter, Transform defaultParent,BurgersCounter burgersCounter,
-            CoffeeCounter coffeeCounter )
+        public void Init(OrdersCounter ordersCounter, Transform defaultParent, BurgersCounter burgersCounter,
+            CoffeeCounter coffeeCounter, SodaCounter sodaCounter)
         {
             _ordersCounter = ordersCounter;
             _defaultParent = defaultParent;
             _burgersCounter = burgersCounter;
             _coffeeCounter = coffeeCounter;
+            _sodaCounter = sodaCounter;
         }
 
         public void SetBusy(bool value)
@@ -82,11 +85,18 @@ namespace RestaurantContent.TrayContent
             _burgersCounter.RemoveBurger(item);
             Order.SetBurgerCompleted(true);
         }
-        
+
         public void SetDrink(Item item)
         {
             _items.Add(item);
             _coffeeCounter.RemoveCoffee(item);
+            Order.SetDrinkCompleted(true);
+        }
+
+        public void SetSodaDrink(Item item)
+        {
+            _items.Add(item);
+            _sodaCounter.RemoveSoda(item);
             Order.SetDrinkCompleted(true);
         }
 

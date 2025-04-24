@@ -39,12 +39,12 @@ public class Draggable : MonoBehaviour, IDraggable
             _parentObject.DOLocalRotate(Vector3.zero, 0.15f).SetEase(Ease.InOutQuad);
 
             playerInteraction.SetDraggableObject(this);
-            DraggablePicked.Invoke();
+            DraggablePicked?.Invoke();
         }
     }
 
     public void Throw()
     {
-        DraggableThrowed.Invoke();
+        DraggableThrowed?.Invoke();
     }
 }

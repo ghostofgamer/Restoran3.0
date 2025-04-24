@@ -3,6 +3,7 @@ using SpawnContent;
 using UnityEngine;
 using System.Linq;
 using KitchenEquipmentContent.AssemblyTables.CoffeeTableContent;
+using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
 using OrdersContent;
 
 namespace RestaurantContent.TrayContent
@@ -14,6 +15,7 @@ namespace RestaurantContent.TrayContent
         [SerializeField] private OrdersCounter _ordersCounter;
         [SerializeField] private BurgersCounter _burgersCounter;
         [SerializeField] private CoffeeCounter _coffeeCounter;
+        [SerializeField] private SodaCounter _sodaCounter;
 
         private List<Tray> _activeTrays = new List<Tray>();
         private Dictionary<Tray, int> _trayToPositionMap = new Dictionary<Tray, int>();
@@ -28,7 +30,7 @@ namespace RestaurantContent.TrayContent
             for (int i = 0; i < _trayPositions.Length; i++)
             {
                 Tray tray = _traySpawner.SpawnTray();
-                tray.Init(_ordersCounter, _traySpawner.transform, _burgersCounter, _coffeeCounter);
+                tray.Init(_ordersCounter, _traySpawner.transform, _burgersCounter, _coffeeCounter, _sodaCounter);
                 tray.Clear();
                 _activeTrays.Add(tray);
                 _trayToPositionMap[tray] = i;
@@ -51,7 +53,7 @@ namespace RestaurantContent.TrayContent
 
                 // Spawn a new tray and place it at the position of the taken tray
                 Tray newTray = _traySpawner.SpawnTray();
-                newTray.Init(_ordersCounter, _traySpawner.transform, _burgersCounter, _coffeeCounter);
+                newTray.Init(_ordersCounter, _traySpawner.transform, _burgersCounter, _coffeeCounter, _sodaCounter);
                 newTray.Clear();
                 _activeTrays.Add(newTray);
                 _trayToPositionMap[newTray] = positionIndex;

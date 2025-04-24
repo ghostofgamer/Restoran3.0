@@ -5,6 +5,7 @@ using System.Linq;
 using ClientsContent;
 using Enums;
 using KitchenEquipmentContent.AssemblyTables.CoffeeTableContent;
+using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace OrdersContent
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private BurgersCounter _burgersCounter;
         [SerializeField] private CoffeeCounter _coffeeCounter;
+        [SerializeField] private SodaCounter _sodaCounter;
 
         private const int MaxActiveOrders = 4;
 
@@ -48,7 +50,8 @@ namespace OrdersContent
                 OrdersChanged?.Invoke(_currentOrders);
                 // OrdersChanged?.Invoke(order);
                 _burgersCounter.CheckWaitNeedBurgers(order.BurgerItemOrder);
-                _coffeeCounter.CheckWaitNeedBurgers(order.DrinkItemOrder);
+                _coffeeCounter.CheckWaitNeedCoffee(order.DrinkItemOrder);
+                _sodaCounter.CheckWaitNeedSoda(order.DrinkItemOrder);
             }
             else
             {
@@ -101,7 +104,8 @@ namespace OrdersContent
                 OrdersChanged?.Invoke(_currentOrders);
                 
                 _burgersCounter.CheckWaitNeedBurgers(nextOrder.BurgerItemOrder);
-                _coffeeCounter.CheckWaitNeedBurgers(nextOrder.DrinkItemOrder);
+                _coffeeCounter.CheckWaitNeedCoffee(nextOrder.DrinkItemOrder);
+                _sodaCounter.CheckWaitNeedSoda(nextOrder.DrinkItemOrder);
                 
                 Debug.Log("Активирован новый заказ: " + nextOrder.IndexTable);
             }

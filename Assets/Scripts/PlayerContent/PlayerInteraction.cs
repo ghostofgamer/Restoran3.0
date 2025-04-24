@@ -66,10 +66,12 @@ namespace PlayerContent
             if (CurrentDraggable == null)
                 return;
             
+            Debug.Log("бросить 1 ");
             CurrentDraggable.Throw();
             CurrentDraggable.GetComponent<Rigidbody>().isKinematic = false;
             CurrentDraggable.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 16f, ForceMode.Impulse);
             ClearDraggableObject();
+            Debug.Log("бросить 3 ");
             _throwButton.SetActive(false);
         }
 

@@ -24,7 +24,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
             _coffeeItems.Remove(item);
         }
         
-        public void CheckWaitNeedBurgers(ItemType itemType)
+        public void CheckWaitNeedCoffee(ItemType itemType)
         {
             if (TryFindNeedBurger(itemType, out Item coffee))
             {

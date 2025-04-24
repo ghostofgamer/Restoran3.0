@@ -72,5 +72,10 @@ namespace RestaurantContent
         {
             tray.SetDrink(item);
         }
+        
+        public void SetSodaOrder(Tray tray, Item item)
+        {
+            tray.SetSodaDrink(item);
+        }
     }
 }
