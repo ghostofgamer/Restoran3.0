@@ -1,5 +1,6 @@
 using Enums;
 using SoContent;
+using SoContent.AssemblyBurger;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,8 @@ namespace OrdersContent.OrderPromptContent
     public class OrderPrompt : MonoBehaviour
     {
         [SerializeField] private ItemsConfig _itemsConfig;
+        [SerializeField] private IngredientsConfig _ingredientsConfig;
+        [SerializeField] private BurgerRecipeConfig _burgerRecipeConfig;
         [SerializeField] private Image _burgerImage;
         [SerializeField] private Image _drinkImage;
         [SerializeField] private Image _extraImage;
@@ -15,6 +18,7 @@ namespace OrdersContent.OrderPromptContent
         [SerializeField] private Image _drinkCompletedImage;
         [SerializeField] private Image _extraCompletedImage;
         [SerializeField] private Image _orderCompletedImage;
+        [SerializeField] private Image[] _ingredients;
 
         private Order _order;
 
@@ -22,17 +26,28 @@ namespace OrdersContent.OrderPromptContent
         {
             _order = order;
             CheckOrdersProgress();
+            InitImages();
+            SubscribeToOrderEvents();
+        }
+
+        private void InitImages()
+        {
             SetImage(_burgerImage, _burgerCompletedImage, _order.BurgerItemOrder);
             SetImage(_drinkImage, _drinkCompletedImage, _order.DrinkItemOrder);
             SetImage(_extraImage, _extraCompletedImage, _order.ExtraItemOrder);
+            SetIngredients();
+        }
 
-            _order.ChangeOrder += () => { CheckOrdersProgress(); };
+        private void SubscribeToOrderEvents()
+        {
+            if (_order != null)
+                _order.ChangeOrder += OnOrderChanged;
+        }
 
-
-            /*_order.BurgerCompleted += () => _burgerCompletedImage.gameObject.SetActive(true);
-            _order.DrinkCompleted += () => _drinkCompletedImage.gameObject.SetActive(true);
-            _order.ExtraCompleted += () => _extraCompletedImage.gameObject.SetActive(true);
-            _order.OrderCompleted += () => _orderCompletedImage.gameObject.SetActive(true);*/
+        private void UnsubscribeFromOrderEvents()
+        {
+            if (_order != null)
+                _order.ChangeOrder -= CheckOrdersProgress;
         }
 
         public void Activate()
@@ -42,22 +57,8 @@ namespace OrdersContent.OrderPromptContent
 
         public void Deactivate()
         {
-            if (_order != null)
-                _order.ChangeOrder -= () => { CheckOrdersProgress(); };
-
-            /*if (_order != null)
-            {
-                _order.BurgerCompleted -= () => _burgerCompletedImage.gameObject.SetActive(true);
-                _order.DrinkCompleted -= () => _drinkCompletedImage.gameObject.SetActive(true);
-                _order.ExtraCompleted -= () => _extraCompletedImage.gameObject.SetActive(true);
-                _order.OrderCompleted -= () => _orderCompletedImage.gameObject.SetActive(true);
-            }*/
-
-            _burgerCompletedImage.gameObject.SetActive(false);
-            _drinkCompletedImage.gameObject.SetActive(false);
-            _extraCompletedImage.gameObject.SetActive(false);
-            _orderCompletedImage.gameObject.SetActive(false);
-
+            UnsubscribeFromOrderEvents();
+            ResetCompletedImages();
             gameObject.SetActive(false);
         }
 
@@ -75,6 +76,28 @@ namespace OrdersContent.OrderPromptContent
             }
         }
 
+        private void SetIngredients()
+        {
+            foreach (var ingredient in _ingredients)
+                ingredient.gameObject.SetActive(false);
+
+            if (_order.BurgerItemOrder != ItemType.Empty)
+            {
+                Recipes recipes = _burgerRecipeConfig.GetRecipeByBurgerType(_order.BurgerItemOrder);
+
+                for (int i = 0; i < recipes.ItemTypes.Count; i++)
+                {
+                    _ingredients[i].sprite = _ingredientsConfig.GetSprite(recipes.ItemTypes[i]);
+                    _ingredients[i].gameObject.SetActive(true);
+                }
+            }
+        }
+
+        private void OnOrderChanged()
+        {
+            CheckOrdersProgress();
+        }
+
         private void CheckOrdersProgress()
         {
             if (_order == null)
@@ -83,7 +106,15 @@ namespace OrdersContent.OrderPromptContent
             _burgerCompletedImage.gameObject.SetActive(_order.IsBurgerCompleted);
             _drinkCompletedImage.gameObject.SetActive(_order.IsDrinkCompleted);
             _extraCompletedImage.gameObject.SetActive(_order.IsExtraCompleted);
-            // _orderCompletedImage.gameObject.SetActive(true);
+            _orderCompletedImage.gameObject.SetActive(_order.IsOrderCompleted());
+        }
+
+        private void ResetCompletedImages()
+        {
+            _burgerCompletedImage.gameObject.SetActive(false);
+            _drinkCompletedImage.gameObject.SetActive(false);
+            _extraCompletedImage.gameObject.SetActive(false);
+            _orderCompletedImage.gameObject.SetActive(false);
         }
     }
 }

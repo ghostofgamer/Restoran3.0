@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Enums;
 using UnityEngine;
 
@@ -8,6 +9,11 @@ namespace SoContent.AssemblyBurger
     public class BurgerRecipeConfig : ScriptableObject
     {
         public List<Recipes> recipes;
+        
+        public Recipes GetRecipeByBurgerType(ItemType burgerType)
+        {
+            return recipes.FirstOrDefault(recipe => recipe.BurgerType == burgerType);
+        }
     }
     
     [System.Serializable]
