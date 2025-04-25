@@ -10,4 +10,5 @@ public class ItemConfig
     public DollarValue Price;
     public string ItemName;
     public Sprite Sprite;
+    public Sprite SpriteNotBackground;
 }

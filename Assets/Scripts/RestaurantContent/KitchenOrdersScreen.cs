@@ -19,22 +19,9 @@ namespace RestaurantContent
         {
             _ordersCounter.OrdersChanged -= UpdateScreenOrders;
         }
-
-        /*private void UpdateScreenOrders(Order order)
-        {
-            foreach (var orderScreen in _orderUiScreens)
-            {
-                if (!orderScreen.gameObject.activeSelf)
-                {
-                    orderScreen.Init(order);
-                    return;
-                }
-            }
-        }*/
         
         private void UpdateScreenOrders(List<Order> orders)
         {
-            // Деактивируем все экраны заказов
             foreach (var orderScreen in _orderUiScreens)
             {
                 orderScreen.Deactivate();

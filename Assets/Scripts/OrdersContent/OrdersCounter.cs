@@ -26,11 +26,9 @@ namespace OrdersContent
         private List<Order> _currentOrders;
         private Queue<Order> _orderQueue;
         private Queue<Client> _clientQueue;
-
-        // public event Action<Order> OrdersChanged;
+        
         public event Action<List<Order>> OrdersChanged;
         
-        // public event Action<Order> OrderDeleted;
 
         private void Start()
         {
