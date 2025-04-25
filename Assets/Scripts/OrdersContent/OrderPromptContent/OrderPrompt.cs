@@ -9,8 +9,6 @@ namespace OrdersContent.OrderPromptContent
     public class OrderPrompt : MonoBehaviour
     {
         [SerializeField] private ItemsConfig _itemsConfig;
-        [SerializeField] private IngredientsConfig _ingredientsConfig;
-        [SerializeField] private BurgerRecipeConfig _burgerRecipeConfig;
         [SerializeField] private Image _burgerImage;
         [SerializeField] private Image _drinkImage;
         [SerializeField] private Image _extraImage;
@@ -18,9 +16,10 @@ namespace OrdersContent.OrderPromptContent
         [SerializeField] private Image _drinkCompletedImage;
         [SerializeField] private Image _extraCompletedImage;
         [SerializeField] private Image _orderCompletedImage;
-        [SerializeField] private Image[] _ingredients;
+        [SerializeField] private IngridientPromt _ingridientPromt;
 
         private Order _order;
+        private Recipes _recipes;
 
         public void InitOrder(Order order)
         {
@@ -35,7 +34,7 @@ namespace OrdersContent.OrderPromptContent
             SetImage(_burgerImage, _burgerCompletedImage, _order.BurgerItemOrder);
             SetImage(_drinkImage, _drinkCompletedImage, _order.DrinkItemOrder);
             SetImage(_extraImage, _extraCompletedImage, _order.ExtraItemOrder);
-            SetIngredients();
+            _ingridientPromt.SetIngredients(_order);
         }
 
         private void SubscribeToOrderEvents()
@@ -73,23 +72,6 @@ namespace OrdersContent.OrderPromptContent
             else
             {
                 image.gameObject.SetActive(false);
-            }
-        }
-
-        private void SetIngredients()
-        {
-            foreach (var ingredient in _ingredients)
-                ingredient.gameObject.SetActive(false);
-
-            if (_order.BurgerItemOrder != ItemType.Empty)
-            {
-                Recipes recipes = _burgerRecipeConfig.GetRecipeByBurgerType(_order.BurgerItemOrder);
-
-                for (int i = 0; i < recipes.ItemTypes.Count; i++)
-                {
-                    _ingredients[i].sprite = _ingredientsConfig.GetSprite(recipes.ItemTypes[i]);
-                    _ingredients[i].gameObject.SetActive(true);
-                }
             }
         }
 
