@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Enums;
-using InteractableContent;
+using ItemContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using SoContent.AssemblyBurger;
@@ -19,13 +19,14 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         [SerializeField] private CoffeeCounter _coffeeCounter;
         [SerializeField] private List<Transform> _wellPositions;
         [SerializeField] private Restaurant _restaurant;
+        [SerializeField] private FullnessCoffeeCounter _fullnessCoffeeCounter;
 
         private Coroutine _coroutine;
         private bool _isWorking = false;
 
         public void PourCoffee()
         {
-            if (_isWorking || ItemContainer.GetActiveItemsValue() <= 0)
+            if (_isWorking || ItemContainer.GetActiveItemsValue() <= 0 || _fullnessCoffeeCounter.CurrentFullness < 10)
                 return;
 
             Debug.Log("КОФЕ");
@@ -44,6 +45,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
             if (availablePosition != null)
             {
                 ItemContainer.DeactivateItems(1);
+                _fullnessCoffeeCounter.UseCoffee();
                 _emptyCup.SetActive(true);
                 yield return new WaitForSeconds(1f);
                 _emptyCup.SetActive(false);
@@ -99,6 +101,14 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
 
             yield return new WaitForSeconds(1f);
             _isWorking = false;
+        }
+
+        public override void FillDrinkMachine(ItemDrinkPackage itemDrinkPackage)
+        {
+            if (itemDrinkPackage.CurrentFullness > 0)
+            {
+                _fullnessCoffeeCounter.RefillCoffee(itemDrinkPackage);
+            }
         }
     }
 }

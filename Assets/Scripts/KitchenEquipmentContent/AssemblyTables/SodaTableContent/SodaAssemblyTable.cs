@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Enums;
+using ItemContent;
 using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
@@ -21,6 +22,7 @@ namespace KitchenEquipmentContent
         // [SerializeField] private CoffeeCounter _coffeeCounter;
         [SerializeField] private List<Transform> _wellPositions;
         [SerializeField] private Restaurant _restaurant;
+        [SerializeField] private SodaFullnessCounter[] _sodaFullnessCounters;
 
         private Coroutine _coroutine;
         private bool _isWorking = false;
@@ -32,16 +34,26 @@ namespace KitchenEquipmentContent
             if (_isWorking || ItemContainer.GetActiveItemsValue() <= 0)
                 return;
 
-            Debug.Log("КОФЕ");
+
+            SodaFullnessCounter sodaFullnessCounter = GetSodaFullnessCounter(itemType);
+            int value = sodaFullnessCounter.CurrentFullness;
+
+            if (value < 10)
+            {
+                Debug.Log("Соды мало тут  " + value);
+                return;
+            }
+
+            Debug.Log("Сода  " + itemType);
             _isWorking = true;
 
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
-            _coroutine = StartCoroutine(Pour(itemType, index));
+            _coroutine = StartCoroutine(Pour(itemType, index, sodaFullnessCounter));
         }
 
-        private IEnumerator Pour(ItemType itemType, int index)
+        private IEnumerator Pour(ItemType itemType, int index, SodaFullnessCounter sodaFullnessCounter)
         {
             Transform availablePosition = _wellPositions.FirstOrDefault(position => position.childCount == 0);
 
@@ -49,6 +61,7 @@ namespace KitchenEquipmentContent
             {
                 ItemContainer.DeactivateItems(1);
                 _emptyCups[index].SetActive(true);
+                sodaFullnessCounter.UseSoda();
                 yield return new WaitForSeconds(1f);
                 _emptyCups[index].SetActive(false);
                 Item sodaInstance = _burgerIngridientSpawner.SpawnItem(itemType);
@@ -91,9 +104,9 @@ namespace KitchenEquipmentContent
                     sodaInstance.transform.SetParent(availablePosition);
 
                     sequence.Join(sodaInstance.transform
-                        .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
-                        .SetEase(Ease.Linear))
-                    .OnComplete(() => _sodaCounter.AddSoda(sodaInstance));
+                            .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
+                            .SetEase(Ease.Linear))
+                        .OnComplete(() => _sodaCounter.AddSoda(sodaInstance));
                 }
             }
             else
@@ -103,6 +116,21 @@ namespace KitchenEquipmentContent
 
             yield return new WaitForSeconds(1f);
             _isWorking = false;
+        }
+
+        public override void FillDrinkMachine(ItemDrinkPackage itemDrinkPackage)
+        {
+            if (itemDrinkPackage.CurrentFullness > 0)
+            {
+                SodaFullnessCounter sodaFullnessCounter = GetSodaFullnessCounter(itemDrinkPackage.ItemType);
+                sodaFullnessCounter.RefillSoda(itemDrinkPackage);
+                // _fullnessCoffeeCounter.RefillCoffee(itemDrinkPackage);
+            }
+        }
+
+        public SodaFullnessCounter GetSodaFullnessCounter(ItemType itemType)
+        {
+            return _sodaFullnessCounters.FirstOrDefault(counter => counter.ItemType == itemType);
         }
     }
 }
