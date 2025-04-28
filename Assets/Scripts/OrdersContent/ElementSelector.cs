@@ -41,7 +41,7 @@ namespace OrdersContent
                 _spacer.SetActive(true);
                 _spacer.GetComponent<LayoutElement>().preferredWidth = _increasedSpacing;
                 _spacer.transform.SetParent(_layoutGroup.transform);
-                _spacer.transform.SetSiblingIndex(startIndex + 1);
+                _spacer.transform.SetSiblingIndex(startIndex + 2);
             }
             else
             {

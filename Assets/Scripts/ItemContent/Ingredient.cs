@@ -8,5 +8,6 @@ namespace ItemContent
     {
         public ItemType itemType;
         public Sprite sprite;
+        public Sprite outlineSprite;
     }
 }

@@ -20,5 +20,19 @@ namespace SoContent
             Debug.LogWarning($"Sprite for ItemType {itemType} not found.");
             return null;
         }
+        
+        public Sprite GetOutlineSprite(ItemType itemType)
+        {
+            Debug.Log("SPRITE" + itemType );
+            
+            foreach (var ingredient in _ingredients)
+            {
+                if (ingredient.itemType == itemType)
+                    return ingredient.outlineSprite;
+            }
+
+            Debug.LogWarning($"Sprite for ItemType {itemType} not found.");
+            return null;
+        }
     }
 }
