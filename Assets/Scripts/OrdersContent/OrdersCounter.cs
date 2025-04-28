@@ -28,6 +28,8 @@ namespace OrdersContent
         private Queue<Client> _clientQueue;
         
         public event Action<List<Order>> OrdersChanged;
+
+        public List<Order> CurrentOrders => _currentOrders;
         
 
         private void Start()
