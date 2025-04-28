@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -30,6 +31,10 @@ namespace AssemblyBurgerContent
         private ItemContainer _lastItemContainer;
         private int _lastIndexBun = -1;
         private bool _isAnimationInProgress = false;
+
+        public event Action StackChanged;
+
+        public Stack<(Item item, ItemContainer container)> IngredientStack => _ingredientStack;
 
         private void Start()
         {
@@ -147,6 +152,8 @@ namespace AssemblyBurgerContent
                 Item previousItem = _ingredientStack.Peek().item;
                 AssemblyIngredient assemblyIngredient = previousItem.GetComponent<AssemblyIngredient>();
 
+                // StackChanged?.Invoke();
+                
                 if (assemblyIngredient != null)
                 {
                     if (assemblyIngredient.PositionUpIngredient != null)
@@ -201,6 +208,7 @@ namespace AssemblyBurgerContent
             }
 
             _ingredientStack.Push((item, itemContainer));
+            StackChanged?.Invoke();
         }
 
         public void UndoLastSelection()
@@ -214,6 +222,8 @@ namespace AssemblyBurgerContent
             {
                 var (lastItem, container) = _ingredientStack.Pop();
 
+                StackChanged?.Invoke();
+                
                 if (container != null)
                 {
                     _isAnimationInProgress = true;
@@ -356,8 +366,11 @@ namespace AssemblyBurgerContent
                     {
                         var (lastItem, container) = _ingredientStack.Pop();
                         lastItem.gameObject.SetActive(false);
+                        
+                        
                         // Destroy(lastItem.gameObject);
                     }
+                        StackChanged?.Invoke();
                 }
                 else
                 {
@@ -386,13 +399,15 @@ namespace AssemblyBurgerContent
                                 .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
                                 .SetEase(Ease.Linear))
                             .OnComplete(() => tray.TryCompletedOrder());
-                        
+
                         while (_ingredientStack.Count > 0)
                         {
                             var (lastItem, container) = _ingredientStack.Pop();
                             lastItem.gameObject.SetActive(false);
+                            
                             // Destroy(lastItem.gameObject);
                         }
+                            StackChanged?.Invoke();
                     }
 
                     else
