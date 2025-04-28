@@ -54,13 +54,13 @@ public class IngridientPromt : MonoBehaviour
             if (_order.IsBurgerCompleted)
             {
                 foreach (var ingredient in _ingredients)
-                   ingredient.gameObject.SetActive(false);
-                
+                    ingredient.gameObject.SetActive(false);
+
                 if (!_order.IsDrinkCompleted)
                 {
                     Debug.Log("_order.DrinkItemOrder " + _order.DrinkItemOrder);
                     Debug.Log("Sprite  " + _ingredientsConfig.GetSprite(_order.DrinkItemOrder));
-                    
+
                     _ingredients[0].sprite = _ingredientsConfig.GetSprite(_order.DrinkItemOrder);
                     _ingredients[0].color = Color.white;
                     _ingredients[0].gameObject.SetActive(true);
@@ -69,6 +69,10 @@ public class IngridientPromt : MonoBehaviour
             else
                 foreach (var ingredient in _ingredients)
                     ingredient.color = Color.white;
+
+
+            foreach (var ingredient in _ingredients)
+                ingredient.transform.localScale = Vector3.one;
         }
 
         Debug.Log("Стек меняется");
@@ -90,36 +94,26 @@ public class IngridientPromt : MonoBehaviour
         {
             int recipeIndex = _recipes.ItemTypes.Count - 1 - i;
 
-            /*for (int j = 0; j < stackItems.Count; j++)
-                Debug.Log("stack " + j + stackItems[j]);*/
-
             if (i >= stackItems.Count)
             {
-                // _ingredients[i].color = Color.white;
                 Debug.Log($"{i}). Индекс выходит за пределы стека");
                 continue;
             }
-
-            Debug.Log($"{i}). +  {stackItems[i]}");
-            Debug.Log($"{i}). + {_recipes.ItemTypes[recipeIndex]} ");
-            Debug.Log($" НОВОЕ {i}). + {_recipes.ItemTypes[recipeIndex]} +///+ {stackItems[stackItems.Count - 1 - i]}");
 
             if (stackItems[i] == _recipes.ItemTypes[recipeIndex])
             {
                 Debug.Log("Правильно ");
                 _ingredients[i].color = Color.gray;
-                // _ingredients[i].color = Color.green;
+
+                Debug.Log("след ингр " + i + (1));
+                Debug.Log("куррент стэцк " + i);
+                Debug.Log("стэцк " + stackItems.Count);
+                _ingredients[i + 1].transform.localScale = new Vector3(1.3f, 1.3f);
             }
             else
             {
-                Debug.Log("Не то ");
-
                 foreach (var ingredient in _ingredients)
-                {
-                    // ingredient.color = Color.red;
-                    _ingredients[i].color = Color.gray;
-                    Debug.Log("выключаем ");
-                }
+                    ingredient.color = Color.gray;
             }
         }
     }
