@@ -4,6 +4,7 @@ using Enums;
 using OrdersContent;
 using SoContent;
 using SoContent.AssemblyBurger;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ public class IngridientPromt : MonoBehaviour
     [SerializeField] private IngredientsConfig _ingredientsConfig;
 
     private Recipes _recipes;
+    private Order _order;
 
     private void OnEnable()
     {
@@ -28,6 +30,8 @@ public class IngridientPromt : MonoBehaviour
 
     public void SetIngredients(Order order)
     {
+        _order = order;
+
         foreach (var ingredient in _ingredients)
             ingredient.gameObject.SetActive(false);
 
@@ -45,8 +49,27 @@ public class IngridientPromt : MonoBehaviour
 
     public void CheckIngredientsProgress()
     {
-        foreach (var ingredient in _ingredients)
-            ingredient.color = Color.white;
+        if (_order != null)
+        {
+            if (_order.IsBurgerCompleted)
+            {
+                foreach (var ingredient in _ingredients)
+                   ingredient.gameObject.SetActive(false);
+                
+                if (!_order.IsDrinkCompleted)
+                {
+                    Debug.Log("_order.DrinkItemOrder " + _order.DrinkItemOrder);
+                    Debug.Log("Sprite  " + _ingredientsConfig.GetSprite(_order.DrinkItemOrder));
+                    
+                    _ingredients[0].sprite = _ingredientsConfig.GetSprite(_order.DrinkItemOrder);
+                    _ingredients[0].color = Color.white;
+                    _ingredients[0].gameObject.SetActive(true);
+                }
+            }
+            else
+                foreach (var ingredient in _ingredients)
+                    ingredient.color = Color.white;
+        }
 
         Debug.Log("Стек меняется");
         if (_assemblyBurger.IngredientStack.Count == 0)
@@ -85,24 +108,18 @@ public class IngridientPromt : MonoBehaviour
             {
                 Debug.Log("Правильно ");
                 _ingredients[i].color = Color.gray;
+                // _ingredients[i].color = Color.green;
             }
             else
             {
                 Debug.Log("Не то ");
 
-                /*for (int j = 0; j < _ingredients.Length; j++)
-                {
-                    _ingredients[j].color = Color.gray;
-                    Debug.Log("сколько выключаем " + j);
-                }*/
-
                 foreach (var ingredient in _ingredients)
                 {
-                    ingredient.color = Color.gray;
+                    // ingredient.color = Color.red;
+                    _ingredients[i].color = Color.gray;
                     Debug.Log("выключаем ");
                 }
-
-                // _ingredients[i].color = Color.white;
             }
         }
     }
