@@ -16,7 +16,6 @@ namespace OrdersContent
         {
             if (_spacer != null)
                 _spacer.SetActive(false);
-            
         }
         
         public void UpdateSpacing(int startIndex)
@@ -47,6 +46,24 @@ namespace OrdersContent
             {
                 _spacer.SetActive(false);
             }
+        }
+
+        public void ReturnDefaultSpacing()
+        {
+            if (_layoutGroup == null)
+            {
+                Debug.LogError("HorizontalLayoutGroup is not assigned.");
+                return;
+            }
+
+            if (_spacer != null)
+            {
+                _spacer.SetActive(false);
+                _spacer.GetComponent<LayoutElement>().preferredWidth = 0; // Reset the spacer's width
+                _spacer.transform.SetParent(null); // Remove the spacer from the layout group
+            }
+
+            _layoutGroup.spacing = _defaultSpacing;
         }
     }
 }

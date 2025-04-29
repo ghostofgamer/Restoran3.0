@@ -56,6 +56,7 @@ public class IngridientPromt : MonoBehaviour
             for (int i = _recipes.ItemTypes.Count - 1, j = 0; i >= 0; i--, j++)
             {
                 _ingredientsViewers[j].SetDefault(_ingredientsConfig.GetSprite(_recipes.ItemTypes[i]));
+                _ingredientsViewers[j].SetItemType(_recipes.ItemTypes[i]);
                 _ingredientsViewers[j].gameObject.SetActive(true);
             }
         }
@@ -250,8 +251,8 @@ public class IngridientPromt : MonoBehaviour
 
             foreach (var ingredient in _ingredientsViewers)
                 ingredient.ResetDefaultScale();
-            
-            
+
+
             foreach (var ingredient in _ingredientsViewers)
                 ingredient.SetOutlineBackground(false, null);
         }
@@ -273,6 +274,8 @@ public class IngridientPromt : MonoBehaviour
 
         int lastCorrectIndex = -1;
 
+        Debug.Log($"{stackItems.Count}). stackItems.Count");
+
         for (int i = 0; i < _ingredientsViewers.Length; i++)
         {
             int recipeIndex = _recipes.ItemTypes.Count - 1 - i;
@@ -289,16 +292,34 @@ public class IngridientPromt : MonoBehaviour
                 _ingredientsViewers[i].SetDefaultColor(Color.gray);
                 _elementSelector.UpdateSpacing(i);
                 lastCorrectIndex = i;
+
+
+                if (i == (stackItems.Count - 1))
+                {
+                    Debug.Log("i == stackItems.Count " + (i) + "  " + stackItems.Count);
+                    Debug.Log("_recipes.ItemTypes[i + 1] " + _recipes.ItemTypes[i + 1]);
+
+                    /*_ingredientsViewers[i + 1].SetOutlineBackground(true,
+                        _ingredientsConfig.GetOutlineSprite(_recipes.ItemTypes[i + 1]));*/
+                    
+                    _ingredientsViewers[i + 1].SetOutlineBackground(true,
+                        _ingredientsConfig.GetOutlineSprite( _ingredientsViewers[i + 1].ItemType));
+                }
             }
             else
             {
-                _ingredientsViewers[i].SetDefaultColor(Color.gray);
-                _ingredientsViewers[i].SetOutlineBackground(false, null);
+                foreach (var ingredient in _ingredientsViewers)
+                    ingredient.SetDefaultColor(Color.gray);
+                
+                _elementSelector.ReturnDefaultSpacing();
+                
+                // _ingredientsViewers[i].SetDefaultColor(Color.gray);
+                // _ingredientsViewers[i].SetOutlineBackground(false, null);
             }
         }
 
         // Включаем outline только для последнего правильного ингредиента
-        if (lastCorrectIndex >= 0 && lastCorrectIndex + 1 < _ingredientsViewers.Length)
+        /*if (lastCorrectIndex >= 0 && lastCorrectIndex + 1 < _ingredientsViewers.Length)
         {
             int nextIndex = lastCorrectIndex + 1;
             int nextRecipeIndex = _recipes.ItemTypes.Count - 1 - nextIndex;
@@ -313,6 +334,6 @@ public class IngridientPromt : MonoBehaviour
                 _ingredientsViewers[lastCorrectIndex].SetOutlineBackground(true,
                     _ingredientsConfig.GetOutlineSprite(_recipes.ItemTypes[lastCorrectIndex]));
             }
-        }
+        }*/
     }
 }

@@ -1,3 +1,4 @@
+using Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,13 @@ namespace IngredientsContent
         [SerializeField] private Image _defaultImage;
         [SerializeField] private Image _backGroundImage;
 
+        public ItemType ItemType;
+
+        public void SetItemType(ItemType itemType)
+        {
+            ItemType = itemType;
+        }
+        
         public void SetValueBackground(bool value)
         {
             _backGroundImage.gameObject.SetActive(value);
