@@ -30,11 +30,10 @@ namespace KitchenEquipmentContent
         public void PourSoda(ItemType itemType, int index)
         {
             Debug.Log("НАЛИВАЕМ лимонад " + itemType);
-
+            
             if (_isWorking || ItemContainer.GetActiveItemsValue() <= 0)
                 return;
-
-
+            
             SodaFullnessCounter sodaFullnessCounter = GetSodaFullnessCounter(itemType);
             int value = sodaFullnessCounter.CurrentFullness;
 
@@ -111,6 +110,40 @@ namespace KitchenEquipmentContent
             }
             else
             {
+                if (_restaurant.TryGetTrayDrinkOrder(itemType, out Tray tray))
+                {
+                    Debug.Log("Позиций нету но есть заказ же ");
+                    Transform position = tray.GetFirstAvailablePosition();
+                    
+                    ItemContainer.DeactivateItems(1);
+                    _emptyCups[index].SetActive(true);
+                    sodaFullnessCounter.UseSoda();
+                    yield return new WaitForSeconds(1f);
+                    _emptyCups[index].SetActive(false);
+                    Item sodaInstance = _burgerIngridientSpawner.SpawnItem(itemType);
+                    sodaInstance.SetParenContainer(_burgerIngridientSpawner.transform);
+                    sodaInstance.gameObject.SetActive(true);
+                    sodaInstance.transform.position = _emptyCups[index].transform.position;
+                    sodaInstance.transform.rotation = Quaternion.identity;
+                    sodaInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(itemType);
+
+                    _restaurant.SetSodaOrder(tray, sodaInstance);
+                    
+                    Sequence sequence = DOTween.Sequence();
+                    
+                    sequence.Append(sodaInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+                    sequence.Append(sodaInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
+                    sequence.Append(sodaInstance.transform.DOMove(position.position, 1f)
+                        .SetEase(Ease.InOutQuad));
+
+                    sodaInstance.transform.SetParent(position);
+
+                    sequence.Join(sodaInstance.transform
+                            .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
+                            .SetEase(Ease.Linear))
+                        .OnComplete(() => tray.TryCompletedOrder());
+                }
+                
                 Debug.Log("нету пустых позиций");
             }
 

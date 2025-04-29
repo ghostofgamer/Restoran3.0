@@ -268,13 +268,41 @@ namespace AssemblyBurgerContent
             }
         }
 
-        private ItemType GetMatchingRecipe()
+        /*private ItemType GetMatchingRecipe()
         {
             List<ItemType> itemTypes = _ingredientStack.Select(tuple => tuple.item.ItemType).ToList();
 
             foreach (var recipe in _burgerRecipeConfig.recipes)
             {
                 if (recipe.ItemTypes.SequenceEqual(itemTypes))
+                {
+                    return recipe.BurgerType;
+                }
+            }
+
+            return ItemType.Empty;
+        }*/
+        
+        private ItemType GetMatchingRecipe()
+        {
+            List<ItemType> itemTypes = _ingredientStack.Select(tuple => tuple.item.ItemType).ToList();
+            
+            foreach (var recipe in _burgerRecipeConfig.recipes)
+            {
+                // Получаем список типов ингредиентов рецепта
+                List<ItemType> recipeItemTypes = new List<ItemType>(recipe.ItemTypes);
+
+                if (recipeItemTypes.Count > 0)
+                {
+                    // Исключаем последний ингредиент из рецепта
+                    ItemType excludedItemType = recipeItemTypes.First();
+                    recipeItemTypes.Remove(excludedItemType);
+
+                    // Выводим исключенный ингредиент в консоль
+                    Debug.Log($"Excluded ingredient from recipe {recipe.BurgerType}: {excludedItemType}");
+                }
+                
+                if (recipeItemTypes.SequenceEqual(itemTypes))
                 {
                     return recipe.BurgerType;
                 }

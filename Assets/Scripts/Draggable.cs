@@ -15,6 +15,8 @@ public class Draggable : MonoBehaviour, IDraggable
 
     public event Action DraggableThrowed;
 
+    public event Action PutOnShelfCompleting;
+
     private void OnEnable()
     {
         _interactableObject.OnAction += Drag;
@@ -46,5 +48,10 @@ public class Draggable : MonoBehaviour, IDraggable
     public void Throw()
     {
         DraggableThrowed?.Invoke();
+    }
+
+    public void PutOnShelf()
+    {
+        PutOnShelfCompleting?.Invoke();
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using Enums;
 using ItemContent;
+using ShelfContent;
 using UnityEngine;
 
 public class ItemBasket : MonoBehaviour
@@ -21,6 +22,8 @@ public class ItemBasket : MonoBehaviour
 
     [SerializeField] private Transform[] _positions;
 
+    public Shelf Shelf { get; private set; }
+    
     public Transform[] Positions => _positions;
 
     public ItemType ItemType => _itemType;
@@ -36,12 +39,14 @@ public class ItemBasket : MonoBehaviour
     {
         _draggable.DraggablePicked += ActivateItems;
         _draggable.DraggableThrowed += DeactivateItems;
+        _draggable.PutOnShelfCompleting += DeactivateItems;
     }
 
     private void OnDisable()
     {
         _draggable.DraggablePicked -= ActivateItems;
         _draggable.DraggableThrowed -= DeactivateItems;
+        _draggable.PutOnShelfCompleting -= DeactivateItems;
     }
 
     private void Start()
@@ -253,10 +258,21 @@ public class ItemBasket : MonoBehaviour
     private void ActivateItems()
     {
         SetActiveValue(true);
+
+        if (Shelf != null)
+        {
+            Shelf.Remove(this);
+            Shelf = null;
+        }
     }
 
     private void DeactivateItems()
     {
         SetActiveValue(false);
+    }
+
+    public void SetShelf(Shelf shelf)
+    {
+        Shelf = shelf;
     }
 }

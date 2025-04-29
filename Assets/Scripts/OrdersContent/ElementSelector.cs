@@ -90,7 +90,7 @@ namespace OrdersContent
             if (_spacer != null)
             {
                 _spacer.SetActive(false);
-                _spacer.GetComponent<LayoutElement>().preferredWidth = 0; // Reset the spacer's width
+                // _spacer.GetComponent<LayoutElement>().preferredWidth = 0; // Reset the spacer's width
                 // _spacer.transform.SetParent(null);
             }
 

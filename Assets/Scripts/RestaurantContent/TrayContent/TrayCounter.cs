@@ -79,7 +79,6 @@ namespace RestaurantContent.TrayContent
         public Tray GetTrayByTableIndex(Order order)
         {
             Tray needTray = _activeTrays.FirstOrDefault(tray => tray.Order == order);
-            Debug.Log("needTray " + needTray.transform.name);
             return needTray;
         }
     }

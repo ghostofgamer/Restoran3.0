@@ -75,7 +75,7 @@ namespace PlayerContent
             _throwButton.SetActive(false);
         }
 
-        private void ClearDraggableObject()
+        public void ClearDraggableObject()
         {
             CurrentDraggable.transform.SetParent(null);
             CurrentDraggable = null;

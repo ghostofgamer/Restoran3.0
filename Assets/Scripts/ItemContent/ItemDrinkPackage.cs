@@ -1,5 +1,6 @@
 using System;
 using Enums;
+using ShelfContent;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,21 +14,25 @@ namespace ItemContent
         [SerializeField] private GameObject _canvasFullness;
 
         private int _maxFullnes = 100;
-
+        
+        public Shelf Shelf { get; private set; }
+        
         public int CurrentFullness { get; private set; }
 
         public ItemType ItemType => _itemType;
 
         private void OnEnable()
         {
-            _draggable.DraggablePicked += () => _canvasFullness.gameObject.SetActive(true);
+            _draggable.DraggablePicked += () => ActivateCanvas();
             _draggable.DraggableThrowed += () => _canvasFullness.gameObject.SetActive(false);
+            _draggable.PutOnShelfCompleting += () => _canvasFullness.gameObject.SetActive(false);
         }
 
         private void OnDisable()
         {
-            _draggable.DraggablePicked -= () => _canvasFullness.gameObject.SetActive(true);
+            _draggable.DraggablePicked -= ()  => ActivateCanvas();
             _draggable.DraggableThrowed -= () => _canvasFullness.gameObject.SetActive(false);
+            _draggable.PutOnShelfCompleting -= () => _canvasFullness.gameObject.SetActive(false);
         }
 
         private void Start()
@@ -49,6 +54,22 @@ namespace ItemContent
         private void UpdateFullUI()
         {
             _imageFullness.fillAmount = (float)CurrentFullness / _maxFullnes;
+        }
+        
+        public void SetShelf(Shelf shelf)
+        {
+            Shelf = shelf;
+        }
+
+        private void ActivateCanvas()
+        {
+            if (Shelf != null)
+            {
+                Shelf.RemoveDrinkPackage(this);
+                Shelf = null;
+            }
+
+            _canvasFullness.gameObject.SetActive(true);
         }
     }
 }

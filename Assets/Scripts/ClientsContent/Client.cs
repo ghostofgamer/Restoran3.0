@@ -44,6 +44,9 @@ namespace ClientsContent
 
         public void GoToQueuePosition(Vector3 position, int index)
         {
+            _navMeshAgent.enabled = true;
+            _meshObstacle.enabled = true;
+            
             if (index == 0)
             {
                 Debug.Log("1");
@@ -54,19 +57,16 @@ namespace ClientsContent
                 {
                     Debug.Log("Дошел до кассы");
                     _cashRegister.SetClient(this);
+                    _navMeshAgent.enabled = false;
+                    _meshObstacle.enabled = false;
                 });
             }
             else
             {
                 SetDestination(position, () =>
                 {
-                    // Debug.Log("Встал в очередь " + gameObject.name);
-
-                    if (index == 0)
-                    {
-                        // Debug.Log("Первый");
-                        // Дополнительные действия, если клиент первый в очереди
-                    }
+                    _navMeshAgent.enabled = false;
+                    _meshObstacle.enabled = false;
                 });
             }
         }
@@ -94,7 +94,7 @@ namespace ClientsContent
             tray.transform.parent = this.transform;
             tray.transform.position = _trayPositionHand.position;
             tray.transform.localRotation = _trayPositionHand.localRotation;
-            
+
             _restaurant.RemoveClientTray(tray);
             _currentState = ClientState.Eat;
 
@@ -149,6 +149,9 @@ namespace ClientsContent
         [ContextMenu("Completed")]
         public void Paid()
         {
+            _navMeshAgent.enabled = true;
+            _meshObstacle.enabled = true;
+            
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
@@ -159,7 +162,7 @@ namespace ClientsContent
         {
             _animator.SetBool("Give", true);
             yield return new WaitForSeconds(1f);
-
+            
             _currentState = ClientState.WaitingForOrder;
             // Debug.Log("Пошел ждать заказ");
             _animator.SetBool("Give", false);
@@ -176,12 +179,9 @@ namespace ClientsContent
 
         public void SetDestination(Vector3 position, System.Action callback)
         {
-            /*this.goal = goal;
-            anim.SetBool("Walking", true);
-
-            obstacle.enabled = false;
-            agent.enabled = true;*/
-
+            /*_navMeshAgent.enabled = true;
+            _meshObstacle.enabled = true;*/
+            
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
@@ -190,8 +190,6 @@ namespace ClientsContent
 
         private IEnumerator MoveToPosition(Vector3 position, System.Action callback)
         {
-            /*Debug.Log("_navMeshAgent.enabled " + _navMeshAgent.enabled);
-            Debug.Log("_currentState " + _currentState);*/
             _meshObstacle.enabled = false;
 
             if (!_navMeshAgent.enabled)
@@ -202,45 +200,23 @@ namespace ClientsContent
             }
 
             if (_animator.GetBool("Sit"))
-            {
                 _animator.SetBool("Sit", false);
-            }
 
             _navMeshAgent.SetDestination(position);
 
 
-            if (_currentState == ClientState.Eat)
-            {
-                _animator.SetBool("WalkTray", true);
-            }
-            else
-            {
-                _animator.SetBool("Walking", true);
-            }
-            // Debug.Log("Начал идти ");
+            _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", true);
+
             while (_navMeshAgent.pathPending)
-            {
                 yield return null;
-            }
 
             while (_navMeshAgent.remainingDistance > 0.1f)
-            {
-                // Debug.Log("_navMeshAgent.remainingDistance  " + _navMeshAgent.remainingDistance);
                 yield return null;
-            }
 
             _meshObstacle.enabled = true;
             Debug.Log("Завершил идти ");
-            
-            if (_currentState == ClientState.Eat)
-            {
-                _animator.SetBool("WalkTray", false);
-            }
-            else
-            {
-                _animator.SetBool("Walking", false);
-            }
 
+            _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", false);
             callback.Invoke();
         }
 

@@ -13,12 +13,14 @@ public class ItemBox : MonoBehaviour
     {
         _draggable.DraggablePicked += OpenBox;
         _draggable.DraggableThrowed += CloseBox;
+        _draggable.PutOnShelfCompleting += CloseBox;
     }
 
     private void OnDisable()
     {
         _draggable.DraggablePicked -= OpenBox;
         _draggable.DraggableThrowed += CloseBox;
+        _draggable.PutOnShelfCompleting -= CloseBox;
     }
 
     public void SetValue(bool value)
