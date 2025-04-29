@@ -33,7 +33,7 @@ namespace OrdersContent.OrderPromptContent
             foreach (var orderPrompt in _orderPrompts)
                 orderPrompt.Deactivate();
 
-            if (orders.Count == 1)
+            if (orders.Count <= 1)
             {
                 _orderPrompts[0].InitOrder(orders[0]);
                 _orderPrompts[0].Activate();

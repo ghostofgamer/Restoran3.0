@@ -36,15 +36,20 @@ namespace IngredientsContent
             _defaultImage.color = color;
         }
 
-        public void ResetDefaultScale()
+        /*public void ResetDefaultScale()
         {
             _defaultImage.transform.localScale = Vector3.one;
-        }
+        }*/
 
         public void SetOutlineBackground(bool value, Sprite sprite)
         {
             _backGroundImage.sprite = sprite;
             _backGroundImage.gameObject.SetActive(value);
+        }
+
+        public void DeactivationOutline()
+        {
+            _backGroundImage.gameObject.SetActive(false);
         }
     }
 }

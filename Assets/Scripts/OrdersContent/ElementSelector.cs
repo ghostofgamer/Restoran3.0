@@ -12,22 +12,22 @@ namespace OrdersContent
         [SerializeField] private float _increasedSpacing = 50f;
         [SerializeField] private GameObject _spacer;
         [SerializeField] private SpacingIngredientsConfig _spacingIngredientsConfig;
-        
-       private float _defaultSpacing; 
-       
-        void Start()
+
+        private float _defaultSpacing;
+
+        /*void Start()
         {
             if (_spacer != null)
                 _spacer.SetActive(false);
-        }
+        }*/
 
         public void SetSpacing(int ingredientsAmount)
         {
             _defaultSpacing = _spacingIngredientsConfig.GetSpacing(ingredientsAmount);
             _layoutGroup.spacing = _defaultSpacing;
         }
-        
-        public void UpdateSpacing(int startIndex,int ingredientsAmount)
+
+        public void UpdateSpacing(int startIndex, int ingredientsAmount)
         {
             if (_layoutGroup == null)
             {
@@ -40,10 +40,10 @@ namespace OrdersContent
                 Debug.LogError("Spacer is not assigned.");
                 return;
             }
-            
+
             _defaultSpacing = _spacingIngredientsConfig.GetSpacing(ingredientsAmount);
             _layoutGroup.spacing = _defaultSpacing;
-            
+
             if (startIndex >= 0 && startIndex < _layoutGroup.transform.childCount)
             {
                 _spacer.SetActive(true);
@@ -55,6 +55,28 @@ namespace OrdersContent
             {
                 _spacer.SetActive(false);
             }
+        }
+
+        public void UpdateSpacing(int startIndex, int ingredientsAmount, int valueSum)
+        {
+            if (_layoutGroup == null)
+            {
+                Debug.LogError("HorizontalLayoutGroup is not assigned.");
+                return;
+            }
+
+            if (_spacer == null)
+            {
+                Debug.LogError("Spacer is not assigned.");
+                return;
+            }
+
+            Debug.Log("Вода 111");
+            _defaultSpacing = _spacingIngredientsConfig.GetSpacing(ingredientsAmount);
+            _layoutGroup.spacing = _defaultSpacing;
+            _spacer.SetActive(true);
+            // _spacer.GetComponent<LayoutElement>().preferredWidth = _increasedSpacing;
+            _spacer.transform.SetSiblingIndex(startIndex + valueSum);
         }
 
         public void ReturnDefaultSpacing()

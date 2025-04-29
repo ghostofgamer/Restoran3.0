@@ -35,23 +35,15 @@ public class IngridientPromt : MonoBehaviour
     {
         _order = order;
 
-        /*
-        foreach (var ingredient in _ingredients)
-            ingredient.gameObject.SetActive(false);*/
-
         foreach (var ingredient in _ingredientsViewers)
+        {
+            ingredient.DeactivationOutline();
             ingredient.gameObject.SetActive(false);
-
-
-        if (order.BurgerItemOrder != ItemType.Empty)
+        }
+        
+        if (order.BurgerItemOrder != ItemType.Empty && !order.IsBurgerCompleted)
         {
             _recipes = _burgerRecipeConfig.GetRecipeByBurgerType(order.BurgerItemOrder);
-
-            /*for (int i = _recipes.ItemTypes.Count - 1, j = 0; i >= 0; i--, j++)
-            {
-                _ingredients[j].sprite = _ingredientsConfig.GetSprite(_recipes.ItemTypes[i]);
-                _ingredients[j].gameObject.SetActive(true);
-            }*/
 
             for (int i = _recipes.ItemTypes.Count - 1, j = 0; i >= 0; i--, j++)
             {
@@ -59,12 +51,33 @@ public class IngridientPromt : MonoBehaviour
                 _ingredientsViewers[j].SetItemType(_recipes.ItemTypes[i]);
                 _ingredientsViewers[j].gameObject.SetActive(true);
             }
+
+            _elementSelector.SetSpacing(_recipes.ItemTypes.Count);
+            _ingredientsViewers[0]
+                .SetOutlineBackground(true, _ingredientsConfig.GetOutlineSprite(_ingredientsViewers[0].ItemType));
+
+            _elementSelector.UpdateSpacing(0, _recipes.ItemTypes.Count, 1);
+        }
+        else if (order.IsBurgerCompleted && order.DrinkItemOrder != ItemType.Empty && !order.IsDrinkCompleted)
+        {
+            _ingredientsViewers[0].SetDefault(_ingredientsConfig.GetSprite(_order.DrinkItemOrder));
+            _ingredientsViewers[0].gameObject.SetActive(true);
+            _ingredientsViewers[0].SetDefaultColor(Color.white);
+            return;
+        }
+        else if (order.IsBurgerCompleted && order.IsDrinkCompleted && !order.IsExtraCompleted &&
+                 order.ExtraItemOrder != ItemType.Empty)
+        {
+            Debug.Log("Включаем екстра ингридиент");
         }
 
-        _elementSelector.SetSpacing(_recipes.ItemTypes.Count);
-        // _elementSelector.UpdateSpacing(0,_recipes.ItemTypes.Count);
+        /*_elementSelector.SetSpacing(_recipes.ItemTypes.Count);
+        _ingredientsViewers[0]
+            .SetOutlineBackground(true, _ingredientsConfig.GetOutlineSprite(_ingredientsViewers[0].ItemType));
+
+        _elementSelector.UpdateSpacing(0,_recipes.ItemTypes.Count,1);*/
     }
-    
+
     public void CheckIngredientsProgress()
     {
         if (_order != null)
@@ -90,14 +103,9 @@ public class IngridientPromt : MonoBehaviour
                 foreach (var ingredient in _ingredientsViewers)
                     ingredient.SetDefaultColor(Color.white);
             }
-
-            foreach (var ingredient in _ingredientsViewers)
-                ingredient.ResetDefaultScale();
-
-
+            
             foreach (var ingredient in _ingredientsViewers)
                 ingredient.SetOutlineBackground(false, null);
-            
             
             _elementSelector.ReturnDefaultSpacing();
         }
@@ -135,15 +143,15 @@ public class IngridientPromt : MonoBehaviour
             {
                 Debug.Log("Правильно ");
                 _ingredientsViewers[i].SetDefaultColor(Color.gray);
-                _elementSelector.UpdateSpacing(i,_recipes.ItemTypes.Count);
+                _elementSelector.UpdateSpacing(i, _recipes.ItemTypes.Count);
                 lastCorrectIndex = i;
-                
+
                 /*if (i == (stackItems.Count - 1))
                 {
                     _ingredientsViewers[i + 1].SetOutlineBackground(true,
                         _ingredientsConfig.GetOutlineSprite( _ingredientsViewers[i + 1].ItemType));
                 }*/
-                
+
                 if (i == (stackItems.Count - 1) && (i + 1) < _ingredientsViewers.Count())
                 {
                     _ingredientsViewers[i + 1].SetOutlineBackground(true,
@@ -154,7 +162,7 @@ public class IngridientPromt : MonoBehaviour
             {
                 foreach (var ingredient in _ingredientsViewers)
                     ingredient.SetDefaultColor(Color.gray);
-                
+
                 _elementSelector.ReturnDefaultSpacing();
                 return;
                 // _ingredientsViewers[i].SetDefaultColor(Color.gray);
