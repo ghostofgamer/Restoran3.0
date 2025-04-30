@@ -80,9 +80,7 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
         private void ChangeTotalPrice()
         {
             int totalCents = PricePerUnit.ToTotalCents(PricePerUnit) * AmountProduct;
-            Debug.Log("Total Cents: " + totalCents);
             TotalPrice = PricePerUnit.FromTotalCents(totalCents);
-            Debug.Log("Total Price: " + TotalPrice.ToString());
         }
     }
 }

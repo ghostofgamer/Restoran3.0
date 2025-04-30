@@ -25,10 +25,6 @@ namespace WalletContent
         
         public int ToTotalCents(DollarValue dollarValue)
         {
-            Debug.Log("Dollars " + dollarValue.Dollars);
-            Debug.Log("Cents " + dollarValue.Cents);
-            Debug.Log("dollarValue " + dollarValue);
-            
             return dollarValue.Dollars * 100 + dollarValue.Cents;
         }
         
@@ -41,9 +37,6 @@ namespace WalletContent
         
         public override string ToString()
         {
-            /*Debug.Log("Dollars " + Dollars);
-            Debug.Log("Cents " + Cents);*/
-             
             return $"${Dollars}.{Cents:D2}";
         }
     }

@@ -9,7 +9,6 @@ namespace UI.Buttons
         
         public override void OnClick()
         {
-            Debug.Log("добавить в корзину ");
             _itemUIProduct.AddItemToCart();
         }
     }

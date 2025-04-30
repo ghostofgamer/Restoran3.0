@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DeliveryContent;
 using Enums;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         [SerializeField] private Transform _container;
         [SerializeField] private TMP_Text _totalPriceText;
         [SerializeField] private Wallet _wallet;
+        [SerializeField] private Delivery _delivery;
 
         private List<ItemCart> _items = new List<ItemCart>();
         private DollarValue _totalPrice;
@@ -92,13 +94,8 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 
         public void ClearItems()
         {
-Debug.Log("Чистим ");
             foreach (var item in _items)
-            {
-            Debug.Log("Elfkztv");
                 Destroy(item.gameObject);
-                
-            }
             
             _items.Clear();
         }
