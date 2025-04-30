@@ -3,7 +3,9 @@ using Enums;
 using ItemContent;
 using SoContent;
 using TMPro;
+using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WalletContent;
 
@@ -18,40 +20,49 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
         [SerializeField] private GameObject _unlockContent;
         [SerializeField] private Image _icon;
         [SerializeField] private TMP_Text _nameItemUIProduct;
-
-        private DollarValue _pricePerUnit;
-        private int _amountProduct = 1;
-        private DollarValue _totalPrice;
+        [SerializeField] private ProductsScrollContent _productsScrollContent;
 
         public event Action<int, DollarValue> AmountChanged;
+
+        public DollarValue PricePerUnit { get; private set; }
+
+        public int AmountProduct { get; private set; } = 1;
+
+        public DollarValue TotalPrice { get; private set; }
+
+        public string Name { get; private set; }
+
+        public ItemType ItemType => _itemType;
 
         private void Start()
         {
             Ingredient ingredient = _ingredientsConfig.GetIngredient(_itemType);
-            _pricePerUnit  = new DollarValue(ingredient.dollarsPrice, ingredient.centsPrice);
+            PricePerUnit = new DollarValue(ingredient.dollarsPrice, ingredient.centsPrice);
             _icon.sprite = ingredient.shopItemSprite;
-            _nameItemUIProduct.text = ingredient.name;
+            Name = ingredient.name;
+            _nameItemUIProduct.text = Name;
             Debug.Log("A" + ingredient.itemType.ToString());
-            AmountChanged?.Invoke(_amountProduct, _pricePerUnit);
+            TotalPrice = PricePerUnit;
+            AmountChanged?.Invoke(AmountProduct, PricePerUnit);
         }
 
         public void IncreaseAmount()
         {
-            if (_amountProduct >= 9)
+            if (AmountProduct >= 9)
                 return;
 
-            _amountProduct++;
+            AmountProduct++;
             ChangeTotalPrice();
-            AmountChanged?.Invoke(_amountProduct, _totalPrice);
+            AmountChanged?.Invoke(AmountProduct, TotalPrice);
         }
 
         public void DecreaseAmount()
         {
-            if (_amountProduct > 1)
+            if (AmountProduct > 1)
             {
-                _amountProduct--;
+                AmountProduct--;
                 ChangeTotalPrice();
-                AmountChanged?.Invoke(_amountProduct, _totalPrice);
+                AmountChanged?.Invoke(AmountProduct, TotalPrice);
             }
         }
 
@@ -63,15 +74,15 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
 
         public void AddItemToCart()
         {
-            
+            _productsScrollContent.AddItem(this);
         }
 
         private void ChangeTotalPrice()
         {
-            int totalCents = _pricePerUnit.ToTotalCents(_pricePerUnit) * _amountProduct;
+            int totalCents = PricePerUnit.ToTotalCents(PricePerUnit) * AmountProduct;
             Debug.Log("Total Cents: " + totalCents);
-            _totalPrice = _pricePerUnit.FromTotalCents(totalCents);
-            Debug.Log("Total Price: " + _totalPrice.ToString());
+            TotalPrice = PricePerUnit.FromTotalCents(totalCents);
+            Debug.Log("Total Price: " + TotalPrice.ToString());
         }
     }
 }

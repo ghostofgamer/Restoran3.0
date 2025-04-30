@@ -1,16 +1,27 @@
+using UI.Screens.ShopContent.ItemUIProductContent;
 using UnityEngine;
 
 namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 {
     public class ProductsScrollContent : PageScrollContent
     {
-        [SerializeField] private ShoppingCartScroll _shoppingCartScroll;
-        
+        [SerializeField] private ItemCartScroll _itemCartScroll;
+
         public override void Init()
         {
-            _shoppingCartScroll.Clear();
-            
+            _itemCartScroll.Clear();
+
             Debug.Log("GasmeObj " + gameObject.name);
+        }
+
+        public void AddItem(ItemUIProduct itemUIProduct)
+        {
+            _itemCartScroll.AddItemCart(
+                itemUIProduct.ItemType,
+                itemUIProduct.AmountProduct,
+                itemUIProduct.PricePerUnit,
+                itemUIProduct.TotalPrice,
+                itemUIProduct.Name);
         }
     }
 }
