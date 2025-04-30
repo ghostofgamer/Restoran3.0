@@ -61,14 +61,17 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
             _unlockContent.SetActive(!value);
         }
 
+        public void AddItemToCart()
+        {
+            
+        }
+
         private void ChangeTotalPrice()
         {
             int totalCents = _pricePerUnit.ToTotalCents(_pricePerUnit) * _amountProduct;
             Debug.Log("Total Cents: " + totalCents);
             _totalPrice = _pricePerUnit.FromTotalCents(totalCents);
-             Debug.Log("Total Price: " + _totalPrice.ToString());
-             
-            
+            Debug.Log("Total Price: " + _totalPrice.ToString());
         }
     }
 }
