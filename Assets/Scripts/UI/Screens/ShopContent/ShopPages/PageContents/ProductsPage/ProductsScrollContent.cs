@@ -9,7 +9,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 
         public override void Init()
         {
-            _itemCartScroll.Clear();
+            _itemCartScroll.ClearItems();
 
             Debug.Log("GasmeObj " + gameObject.name);
         }

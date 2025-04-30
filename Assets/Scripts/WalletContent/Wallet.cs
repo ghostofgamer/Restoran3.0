@@ -5,45 +5,45 @@ namespace WalletContent
 {
     public class Wallet : MonoBehaviour
     {
-        private DollarValue _dollarValue;
+        public DollarValue DollarValue { get; private set; }
 
         public event Action<DollarValue> DollarValueChanged;
 
         private void Start()
         {
-            _dollarValue = new DollarValue(100, 10);
-            DollarValueChanged.Invoke(_dollarValue);
+            DollarValue = new DollarValue(100, 10);
+            DollarValueChanged.Invoke(DollarValue);
         }
 
         public void AddTest()
         {
-            Add(new DollarValue(1003,65));
+            Add(new DollarValue(1003, 65));
         }
 
         public void SubtractTest()
         {
             Subtract(new DollarValue(135, 06));
         }
-        
+
         public void Add(DollarValue other)
         {
-            int totalCents = ToTotalCents(_dollarValue) + ToTotalCents(other);
-            _dollarValue= FromTotalCents(totalCents);
-            DollarValueChanged.Invoke(_dollarValue);
+            int totalCents = ToTotalCents(DollarValue) + ToTotalCents(other);
+            DollarValue = FromTotalCents(totalCents);
+            DollarValueChanged.Invoke(DollarValue);
         }
-       
+
         public void Subtract(DollarValue other)
         {
-            int totalCents = ToTotalCents(_dollarValue) - ToTotalCents(other);
-            _dollarValue= FromTotalCents(totalCents);
-            DollarValueChanged.Invoke(_dollarValue);
+            int totalCents = ToTotalCents(DollarValue) - ToTotalCents(other);
+            DollarValue = FromTotalCents(totalCents);
+            DollarValueChanged.Invoke(DollarValue);
         }
-        
+
         public int ToTotalCents(DollarValue dollarValue)
         {
             return dollarValue.Dollars * 100 + dollarValue.Cents;
         }
-        
+
         public DollarValue FromTotalCents(int totalCents)
         {
             int dollars = totalCents / 100;

@@ -1,5 +1,6 @@
 using Enums;
 using TMPro;
+using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
 using WalletContent;
 
@@ -11,19 +12,53 @@ namespace UI.Screens.ShopContent
         [SerializeField] private TMP_Text _priceText;
         [SerializeField] private TMP_Text _name;
 
-        private int _currentAmount;
-        private DollarValue _pricePerUnit;
+        public DollarValue PricePerUnit{ get; private set; }
+        
+        public int CurrentAmount { get; private set; }
         
         public ItemType ItemType { get; private set; }
-
-        public void Init(ItemType itemType, int amount,DollarValue pricePerUnit,DollarValue totalPrice,string name )
+        
+        public DollarValue TotalPrice{ get; private set; }
+        
+        private ItemCartScroll _itemCartScroll;
+        
+        public void Init(ItemType itemType, int amount,DollarValue pricePerUnit,DollarValue totalPrice,string name,
+            ItemCartScroll itemCartScroll)
         {
             ItemType = itemType;
-            _currentAmount = amount;
-            _pricePerUnit = pricePerUnit;
-            _amount.text = _currentAmount.ToString();
-            _priceText.text = totalPrice.ToString();
+            CurrentAmount = amount;
+            PricePerUnit = pricePerUnit;
+            _amount.text = CurrentAmount.ToString();
+            TotalPrice = totalPrice;
+            _priceText.text = TotalPrice.ToString();
             _name.text = name;
+            _itemCartScroll = itemCartScroll;
+        }
+        
+        public void UpdateAmount(int amount, DollarValue totalPrice)
+        {
+            CurrentAmount = amount;
+            TotalPrice = totalPrice;
+            _amount.text = CurrentAmount.ToString();
+            _priceText.text = TotalPrice.ToString();
+        }
+        
+        public void IncreaseAmount()
+        {
+            if (CurrentAmount >= 9)
+                return;
+
+            CurrentAmount++;
+            _itemCartScroll.UpdateItemCartInfo(this);
+        }
+
+        public void DecreaseAmount()
+        {
+            if (CurrentAmount > 1)
+            {
+                CurrentAmount--;
+                _itemCartScroll.UpdateItemCartInfo(this);
+            }
         }
     }
 }
