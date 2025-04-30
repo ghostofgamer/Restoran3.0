@@ -34,5 +34,17 @@ namespace SoContent
             Debug.LogWarning($"Sprite for ItemType {itemType} not found.");
             return null;
         }
+
+        public Ingredient GetIngredient(ItemType itemType)
+        {
+            foreach (var ingredient in _ingredients)
+            {
+                if (ingredient.itemType == itemType)
+                    return ingredient;
+            }
+
+            Debug.LogWarning($"Sprite for ItemType {itemType} not found.");
+            return null;
+        }
     }
 }
