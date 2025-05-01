@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using SoContent;
@@ -14,6 +15,8 @@ namespace DeliveryContent
         private List<ItemDeliveryInfo> _items = new List<ItemDeliveryInfo>();
         private bool _isSpawning = false;
         private Coroutine _coroutine;
+        private int _amountDeliveries;
+        public event Action<int> AmountItemsDeliveriesChanged;
 
         public void AddItemsCart(List<ItemCart> items)
         {
@@ -26,12 +29,14 @@ namespace DeliveryContent
             {
                 SpawnItems();
             }
+
+            UpdateAmountDeliveries();
         }
 
         private void SpawnItems()
         {
             _isSpawning = true;
-            
+
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
@@ -44,18 +49,20 @@ namespace DeliveryContent
             {
                 yield return new WaitForSeconds(_deliveryConfig.MinValueTimer);
                 Debug.Log("СПАВН " + _items.Count);
-                
+
                 var item = _items[0];
-                Debug.Log(" item.Amount " +  item.Amount + "   "+item.ItemType);
+                Debug.Log(" item.Amount " + item.Amount + "   " + item.ItemType);
                 GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
-                
+
                 if (prefab != null)
                 {
                     Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
                 }
 
                 item.Amount--;
-                
+
+                UpdateAmountDeliveries();
+
                 if (item.Amount <= 0)
                 {
                     _items.RemoveAt(0);
@@ -63,25 +70,20 @@ namespace DeliveryContent
             }
 
             _isSpawning = false;
-            
-            /*_isSpawning = true;
+        }
+
+        private void UpdateAmountDeliveries()
+        {
+            _amountDeliveries = 0;
 
             foreach (var item in _items)
             {
-                for (int i = 0; i < item.Amount; i++)
-                {
-                    GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
-
-                    if (prefab != null)
-                    {
-                        Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
-                    }
-
-                    yield return new WaitForSeconds(_deliveryConfig.MinValueTimer);
-                }
+                _amountDeliveries += item.Amount;
             }
 
-            _isSpawning = false;*/
+            AmountItemsDeliveriesChanged?.Invoke(_amountDeliveries);
+
+            Debug.Log($"Общее количество доставок: {_amountDeliveries}");
         }
     }
 }
