@@ -17,17 +17,22 @@ namespace DeliveryContent
         private bool _isSpawning = false;
         private Coroutine _coroutine;
         private int _amountDeliveries;
-        
+        private float _remainingTimeForNextSpawn;
+
         public event Action<int> AmountItemsDeliveriesChanged;
+        
+        public event Action<float> DeliveryTimerStarted;
+        public event Action DeliveryTimerStopped;
 
         private const string SavedItemsKey = "DeliverySaveData";
         private const string LastExitTimeKey = "LastExitTime";
+        private const string RemainingTimeKey = "RemainingTimeKey";
 
         private void Start()
         {
             LoadDeliveryData();
             ProcessMissedDeliveries();
-                
+
             if (_items.Count > 0 && !_isSpawning)
                 SpawnItems();
         }
@@ -38,7 +43,13 @@ namespace DeliveryContent
             SaveLastExitTime();
             SaveDeliveryData();
         }
-        
+
+        private void SaveRemainingTime()
+        {
+            PlayerPrefs.SetFloat(RemainingTimeKey, _remainingTimeForNextSpawn);
+            PlayerPrefs.Save();
+            Debug.Log($"Сохранено оставшееся время: {_remainingTimeForNextSpawn}");
+        }
         /*private void OnApplicationQuit()
         {
             SaveLastExitTime();
@@ -57,113 +68,71 @@ namespace DeliveryContent
                 ProcessMissedDeliveries();
             }
         }*/
-        
-        private void ProcessMissedDeliveries()
-{
-    if (!PlayerPrefs.HasKey(LastExitTimeKey)) return;
-
-    // Загружаем время выхода в UTC
-    string savedTime = PlayerPrefs.GetString(LastExitTimeKey);
-    DateTime lastExitTime;
-    
-    if (!DateTime.TryParse(savedTime, null, System.Globalization.DateTimeStyles.RoundtripKind, out lastExitTime))
-    {
-        Debug.LogError("Не удалось распарсить время выхода");
-        return;
-    }
-
-    // Текущее время в UTC
-    DateTime currentTime = DateTime.UtcNow;
-    
-    // Проверяем чтобы время не было в будущем (на случай проблем с системным временем)
-    if (currentTime < lastExitTime)
-    {
-        Debug.LogWarning("Время выхода в будущем! Сброс времени.");
-        lastExitTime = currentTime;
-    }
-
-    TimeSpan absenceTime = currentTime - lastExitTime;
-    float totalSeconds = (float)absenceTime.TotalSeconds;
-    
-    // Минимальный интервал между доставками (защита от деления на 0)
-    float spawnInterval = Mathf.Max(0.1f, _deliveryConfig.MinValueTimer);
-    int missedDeliveries = Mathf.FloorToInt(totalSeconds / spawnInterval);
-
-    Debug.Log($"Игрок отсутствовал {absenceTime.TotalSeconds} сек. Пропущено доставок: {missedDeliveries}");
-
-    // Ограничиваем максимальное количество пропущенных доставок
-    int maxMissedDeliveries = 100; // Например, не более 100 за раз
-    missedDeliveries = Mathf.Min(missedDeliveries, maxMissedDeliveries);
-
-    // Обрабатываем пропущенные доставки
-    while (missedDeliveries > 0 && _items.Count > 0)
-    {
-        Debug.Log("Обработка пропущенной доставки");
-        
-        var item = _items[0];
-        GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
-        
-        if (prefab != null)
+        private void LoadRemainingTime()
         {
-            Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+            if (PlayerPrefs.HasKey(RemainingTimeKey))
+            {
+                _remainingTimeForNextSpawn = PlayerPrefs.GetFloat(RemainingTimeKey);
+                Debug.Log($"Загружено оставшееся время: {_remainingTimeForNextSpawn}");
+            }
+            else
+            {
+                _remainingTimeForNextSpawn = _deliveryConfig.MinValueTimer;
+            }
         }
         
-        item.Amount--;
-        missedDeliveries--;
-
-        if (item.Amount <= 0)
-        {
-            _items.RemoveAt(0);
-        }
-    }
-
-    UpdateAmountDeliveries();
-    SaveDeliveryData();
-}
-
-private void SaveLastExitTime()
-{
-    // Сохраняем в формате ISO 8601 (UTC)
-    PlayerPrefs.SetString(LastExitTimeKey, DateTime.UtcNow.ToString("O"));
-    PlayerPrefs.Save();
-    Debug.Log($"Время выхода сохранено: {DateTime.UtcNow.ToString("O")}");
-}
-        
-        
-        /*private void SaveLastExitTime()
-        {
-            PlayerPrefs.SetString(LastExitTimeKey, DateTime.UtcNow.ToString("O"));
-            PlayerPrefs.Save();
-        }
         
         private void ProcessMissedDeliveries()
         {
             if (!PlayerPrefs.HasKey(LastExitTimeKey)) return;
 
+            // Загружаем время выхода в UTC
+            string savedTime = PlayerPrefs.GetString(LastExitTimeKey);
             DateTime lastExitTime;
-            if (!DateTime.TryParse(PlayerPrefs.GetString(LastExitTimeKey), out lastExitTime))
-                return;
 
-            TimeSpan absenceTime = DateTime.UtcNow - lastExitTime;
+            if (!DateTime.TryParse(savedTime, null, System.Globalization.DateTimeStyles.RoundtripKind,
+                    out lastExitTime))
+            {
+                Debug.LogError("Не удалось распарсить время выхода");
+                return;
+            }
+
+            // Текущее время в UTC
+            DateTime currentTime = DateTime.UtcNow;
+
+            // Проверяем чтобы время не было в будущем (на случай проблем с системным временем)
+            if (currentTime < lastExitTime)
+            {
+                Debug.LogWarning("Время выхода в будущем! Сброс времени.");
+                lastExitTime = currentTime;
+            }
+
+            TimeSpan absenceTime = currentTime - lastExitTime;
             float totalSeconds = (float)absenceTime.TotalSeconds;
-            int missedDeliveries = Mathf.FloorToInt(totalSeconds / _deliveryConfig.MinValueTimer);
+
+            // Минимальный интервал между доставками (защита от деления на 0)
+            float spawnInterval = Mathf.Max(0.1f, _deliveryConfig.MinValueTimer);
+            int missedDeliveries = Mathf.FloorToInt(totalSeconds / spawnInterval);
 
             Debug.Log($"Игрок отсутствовал {absenceTime.TotalSeconds} сек. Пропущено доставок: {missedDeliveries}");
+
+            // Ограничиваем максимальное количество пропущенных доставок
+            int maxMissedDeliveries = 100; // Например, не более 100 за раз
+            missedDeliveries = Mathf.Min(missedDeliveries, maxMissedDeliveries);
 
             // Обрабатываем пропущенные доставки
             while (missedDeliveries > 0 && _items.Count > 0)
             {
-                Debug.Log(" Спавним ");
-                
+                Debug.Log("Обработка пропущенной доставки");
+
                 var item = _items[0];
-                
                 GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
-                
+
                 if (prefab != null)
                 {
                     Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
                 }
-                
+
                 item.Amount--;
                 missedDeliveries--;
 
@@ -175,8 +144,16 @@ private void SaveLastExitTime()
 
             UpdateAmountDeliveries();
             SaveDeliveryData();
-        }*/
-        
+        }
+
+        private void SaveLastExitTime()
+        {
+            // Сохраняем в формате ISO 8601 (UTC)
+            PlayerPrefs.SetString(LastExitTimeKey, DateTime.UtcNow.ToString("O"));
+            PlayerPrefs.Save();
+            Debug.Log($"Время выхода сохранено: {DateTime.UtcNow.ToString("O")}");
+        }
+
         public void AddItemsCart(List<ItemCart> items)
         {
             foreach (var item in items)
@@ -205,6 +182,8 @@ private void SaveLastExitTime()
 
         private IEnumerator Spawn()
         {
+            DeliveryTimerStarted?.Invoke(_deliveryConfig.MinValueTimer);
+            
             while (_items.Count > 0)
             {
                 yield return new WaitForSeconds(_deliveryConfig.MinValueTimer);
@@ -227,10 +206,13 @@ private void SaveLastExitTime()
                 {
                     _items.RemoveAt(0);
                 }
-                
-                SaveDeliveryData();
-            }
 
+                SaveDeliveryData();
+                
+                DeliveryTimerStarted?.Invoke(_deliveryConfig.MinValueTimer);
+            }
+            
+            DeliveryTimerStopped?.Invoke();
             _isSpawning = false;
         }
 
@@ -247,7 +229,7 @@ private void SaveLastExitTime()
 
             Debug.Log($"Общее количество доставок: {_amountDeliveries}");
         }
-        
+
         private DeliverySaveWrapper ConvertToSaveData()
         {
             var wrapper = new DeliverySaveWrapper
@@ -262,11 +244,11 @@ private void SaveLastExitTime()
 
             return wrapper;
         }
-        
+
         private List<ItemDeliveryInfo> ConvertFromSaveData(DeliverySaveWrapper wrapper)
         {
             var result = new List<ItemDeliveryInfo>();
-            
+
             if (wrapper?.Items != null)
             {
                 foreach (var savedItem in wrapper.Items)
@@ -281,7 +263,7 @@ private void SaveLastExitTime()
 
             return result;
         }
-        
+
         private void SaveDeliveryData()
         {
             try
@@ -300,7 +282,7 @@ private void SaveLastExitTime()
                 Debug.LogError($"Ошибка сохранения: {e.Message}");
             }
         }
-        
+
         private void LoadDeliveryData()
         {
             try
@@ -340,14 +322,14 @@ private void SaveLastExitTime()
         {
             public List<ItemDeliveryInfo> Items;
         }
-        
+
         [System.Serializable]
         private class DeliverySaveWrapper
         {
             public List<SavedItemData> Items = new List<SavedItemData>();
             public string SaveTime;
         }
-        
+
         [System.Serializable]
         private class SavedItemData
         {
