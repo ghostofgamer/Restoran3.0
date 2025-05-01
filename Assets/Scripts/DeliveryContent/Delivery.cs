@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Enums;
 using SoContent;
 using UI.Screens.ShopContent;
@@ -12,6 +13,7 @@ namespace DeliveryContent
     {
         [SerializeField] private Transform _spawnPosition;
         [SerializeField] private DeliveryConfig _deliveryConfig;
+        [SerializeField] private DeliveryViewer _deliveryViewer;
 
         private List<ItemDeliveryInfo> _items = new List<ItemDeliveryInfo>();
         private bool _isSpawning = false;
@@ -20,7 +22,7 @@ namespace DeliveryContent
         private float _remainingTimeForNextSpawn;
 
         public event Action<int> AmountItemsDeliveriesChanged;
-        
+
         public event Action<float> DeliveryTimerStarted;
         public event Action DeliveryTimerStopped;
 
@@ -43,50 +45,31 @@ namespace DeliveryContent
             SaveLastExitTime();
             SaveDeliveryData();
         }
-
-        private void SaveRemainingTime()
+        
+        private void OnApplicationFocus(bool hasFocus)
         {
-            PlayerPrefs.SetFloat(RemainingTimeKey, _remainingTimeForNextSpawn);
-            PlayerPrefs.Save();
-            Debug.Log($"Сохранено оставшееся время: {_remainingTimeForNextSpawn}");
-        }
-        /*private void OnApplicationQuit()
-        {
-            SaveLastExitTime();
-            SaveDeliveryData();
-        }
-
-        private void OnApplicationPause(bool pauseStatus)
-        {
-            if (pauseStatus)
+            if (hasFocus)
             {
+                Debug.Log("Приложение развернуто, обновляем данные");
+                LoadDeliveryData();
+                ProcessMissedDeliveries();
+                if (_items.Count > 0 && !_isSpawning)
+                    SpawnItems();
+            }
+            else
+            {
+                Debug.Log("Приложение свернуто, сохраняем данные");
                 SaveLastExitTime();
+                // SaveLastFocusTime();
                 SaveDeliveryData();
             }
-            else
-            {
-                ProcessMissedDeliveries();
-            }
-        }*/
-        private void LoadRemainingTime()
-        {
-            if (PlayerPrefs.HasKey(RemainingTimeKey))
-            {
-                _remainingTimeForNextSpawn = PlayerPrefs.GetFloat(RemainingTimeKey);
-                Debug.Log($"Загружено оставшееся время: {_remainingTimeForNextSpawn}");
-            }
-            else
-            {
-                _remainingTimeForNextSpawn = _deliveryConfig.MinValueTimer;
-            }
         }
-        
-        
+
         private void ProcessMissedDeliveries()
         {
             if (!PlayerPrefs.HasKey(LastExitTimeKey)) return;
 
-            // Загружаем время выхода в UTC
+            // Загружаем время выхода
             string savedTime = PlayerPrefs.GetString(LastExitTimeKey);
             DateTime lastExitTime;
 
@@ -97,10 +80,16 @@ namespace DeliveryContent
                 return;
             }
 
-            // Текущее время в UTC
+            // Загружаем оставшееся время на момент выхода
+            float remainingTimeOnExit = PlayerPrefs.GetFloat(RemainingTimeKey, _deliveryConfig.MinValueTimer);
+
+            // Текущее время
             DateTime currentTime = DateTime.UtcNow;
 
-            // Проверяем чтобы время не было в будущем (на случай проблем с системным временем)
+            Debug.Log($"lastExitTime: {lastExitTime}, currentTime: {currentTime}");
+            Debug.Log($"remainingTimeOnExit: {remainingTimeOnExit}");
+
+            // Проверка на некорректное время
             if (currentTime < lastExitTime)
             {
                 Debug.LogWarning("Время выхода в будущем! Сброс времени.");
@@ -109,37 +98,70 @@ namespace DeliveryContent
 
             TimeSpan absenceTime = currentTime - lastExitTime;
             float totalSeconds = (float)absenceTime.TotalSeconds;
+            float spawnInterval = _deliveryConfig.MinValueTimer;
 
-            // Минимальный интервал между доставками (защита от деления на 0)
-            float spawnInterval = Mathf.Max(0.1f, _deliveryConfig.MinValueTimer);
-            int missedDeliveries = Mathf.FloorToInt(totalSeconds / spawnInterval);
+            Debug.Log($"absenceTime: {absenceTime}");
+            Debug.Log($"totalSeconds: {totalSeconds}");
+            Debug.Log($"spawnInterval: {spawnInterval}");
 
-            Debug.Log($"Игрок отсутствовал {absenceTime.TotalSeconds} сек. Пропущено доставок: {missedDeliveries}");
-
-            // Ограничиваем максимальное количество пропущенных доставок
-            int maxMissedDeliveries = 100; // Например, не более 100 за раз
-            missedDeliveries = Mathf.Min(missedDeliveries, maxMissedDeliveries);
-
-            // Обрабатываем пропущенные доставки
-            while (missedDeliveries > 0 && _items.Count > 0)
+            if (totalSeconds < remainingTimeOnExit)
             {
-                Debug.Log("Обработка пропущенной доставки");
+                _remainingTimeForNextSpawn = remainingTimeOnExit - totalSeconds;
+                Debug.Log("ИИИ " + _remainingTimeForNextSpawn);
+            }
+            else
+            {
+                Debug.Log("УДЫУ");
+                int fullDeliveries = 0;
 
-                var item = _items[0];
-                GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
+                totalSeconds -= remainingTimeOnExit;
+                fullDeliveries = 1;
 
-                if (prefab != null)
+                Debug.Log($"NEW TOTSL SEC : {totalSeconds}");
+                // Общее время, которое нужно обработать (оставшееся + время отсутствия)
+                // float totalProcessingTime = remainingTimeOnExit + totalSeconds;
+
+                // Количество полных доставок за это время
+                int deliversCount = Mathf.FloorToInt(totalSeconds / spawnInterval);
+
+                fullDeliveries += deliversCount;
+
+                // int fullDeliveries = Mathf.FloorToInt(totalProcessingTime / remainingTimeOnExit);
+
+                // Новое оставшееся время для следующей доставки
+                _remainingTimeForNextSpawn = spawnInterval - (totalSeconds % spawnInterval);
+
+                Debug.Log($"_remainingTimeForNextSpawn: {_remainingTimeForNextSpawn}");
+                Debug.Log($"_remainingTimeForNextSpawn: {fullDeliveries}");
+
+                /*Debug.Log(
+                    $"totalProcessingTime: {totalProcessingTime}, fullDeliveries: {fullDeliveries}, newRemainingTime: {_remainingTimeForNextSpawn}");*/
+
+                // Ограничиваем максимальное количество пропущенных доставок
+                fullDeliveries = Mathf.Min(fullDeliveries, 100);
+
+                // Обрабатываем пропущенные доставки
+                while (fullDeliveries > 0 && _items.Count > 0)
                 {
-                    Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+                    var item = _items[0];
+                    GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
+
+                    if (prefab != null)
+                    {
+                        Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+                    }
+
+                    item.Amount--;
+                    fullDeliveries--;
+
+                    if (item.Amount <= 0)
+                    {
+                        _items.RemoveAt(0);
+                    }
                 }
 
-                item.Amount--;
-                missedDeliveries--;
-
-                if (item.Amount <= 0)
-                {
-                    _items.RemoveAt(0);
-                }
+                if (_items.Count <= 0)
+                    _remainingTimeForNextSpawn = 0;
             }
 
             UpdateAmountDeliveries();
@@ -148,10 +170,10 @@ namespace DeliveryContent
 
         private void SaveLastExitTime()
         {
-            // Сохраняем в формате ISO 8601 (UTC)
             PlayerPrefs.SetString(LastExitTimeKey, DateTime.UtcNow.ToString("O"));
+            PlayerPrefs.SetFloat(RemainingTimeKey, _deliveryViewer.CurrentTimer);
             PlayerPrefs.Save();
-            Debug.Log($"Время выхода сохранено: {DateTime.UtcNow.ToString("O")}");
+            Debug.Log($"Сохранено время выхода и оставшееся время: {_deliveryViewer.CurrentTimer}");
         }
 
         public void AddItemsCart(List<ItemCart> items)
@@ -182,10 +204,45 @@ namespace DeliveryContent
 
         private IEnumerator Spawn()
         {
-            DeliveryTimerStarted?.Invoke(_deliveryConfig.MinValueTimer);
-            
+            if (_remainingTimeForNextSpawn > 0 && _items.Count > 0)
+            {
+                Debug.Log($"SpawnFirstItem: " + _remainingTimeForNextSpawn);
+
+                DeliveryTimerStarted?.Invoke(_remainingTimeForNextSpawn);
+                yield return new WaitForSeconds(_remainingTimeForNextSpawn);
+
+                var item = _items[0];
+                Debug.Log(" item.Amount " + item.Amount + "   " + item.ItemType);
+                GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
+
+                if (prefab != null)
+                {
+                    Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+                }
+
+                item.Amount--;
+
+                UpdateAmountDeliveries();
+
+                if (item.Amount <= 0)
+                {
+                    _items.RemoveAt(0);
+                }
+
+                SaveDeliveryData();
+
+                _remainingTimeForNextSpawn = 0;
+            }
+            else if (_items.Count <= 0)
+            {
+                _remainingTimeForNextSpawn = 0;
+            }
+
+            // DeliveryTimerStarted?.Invoke(_deliveryConfig.MinValueTimer);
+
             while (_items.Count > 0)
             {
+                DeliveryTimerStarted?.Invoke(_deliveryConfig.MinValueTimer);
                 yield return new WaitForSeconds(_deliveryConfig.MinValueTimer);
                 Debug.Log("СПАВН " + _items.Count);
 
@@ -208,12 +265,12 @@ namespace DeliveryContent
                 }
 
                 SaveDeliveryData();
-                
-                DeliveryTimerStarted?.Invoke(_deliveryConfig.MinValueTimer);
             }
-            
+
             DeliveryTimerStopped?.Invoke();
+            _remainingTimeForNextSpawn = 0;
             _isSpawning = false;
+            SaveDeliveryData();
         }
 
         private void UpdateAmountDeliveries()
@@ -245,15 +302,14 @@ namespace DeliveryContent
             return wrapper;
         }
 
-        private List<ItemDeliveryInfo> ConvertFromSaveData(DeliverySaveWrapper wrapper)
+        private List<ItemDeliveryInfo> ConvertFromSaveData(DeliverySaveData saveData)
         {
             var result = new List<ItemDeliveryInfo>();
 
-            if (wrapper?.Items != null)
+            if (saveData?.Items != null)
             {
-                foreach (var savedItem in wrapper.Items)
+                foreach (var savedItem in saveData.Items)
                 {
-                    // Используем конструктор вместо приведения типов
                     result.Add(new ItemDeliveryInfo(
                         (ItemType)savedItem.ItemTypeInt,
                         savedItem.Amount
@@ -264,22 +320,32 @@ namespace DeliveryContent
             return result;
         }
 
+        [System.Serializable]
+        private class DeliverySaveData
+        {
+            public List<SavedItemData> Items = new List<SavedItemData>();
+            public float RemainingTime;
+            public string SaveTime;
+        }
+
         private void SaveDeliveryData()
         {
             try
             {
-                var saveData = ConvertToSaveData();
-                string json = JsonUtility.ToJson(saveData);
+                var saveData = new DeliverySaveData
+                {
+                    Items = _items.Select(i => new SavedItemData(i.ItemType, i.Amount)).ToList(),
+                    RemainingTime = _remainingTimeForNextSpawn,
+                    SaveTime = DateTime.UtcNow.ToString("O")
+                };
 
+                string json = JsonUtility.ToJson(saveData);
                 PlayerPrefs.SetString(SavedItemsKey, json);
                 PlayerPrefs.Save();
-
-                Debug.Log($"Сохранено {_items.Count} предметов. JSON:\n{json}");
-                LogItems(_items);
             }
-            catch (Exception e)
+            catch
             {
-                Debug.LogError($"Ошибка сохранения: {e.Message}");
+                /* обработка ошибок */
             }
         }
 
@@ -289,22 +355,21 @@ namespace DeliveryContent
             {
                 if (!PlayerPrefs.HasKey(SavedItemsKey))
                 {
-                    Debug.Log("Нет сохраненных данных");
                     _items = new List<ItemDeliveryInfo>();
+                    _remainingTimeForNextSpawn = _deliveryConfig.MinValueTimer;
                     return;
                 }
 
                 string json = PlayerPrefs.GetString(SavedItemsKey);
-                var saveData = JsonUtility.FromJson<DeliverySaveWrapper>(json);
+                var saveData = JsonUtility.FromJson<DeliverySaveData>(json);
 
                 _items = ConvertFromSaveData(saveData);
-                Debug.Log($"Загружено {_items.Count} предметов");
-                LogItems(_items);
+                _remainingTimeForNextSpawn = saveData.RemainingTime;
             }
-            catch (Exception e)
+            catch
             {
-                Debug.LogError($"Ошибка загрузки: {e.Message}");
                 _items = new List<ItemDeliveryInfo>();
+                _remainingTimeForNextSpawn = _deliveryConfig.MinValueTimer;
             }
         }
 

@@ -13,7 +13,7 @@ namespace DeliveryContent
         [SerializeField] private Delivery _delivery;
 
         private Coroutine _timerCoroutine;
-        private float _currentTimer;
+        public float CurrentTimer { get; private set; }
         
         private void OnEnable()
         {
@@ -64,21 +64,22 @@ namespace DeliveryContent
 
         private IEnumerator UpdateTimer(float duration)
         {
-            _currentTimer = duration;
+            CurrentTimer = duration;
         
-            while (_currentTimer > 0)
+            while (CurrentTimer > 0)
             {
-                _currentTimer -= Time.deltaTime;
+                CurrentTimer -= Time.deltaTime;
                 UpdateTimerText();
                 yield return null;
             }
-        
+
+            CurrentTimer = 0;
             _timerDeliveryText.text = "0:00";
         }
 
         private void UpdateTimerText()
         {
-            int seconds = Mathf.CeilToInt(_currentTimer);
+            int seconds = Mathf.CeilToInt(CurrentTimer);
             _timerDeliveryText.text = $"{seconds / 60}:{seconds % 60:00}";
         }
     }
