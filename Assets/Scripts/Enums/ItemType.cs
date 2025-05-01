@@ -3,7 +3,7 @@ namespace Enums
 {
   public enum ItemType 
   {
-    Empty,
+    Empty=0,
     Cutlet,
     Cheese,
     Bun,

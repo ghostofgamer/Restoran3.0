@@ -81,6 +81,9 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 
         public void PayItems()
         {
+            if (_items.Count <= 0)
+                return;
+            
             if (_wallet.ToTotalCents(_wallet.DollarValue) < _totalPrice.ToTotalCents(_totalPrice))
             {
                 Debug.Log("у тебя мало денег ");
@@ -88,6 +91,8 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
             }
             else
             {
+                _delivery.AddItemsCart(_items);
+                ClearItems();
                 Debug.Log("тебе хватает денег ");
             }
         }
@@ -98,6 +103,9 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
                 Destroy(item.gameObject);
             
             _items.Clear();
+            
+            _totalPrice = new DollarValue(0,0);
+            _totalPriceText.text = _totalPrice.ToString();
         }
     }
 }
