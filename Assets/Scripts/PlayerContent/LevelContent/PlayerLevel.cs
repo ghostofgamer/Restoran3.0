@@ -8,7 +8,6 @@ namespace PlayerContent.LevelContent
     {
         public List<LevelConfig> levelConfigs;
         
-        private int _currentLevel;
         private int _minLevel = 1;
         private int _currentExp;
         private int _targetExp;
@@ -16,20 +15,22 @@ namespace PlayerContent.LevelContent
         public event Action<int> LevelChanged;
         public event Action<int, int> ExpChanged;
 
+        public int CurrentLevel { get; private set; }
+        
         private void Start()
         {
-            _currentLevel = PlayerPrefs.GetInt("Level", _minLevel);
+            CurrentLevel = PlayerPrefs.GetInt("Level", _minLevel);
             _currentExp = PlayerPrefs.GetInt("Exp", 0);
-            _targetExp = GetExpForLevel(_currentLevel);
+            _targetExp = GetExpForLevel(CurrentLevel);
             Debug.Log("_targetStartExp " + _targetExp);
-            LevelChanged?.Invoke(_currentLevel);
+            LevelChanged?.Invoke(CurrentLevel);
             ExpChanged?.Invoke(_currentExp, _targetExp);
         }
 
         [ContextMenu("TestAddCurrentExp")]
         public void TestAddExp()
         {
-            AddExp(50);
+            AddExp(1350);
         }
 
         public void AddExp(int valueExp)
@@ -44,7 +45,7 @@ namespace PlayerContent.LevelContent
                 LevelUp();
             }*/
             
-            while (_currentExp >= _targetExp && _currentLevel < levelConfigs.Count)
+            while (_currentExp >= _targetExp && CurrentLevel < levelConfigs.Count)
             {
                 LevelUp();
             }
@@ -55,11 +56,11 @@ namespace PlayerContent.LevelContent
 
         private void LevelUp()
         {
-            _currentLevel++;
-            PlayerPrefs.SetInt("Level", _currentLevel);
-            _targetExp = GetExpForLevel(_currentLevel);
+            CurrentLevel++;
+            PlayerPrefs.SetInt("Level", CurrentLevel);
+            _targetExp = GetExpForLevel(CurrentLevel);
             Debug.Log("_targetExp " + _targetExp);
-            LevelChanged?.Invoke(_currentLevel);
+            LevelChanged?.Invoke(CurrentLevel);
         }
         
         private int GetExpForLevel(int level)

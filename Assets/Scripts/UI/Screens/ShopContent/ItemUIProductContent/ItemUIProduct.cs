@@ -5,7 +5,6 @@ using SoContent;
 using TMPro;
 using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WalletContent;
 
@@ -20,6 +19,7 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
         [SerializeField] private GameObject _unlockContent;
         [SerializeField] private Image _icon;
         [SerializeField] private TMP_Text _nameItemUIProduct;
+        [SerializeField] private TMP_Text _levelRequiredText;
         [SerializeField] private ProductsScrollContent _productsScrollContent;
 
         public event Action<int, DollarValue> AmountChanged;
@@ -41,9 +41,9 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
             _icon.sprite = ingredient.shopItemSprite;
             Name = ingredient.name;
             _nameItemUIProduct.text = Name;
-            Debug.Log("A" + ingredient.itemType.ToString());
             TotalPrice = PricePerUnit;
             AmountChanged?.Invoke(AmountProduct, PricePerUnit);
+            _levelRequiredText.text = $"Level to unlock {_minLevelToUnlock}";
         }
 
         public void IncreaseAmount()
@@ -66,10 +66,10 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
             }
         }
 
-        public void CheckUnlocked(bool value)
+        public void CheckUnlocked(int playerLevel)
         {
-            _lockContent.SetActive(value);
-            _unlockContent.SetActive(!value);
+            _lockContent.SetActive(playerLevel < _minLevelToUnlock);
+            _unlockContent.SetActive(playerLevel >= _minLevelToUnlock);
         }
 
         public void AddItemToCart()
