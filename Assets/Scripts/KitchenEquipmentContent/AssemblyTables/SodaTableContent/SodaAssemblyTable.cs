@@ -8,6 +8,7 @@ using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using SoContent.AssemblyBurger;
+using UI.Screens;
 using UnityEngine;
 
 namespace KitchenEquipmentContent
@@ -23,10 +24,16 @@ namespace KitchenEquipmentContent
         [SerializeField] private List<Transform> _wellPositions;
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private SodaFullnessCounter[] _sodaFullnessCounters;
-
+        [SerializeField] private EquipmentUIProduct _equipmentUIProduct;
+        
         private Coroutine _coroutine;
         private bool _isWorking = false;
 
+        private void Start()
+        {
+            gameObject.SetActive(_equipmentUIProduct.IsBuyed());
+        }
+        
         public void PourSoda(ItemType itemType, int index)
         {
             Debug.Log("НАЛИВАЕМ лимонад " + itemType);

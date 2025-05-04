@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8507431538767623634}
   - component: {fileID: 6799151981702665501}
   - component: {fileID: 5052268725715444439}
+  - component: {fileID: 5186938579727095696}
   m_Layer: 5
   m_Name: PayButton
   m_TagString: Untagged
@@ -121,6 +122,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5186938579727095696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513330273611336482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9aa170f8777ea40bd76d537aaeb715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _equipmentUIProduct: {fileID: 3858830363783500648}
 --- !u!1 &1638640813328293147
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,7 +285,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.6901961, g: 0.8745099, b: 0.34509805, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -479,6 +493,7 @@ GameObject:
   - component: {fileID: 9149215111870073668}
   - component: {fileID: 4710533299998406087}
   - component: {fileID: 836205665465457219}
+  - component: {fileID: 3858830363783500648}
   m_Layer: 5
   m_Name: EquipmentUIProduct
   m_TagString: Untagged
@@ -547,6 +562,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3858830363783500648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6228310589118411482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eccc0f6173c43945bbad17932cba4c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ownedObjectInfo: {fileID: 2149570437717236485}
+  _requaredObjectInfo: {fileID: 6342926297439851863}
+  _buyObjectInfo: {fileID: 513330273611336482}
+  _levelOpened: 0
+  _equipment: {fileID: 0}
+  _requaredText: {fileID: 2971355648513014547}
 --- !u!1 &6291149287169224248
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,7 +791,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.62352943, g: 0.36862746, b: 0.23137257, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

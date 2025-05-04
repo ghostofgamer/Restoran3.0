@@ -7,6 +7,7 @@ using ItemContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using SoContent.AssemblyBurger;
+using UI.Screens;
 using UnityEngine;
 
 namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
@@ -20,9 +21,15 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         [SerializeField] private List<Transform> _wellPositions;
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private FullnessCoffeeCounter _fullnessCoffeeCounter;
+        [SerializeField] private EquipmentUIProduct _equipmentUIProduct;
 
         private Coroutine _coroutine;
         private bool _isWorking = false;
+
+        private void Start()
+        {
+            gameObject.SetActive(_equipmentUIProduct.IsBuyed());
+        }
 
         public void PourCoffee()
         {
