@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 8361662455937184319}
   - component: {fileID: 6640335590251529518}
   - component: {fileID: 3333838382080371045}
+  - component: {fileID: 4037353099672095635}
   m_Layer: 6
   m_Name: CoffePackage
   m_TagString: Untagged
@@ -279,6 +280,32 @@ CapsuleCollider:
   m_Height: 0.27321023
   m_Direction: 1
   m_Center: {x: 0, y: 0.11696895, z: 0}
+--- !u!205 &4037353099672095635
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3406630434358800178}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.8
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 2144987198492580896}
+  - screenRelativeHeight: 0.16
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 5785976620827506863}
+  - screenRelativeHeight: 0.1
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1
 --- !u!1 &3676145507302691687
 GameObject:
   m_ObjectHideFlags: 0

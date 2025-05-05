@@ -1,0 +1,23 @@
+using TMPro;
+using UnityEngine;
+using WalletContent;
+
+namespace UI
+{
+    public class FlyValue : MonoBehaviour
+    {
+        [SerializeField] private TMP_Text _text;
+
+        private Color _color;
+
+        public void ShowFly(DollarValue dollarValue, bool profitValue)
+        {
+            Debug.Log("profitValue " + profitValue);
+            
+            gameObject.SetActive(false);
+            gameObject.SetActive(true);
+            _text.color = profitValue ? Color.green : Color.red;
+            _text.text = dollarValue.ToString();
+        }
+    }
+}
