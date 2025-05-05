@@ -1,6 +1,7 @@
 using TMPro;
 using UI.Screens.ShopContent;
 using UnityEngine;
+using UnityEngine.UI;
 using WalletContent;
 
 namespace UI.Screens
@@ -19,27 +20,40 @@ namespace UI.Screens
         [SerializeField] private int _dollarPrice;
         [SerializeField] private int _centPrice;
         [SerializeField] private ShopScreen _shopScreen;
+        [SerializeField] private Wallet _wallet;
+        [SerializeField] private Color _activeButtonColor;
+        [SerializeField] private Color _notActiveButtonColor;
+        [SerializeField] private Image _buyButtonImage;
 
         private bool _isOwned;
         private DollarValue _currentPrice;
 
-        private void Start()
-        {
-            _currentPrice = new DollarValue(_dollarPrice, _centPrice);
-            _requaredText.text = $"Requared is {_levelOpened} level";
-            _priceText.text = $"{_currentPrice.ToString()} ";
-        }
-
         public void Init(int levelPlayer)
         {
             _isOwned = IsBuyed();
+            _currentPrice = new DollarValue(_dollarPrice, _centPrice);
+            _requaredText.text = $"Requared is {_levelOpened} level";
+            _priceText.text = $"{_currentPrice.ToString()} ";
+            
             _requaredObjectInfo.SetActive(levelPlayer < _levelOpened && !_isOwned);
             _ownedObjectInfo.SetActive(levelPlayer >= _levelOpened && _isOwned);
             _buyObjectInfo.SetActive(levelPlayer >= _levelOpened && !_isOwned);
+            
+            _buyButtonImage.color = _wallet.DollarValue.ToTotalCents() >= _currentPrice.ToTotalCents()
+                ? _activeButtonColor
+                : _notActiveButtonColor;
         }
 
         public void Buy()
         {
+            if (_wallet.DollarValue.ToTotalCents() < _currentPrice.ToTotalCents())
+            {
+                Debug.Log("Не хватает денег ");
+                return;
+            }
+
+            _wallet.Subtract(_currentPrice);
+            
             _isOwned = true;
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);

@@ -1,6 +1,7 @@
 using RestaurantContent;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using WalletContent;
 
 namespace UI.Screens.ShopContent
@@ -18,24 +19,24 @@ namespace UI.Screens.ShopContent
         [SerializeField] private int _dollars;
         [SerializeField] private int _cents;
         [SerializeField] private PlaceTable _placeTable;
-        
+        [SerializeField] private Wallet _wallet;
+        [SerializeField] private Color _activeButtonColor;
+        [SerializeField] private Color _notActiveButtonColor;
+        [SerializeField] private Image _buyButtonImage;
+
         private DollarValue _dollarValue;
 
         public bool IsOwned { get; private set; }
 
-        private void Start()
+        public void Init()
         {
             _dollarValue = new DollarValue(_dollars, _cents);
+            IsOwned = IsBuyed();
             _requaredText.text = _zoneProduct != null
                 ? $"Requared is  zone"
                 : $"Requared";
             _priceText.text = $"{_dollarValue.ToString()} ";
-        }
-
-        public void Init()
-        {
-            IsOwned = IsBuyed();
-
+            
             if (_zoneProduct == null)
             {
                 SetValue(false, IsOwned, !IsOwned);
@@ -46,6 +47,17 @@ namespace UI.Screens.ShopContent
                     _zoneProduct.IsBuyed() && IsOwned,
                     _zoneProduct.IsBuyed() && !IsOwned);
             }
+
+            Debug.Log("_buyButtonImage" + _buyButtonImage);
+            Debug.Log("_wallet" + _wallet);
+            Debug.Log("_wallet.DollarValue.ToTotalCents()" + _wallet.DollarValue.ToTotalCents());
+            Debug.Log("_dollarValue.ToTotalCents()" + _dollarValue.ToTotalCents());
+            Debug.Log("_activeButtonColor" + _activeButtonColor);
+            Debug.Log("_notActiveButtonColor" + _notActiveButtonColor);
+            
+            _buyButtonImage.color = _wallet.DollarValue.ToTotalCents() >= _dollarValue.ToTotalCents()
+                ? _activeButtonColor
+                : _notActiveButtonColor;
         }
 
         public bool IsBuyed()
@@ -55,6 +67,14 @@ namespace UI.Screens.ShopContent
 
         public void Buy()
         {
+            if (_wallet.DollarValue.ToTotalCents() < _dollarValue.ToTotalCents())
+            {
+                Debug.Log("Не хватает денег ");
+                return;
+            }
+
+            _wallet.Subtract(_dollarValue);
+
             IsOwned = true;
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);

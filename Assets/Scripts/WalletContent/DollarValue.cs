@@ -28,6 +28,11 @@ namespace WalletContent
             return dollarValue.Dollars * 100 + dollarValue.Cents;
         }
         
+        public int ToTotalCents()
+        {
+            return Dollars * 100 + Cents;
+        }
+        
         public DollarValue FromTotalCents(int totalCents)
         {
             int dollars = totalCents / 100;

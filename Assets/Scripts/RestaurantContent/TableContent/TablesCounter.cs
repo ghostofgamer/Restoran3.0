@@ -10,6 +10,30 @@ namespace RestaurantContent.TableContent
         {
             foreach (var table in _tables)
             {
+                if (table.gameObject.activeInHierarchy && !table.IsBusy)
+                    return table;
+            }
+            return null;
+        }
+
+        public int GetFreeTableCount()
+        {
+            int freeTableCount = 0;
+
+            foreach (var table in _tables)
+            {
+                if (table.gameObject.activeInHierarchy && !table.IsBusy)
+                    freeTableCount++;
+            }
+
+            Debug.Log("GetFreeTableCount " + freeTableCount);
+            return freeTableCount;
+        }
+        
+        /*public Table GetAvailableTable()
+        {
+            foreach (var table in _tables)
+            {
                 if (!table.IsBusy)
                     return table;
             }
@@ -28,6 +52,6 @@ namespace RestaurantContent.TableContent
             
             Debug.Log("GetFreeTableCount " + freeTableCount);
             return freeTableCount;
-        }
+        }*/
     }
 }
