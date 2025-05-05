@@ -30,7 +30,7 @@ namespace PlayerContent.LevelContent
         [ContextMenu("TestAddCurrentExp")]
         public void TestAddExp()
         {
-            AddExp(150);
+            AddExp(563);
         }
 
         public void AddExp(int valueExp)

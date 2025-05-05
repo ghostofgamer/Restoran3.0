@@ -1,26 +1,24 @@
 using RestaurantContent;
 using TMPro;
-using Unity.AI.Navigation;
 using UnityEngine;
 using WalletContent;
 
 namespace UI.Screens.ShopContent
 {
-    public class ZoneUIProduct : MonoBehaviour
+    public class PlaceUIProduct : MonoBehaviour
     {
         [SerializeField] private GameObject _ownedObjectInfo;
         [SerializeField] private GameObject _requaredObjectInfo;
+        [SerializeField] private int _index;
         [SerializeField] private GameObject _buyObjectInfo;
-        [SerializeField] private int _levelOpened;
-        [SerializeField] private GameObject _wallZone;
-        [SerializeField] private ZoneWall _zoneWall;
-        [SerializeField] private ZoneUIProduct _previousWallZone;
+        [SerializeField] private ZoneUIProduct _zoneProduct;
         [SerializeField] private TMP_Text _requaredText;
         [SerializeField] private TMP_Text _priceText;
+        [SerializeField] private ShopScreen _shopScreen;
         [SerializeField] private int _dollars;
         [SerializeField] private int _cents;
-        [SerializeField] private ShopScreen _shopScreen;
-
+        [SerializeField] private PlaceTable _placeTable;
+        
         private DollarValue _dollarValue;
 
         public bool IsOwned { get; private set; }
@@ -28,33 +26,31 @@ namespace UI.Screens.ShopContent
         private void Start()
         {
             _dollarValue = new DollarValue(_dollars, _cents);
-            _requaredText.text = _previousWallZone == null
-                ? $"Requared is {_levelOpened} level"
-                : $"Requared is {_levelOpened} level and prev zone";
+            _requaredText.text = _zoneProduct != null
+                ? $"Requared is  zone"
+                : $"Requared";
             _priceText.text = $"{_dollarValue.ToString()} ";
         }
 
-        public void Init(int levelPlayer)
+        public void Init()
         {
             IsOwned = IsBuyed();
 
-            if (_previousWallZone == null)
+            if (_zoneProduct == null)
             {
-                SetValue(levelPlayer < _levelOpened && !IsOwned,
-                    levelPlayer >= _levelOpened && IsOwned,
-                    levelPlayer >= _levelOpened && !IsOwned);
+                SetValue(false, IsOwned, !IsOwned);
             }
             else
             {
-                SetValue((!IsOwned && !_previousWallZone.IsOwned) || levelPlayer < _levelOpened,
-                    levelPlayer >= _levelOpened && IsOwned && _previousWallZone.IsOwned,
-                    levelPlayer >= _levelOpened && !IsOwned && _previousWallZone.IsOwned);
+                SetValue(!_zoneProduct.IsBuyed(),
+                    _zoneProduct.IsBuyed() && IsOwned,
+                    _zoneProduct.IsBuyed() && !IsOwned);
             }
         }
 
         public bool IsBuyed()
         {
-            return PlayerPrefs.GetInt("Zona" + _levelOpened, 0) > 0;
+            return PlayerPrefs.GetInt("Place" + _index, 0) > 0;
         }
 
         public void Buy()
@@ -63,9 +59,9 @@ namespace UI.Screens.ShopContent
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);
             // _wallZone.gameObject.SetActive(false);
-            PlayerPrefs.SetInt("Zona" + _levelOpened, 1);
+            PlayerPrefs.SetInt("Place" + _index, 1);
             _shopScreen.CloseScreen();
-            _zoneWall.Activate();
+            _placeTable.Activate();
         }
 
         private void SetValue(bool requaredObjectValue, bool ownedObjectValue, bool buyObjectValue)
