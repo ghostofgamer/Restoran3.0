@@ -14,6 +14,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         [SerializeField] private TMP_Text _totalPriceText;
         [SerializeField] private Wallet _wallet;
         [SerializeField] private Delivery _delivery;
+        [SerializeField] private ShopScreen _shopScreen;
 
         private List<ItemCart> _items = new List<ItemCart>();
         private DollarValue _totalPrice;
@@ -93,6 +94,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
             {
                 _delivery.AddItemsCart(_items);
                 ClearItems();
+                _shopScreen.CloseScreen();
                 Debug.Log("тебе хватает денег ");
             }
         }

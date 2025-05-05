@@ -1,5 +1,7 @@
 using TMPro;
+using UI.Screens.ShopContent;
 using UnityEngine;
+using WalletContent;
 
 namespace UI.Screens
 {
@@ -13,12 +15,19 @@ namespace UI.Screens
         [SerializeField] private int _levelOpened;
         [SerializeField] private GameObject _equipment;
         [SerializeField] private TMP_Text _requaredText;
+        [SerializeField] private TMP_Text _priceText;
+        [SerializeField] private int _dollarPrice;
+        [SerializeField] private int _centPrice;
+        [SerializeField] private ShopScreen _shopScreen;
 
         private bool _isOwned;
+        private DollarValue _currentPrice;
 
         private void Start()
         {
+            _currentPrice = new DollarValue(_dollarPrice, _centPrice);
             _requaredText.text = $"Requared is {_levelOpened} level";
+            _priceText.text = $"{_currentPrice.ToString()} ";
         }
 
         public void Init(int levelPlayer)
@@ -28,7 +37,7 @@ namespace UI.Screens
             _ownedObjectInfo.SetActive(levelPlayer >= _levelOpened && _isOwned);
             _buyObjectInfo.SetActive(levelPlayer >= _levelOpened && !_isOwned);
         }
-        
+
         public void Buy()
         {
             _isOwned = true;
@@ -36,6 +45,7 @@ namespace UI.Screens
             _buyObjectInfo.SetActive(false);
             _equipment.gameObject.SetActive(true);
             PlayerPrefs.SetInt(Equipment + _levelOpened, 1);
+            _shopScreen.CloseScreen();
         }
 
         public bool IsBuyed()
