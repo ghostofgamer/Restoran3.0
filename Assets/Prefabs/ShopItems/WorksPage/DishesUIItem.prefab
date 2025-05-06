@@ -65,10 +65,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Market Price:$0
+  m_text: Price:$0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02fea1fb776e0ad43a5e684a1ab0ce9e, type: 2}
-  m_sharedMaterial: {fileID: 942589445191879500, guid: 02fea1fb776e0ad43a5e684a1ab0ce9e, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: ea94be002e7c1df428eb1e2ac0181831, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,12 +92,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
+  m_fontSize: 35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 5
-  m_fontSizeMax: 25
+  m_fontSizeMax: 35
   m_fontStyle: 17
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 1539517748098472965}
   - component: {fileID: 9206499481913819798}
   m_Layer: 5
-  m_Name: PriceText
+  m_Name: ProfitText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -377,7 +377,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PRICE:$0
+  m_text: PROFIT:$0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02fea1fb776e0ad43a5e684a1ab0ce9e, type: 2}
   m_sharedMaterial: {fileID: 942589445191879500, guid: 02fea1fb776e0ad43a5e684a1ab0ce9e, type: 2}
@@ -386,8 +386,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286466380
-  m_fontColor: {r: 0.29803923, g: 0.28627452, b: 0.49411768, a: 1}
+    rgba: 4286466378
+  m_fontColor: {r: 0.2901961, g: 0.28627452, b: 0.49411768, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -404,12 +404,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
+  m_fontSize: 30
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 5
-  m_fontSizeMax: 25
+  m_fontSizeMax: 30
   m_fontStyle: 17
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -632,6 +632,7 @@ GameObject:
   - component: {fileID: 129101180732224522}
   - component: {fileID: 153429844291501514}
   - component: {fileID: 3774968781993354450}
+  - component: {fileID: 4519282205749430134}
   m_Layer: 5
   m_Name: DishesUIItem
   m_TagString: Untagged
@@ -717,7 +718,25 @@ MonoBehaviour:
   _nameItemText: {fileID: 4380513702417476969}
   _openedContent: {fileID: 534144368404868419}
   _closedContent: {fileID: 1614030596325093271}
+  _slider: {fileID: 1778951379529927056}
+  _colorRed: {r: 0.9716981, g: 0.2327099, b: 0.21542363, a: 1}
+--- !u!114 &4519282205749430134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037085084115986066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7249610ce236b7418fda32ae0bb5cce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _requiredText: {fileID: 4562510064969441029}
+  _costText: {fileID: 4672164032079765676}
+  _profitText: {fileID: 9206499481913819798}
+  _priceText: {fileID: 3328792550824033552}
+  _dishesUIItem: {fileID: 3774968781993354450}
 --- !u!1 &3614329823623401336
 GameObject:
   m_ObjectHideFlags: 0

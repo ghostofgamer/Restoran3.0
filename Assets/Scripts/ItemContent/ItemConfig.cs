@@ -12,4 +12,7 @@ public class ItemConfig
     public Sprite Sprite;
     public Sprite SpriteNotBackground;
     public int LevelOpened;
+    public DollarValue PurchasePrice;
+    public DollarValue MaxPrice;
+    public DollarValue RecommendedPrice;
 }
