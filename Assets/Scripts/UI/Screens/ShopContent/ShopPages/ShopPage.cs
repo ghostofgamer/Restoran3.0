@@ -14,6 +14,7 @@ namespace UI.Screens.ShopContent.ShopPages
             gameObject.SetActive(true);
             DeactivatePages();
             ActivatePage(index);
+            OpenScroll(index);
         }
 
         public void Close()
@@ -39,6 +40,7 @@ namespace UI.Screens.ShopContent.ShopPages
         
         protected void OpenScroll(int index)
         {
+            Debug.Log("OpenScroll");
             _pageContents[index].Init();
         }
     }

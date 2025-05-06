@@ -34,6 +34,8 @@ namespace UI.MenuUIContent
 
         public override void Init(ItemsConfig itemsConfig)
         {
+            Debug.Log("INIT DISHE ONE");
+            
             base.Init(itemsConfig);
 
             if (ItemConfig != null)
@@ -85,16 +87,11 @@ namespace UI.MenuUIContent
             _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
             UpdateProfitText();
             
-            Debug.Log("_currentPrice: " + _currentPrice.ToTotalCents());
-            Debug.Log("_recommendedPrice: " + _recommendedPrice.ToTotalCents());
-            Debug.Log("_recommendedPrice * 1.20: " + (_recommendedPrice.ToTotalCents() * 1.10));
-            
             Color color = _currentPrice.ToTotalCents() <= _recommendedPrice.ToTotalCents() * 1.10
                 ? Color.green
                 : _colorRed;
             
             ChangeCurrentPrice?.Invoke(_currentPrice,color);
-Debug.Log("totalCents " + (_currentPrice.ToTotalCents() <= _recommendedPrice.ToTotalCents() * 1.10));
             PlayerPrefs.SetInt(CurrentPriceKey + ItemConfig.ItemType, totalCents);
             PlayerPrefs.Save();
         }
