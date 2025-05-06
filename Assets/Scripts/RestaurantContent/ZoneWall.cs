@@ -23,11 +23,9 @@ namespace RestaurantContent
                 _closeDoor.SetActive(!_zoneUIProduct.IsBuyed());
                 _openDoor.SetActive(_zoneUIProduct.IsBuyed());
                 _zoneEnvironment.SetActive(_zoneUIProduct.IsBuyed());
-                Debug.Log("DOOR");
             }
             else
             {
-                Debug.Log(" NOT DOOR");
                 gameObject.SetActive(!_zoneUIProduct.IsBuyed());
             }
         }

@@ -55,6 +55,7 @@ namespace RestaurantContent.CashRegisterContent
             client.Paid();
             yield return new WaitForSeconds(1f);
             _restaurant.AcceptOrder(client.Order, client);
+            // _currentClient = null;
         }
     }
 }

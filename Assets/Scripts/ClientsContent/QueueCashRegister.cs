@@ -11,6 +11,8 @@ namespace ClientsContent
         private Client currentClient;
         private int _maxQueueSize = 5;
 
+        public Queue<Client> ClientQueue => clientQueue;
+
         public void AddClientToQueue(Client client)
         {
             clientQueue.Enqueue(client);
@@ -58,6 +60,11 @@ namespace ClientsContent
             Debug.Log("clientQueue.Count " + clientQueue.Count );
       
             return clientQueue.Count >= _maxQueueSize;
+        }
+
+        public int GetFreeQueuePositions()
+        {
+            return _maxQueueSize - clientQueue.Count;
         }
     }
 }

@@ -63,22 +63,37 @@ namespace OrdersContent
 
         public void CompleteOrder(Order order, Tray tray)
         {
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            
             if (_currentOrders.Contains(order))
             {
+                Debug.Log(" нашли заказ ");
+                
                 _currentOrders.Remove(order);
                 // OrderDeleted?.Invoke(order);
-                
-                OrdersChanged?.Invoke(_currentOrders);
-                
+                Debug.Log(" 1 ");
+                Debug.Log(" 3 ");
                 Client client = _activeOrderWaitClients.FirstOrDefault(c => c.Order == order);
-
+                
+                Debug.Log(" client");
+                
                 if (client != null)
                 {
+                    Debug.Log(" client иди за заказом " + client);
                     _activeOrderWaitClients.Remove(client);
                     client.OrderCompleted(tray);
                 }
+                else
+                {
+                    Debug.Log(" Не анходит клиента  которого заказ! ");
+                }
 
+                OrdersChanged?.Invoke(_currentOrders);
                 // TryActivateOrder();
+            }
+            else
+            {
+                Debug.Log("не находит нужный выполненный заказ");
             }
         }
 

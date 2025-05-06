@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using OrdersContent;
 using ParkingContent;
 using RestaurantContent;
@@ -31,10 +32,10 @@ namespace ClientsContent
 
         private float _elapsedTime;
         private float _nextSpawnTime = 0f;
-        
+
         private void Start()
         {
-            _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);  
+            _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);
         }
 
         private void Update()
@@ -42,7 +43,7 @@ namespace ClientsContent
             if (_isWork)
             {
                 _elapsedTime += Time.deltaTime;
-                
+
                 if (_elapsedTime >= _nextSpawnTime)
                 {
                     _elapsedTime = 0;
@@ -72,38 +73,86 @@ namespace ClientsContent
 
         private IEnumerator Create()
         {
-            Table table = _tablesCounter.GetAvailableTable();
-            table.SetBusyValue(true);
-            Client client = _clientsSpawner.SpawnRandomClient();
-            client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                _queueCashRegister);
-
-            if (_parking.GetCountFreeParkingPositions() > 0)
+            /*if (_parking.GetCountFreeParkingPositions() > 0)
             {
                 float randomValue = Random.Range(0f, 1f);
 
                 if (randomValue < 0.5f)
                 {
-                    Debug.Log("В машине рандом");
-                    ParkingSpace parkingSpace = _parking.GetFreeParkingPosition();
-                    ClientCar car = Instantiate(_clientCar, _carSpawnPosition.position, Quaternion.identity, transform);
-                    parkingSpace.BusyPlace(car);
-                    car.AddClient(client, parkingSpace);
-                    car.GoToPosition(parkingSpace.transform.position);
-                    _queueCashRegister.AddClientQueue(client);
+                    int freePositionsQueueAmount = _queueCashRegister.GetFreeQueuePositions();
+                    int amountTables = _tablesCounter.GetFreeTableCount();
+
+                    if (amountTables > 1 && freePositionsQueueAmount > 1)
+                    {
+                        InitClientsCar(Random.Range(1, 3));
+                    }
+                    else
+                    {
+                        InitClientCar();
+                    }
                 }
                 else
                 {
-                    Debug.Log("В пешком рандом");
-                    _queueCashRegister.AddClientToQueue(client);
+                    InitClientWalking();
                 }
             }
             else
             {
-                Debug.Log("пешком");
-                _queueCashRegister.AddClientToQueue(client);
-            }
+                InitClientWalking();
+            }*/
+
+            InitClientWalking();
+
             yield return null;
+        }
+
+        private void InitClientCar()
+        {
+            InitClientsCar(1);
+        }
+
+        private void InitClientsCar(int clientCount)
+        {
+            List<Client> _clients = new List<Client>();
+            
+            int value = Random.Range(1, 3);
+            
+            Debug.Log("DFKET " + value);
+            
+            for (int i = 0; i < value; i++)
+            {
+                Table table = _tablesCounter.GetAvailableTable();
+                table.SetBusyValue(true);
+                Client client = _clientsSpawner.SpawnRandomClient();
+                client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
+                    _queueCashRegister);
+                _queueCashRegister.AddClientQueue(client);
+                _clients.Add(client);
+            }
+
+            Debug.Log("В машине несколько!!!");
+            ParkingSpace parkingSpace = _parking.GetFreeParkingPosition();
+            ClientCar car = Instantiate(_clientCar, _carSpawnPosition.position, Quaternion.identity, transform);
+            parkingSpace.BusyPlace(car);
+
+            foreach (var client in _clients)
+            {
+                car.AddClient(client, parkingSpace);
+                client.SetCar(car);
+            }
+
+            car.GoToPosition(parkingSpace.transform.position);
+        }
+        
+        private void InitClientWalking()
+        {
+            Table table = _tablesCounter.GetAvailableTable();
+            table.SetBusyValue(true);
+            Client client = _clientsSpawner.SpawnRandomClient();
+            client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister, _queueCashRegister);
+
+            Debug.Log("Пешком");
+            _queueCashRegister.AddClientToQueue(client);
         }
     }
 }

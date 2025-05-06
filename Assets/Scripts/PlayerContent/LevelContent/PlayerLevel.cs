@@ -25,7 +25,6 @@ namespace PlayerContent.LevelContent
             CurrentLevel = PlayerPrefs.GetInt("Level", _minLevel);
             _currentExp = PlayerPrefs.GetInt("Exp", 0);
             _targetExp = GetExpForLevel(CurrentLevel);
-            Debug.Log("_targetStartExp " + _targetExp);
             LevelChanged?.Invoke(CurrentLevel);
             ExpChanged?.Invoke(_currentExp, _targetExp);
         }

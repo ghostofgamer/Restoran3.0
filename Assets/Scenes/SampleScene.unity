@@ -14556,8 +14556,8 @@ MonoBehaviour:
   _carParkingPosition: {fileID: 520979546}
   _parking: {fileID: 1352070191}
   _isWork: 1
-  _minTimeSpawn: 15
-  _maxTimeSpawn: 25
+  _minTimeSpawn: 13
+  _maxTimeSpawn: 21
 --- !u!114 &402138952 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3561627123729294804, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
@@ -60954,7 +60954,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1773389004
 RectTransform:
   m_ObjectHideFlags: 0
@@ -76884,6 +76884,10 @@ PrefabInstance:
     - target: {fileID: 1383817195103315162, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
       propertyPath: m_LocalPosition.z
       value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392030395931197468, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1405654571922198271, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
       propertyPath: m_LocalPosition.x

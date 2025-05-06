@@ -52,6 +52,7 @@ namespace RestaurantContent.TrayContent
         [ContextMenu("Completed")]
         public void Completed()
         {
+            Debug.Log("Completed Tray");
             _ordersCounter.CompleteOrder(Order, this);
         }
 

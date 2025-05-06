@@ -25,13 +25,14 @@ namespace ClientsContent
         private Coroutine _coroutine;
         private Transform _exitPosition;
         private QueueCashRegister _queueCashRegister;
+        private ClientCar _clientCar;
 
         public Order Order { get; private set; }
 
         public Table Table { get; private set; }
 
         public void Init(Order order, Restaurant restaurant, Table table, Transform exitPosition,
-            CashRegister cashRegister,QueueCashRegister queueCashRegister)
+            CashRegister cashRegister, QueueCashRegister queueCashRegister)
         {
             Order = order;
             _restaurant = restaurant;
@@ -41,18 +42,25 @@ namespace ClientsContent
             _exitPosition = exitPosition;
             _cashRegister = cashRegister;
             _queueCashRegister = queueCashRegister;
+
+            _clientCar = null;
+        }
+
+        public void SetCar(ClientCar clientCar)
+        {
+            _clientCar = clientCar;
         }
 
         public void UpdateGotoQueue()
         {
             _queueCashRegister.UpdateQueuePositions();
         }
-        
+
         public void GoToQueuePosition(Vector3 position, int index)
         {
             _navMeshAgent.enabled = true;
             _meshObstacle.enabled = true;
-            
+
             if (index == 0)
             {
                 Debug.Log("1");
@@ -149,7 +157,14 @@ namespace ClientsContent
             _animator.SetBool("Sit", false);
             _currentState = ClientState.GoAway;
 
-            SetDestination(_exitPosition.transform.position, () => { gameObject.SetActive(false); });
+            if (_clientCar != null)
+            {
+                SetDestination(_clientCar.transform.position, () => { gameObject.SetActive(false); });
+            }
+            else
+            {
+                SetDestination(_exitPosition.transform.position, () => { gameObject.SetActive(false); });
+            }
         }
 
         [ContextMenu("Completed")]
@@ -157,7 +172,8 @@ namespace ClientsContent
         {
             _navMeshAgent.enabled = true;
             _meshObstacle.enabled = true;
-            
+            // _currentState = ClientState.WaitingForOrder;
+
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
@@ -168,7 +184,7 @@ namespace ClientsContent
         {
             _animator.SetBool("Give", true);
             yield return new WaitForSeconds(1f);
-            
+
             _currentState = ClientState.WaitingForOrder;
             // Debug.Log("Пошел ждать заказ");
             _animator.SetBool("Give", false);
@@ -187,7 +203,7 @@ namespace ClientsContent
         {
             /*_navMeshAgent.enabled = true;
             _meshObstacle.enabled = true;*/
-            
+
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
@@ -209,7 +225,7 @@ namespace ClientsContent
                 _animator.SetBool("Sit", false);
 
             _navMeshAgent.SetDestination(position);
-            
+
             _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", true);
 
             while (_navMeshAgent.pathPending)
