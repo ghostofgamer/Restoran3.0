@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using Enums;
 using SoContent;
 using UnityEngine;
 
-namespace RestorantContent
+namespace RestaurantContent.MenuContent
 {
     public class MenuCounter : MonoBehaviour
     {
@@ -17,6 +18,8 @@ namespace RestorantContent
         private List<ItemType> _cachedDrinks = new List<ItemType>();
         private List<ItemType> _cachedExtras = new List<ItemType>();
 
+        public event Action<List<ItemType>> ChangeMenuList;
+        
         private void Awake()
         {
             Debug.Log("Awake");
@@ -31,6 +34,7 @@ namespace RestorantContent
             {
                 _menuList.Add(itemType);
                 UpdateCachedListsForItem(itemType, true);
+                ChangeMenuList?.Invoke(_menuList);
             }
             else
             {
@@ -44,6 +48,7 @@ namespace RestorantContent
             {
                 _menuList.Remove(itemType);
                 UpdateCachedListsForItem(itemType, false);
+                ChangeMenuList?.Invoke(_menuList);
             }
             else
             {

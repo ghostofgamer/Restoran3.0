@@ -11,4 +11,5 @@ public class ItemConfig
     public string ItemName;
     public Sprite Sprite;
     public Sprite SpriteNotBackground;
+    public int LevelOpened;
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Enums;
 using RestaurantContent;
-using RestorantContent;
+using RestaurantContent.MenuContent;
 using UnityEngine;
 
 namespace OrdersContent

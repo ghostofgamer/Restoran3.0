@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Enums;
-using RestorantContent;
+using PlayerContent.LevelContent;
+using RestaurantContent.MenuContent;
 using SoContent;
 using UI.MenuUIContent;
 using UnityEngine;
@@ -13,11 +15,22 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.WorksPage
         [SerializeField] private DishesUIItem[] _dishesUIItems;
         [SerializeField] private MenuUIItem[] _menuUIItems;
         [SerializeField] private ItemsConfig _itemsConfig;
+        [SerializeField] private PlayerLevel _playerLevel;
 
         private Dictionary<ItemType, DishesUIItem> _dishesDictionary;
         private Dictionary<ItemType, MenuUIItem> _menuDictionary;
 
         public MenuCounter MenuCounter => _menuCounter;
+
+        private void OnEnable()
+        {
+            _playerLevel.LevelChanged += UpdateDishInit;
+        }
+
+        private void OnDisable()
+        {
+            _playerLevel.LevelChanged -= UpdateDishInit;
+        }
 
         private void Awake()
         {
@@ -33,6 +46,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.WorksPage
             {
                 _dishesDictionary[dish.ItemType] = dish;
                 dish.Init(_itemsConfig);
+                dish.SetValue(_playerLevel.CurrentLevel);
             }
 
             foreach (var menuItem in _menuUIItems)
@@ -40,6 +54,12 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.WorksPage
                 _menuDictionary[menuItem.ItemType] = menuItem;
                 menuItem.Init(_itemsConfig);
             }
+        }
+
+        private void UpdateDishInit(int playerLevel)
+        {
+            foreach (var dish in _dishesUIItems)
+                dish.SetValue(playerLevel);
         }
 
         public void AddItem(ItemType type)
