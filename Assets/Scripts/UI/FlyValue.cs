@@ -13,11 +13,20 @@ namespace UI
         public void ShowFly(DollarValue dollarValue, bool profitValue)
         {
             Debug.Log("profitValue " + profitValue);
-            
+
             gameObject.SetActive(false);
             gameObject.SetActive(true);
             _text.color = profitValue ? Color.green : Color.red;
             _text.text = dollarValue.ToString();
+        }
+
+        public void ShowFly(int value)
+        {
+            gameObject.SetActive(false);
+            gameObject.SetActive(true);
+            
+            _text.color = value >= 0 ? Color.green : Color.red;
+            _text.text = value >= 0 ? $"+{value.ToString()}" : $"-{value.ToString()}";
         }
     }
 }

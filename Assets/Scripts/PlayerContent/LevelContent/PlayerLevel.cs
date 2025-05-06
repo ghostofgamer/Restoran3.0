@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 
 namespace PlayerContent.LevelContent
 {
     public class PlayerLevel : MonoBehaviour
     {
+        [SerializeField] private FlyValue _flyValue;
+        
         public List<LevelConfig> levelConfigs;
         
         private int _minLevel = 1;
@@ -37,7 +40,9 @@ namespace PlayerContent.LevelContent
         {
             if (valueExp <= 0)
                 return;
-
+            
+            _flyValue.ShowFly(valueExp);
+            
             _currentExp += valueExp;
 
             /*if (_currentExp >= _targetExp)
