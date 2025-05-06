@@ -34,8 +34,6 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.WorksPage
 
         public override void Init()
         {
-            Debug.Log("INIT");
-            
             _dishesDictionary = new Dictionary<ItemType, DishesUIItem>();
             _menuDictionary = new Dictionary<ItemType, MenuUIItem>();
 

@@ -11,12 +11,13 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private Transform _clientPosition;
+        [SerializeField] private GameObject _canvas;
 
         private Client _currentClient;
         private Coroutine _coroutine;
-        
+
         public Transform ClientPosition => _clientPosition;
-        
+
         private void OnEnable()
         {
             _interactableObject.OnAction += AcceptOrder;
@@ -30,33 +31,30 @@ namespace RestaurantContent.CashRegisterContent
         public void SetClient(Client client)
         {
             _currentClient = client;
+            _canvas.SetActive(_currentClient != null);
         }
-        
+
         [ContextMenu("AcceptOrder")]
         private void AcceptOrder(PlayerInteraction playerInteraction)
         {
-            Debug.Log("3");
             if (_currentClient == null)
                 return;
-            Debug.Log("5");
-            if(_coroutine!=null)
+       
+            if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
             _coroutine = StartCoroutine(StartAcceptOrder());
-            
-            /*_currentClient.Paid();
-            _restaurant.AcceptOrder(_currentClient.Order,_currentClient);
-            _currentClient = null;*/
         }
-        
+
         private IEnumerator StartAcceptOrder()
-       { Debug.Log("6");
-           _currentClient.Paid();
-           Debug.Log("7");
-           yield return new WaitForSeconds(1f);
-           _restaurant.AcceptOrder(_currentClient.Order,_currentClient);
-           _currentClient = null;
-           Debug.Log("8");
-       }
+        {
+            Client client = _currentClient;
+            _currentClient = null;
+            _canvas.SetActive(_currentClient != null);
+            
+            client.Paid();
+            yield return new WaitForSeconds(1f);
+            _restaurant.AcceptOrder(client.Order, client);
+        }
     }
 }

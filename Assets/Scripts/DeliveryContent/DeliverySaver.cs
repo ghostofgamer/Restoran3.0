@@ -27,11 +27,11 @@ namespace DeliveryContent
             if (hasFocus)
             {
                 LoadDeliveryData();
-                Debug.Log("Приложение развернуто, обновляем данные " );
+               
             }
             else
             {
-                Debug.Log("Приложение свернуто, сохраняем данные" );
+               
                 SaveLastExitTime();
                 SaveDeliveryData();
             }
@@ -42,7 +42,7 @@ namespace DeliveryContent
             PlayerPrefs.SetString(LastExitTimeKey, DateTime.UtcNow.ToString("O"));
             PlayerPrefs.SetFloat(RemainingTimeKey, _delivery.RemainingTime);
             PlayerPrefs.Save();
-            Debug.Log($"Сохранено время выхода и оставшееся время: {_delivery.RemainingTime}");
+           
         }
     
         public void SaveDeliveryData()
@@ -78,7 +78,7 @@ namespace DeliveryContent
                 string json = PlayerPrefs.GetString(SavedItemsKey);
                 var saveData = JsonUtility.FromJson<DeliverySaveData>(json);
                 
-                Debug.Log($"Время загрузки: {saveData.SaveTime}");
+               
                 
                 DateTime saveTime = DateTime.Parse(saveData.SaveTime).ToUniversalTime();
                 _delivery.Init(ConvertFromSaveData(saveData),saveData.RemainingTime,saveTime);
@@ -86,7 +86,7 @@ namespace DeliveryContent
             catch
             {
                 _delivery.SetItemsList(new List<ItemDeliveryInfo>());
-                Debug.Log("CATH");
+               
             }
         }
     

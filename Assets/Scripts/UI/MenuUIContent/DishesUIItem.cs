@@ -34,8 +34,6 @@ namespace UI.MenuUIContent
 
         public override void Init(ItemsConfig itemsConfig)
         {
-            Debug.Log("INIT DISHE ONE");
-            
             base.Init(itemsConfig);
 
             if (ItemConfig != null)

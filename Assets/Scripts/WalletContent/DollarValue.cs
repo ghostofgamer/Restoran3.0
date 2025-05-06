@@ -14,8 +14,6 @@ namespace WalletContent
 
         public DollarValue(int dollars, int cents)
         {
-            Debug.Log("cents " + cents);
-            
             if (cents < 0 || cents > 99)
                 throw new ArgumentOutOfRangeException(nameof(cents), "Центы должны быть в диапазоне от 0 до 99.");
 

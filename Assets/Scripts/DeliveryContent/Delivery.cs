@@ -100,11 +100,10 @@ namespace DeliveryContent
             if (items.Count > 0)
             {
                 CheckDeliveryProgress();
-                Debug.Log("првоеряем на пропущенные посылкуи");
             }
             else
             {
-                Debug.Log("Посылок нету");
+                // Debug.Log("Посылок нету");
             }
         }
 
@@ -112,31 +111,20 @@ namespace DeliveryContent
         {
             DateTime currentTime = DateTime.UtcNow;
 
-            Debug.Log("оставшееся время при выходе из игры было " + RemainingTime);
-            Debug.Log($"Время выхода: {_exitTime.ToString("O")}");
-            Debug.Log($"Текущее время: {currentTime.ToString("O")}");
-
             TimeSpan elapsedTime = currentTime - _exitTime;
             double secondsElapsed = elapsedTime.TotalSeconds;
-
-            Debug.Log($"Пройдено секунд: {secondsElapsed}");
+            
 
             if (secondsElapsed < RemainingTime)
             {
                 RemainingTime -= (float)secondsElapsed;
                 _isSpawning = true;
-
-                Debug.Log("прошло мало времени для посылки ");
             }
             else
             {
-                Debug.Log("прошло много времени и должна прийти посылка ");
                 secondsElapsed -= RemainingTime;
-                Debug.Log("после пересчета посылки одной осталось " + secondsElapsed);
                 SpawnItem();
-
                 int deliveriesToSpawn = (int)(secondsElapsed / _deliveryConfig.MinValueTimer);
-                Debug.Log("deliveriesToSpawn " + deliveriesToSpawn);
 
                 double remainingSeconds;
                 
@@ -144,14 +132,11 @@ namespace DeliveryContent
                     remainingSeconds = secondsElapsed % _deliveryConfig.MinValueTimer;
                 else
                     remainingSeconds = _deliveryConfig.MinValueTimer - secondsElapsed;
-
-                Debug.Log("remainingSeconds " + remainingSeconds);
+                
                 int actualDeliveriesToSpawn = Math.Min(deliveriesToSpawn, CurrentItems.Count);
-                Debug.Log("actualDeliveriesToSpawn " + actualDeliveriesToSpawn);
 
                 for (int i = 0; i < actualDeliveriesToSpawn; i++)
                 {
-                    Debug.Log("спавним после первой " + i);
                     SpawnItem();
                 }
 
@@ -189,7 +174,6 @@ namespace DeliveryContent
             if (_items.Count > 0)
             {
                 var item = _items[0];
-                Debug.Log(" item.Amount " + item.Amount + "   " + item.ItemType);
                 GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
 
                 if (prefab != null)
@@ -212,7 +196,6 @@ namespace DeliveryContent
                 _amountDeliveries += item.Amount;
 
             AmountItemsDeliveriesChanged?.Invoke(_amountDeliveries);
-            Debug.Log($"Общее количество доставок: {_amountDeliveries}");
         }
     }
 }

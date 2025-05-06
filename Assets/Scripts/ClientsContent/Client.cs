@@ -6,7 +6,6 @@ using RestaurantContent;
 using RestaurantContent.CashRegisterContent;
 using RestaurantContent.TableContent;
 using RestaurantContent.TrayContent;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,13 +24,14 @@ namespace ClientsContent
         private ClientState _currentState;
         private Coroutine _coroutine;
         private Transform _exitPosition;
+        private QueueCashRegister _queueCashRegister;
 
         public Order Order { get; private set; }
 
         public Table Table { get; private set; }
 
         public void Init(Order order, Restaurant restaurant, Table table, Transform exitPosition,
-            CashRegister cashRegister)
+            CashRegister cashRegister,QueueCashRegister queueCashRegister)
         {
             Order = order;
             _restaurant = restaurant;
@@ -40,8 +40,14 @@ namespace ClientsContent
             Order.SetTable(Table.Index);
             _exitPosition = exitPosition;
             _cashRegister = cashRegister;
+            _queueCashRegister = queueCashRegister;
         }
 
+        public void UpdateGotoQueue()
+        {
+            _queueCashRegister.UpdateQueuePositions();
+        }
+        
         public void GoToQueuePosition(Vector3 position, int index)
         {
             _navMeshAgent.enabled = true;
@@ -203,8 +209,7 @@ namespace ClientsContent
                 _animator.SetBool("Sit", false);
 
             _navMeshAgent.SetDestination(position);
-
-
+            
             _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", true);
 
             while (_navMeshAgent.pathPending)
