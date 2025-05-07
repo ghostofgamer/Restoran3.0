@@ -12,11 +12,16 @@ namespace ClientsContent
         [SerializeField] private Transform[] _position;
         [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private ParkingSpace _parkingSpace;
+        [SerializeField] private Transform _exitPosition;
+        
+         private Transform _exitCarPosition;
 
         private int _maxSize = 3;
         private Coroutine _coroutine;
         
-        public void AddClient(Client client,ParkingSpace parkingSpace)
+        public Transform ExitPosition => _exitPosition;
+        
+        public void AddClient(Client client,ParkingSpace parkingSpace,Transform exitCarPosition)
         {
             if (_clients.Count >= _maxSize)
                 return;
@@ -24,6 +29,7 @@ namespace ClientsContent
             _clients.Add(client);
             _parkingSpace = parkingSpace;
             client.gameObject.SetActive(false);
+            _exitCarPosition = exitCarPosition;
         }
 
         public void ActivateClients()
@@ -84,6 +90,22 @@ namespace ClientsContent
             Debug.Log("Завершил ехать ");
             
             callback.Invoke();
+        }
+
+        public void RemoveClient(Client client)
+        {
+            _clients.Remove(client);
+            _parkingSpace.ClearPlace();
+            
+            if (_clients.Count <= 0)
+            {
+                SetDestination(_exitCarPosition.position, () =>
+                {
+                    
+                    gameObject.SetActive(false);
+                });
+              
+            }
         }
     }
 }

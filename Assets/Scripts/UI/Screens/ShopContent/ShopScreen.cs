@@ -1,4 +1,5 @@
 using InputContent;
+using PlayerContent.LevelContent;
 using UI.Buttons.PageShopButtons;
 using UI.Screens.ShopContent.ShopPages;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace UI.Screens.ShopContent
     {
         [SerializeField] private PageShopButton[] _pageShopButtons;
         [SerializeField] private ShopPage[] _shopPages;
+        [SerializeField] private PlayerLevel _playerLevel;
 
         public override void OpenScreen()
         {
@@ -45,6 +47,11 @@ namespace UI.Screens.ShopContent
         {
             foreach (var screen in _shopPages)
                 screen.Close();
+        }
+        
+        public void MakePurchase()
+        {
+            _playerLevel.AddExp(5);
         }
     }
 }

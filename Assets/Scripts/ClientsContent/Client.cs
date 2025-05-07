@@ -159,7 +159,12 @@ namespace ClientsContent
 
             if (_clientCar != null)
             {
-                SetDestination(_clientCar.transform.position, () => { gameObject.SetActive(false); });
+                SetDestination(_clientCar.ExitPosition.position, () =>
+                {
+                    _clientCar.RemoveClient(this);
+                    _clientCar = null;
+                    gameObject.SetActive(false);
+                });
             }
             else
             {
@@ -170,22 +175,33 @@ namespace ClientsContent
         [ContextMenu("Completed")]
         public void Paid()
         {
+            Debug.Log("Paid");
+            _currentState = ClientState.WaitingForOrder;
             _navMeshAgent.enabled = true;
             _meshObstacle.enabled = true;
-            // _currentState = ClientState.WaitingForOrder;
 
-            if (_coroutine != null)
+            /*if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
-            _coroutine = StartCoroutine(StartPaid());
+            _coroutine = StartCoroutine(StartPaid());*/
+
+
+            SetDestination(Table.ClientSitPosition.transform.position, () =>
+            {
+                _navMeshAgent.enabled = false;
+                _animator.SetBool("Sit", true);
+                transform.position = Table.ClientSitPosition.transform.position;
+                transform.rotation = Table.ClientSitPosition.transform.rotation;
+                Debug.Log("Жду за столом ");
+            });
         }
 
         private IEnumerator StartPaid()
         {
             _animator.SetBool("Give", true);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
 
-            _currentState = ClientState.WaitingForOrder;
+            // _currentState = ClientState.WaitingForOrder;
             // Debug.Log("Пошел ждать заказ");
             _animator.SetBool("Give", false);
 

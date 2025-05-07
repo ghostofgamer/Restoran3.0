@@ -4,6 +4,7 @@ using OrdersContent;
 using ParkingContent;
 using RestaurantContent;
 using RestaurantContent.CashRegisterContent;
+using RestaurantContent.MenuContent;
 using RestaurantContent.TableContent;
 using SpawnContent;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace ClientsContent
         [SerializeField] private TablesCounter _tablesCounter;
         [SerializeField] private Transform _exitPosition;
         [SerializeField] private CashRegister _cashRegister;
+        [SerializeField] private MenuCounter _menuCounter;
 
         [SerializeField] private ClientCar _clientCar;
         [SerializeField] private Transform _carSpawnPosition;
@@ -30,6 +32,8 @@ namespace ClientsContent
         [SerializeField] private float _minTimeSpawn;
         [SerializeField] private float _maxTimeSpawn;
 
+        [SerializeField] private Transform _exitCarPosition;
+        
         private float _elapsedTime;
         private float _nextSpawnTime = 0f;
 
@@ -56,6 +60,12 @@ namespace ClientsContent
         [ContextMenu("Create New Client")]
         public void CreateClients()
         {
+            if (_menuCounter.MenuList.Count <= 0)
+            {
+                Debug.Log("Меню пустое");
+                return;
+            }
+            
             if (_queueCashRegister.IsQueueFull())
             {
                 Debug.Log("Очередь заполнена");
@@ -73,7 +83,7 @@ namespace ClientsContent
 
         private IEnumerator Create()
         {
-            /*if (_parking.GetCountFreeParkingPositions() > 0)
+            if (_parking.GetCountFreeParkingPositions() > 0)
             {
                 float randomValue = Random.Range(0f, 1f);
 
@@ -99,9 +109,7 @@ namespace ClientsContent
             else
             {
                 InitClientWalking();
-            }*/
-
-            InitClientWalking();
+            }
 
             yield return null;
         }
@@ -115,11 +123,7 @@ namespace ClientsContent
         {
             List<Client> _clients = new List<Client>();
             
-            int value = Random.Range(1, 3);
-            
-            Debug.Log("DFKET " + value);
-            
-            for (int i = 0; i < value; i++)
+            for (int i = 0; i < clientCount; i++)
             {
                 Table table = _tablesCounter.GetAvailableTable();
                 table.SetBusyValue(true);
@@ -137,7 +141,7 @@ namespace ClientsContent
 
             foreach (var client in _clients)
             {
-                car.AddClient(client, parkingSpace);
+                car.AddClient(client, parkingSpace,_exitCarPosition);
                 client.SetCar(car);
             }
 

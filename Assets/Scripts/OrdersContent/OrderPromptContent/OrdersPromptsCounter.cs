@@ -38,6 +38,7 @@ namespace OrdersContent.OrderPromptContent
                 _orderPrompts[0].InitOrder(orders[0]);
                 _orderPrompts[0].Activate();
                 _toggleButton.gameObject.SetActive(false);
+                _amountOrdersValueText.text = _ordersCounter.CurrentOrders.Count.ToString();
             }
             else
             {
@@ -76,6 +77,7 @@ namespace OrdersContent.OrderPromptContent
 
         private void ShowAmountOrders(bool value)
         {
+            Debug.Log("_ordersCounter.CurrentOrders.Count " + _ordersCounter.CurrentOrders.Count);
             _arrowText.text = value ? ">" : "<";
             _amountOrdersContatainer.SetActive(value);
             _amountOrdersValueText.text = _ordersCounter.CurrentOrders.Count.ToString();

@@ -40,20 +40,25 @@ namespace RestaurantContent.CashRegisterContent
             if (_currentClient == null)
                 return;
        
-            if (_coroutine != null)
+            /*if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
-            _coroutine = StartCoroutine(StartAcceptOrder());
+            _coroutine = StartCoroutine(StartAcceptOrder());*/
+            
+            _currentClient.Paid();
+            Client client = _currentClient;
+            _currentClient = null;
+            _canvas.SetActive(_currentClient != null);
+            _restaurant.AcceptOrder(client.Order, client);
         }
 
         private IEnumerator StartAcceptOrder()
         {
+            _currentClient.Paid();
             Client client = _currentClient;
             _currentClient = null;
             _canvas.SetActive(_currentClient != null);
-            
-            client.Paid();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.6f);
             _restaurant.AcceptOrder(client.Order, client);
             // _currentClient = null;
         }

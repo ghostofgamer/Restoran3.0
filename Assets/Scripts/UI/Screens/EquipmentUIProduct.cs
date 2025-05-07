@@ -53,7 +53,7 @@ namespace UI.Screens
             }
 
             _wallet.Subtract(_currentPrice);
-            
+            _shopScreen.MakePurchase();
             _isOwned = true;
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);

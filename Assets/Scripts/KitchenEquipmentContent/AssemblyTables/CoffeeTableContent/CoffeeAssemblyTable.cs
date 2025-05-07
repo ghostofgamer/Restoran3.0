@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using Enums;
 using ItemContent;
+using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using SoContent.AssemblyBurger;
@@ -22,7 +23,8 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private FullnessCoffeeCounter _fullnessCoffeeCounter;
         [SerializeField] private EquipmentUIProduct _equipmentUIProduct;
-
+        [SerializeField] private PlayerLevel _playerLevel;
+        
         private Coroutine _coroutine;
         private bool _isWorking = false;
 
@@ -62,7 +64,9 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
                 coffeeInstance.transform.position = _emptyCup.transform.position;
                 coffeeInstance.transform.rotation = Quaternion.identity;
                 coffeeInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(ItemType.Coffee);
-
+                
+                _playerLevel.AddExp(5);
+                
                 Sequence sequence = DOTween.Sequence();
 
                 if (_restaurant.TryGetTrayDrinkOrder(ItemType.Coffee, out Tray tray))

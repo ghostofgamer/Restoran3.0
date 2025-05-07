@@ -5,6 +5,7 @@ using DG.Tweening;
 using Enums;
 using ItemContent;
 using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
+using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using SoContent.AssemblyBurger;
@@ -19,7 +20,8 @@ namespace KitchenEquipmentContent
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
         [SerializeField] private SodaCounter _sodaCounter;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
-
+        [SerializeField] private PlayerLevel _playerLevel;
+        
         // [SerializeField] private CoffeeCounter _coffeeCounter;
         [SerializeField] private List<Transform> _wellPositions;
         [SerializeField] private Restaurant _restaurant;
@@ -76,7 +78,9 @@ namespace KitchenEquipmentContent
                 sodaInstance.transform.position = _emptyCups[index].transform.position;
                 sodaInstance.transform.rotation = Quaternion.identity;
                 sodaInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(itemType);
-
+                
+                _playerLevel.AddExp(5);
+                
                 Sequence sequence = DOTween.Sequence();
 
                 if (_restaurant.TryGetTrayDrinkOrder(itemType, out Tray tray))
@@ -133,7 +137,9 @@ namespace KitchenEquipmentContent
                     sodaInstance.transform.position = _emptyCups[index].transform.position;
                     sodaInstance.transform.rotation = Quaternion.identity;
                     sodaInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(itemType);
-
+                    
+                    _playerLevel.AddExp(5);
+                    
                     _restaurant.SetSodaOrder(tray, sodaInstance);
                     
                     Sequence sequence = DOTween.Sequence();

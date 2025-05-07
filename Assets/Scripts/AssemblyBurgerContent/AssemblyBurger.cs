@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using Enums;
 using InteractableContent;
+using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using SoContent.AssemblyBurger;
@@ -21,6 +22,7 @@ namespace AssemblyBurgerContent
         [SerializeField] private List<Transform> _burgerPositions;
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private BurgersCounter _burgersCounter;
+        [SerializeField] private PlayerLevel _playerLevel;
 
         // private Stack<Item> _ingredientStack = new Stack<Item>();
 
@@ -153,7 +155,7 @@ namespace AssemblyBurgerContent
                 AssemblyIngredient assemblyIngredient = previousItem.GetComponent<AssemblyIngredient>();
 
                 // StackChanged?.Invoke();
-                
+
                 if (assemblyIngredient != null)
                 {
                     if (assemblyIngredient.PositionUpIngredient != null)
@@ -223,7 +225,7 @@ namespace AssemblyBurgerContent
                 var (lastItem, container) = _ingredientStack.Pop();
 
                 StackChanged?.Invoke();
-                
+
                 if (container != null)
                 {
                     _isAnimationInProgress = true;
@@ -282,11 +284,11 @@ namespace AssemblyBurgerContent
 
             return ItemType.Empty;
         }*/
-        
+
         private ItemType GetMatchingRecipe()
         {
             List<ItemType> itemTypes = _ingredientStack.Select(tuple => tuple.item.ItemType).ToList();
-            
+
             foreach (var recipe in _burgerRecipeConfig.recipes)
             {
                 // Получаем список типов ингредиентов рецепта
@@ -301,7 +303,7 @@ namespace AssemblyBurgerContent
                     // Выводим исключенный ингредиент в консоль
                     Debug.Log($"Excluded ingredient from recipe {recipe.BurgerType}: {excludedItemType}");
                 }
-                
+
                 if (recipeItemTypes.SequenceEqual(itemTypes))
                 {
                     return recipe.BurgerType;
@@ -330,7 +332,9 @@ namespace AssemblyBurgerContent
                     burgerInstance.gameObject.SetActive(true);
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                     burgerInstance.transform.rotation = Quaternion.identity;
-
+                    
+                    _playerLevel.AddExp(5);
+                    
                     /*GameObject burgerInstance =
                         Instantiate(burgerPrefab, _burgerBoard.CenterPosition.position, Quaternion.identity);*/
 
@@ -372,33 +376,15 @@ namespace AssemblyBurgerContent
                             .OnComplete(() => _burgersCounter.AddBurger(burgerInstance));
                     }
 
-
-                    /*Sequence sequence = DOTween.Sequence();
-                    sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
-                    sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
-                    sequence.Append(burgerInstance.transform.DOMove(availablePosition.position, 0.5f)
-                        .SetEase(Ease.InOutQuad));
-
-                    burgerInstance.transform.SetParent(availablePosition);
-
-                    sequence.Join(burgerInstance.transform.DOLocalRotate(new Vector3(0,0,0), 0.5f, RotateMode.FastBeyond360)
-                        .SetEase(Ease.Linear));*/
-
-                    // burgerInstance.transform.position = Vector3.zero;
                     Debug.Log("Бургер создан: " + burgerType);
-
-                    // _restaurant.CheckOrderBurger(burgerType);
-
 
                     while (_ingredientStack.Count > 0)
                     {
                         var (lastItem, container) = _ingredientStack.Pop();
                         lastItem.gameObject.SetActive(false);
-                        
-                        
-                        // Destroy(lastItem.gameObject);
                     }
-                        StackChanged?.Invoke();
+
+                    StackChanged?.Invoke();
                 }
                 else
                 {
@@ -411,7 +397,8 @@ namespace AssemblyBurgerContent
                         burgerInstance.transform.rotation = Quaternion.identity;
 
                         _restaurant.SetBurgerOrder(tray, burgerInstance);
-
+                        _playerLevel.AddExp(5);
+                        
                         Sequence sequence = DOTween.Sequence();
                         Debug.Log("TRUE");
                         Transform position = tray.GetFirstAvailablePosition();
@@ -432,10 +419,11 @@ namespace AssemblyBurgerContent
                         {
                             var (lastItem, container) = _ingredientStack.Pop();
                             lastItem.gameObject.SetActive(false);
-                            
+
                             // Destroy(lastItem.gameObject);
                         }
-                            StackChanged?.Invoke();
+
+                        StackChanged?.Invoke();
                     }
 
                     else

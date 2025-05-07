@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DeliveryContent;
 using Enums;
+using PlayerContent.LevelContent;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +20,8 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         [SerializeField] private Color _activeButtonColor;
         [SerializeField] private Color _notActiveButtonColor;
         [SerializeField] private Image _buyButtonImage;
-        
+        [SerializeField] private PlayerLevel _playerLevel;
+
         private List<ItemCart> _items = new List<ItemCart>();
         private DollarValue _totalPrice;
 
@@ -83,7 +85,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
             totalValue = totalValue.FromTotalCents(totalCents);
             _totalPrice = totalValue;
             _totalPriceText.text = _totalPrice.ToString();
-            
+
             _buyButtonImage.color = _wallet.DollarValue.ToTotalCents() >= _totalPrice.ToTotalCents()
                 ? _activeButtonColor
                 : _notActiveButtonColor;
@@ -99,6 +101,15 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
                 Debug.Log("у тебя мало денег ");
                 return;
             }
+
+            int amountItems = 0;
+
+            foreach (var item in _items)
+            {
+                amountItems += item.CurrentAmount;
+            }
+
+            _playerLevel.AddExp(amountItems * 5);
 
             _wallet.Subtract(_totalPrice);
             _delivery.AddItemsCart(_items);

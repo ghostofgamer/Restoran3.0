@@ -8863,7 +8863,7 @@ Transform:
   m_GameObject: {fileID: 248561232}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -56.8, y: -3.06, z: -43.45}
+  m_LocalPosition: {x: -55.3, y: -3.06, z: -40.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14530,6 +14530,7 @@ Transform:
   - {fileID: 1080776660}
   - {fileID: 1480147911}
   - {fileID: 520979546}
+  - {fileID: 1984714729}
   m_Father: {fileID: 588533451}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &401500999
@@ -14551,6 +14552,7 @@ MonoBehaviour:
   _tablesCounter: {fileID: 199217617}
   _exitPosition: {fileID: 1080776660}
   _cashRegister: {fileID: 758493154}
+  _menuCounter: {fileID: 715113176}
   _clientCar: {fileID: 6022933893588618443, guid: 8b3b665372433434a9c5f7bc649ddfb4, type: 3}
   _carSpawnPosition: {fileID: 1480147911}
   _carParkingPosition: {fileID: 520979546}
@@ -14558,6 +14560,7 @@ MonoBehaviour:
   _isWork: 1
   _minTimeSpawn: 13
   _maxTimeSpawn: 21
+  _exitCarPosition: {fileID: 1984714729}
 --- !u!114 &402138952 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3561627123729294804, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
@@ -68718,6 +68721,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2188fbeae0dbe6b429a852d5fd3b2300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1984714728
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1984714729}
+  m_Layer: 0
+  m_Name: ExitPositionCar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1984714729
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984714728}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -164.1, y: -5.65, z: -53}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 401500998}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1992738048
 GameObject:
   m_ObjectHideFlags: 0
@@ -69484,6 +69518,7 @@ MonoBehaviour:
   _burgersCounter: {fileID: 962541068}
   _coffeeCounter: {fileID: 343672238}
   _sodaCounter: {fileID: 2069346611}
+  _playerLevel: {fileID: 1217972363}
 --- !u!1001 &2023965598
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -75303,6 +75338,10 @@ PrefabInstance:
       propertyPath: _delivery
       value: 
       objectReference: {fileID: 1491356674}
+    - target: {fileID: 4244588841802754445, guid: 2ec2b1f0869d884408818be135504864, type: 3}
+      propertyPath: _playerLevel
+      value: 
+      objectReference: {fileID: 1217972363}
     - target: {fileID: 4248105434034641515, guid: 2ec2b1f0869d884408818be135504864, type: 3}
       propertyPath: _wallet
       value: 
@@ -76934,6 +76973,10 @@ PrefabInstance:
       value: 5.8
       objectReference: {fileID: 0}
     - target: {fileID: 2110042875132484386, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: _playerLevel
+      value: 
+      objectReference: {fileID: 1217972363}
+    - target: {fileID: 2110042875132484386, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
       propertyPath: _sodaCounter
       value: 
       objectReference: {fileID: 2069346611}
@@ -76962,6 +77005,10 @@ PrefabInstance:
       value: 5.53
       objectReference: {fileID: 0}
     - target: {fileID: 2360737555742527878, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: _playerLevel
+      value: 
+      objectReference: {fileID: 1217972363}
+    - target: {fileID: 2360737555742527878, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
       propertyPath: _burgersCounter
       value: 
       objectReference: {fileID: 962541068}
@@ -76977,6 +77024,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -1.36
       objectReference: {fileID: 0}
+    - target: {fileID: 2633585016665548352, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: _playerLevel
+      value: 
+      objectReference: {fileID: 1217972363}
     - target: {fileID: 2633585016665548352, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
       propertyPath: _coffeeCounter
       value: 

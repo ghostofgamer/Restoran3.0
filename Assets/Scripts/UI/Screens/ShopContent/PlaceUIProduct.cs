@@ -1,5 +1,6 @@
 using RestaurantContent;
 using TMPro;
+using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
 using UnityEngine.UI;
 using WalletContent;
@@ -23,6 +24,7 @@ namespace UI.Screens.ShopContent
         [SerializeField] private Color _activeButtonColor;
         [SerializeField] private Color _notActiveButtonColor;
         [SerializeField] private Image _buyButtonImage;
+        [SerializeField] private PlacesScrollContent _placesScrollContent;
 
         private DollarValue _dollarValue;
 
@@ -74,7 +76,7 @@ namespace UI.Screens.ShopContent
             }
 
             _wallet.Subtract(_dollarValue);
-
+            _shopScreen.MakePurchase();
             IsOwned = true;
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);

@@ -6,6 +6,7 @@ using ClientsContent;
 using Enums;
 using KitchenEquipmentContent.AssemblyTables.CoffeeTableContent;
 using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
+using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using UnityEngine;
@@ -20,7 +21,8 @@ namespace OrdersContent
         [SerializeField] private BurgersCounter _burgersCounter;
         [SerializeField] private CoffeeCounter _coffeeCounter;
         [SerializeField] private SodaCounter _sodaCounter;
-
+        [SerializeField] private PlayerLevel _playerLevel;
+        
         private const int MaxActiveOrders = 4;
 
         private List<Order> _currentOrders;
@@ -82,12 +84,12 @@ namespace OrdersContent
                     Debug.Log(" client иди за заказом " + client);
                     _activeOrderWaitClients.Remove(client);
                     client.OrderCompleted(tray);
+                _playerLevel.AddExp(5);
                 }
                 else
                 {
                     Debug.Log(" Не анходит клиента  которого заказ! ");
                 }
-
                 OrdersChanged?.Invoke(_currentOrders);
                 // TryActivateOrder();
             }
