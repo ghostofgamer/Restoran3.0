@@ -153,6 +153,7 @@ namespace ClientsContent
 
         private void GoAway()
         {
+            Table.DirtyTable();
             Table.SetBusyValue(false);
             _animator.SetBool("Sit", false);
             _currentState = ClientState.GoAway;
