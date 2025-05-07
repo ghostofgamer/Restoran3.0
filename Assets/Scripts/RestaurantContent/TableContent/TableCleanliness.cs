@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GarbageContent;
+using PlayerContent.LevelContent;
 using UnityEngine;
 using Random = System.Random;
 
@@ -9,6 +10,7 @@ namespace RestaurantContent.TableContent
     public class TableCleanliness : MonoBehaviour
     {
         [SerializeField] private GarbagePackage[] _garbagePackages;
+        [SerializeField] private PlayerLevel _playerLevel;
         
         private int _maxPollutionLevel = 3;
         private int _pollutionLevel;
@@ -53,7 +55,7 @@ namespace RestaurantContent.TableContent
             if (_pollutionLevel <= 0) return;
 
             _pollutionLevel--;
-
+            _playerLevel.AddExp(5);
             /*if (_pollutionLevel == 0)
                 _allBuyerPlaces.RemoveDirtyBuyerPlace(this);*/
             
