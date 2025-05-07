@@ -8,6 +8,7 @@ using RestaurantContent.TableContent;
 using RestaurantContent.TrayContent;
 using UnityEngine;
 using UnityEngine.AI;
+using WalletContent;
 
 namespace ClientsContent
 {
@@ -19,6 +20,7 @@ namespace ClientsContent
         [SerializeField] private CashRegister _cashRegister;
         [SerializeField] private Transform _trayPositionHand;
 
+        private PriceOrderCounter _priceOrderCounter;
         private Restaurant _restaurant;
         private Action<Client> _reachAction;
         private ClientState _currentState;
@@ -26,15 +28,19 @@ namespace ClientsContent
         private Transform _exitPosition;
         private QueueCashRegister _queueCashRegister;
         private ClientCar _clientCar;
+        private DollarValue _priceOrder;
+
+        public DollarValue Cash { get; private set; }
 
         public Order Order { get; private set; }
 
         public Table Table { get; private set; }
 
         public void Init(Order order, Restaurant restaurant, Table table, Transform exitPosition,
-            CashRegister cashRegister, QueueCashRegister queueCashRegister)
+            CashRegister cashRegister, QueueCashRegister queueCashRegister, PriceOrderCounter priceOrderCounter)
         {
             Order = order;
+            _priceOrder = priceOrderCounter.GetPriceOrder(Order);
             _restaurant = restaurant;
             _currentState = ClientState.InQueue;
             Table = table;
@@ -43,7 +49,8 @@ namespace ClientsContent
             _cashRegister = cashRegister;
             _queueCashRegister = queueCashRegister;
 
-            _clientCar = null;
+            // _clientCar = null;
+            InitCash(_priceOrder);
         }
 
         public void SetCar(ClientCar clientCar)
@@ -89,6 +96,24 @@ namespace ClientsContent
         {
             // StartCoroutine(PickUpOrder(tray));
             GoToOrderTray(tray);
+        }
+
+        private void InitCash(DollarValue dollarValuePriceOrder)
+        {
+            Cash = dollarValuePriceOrder.Dollars switch
+            {
+                < 10 => new DollarValue(10, 0),
+                < 20 => new DollarValue(20, 0),
+                < 30 => new DollarValue(30, 0),
+                < 40 => new DollarValue(40, 0),
+                < 50 => new DollarValue(50, 0),
+                < 60 => new DollarValue(60, 0),
+                < 70 => new DollarValue(70, 0),
+                < 80 => new DollarValue(80, 0),
+                < 90 => new DollarValue(90, 0),
+                < 100 => new DollarValue(100, 0),
+                _ => Cash
+            };
         }
 
         private void GoToOrderTray(Tray tray)

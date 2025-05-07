@@ -33,7 +33,9 @@ namespace ClientsContent
         [SerializeField] private float _maxTimeSpawn;
 
         [SerializeField] private Transform _exitCarPosition;
-        
+
+        [SerializeField] private PriceOrderCounter _priceOrderCounter;
+
         private float _elapsedTime;
         private float _nextSpawnTime = 0f;
 
@@ -65,7 +67,7 @@ namespace ClientsContent
                 Debug.Log("Меню пустое");
                 return;
             }
-            
+
             if (_queueCashRegister.IsQueueFull())
             {
                 Debug.Log("Очередь заполнена");
@@ -122,14 +124,14 @@ namespace ClientsContent
         private void InitClientsCar(int clientCount)
         {
             List<Client> _clients = new List<Client>();
-            
+
             for (int i = 0; i < clientCount; i++)
             {
                 Table table = _tablesCounter.GetAvailableTable();
                 table.SetBusyValue(true);
                 Client client = _clientsSpawner.SpawnRandomClient();
                 client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                    _queueCashRegister);
+                    _queueCashRegister, _priceOrderCounter);
                 _queueCashRegister.AddClientQueue(client);
                 _clients.Add(client);
             }
@@ -141,19 +143,20 @@ namespace ClientsContent
 
             foreach (var client in _clients)
             {
-                car.AddClient(client, parkingSpace,_exitCarPosition);
+                car.AddClient(client, parkingSpace, _exitCarPosition);
                 client.SetCar(car);
             }
 
             car.GoToPosition(parkingSpace.transform.position);
         }
-        
+
         private void InitClientWalking()
         {
             Table table = _tablesCounter.GetAvailableTable();
             table.SetBusyValue(true);
             Client client = _clientsSpawner.SpawnRandomClient();
-            client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister, _queueCashRegister);
+            client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
+                _queueCashRegister, _priceOrderCounter);
 
             Debug.Log("Пешком");
             _queueCashRegister.AddClientToQueue(client);
