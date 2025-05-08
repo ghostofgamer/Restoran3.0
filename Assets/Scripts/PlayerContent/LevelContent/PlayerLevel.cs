@@ -32,7 +32,7 @@ namespace PlayerContent.LevelContent
         [ContextMenu("TestAddCurrentExp")]
         public void TestAddExp()
         {
-            AddExp(563);
+            AddExp(15);
         }
 
         public void AddExp(int valueExp)
@@ -41,17 +41,13 @@ namespace PlayerContent.LevelContent
                 return;
             
             _flyValue.ShowFly(valueExp);
-            
             _currentExp += valueExp;
-
-            /*if (_currentExp >= _targetExp)
-            {
-                LevelUp();
-            }*/
             
             while (_currentExp >= _targetExp && CurrentLevel < levelConfigs.Count)
             {
+                int excessExp = _currentExp - _targetExp;
                 LevelUp();
+                _currentExp = excessExp;
             }
             
             PlayerPrefs.SetInt("Exp", _currentExp);
@@ -65,6 +61,7 @@ namespace PlayerContent.LevelContent
             _targetExp = GetExpForLevel(CurrentLevel);
             Debug.Log("_targetExp " + _targetExp);
             LevelChanged?.Invoke(CurrentLevel);
+            ExpChanged?.Invoke(_currentExp, _targetExp);
         }
         
         private int GetExpForLevel(int level)
