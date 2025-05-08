@@ -28,7 +28,8 @@ namespace ClientsContent
         private Transform _exitPosition;
         private QueueCashRegister _queueCashRegister;
         private ClientCar _clientCar;
-        private DollarValue _priceOrder;
+        
+        public DollarValue PriceOrder{ get; private set; }
 
         public DollarValue Cash { get; private set; }
 
@@ -40,7 +41,7 @@ namespace ClientsContent
             CashRegister cashRegister, QueueCashRegister queueCashRegister, PriceOrderCounter priceOrderCounter)
         {
             Order = order;
-            _priceOrder = priceOrderCounter.GetPriceOrder(Order);
+            PriceOrder = priceOrderCounter.GetPriceOrder(Order);
             _restaurant = restaurant;
             _currentState = ClientState.InQueue;
             Table = table;
@@ -50,7 +51,11 @@ namespace ClientsContent
             _queueCashRegister = queueCashRegister;
 
             // _clientCar = null;
-            InitCash(_priceOrder);
+            
+            Cash = new DollarValue(0, 0);
+            Cash = priceOrderCounter.GetCash(PriceOrder);
+            
+            // InitCash(PriceOrder);
         }
 
         public void SetCar(ClientCar clientCar)
@@ -98,7 +103,7 @@ namespace ClientsContent
             GoToOrderTray(tray);
         }
 
-        private void InitCash(DollarValue dollarValuePriceOrder)
+        /*private void InitCash(DollarValue dollarValuePriceOrder)
         {
             Cash = dollarValuePriceOrder.Dollars switch
             {
@@ -114,7 +119,7 @@ namespace ClientsContent
                 < 100 => new DollarValue(100, 0),
                 _ => Cash
             };
-        }
+        }*/
 
         private void GoToOrderTray(Tray tray)
         {

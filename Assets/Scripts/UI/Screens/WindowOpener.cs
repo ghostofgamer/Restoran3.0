@@ -1,4 +1,5 @@
 using KitchenEquipmentContent;
+using RestaurantContent.CashRegisterContent;
 using UI.Screens.AssemblyScreens;
 using UnityEngine;
 
@@ -12,34 +13,50 @@ namespace UI.Screens
         [SerializeField] private AssemblyTable _assemblyTable;
         [SerializeField] private AssemblyDrinkTable _assemblyDrinkTable;
         [SerializeField] private AssemblyDrinkTable _assemblySodaTable;
-        
+        [SerializeField] private AssemblyCashRegisterOrderScreen _assemblyCashRegisterOrderScreen;
+        [SerializeField] private CashRegister _cashRegister;
+
         private void OnEnable()
         {
             _assemblyTable.BurgerAssemblyBeginig += OpenAssemblyBurgerScreen;
             _assemblyDrinkTable.DrinkAssemblyBeginig += OpenAssemblyCoffeeScreen;
             _assemblySodaTable.DrinkAssemblyBeginig += OpenAssemblySodaScreen;
+            _cashRegister.CashRegisterAssemblyBeginig += OpenCashRegisterOrderScreen;
+            _cashRegister.CashRegisterOrderCompleted += CloseCashRegisterScreen;
         }
 
         private void OnDisable()
         {
             _assemblyTable.BurgerAssemblyBeginig -= OpenAssemblyBurgerScreen;
             _assemblyDrinkTable.DrinkAssemblyBeginig -= OpenAssemblyCoffeeScreen;
-            _assemblySodaTable.DrinkAssemblyBeginig += OpenAssemblySodaScreen;
+            _assemblySodaTable.DrinkAssemblyBeginig -= OpenAssemblySodaScreen;
+            _cashRegister.CashRegisterAssemblyBeginig -= OpenCashRegisterOrderScreen;
+            _cashRegister.CashRegisterOrderCompleted -= CloseCashRegisterScreen;
         }
 
         private void OpenAssemblyBurgerScreen()
         {
             _assemblyBurgerScreen.OpenScreen();
         }
-        
+
         private void OpenAssemblyCoffeeScreen()
         {
             _assemblyCoffeeScreen.OpenScreen();
         }
-        
+
         private void OpenAssemblySodaScreen()
         {
             _assemblySodaScreen.OpenScreen();
+        }
+
+        private void OpenCashRegisterOrderScreen()
+        {
+            _assemblyCashRegisterOrderScreen.OpenScreen();
+        }
+
+        private void CloseCashRegisterScreen()
+        {
+            _assemblyCashRegisterOrderScreen.CloseScreen();
         }
     }
 }

@@ -880,6 +880,7 @@ MonoBehaviour:
   - {fileID: 3916636295014884887}
   - {fileID: 9033868182774161447}
   - {fileID: 9114450746651315112}
+  _playerLevel: {fileID: 0}
 --- !u!1 &856196667429233580
 GameObject:
   m_ObjectHideFlags: 0
@@ -2140,6 +2141,7 @@ MonoBehaviour:
   - {fileID: 6397635794830295393}
   - {fileID: 1426769245694953297}
   - {fileID: 1220282567393979614}
+  _playerLevel: {fileID: 0}
 --- !u!1 &1799710640985421247
 GameObject:
   m_ObjectHideFlags: 0
@@ -6836,6 +6838,7 @@ MonoBehaviour:
   - {fileID: 202508017276341498}
   - {fileID: 5317452852159466186}
   - {fileID: 5397797955918717253}
+  _playerLevel: {fileID: 0}
 --- !u!1 &5031277999838614926
 GameObject:
   m_ObjectHideFlags: 0
@@ -7334,6 +7337,7 @@ MonoBehaviour:
   - {fileID: 3224696808104930844}
   - {fileID: 7477238047065024556}
   - {fileID: 7271004376697635747}
+  _playerLevel: {fileID: 0}
 --- !u!1 &5117223888489405159
 GameObject:
   m_ObjectHideFlags: 0
@@ -9257,6 +9261,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6377316734044721079
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1847708528221221486}
+  m_Layer: 6
+  m_Name: CameraPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1847708528221221486
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6377316734044721079}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.79335326, y: -8.526513e-14, z: -2.842171e-14, w: 0.60876167}
+  m_LocalPosition: {x: -0.274, y: 0.592, z: 0.482}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2871219974432913372}
+  m_LocalEulerAnglesHint: {x: 105, y: 0, z: 0}
 --- !u!1 &6390165644684482015
 GameObject:
   m_ObjectHideFlags: 0
@@ -11136,6 +11171,7 @@ MonoBehaviour:
   - {fileID: 2432240781204380409}
   - {fileID: 7693589420100902089}
   - {fileID: 7630972740930271046}
+  _playerLevel: {fileID: 0}
 --- !u!1 &7810776236588772767
 GameObject:
   m_ObjectHideFlags: 0
@@ -11832,6 +11868,7 @@ MonoBehaviour:
   - {fileID: 1391588472740926121}
   - {fileID: 6362454454640759961}
   - {fileID: 6586599167579258646}
+  _playerLevel: {fileID: 0}
 --- !u!1 &8151010515574712212
 GameObject:
   m_ObjectHideFlags: 0
@@ -16639,6 +16676,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3107185457164101670, guid: c6f78fe1e8863024c8ad3d9f3606754a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 51315229014243227}
+    - targetCorrespondingSourceObject: {fileID: 3107185457164101670, guid: c6f78fe1e8863024c8ad3d9f3606754a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1847708528221221486}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1536131939953522838, guid: c6f78fe1e8863024c8ad3d9f3606754a, type: 3}
       insertIndex: -1
@@ -16911,6 +16951,8 @@ MonoBehaviour:
   _interactableObject: {fileID: 8730505113788335001}
   _clientPosition: {fileID: 7115596277495136916}
   _canvas: {fileID: 4416256476299740917}
+  _cameraPositionChanger: {fileID: 0}
+  _cameraCurrentPosition: {fileID: 1847708528221221486}
 --- !u!4 &2871219974432913372 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3107185457164101670, guid: c6f78fe1e8863024c8ad3d9f3606754a, type: 3}
@@ -22120,6 +22162,7 @@ MonoBehaviour:
   - {fileID: 648765839940100632}
   - {fileID: 4757192991515288616}
   - {fileID: 4694798396479246247}
+  _playerLevel: {fileID: 0}
 --- !u!1 &2273518596400612472 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 55352152595992689, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -22209,6 +22252,7 @@ MonoBehaviour:
   - {fileID: 4686717087961082604}
   - {fileID: 724657972283370716}
   - {fileID: 661245194852484947}
+  _playerLevel: {fileID: 0}
 --- !u!1001 &2339476722665280753
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22540,6 +22584,7 @@ MonoBehaviour:
   - {fileID: 3764797705238309709}
   - {fileID: 9167973533338955133}
   - {fileID: 8942065064465057522}
+  _playerLevel: {fileID: 0}
 --- !u!4 &3605062120583197731 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1260301753116307657, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -22616,6 +22661,7 @@ MonoBehaviour:
   - {fileID: 8906057161000097418}
   - {fileID: 3502880249422188730}
   - {fileID: 3728712834814425909}
+  _playerLevel: {fileID: 0}
 --- !u!4 &8462329779038907834 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199909918054394192, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -22863,6 +22909,7 @@ MonoBehaviour:
   - {fileID: 980860614110428568}
   - {fileID: 5086999681914878888}
   - {fileID: 5024628314061967399}
+  _playerLevel: {fileID: 0}
 --- !u!4 &3862717830143173637 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1260301753116307657, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -22939,6 +22986,7 @@ MonoBehaviour:
   - {fileID: 3662187505698445041}
   - {fileID: 8779385840098939073}
   - {fileID: 8860009274885421902}
+  _playerLevel: {fileID: 0}
 --- !u!4 &8281237468657843612 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199909918054394192, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -28167,6 +28215,7 @@ MonoBehaviour:
   - {fileID: 5251734349105737074}
   - {fileID: 280903621071907650}
   - {fileID: 55819785918447821}
+  _playerLevel: {fileID: 0}
 --- !u!1 &4132092688543904439 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 55352152595992689, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -28256,6 +28305,7 @@ MonoBehaviour:
   - {fileID: 282377456098144283}
   - {fileID: 5255458902387488299}
   - {fileID: 5461902697890274724}
+  _playerLevel: {fileID: 0}
 --- !u!1001 &4284673520367847056
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29332,6 +29382,7 @@ MonoBehaviour:
   - {fileID: 1585465695156777258}
   - {fileID: 6702662930813794074}
   - {fileID: 6784413328812973205}
+  _playerLevel: {fileID: 0}
 --- !u!4 &6592132183218929546 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1801610095069186880, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -30490,6 +30541,7 @@ MonoBehaviour:
   - {fileID: 2095487015495080962}
   - {fileID: 6201661869240982066}
   - {fileID: 6139265057734177213}
+  _playerLevel: {fileID: 0}
 --- !u!4 &5790259312522796894 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1801610095069186880, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -35798,6 +35850,7 @@ MonoBehaviour:
   - {fileID: 8913281369038236666}
   - {fileID: 3510070904977042890}
   - {fileID: 3717142540912166469}
+  _playerLevel: {fileID: 0}
 --- !u!4 &3860055763984160437 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199909918054394192, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -35887,6 +35940,7 @@ MonoBehaviour:
   - {fileID: 2989405214588404816}
   - {fileID: 7095580635297251936}
   - {fileID: 7015244172777990639}
+  _playerLevel: {fileID: 0}
 --- !u!4 &8279393718859501356 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1260301753116307657, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -37643,6 +37697,7 @@ MonoBehaviour:
   - {fileID: 65695095078507949}
   - {fileID: 5471158441350615965}
   - {fileID: 5246343969097545746}
+  _playerLevel: {fileID: 0}
 --- !u!4 &7129971530545128016 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1260301753116307657, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -37737,6 +37792,7 @@ MonoBehaviour:
   - {fileID: 5687803918146327966}
   - {fileID: 426490995892900782}
   - {fileID: 488786637298235425}
+  _playerLevel: {fileID: 0}
 --- !u!1001 &8425935298318266947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38051,6 +38107,7 @@ MonoBehaviour:
   - {fileID: 4333860630608624025}
   - {fileID: 8584115435472732073}
   - {fileID: 8359613381288367142}
+  _playerLevel: {fileID: 0}
 --- !u!4 &7247751299422194777 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1260301753116307657, guid: c075bdb7a969ba34baf8d1c7e3fe6775, type: 3}
@@ -38145,6 +38202,7 @@ MonoBehaviour:
   - {fileID: 8653778372778915553}
   - {fileID: 3682947644978065617}
   - {fileID: 3476711605633309534}
+  _playerLevel: {fileID: 0}
 --- !u!1001 &8682492043866807456
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,0 +1,15 @@
+using RestaurantContent.CashRegisterContent;
+using UnityEngine;
+
+namespace UI.Buttons
+{
+    public class AcceptCashRegisterOrderButton : AbstractButton
+    {
+        [SerializeField] private CashRegister _cashRegister;
+        
+        public override void OnClick()
+        {
+            _cashRegister.AcceptOrder();
+        }
+    }
+}
