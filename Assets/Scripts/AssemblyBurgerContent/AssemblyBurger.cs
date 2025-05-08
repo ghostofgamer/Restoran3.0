@@ -210,6 +210,7 @@ namespace AssemblyBurgerContent
             }
 
             _ingredientStack.Push((item, itemContainer));
+            Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
             StackChanged?.Invoke();
         }
 
@@ -223,7 +224,7 @@ namespace AssemblyBurgerContent
             if (_ingredientStack.Count > 0)
             {
                 var (lastItem, container) = _ingredientStack.Pop();
-
+                Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
                 StackChanged?.Invoke();
 
                 if (container != null)
@@ -381,6 +382,7 @@ namespace AssemblyBurgerContent
                     while (_ingredientStack.Count > 0)
                     {
                         var (lastItem, container) = _ingredientStack.Pop();
+                        Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
                         lastItem.gameObject.SetActive(false);
                     }
 
@@ -418,6 +420,7 @@ namespace AssemblyBurgerContent
                         while (_ingredientStack.Count > 0)
                         {
                             var (lastItem, container) = _ingredientStack.Pop();
+                            Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
                             lastItem.gameObject.SetActive(false);
 
                             // Destroy(lastItem.gameObject);

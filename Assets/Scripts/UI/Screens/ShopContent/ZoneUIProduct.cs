@@ -1,4 +1,5 @@
 using System;
+using Enums;
 using RestaurantContent;
 using TMPro;
 using Unity.AI.Navigation;
@@ -26,6 +27,7 @@ namespace UI.Screens.ShopContent
         [SerializeField] private Color _activeButtonColor;
         [SerializeField] private Color _notActiveButtonColor;
         [SerializeField] private Image _buyButtonImage;
+        [SerializeField] private ZoneType _zoneType;
         
         private DollarValue _dollarValue;
 
@@ -60,7 +62,7 @@ namespace UI.Screens.ShopContent
 
         public bool IsBuyed()
         {
-            return PlayerPrefs.GetInt("Zona" + _levelOpened, 0) > 0;
+            return PlayerPrefs.GetInt("Zona" + _zoneType, 0) > 0;
         }
 
         public void Buy()
@@ -77,7 +79,7 @@ namespace UI.Screens.ShopContent
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);
             // _wallZone.gameObject.SetActive(false);
-            PlayerPrefs.SetInt("Zona" + _levelOpened, 1);
+            PlayerPrefs.SetInt("Zona" + _zoneType, 1);
             _shopScreen.CloseScreen();
             _zoneWall.Activate();
         }
