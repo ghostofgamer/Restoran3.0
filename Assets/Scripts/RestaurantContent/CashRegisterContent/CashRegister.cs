@@ -132,6 +132,7 @@ namespace RestaurantContent.CashRegisterContent
             {
                 int lastChange = _changeHistory.Pop();
                 int total = _currentGivingValue.ToTotalCents() - lastChange;
+                
                 if (total < 0)
                     total = 0;
 
