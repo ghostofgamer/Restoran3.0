@@ -65,9 +65,15 @@ namespace AssemblyBurgerContent
                         if (selectedContainer.IsAdditionalItemsContainer)
                         {
                             int[] activeItems = selectedContainer.GetActivePositions();
-
+                            
                             if (_ingredientStack.Count > 0)
                             {
+                                if (activeItems[0] <= 0)
+                                {
+                                    Debug.Log("булочек не хватает");
+                                    return;
+                                }
+                                
                                 Debug.Log("selectedContainer.CurrentItemsType[0] " +
                                           selectedContainer.CurrentItemsType[0]);
                                 HandleContainerSelection(selectedContainer.CurrentItemsType[0], selectedContainer,
@@ -75,16 +81,17 @@ namespace AssemblyBurgerContent
                             }
                             else
                             {
+                                if (activeItems[1] <= 0)
+                                {
+                                    Debug.Log("булочек не хватает");
+                                    return;
+                                }
+                                
                                 Debug.Log("selectedContainer.CurrentItemsType[1] " +
                                           selectedContainer.CurrentItemsType[1]);
                                 HandleContainerSelection(selectedContainer.CurrentItemsType[1], selectedContainer,
                                     1, true);
                             }
-
-                            /*for (int i = 0; i < activeItems.Length; i++)
-                            {
-                                Debug.Log("Active count in sub-array " + i + ": " + activeItems[i]);
-                            }*/
                         }
                         else
                         {
@@ -107,16 +114,29 @@ namespace AssemblyBurgerContent
                              selectedContainer.CurrentItemContainer == ItemType.PackageBurgerPaper)
                     {
                         Debug.Log("пробуем собрать бургер по рецепту");
-                        ItemType burgerType = GetMatchingRecipe();
 
-                        if (burgerType != ItemType.Empty)
+                        int activePackageBurgerPaper = selectedContainer.GetActiveItemsValue();
+
+                        if (activePackageBurgerPaper <= 0)
                         {
-                            CreateBurger(burgerType);
-                            Debug.Log("Бургер " + burgerType);
+                            Debug.Log("упаковок нету уже");
                         }
                         else
                         {
-                            Debug.Log("Не правильная сборка Бургер ");
+                            Debug.Log("упаковок осталось " + activePackageBurgerPaper);
+
+                            ItemType burgerType = GetMatchingRecipe();
+
+                            if (burgerType != ItemType.Empty)
+                            {
+                                CreateBurger(burgerType,selectedContainer);
+                                Debug.Log("Бургер " + burgerType);
+                                // selectedContainer.DeactivateItems(1);
+                            }
+                            else
+                            {
+                                Debug.Log("Не правильная сборка Бургер ");
+                            }
                         }
                     }
 
@@ -314,7 +334,7 @@ namespace AssemblyBurgerContent
             return ItemType.Empty;
         }
 
-        private void CreateBurger(ItemType burgerType)
+        private void CreateBurger(ItemType burgerType,ItemContainer containerPackageBurger)
         {
             GameObject burgerPrefab =
                 _burgerPrefabPairs.FirstOrDefault(pair => pair.BurgerType == burgerType)?.BurgerPrefab;
@@ -334,8 +354,10 @@ namespace AssemblyBurgerContent
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                     burgerInstance.transform.rotation = Quaternion.identity;
                     
-                    _playerLevel.AddExp(5);
+                    containerPackageBurger.DeactivateItems(1);
                     
+                    _playerLevel.AddExp(5);
+
                     /*GameObject burgerInstance =
                         Instantiate(burgerPrefab, _burgerBoard.CenterPosition.position, Quaternion.identity);*/
 
@@ -397,10 +419,12 @@ namespace AssemblyBurgerContent
                         burgerInstance.gameObject.SetActive(true);
                         burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                         burgerInstance.transform.rotation = Quaternion.identity;
-
+                        
+                        containerPackageBurger.DeactivateItems(1);
+                        
                         _restaurant.SetBurgerOrder(tray, burgerInstance);
                         _playerLevel.AddExp(5);
-                        
+
                         Sequence sequence = DOTween.Sequence();
                         Debug.Log("TRUE");
                         Transform position = tray.GetFirstAvailablePosition();

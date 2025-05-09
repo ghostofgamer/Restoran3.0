@@ -86,6 +86,7 @@ MonoBehaviour:
   _animator: {fileID: 7967681750066945927}
   _cashRegister: {fileID: 0}
   _trayPositionHand: {fileID: 3551600111525794883}
+  _clientCollider: {fileID: 3464684361244005113}
 --- !u!195 &2878373742009272604
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -115,7 +116,7 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7899829959184802057}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Shape: 0
   m_Extents: {x: 0.5, y: 2.5, z: 0.5}
@@ -168,7 +169,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 5

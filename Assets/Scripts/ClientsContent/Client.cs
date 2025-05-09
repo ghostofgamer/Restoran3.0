@@ -19,7 +19,8 @@ namespace ClientsContent
         [SerializeField] private Animator _animator;
         [SerializeField] private CashRegister _cashRegister;
         [SerializeField] private Transform _trayPositionHand;
-
+        [SerializeField] private Collider _clientCollider;
+        
         private PriceOrderCounter _priceOrderCounter;
         private Restaurant _restaurant;
         private Action<Client> _reachAction;
@@ -71,7 +72,7 @@ namespace ClientsContent
         public void GoToQueuePosition(Vector3 position, int index)
         {
             _navMeshAgent.enabled = true;
-            _meshObstacle.enabled = true;
+            // _meshObstacle.enabled = true;
 
             if (index == 0)
             {
@@ -84,7 +85,7 @@ namespace ClientsContent
                     Debug.Log("Дошел до кассы");
                     _cashRegister.SetClient(this);
                     _navMeshAgent.enabled = false;
-                    _meshObstacle.enabled = false;
+                    // _meshObstacle.enabled = false;
                 });
             }
             else
@@ -92,7 +93,7 @@ namespace ClientsContent
                 SetDestination(position, () =>
                 {
                     _navMeshAgent.enabled = false;
-                    _meshObstacle.enabled = false;
+                    // _meshObstacle.enabled = false;
                 });
             }
         }
@@ -209,7 +210,7 @@ namespace ClientsContent
             Debug.Log("Paid");
             _currentState = ClientState.WaitingForOrder;
             _navMeshAgent.enabled = true;
-            _meshObstacle.enabled = true;
+            // _meshObstacle.enabled = true;
 
             /*if (_coroutine != null)
                 StopCoroutine(_coroutine);
@@ -259,8 +260,9 @@ namespace ClientsContent
 
         private IEnumerator MoveToPosition(Vector3 position, System.Action callback)
         {
-            _meshObstacle.enabled = false;
-
+            // _meshObstacle.enabled = false;
+            // _clientCollider.enabled = false;
+            
             if (!_navMeshAgent.enabled)
             {
                 _navMeshAgent.enabled = true;
@@ -281,14 +283,14 @@ namespace ClientsContent
             while (_navMeshAgent.remainingDistance > 0.1f)
                 yield return null;
 
-            _meshObstacle.enabled = true;
+            // _meshObstacle.enabled = true;
+            // _clientCollider.enabled = true;
             Debug.Log("Завершил идти ");
 
             _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", false);
             callback.Invoke();
         }
-
-
+        
         public bool CanInteractWithCashier()
         {
             return _currentState == ClientState.AtCashier;

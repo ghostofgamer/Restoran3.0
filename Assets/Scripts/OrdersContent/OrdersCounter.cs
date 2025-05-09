@@ -31,6 +31,8 @@ namespace OrdersContent
         
         public event Action<List<Order>> OrdersChanged;
 
+        public event Action<int> UpdateOrders;
+
         public List<Order> CurrentOrders => _currentOrders;
         
 
@@ -90,7 +92,11 @@ namespace OrdersContent
                 {
                     Debug.Log(" Не анходит клиента  которого заказ! ");
                 }
+                
+                Debug.Log("_currentOrders " + _currentOrders.Count);
+                UpdateOrders?.Invoke(_currentOrders.Count);
                 OrdersChanged?.Invoke(_currentOrders);
+                Debug.Log("FFF ");
                 // TryActivateOrder();
             }
             else

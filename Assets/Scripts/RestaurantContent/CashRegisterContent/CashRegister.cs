@@ -63,11 +63,22 @@ namespace RestaurantContent.CashRegisterContent
 
             if (_currentClient == null)
                 return;
+            
+            
+            CashRegisterOrderCompleted?.Invoke();
+            _currentClient.Paid();
+            _wallet.Add(_currentClient.PriceOrder);
+            Client client = _currentClient;
+            _currentClient = null;
+            SetCanvasActive(_currentClient != null);
+            _restaurant.AcceptOrder(client.Order, client);
+            
+            
 
-            CashRegisterAssemblyBeginig?.Invoke();
+            /*CashRegisterAssemblyBeginig?.Invoke();
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
             _currentGivingValue = new DollarValue(0, 0);
-            _cashRegisterViewer.Init(_currentClient, _currentGivingValue);
+            _cashRegisterViewer.Init(_currentClient, _currentGivingValue);*/
         }
 
         public void SetCanvasActive(bool value)
