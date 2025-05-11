@@ -1,16 +1,16 @@
-using System;
 using Enums;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
+using UnityEngine.Serialization;
 using Image = UnityEngine.UI.Image;
 
 namespace WorkerContent
 {
     public abstract class Worker : MonoBehaviour
     {
-        [SerializeField] private Animator _animator;
+        [SerializeField] protected WorkerTimerViewer WorkerTimerViewer;
+        [SerializeField] protected Animator Animator;
         [SerializeField] private NavMeshAgent _agent;
         [SerializeField] private float _stoppingDistance = 1f;
         [SerializeField] private float _delayWork;
@@ -21,25 +21,21 @@ namespace WorkerContent
         [SerializeField] private Image _workStateImage;
         [SerializeField] private Image _radialFillImage;
         [SerializeField] private WorkerType _workerType;
-        
-        
-        
-        [SerializeField]private Transform _relaxPosition;
-        
+
+        [SerializeField] protected Transform RelaxPosition;
+
         protected WorkerState WorkerState;
-        private float _elapsedTime;
+        protected float ElapsedTime;
 
+        public float DelayRelax => _delayRelax;
+        public float DelayWork => _delayWork;
         public WorkerType WorkerType => _workerType;
+        public NavMeshAgent Agent => _agent;
 
-        private void Update()
+        public virtual void Activate()
         {
-            
-        }
-
-        public void Activate()
-        {
-            WorkerState = WorkerState.Work;
-            transform.position = _relaxPosition.position;
+            ElapsedTime = _delayWork;
+            transform.position = RelaxPosition.position;
             gameObject.SetActive(true);
         }
 

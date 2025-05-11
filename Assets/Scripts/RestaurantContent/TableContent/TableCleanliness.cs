@@ -13,23 +13,25 @@ namespace RestaurantContent.TableContent
         [SerializeField] private GarbagePackage[] _garbagePackages;
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private Transform _cleanerPosition;
+        [SerializeField] private Transform  _lookDirtyPosition;
         
         private int _maxPollutionLevel = 3;
-        private int _pollutionLevel;
 
         public event Action<TableCleanliness> TablePolluted;
         public event Action<TableCleanliness> TableCleaned;
         
+        public int PollutionLevel { get; private set; }
         public Transform CleanerPosition => _cleanerPosition;
-        
+        public Transform LookDirtyPosition => _lookDirtyPosition;
+
         [ContextMenu("PolluteTable")]
         public void PolluteTable()
         {
             if (_garbagePackages.Length <= 0) return;
 
-            if (_pollutionLevel >= _maxPollutionLevel) return;
+            if (PollutionLevel >= _maxPollutionLevel) return;
             
-            _pollutionLevel++;
+            PollutionLevel++;
             // _dirtyCounter.AddDirtyTable(this);
             TablePolluted?.Invoke(this);
             
@@ -60,21 +62,21 @@ namespace RestaurantContent.TableContent
         
         public void DecreasePollutionLevel()
         {
-            if (_pollutionLevel <= 0) return;
+            if (PollutionLevel <= 0) return;
 
-            _pollutionLevel--;
+            PollutionLevel--;
             _playerLevel.AddExp(5);
             
-            if (_pollutionLevel == 0)
+            if (PollutionLevel == 0)
                 TableCleaned?.Invoke(this);
             
-            Debug.Log("Decreased pollution level: " + _pollutionLevel);
+            Debug.Log("Decreased pollution level: " + PollutionLevel);
         }
 
         public void ClearTable()
         {
-            if (_pollutionLevel <= 0) return;
-            _pollutionLevel = 0;
+            if (PollutionLevel <= 0) return;
+            PollutionLevel = 0;
             DeactivateGarbages();
             
             TableCleaned?.Invoke(this);
