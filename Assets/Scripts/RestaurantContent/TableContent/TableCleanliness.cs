@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GarbageContent;
@@ -11,20 +12,27 @@ namespace RestaurantContent.TableContent
     {
         [SerializeField] private GarbagePackage[] _garbagePackages;
         [SerializeField] private PlayerLevel _playerLevel;
+        [SerializeField] private Transform _cleanerPosition;
         
         private int _maxPollutionLevel = 3;
         private int _pollutionLevel;
+
+        public event Action<TableCleanliness> TablePolluted;
+        public event Action<TableCleanliness> TableCleaned;
         
+        public Transform CleanerPosition => _cleanerPosition;
+        
+        [ContextMenu("PolluteTable")]
         public void PolluteTable()
         {
             if (_garbagePackages.Length <= 0) return;
 
             if (_pollutionLevel >= _maxPollutionLevel) return;
+            
             _pollutionLevel++;
-
-            //это для уборщика список столов мусорных
-            // _allBuyerPlaces.AddDirtyBuyerPlace(this);
-
+            // _dirtyCounter.AddDirtyTable(this);
+            TablePolluted?.Invoke(this);
+            
             Random random = new Random();
             List<GarbagePackage> garbagesTable = _garbagePackages.Where(t => !t.IsActive).ToList();
 
@@ -56,8 +64,9 @@ namespace RestaurantContent.TableContent
 
             _pollutionLevel--;
             _playerLevel.AddExp(5);
-            /*if (_pollutionLevel == 0)
-                _allBuyerPlaces.RemoveDirtyBuyerPlace(this);*/
+            
+            if (_pollutionLevel == 0)
+                TableCleaned?.Invoke(this);
             
             Debug.Log("Decreased pollution level: " + _pollutionLevel);
         }
@@ -68,7 +77,7 @@ namespace RestaurantContent.TableContent
             _pollutionLevel = 0;
             DeactivateGarbages();
             
-            // _allBuyerPlaces.RemoveDirtyBuyerPlace(this);
+            TableCleaned?.Invoke(this);
         }
 
         private void DeactivateGarbages()

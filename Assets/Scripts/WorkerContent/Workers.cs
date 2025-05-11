@@ -31,28 +31,36 @@ namespace WorkerContent
 
         private void Start()
         {
-            Debug.Log("Уборщирк " + PlayerPrefs.GetInt(Worker + WorkerType.Cleaner, 0));
+            Debug.Log("работник " + PlayerPrefs.GetInt(Worker + WorkerType.Cleaner, 0));
 
             foreach (var worker in _workers)
                 worker.gameObject.SetActive(PlayerPrefs.GetInt(Worker + worker.WorkerType, 0) > 0);
         }
 
+        public Worker GetCleaner(WorkerType type)
+        {
+            var worker = System.Array.Find(_workers, w => w.WorkerType == type);
+
+            if (worker != null && worker.gameObject.activeSelf)
+                return worker;
+            else
+                return null;
+        }
+
         private void ActivateWorker(WorkerType type)
         {
-            Debug.Log("Купили работника себе " + type);
             var worker = System.Array.Find(_workers, w => w.WorkerType == type);
 
             if (worker != null)
-                worker.gameObject.SetActive(true);
+                worker.Activate();
         }
 
         private void DeactivateWorker(WorkerType type)
         {
-            Debug.Log("Продали работника себе " );
             var worker = System.Array.Find(_workers, w => w.WorkerType == type);
 
             if (worker != null)
-                worker.gameObject.SetActive(false);
+                worker.Deactivate();
         }
     }
 }

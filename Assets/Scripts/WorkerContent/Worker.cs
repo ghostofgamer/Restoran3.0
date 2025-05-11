@@ -1,12 +1,14 @@
+using System;
 using Enums;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 namespace WorkerContent
 {
-    public class Worker : MonoBehaviour
+    public abstract class Worker : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
         [SerializeField] private NavMeshAgent _agent;
@@ -20,9 +22,32 @@ namespace WorkerContent
         [SerializeField] private Image _radialFillImage;
         [SerializeField] private WorkerType _workerType;
         
-        private WorkerState _workerState;
+        
+        
+        [SerializeField]private Transform _relaxPosition;
+        
+        protected WorkerState WorkerState;
         private float _elapsedTime;
 
         public WorkerType WorkerType => _workerType;
+
+        private void Update()
+        {
+            
+        }
+
+        public void Activate()
+        {
+            WorkerState = WorkerState.Work;
+            transform.position = _relaxPosition.position;
+            gameObject.SetActive(true);
+        }
+
+        public void Deactivate()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public abstract void Work();
     }
 }
