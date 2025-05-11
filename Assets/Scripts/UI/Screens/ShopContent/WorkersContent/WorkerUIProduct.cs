@@ -19,14 +19,14 @@ namespace UI.Screens.ShopContent.WorkersContent
         [SerializeField] private GameObject _hireButton;
         [SerializeField] private GameObject _dismissButton;
         [SerializeField] private GameObject _requiredContent;
-
-        private bool isOwned;
-
+        
         public event Action<DollarValue, DollarValue> ValueChanged;
+        public event Action<WorkerType> WorkerBuyed;
+        public event Action<WorkerType> WorkerFired;
 
+        public bool IsOwned { get;private set; }
         public DollarValue Price { get; private set; }
         public DollarValue Salary { get; private set; }
-
         public WorkerType WorkerType => _workerType;
 
         private void Start()
@@ -37,7 +37,7 @@ namespace UI.Screens.ShopContent.WorkersContent
                 return;
             }
 
-            isOwned = PlayerPrefs.GetInt(Worker + _workerType, 0) > 0;
+            IsOwned = PlayerPrefs.GetInt(Worker + _workerType, 0) > 0;
             SetValue();
         }
 
@@ -58,7 +58,7 @@ namespace UI.Screens.ShopContent.WorkersContent
             }
             else
             {
-                isOwned = PlayerPrefs.GetInt(Worker + _workerType, 0) > 0;
+                IsOwned = PlayerPrefs.GetInt(Worker + _workerType, 0) > 0;
                 SetValue();
             }
         }
@@ -69,9 +69,10 @@ namespace UI.Screens.ShopContent.WorkersContent
             {
                 Debug.Log("недостаточно денег");
             }
-
+            
+            WorkerBuyed?.Invoke(_workerType);
             _wallet.Subtract(Price);
-            isOwned = true;
+            IsOwned = true;
             PlayerPrefs.SetInt(Worker + _workerType, 1);
             SetValue();
         }
@@ -79,15 +80,16 @@ namespace UI.Screens.ShopContent.WorkersContent
         private void SetValue()
         {
             _requiredContent.SetActive(false);
-            PayContent.SetActive(!isOwned);
-            UpdateContent.SetActive(isOwned);
-            _hireButton.SetActive(!isOwned);
-            _dismissButton.SetActive(isOwned);
+            PayContent.SetActive(!IsOwned);
+            UpdateContent.SetActive(IsOwned);
+            _hireButton.SetActive(!IsOwned);
+            _dismissButton.SetActive(IsOwned);
         }
 
         public void DismissWorker()
         {
-            isOwned = false;
+            WorkerFired?.Invoke(_workerType);
+            IsOwned = false;
             PlayerPrefs.SetInt(Worker + _workerType, 0);
             SetValue();
         }
