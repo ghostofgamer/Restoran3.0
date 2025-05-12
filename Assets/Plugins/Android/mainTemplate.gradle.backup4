@@ -5,6 +5,7 @@ apply from: '../shared/keepUnitySymbols.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
+    implementation 'com.applovin.mediation:google-adapter:[24.2.0.1]' // Packages/com.applovin.mediation.adapters.google.android/Editor/Dependencies.xml:4
     implementation 'com.applovin.mediation:google-ad-manager-adapter:[24.2.0.0]' // Packages/com.applovin.mediation.adapters.googleadmanager.android/Editor/Dependencies.xml:4
     implementation 'com.applovin:applovin-sdk:13.2.0' // Packages/com.applovin.mediation.ads/AppLovin/Editor/Dependencies.xml:4
 // Android Resolver Dependencies End
@@ -12,7 +13,7 @@ dependencies {
 
 // Android Resolver Exclusions Start
 android {
-  packaging {
+  packagingOptions {
       exclude ('/lib/armeabi/*' + '*')
       exclude ('/lib/mips/*' + '*')
       exclude ('/lib/mips64/*' + '*')

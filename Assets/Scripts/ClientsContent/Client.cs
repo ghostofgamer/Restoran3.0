@@ -262,6 +262,7 @@ namespace ClientsContent
         {
             // _meshObstacle.enabled = false;
             // _clientCollider.enabled = false;
+            _meshObstacle.enabled = true;
             
             if (!_navMeshAgent.enabled)
             {
@@ -283,6 +284,7 @@ namespace ClientsContent
             while (_navMeshAgent.remainingDistance > 0.1f)
                 yield return null;
 
+            _meshObstacle.enabled = false;
             // _meshObstacle.enabled = true;
             // _clientCollider.enabled = true;
             Debug.Log("Завершил идти ");

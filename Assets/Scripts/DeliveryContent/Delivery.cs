@@ -35,30 +35,6 @@ namespace DeliveryContent
             _deliverySaver.LoadDeliveryData();
         }
 
-        /*private void OnApplicationFocus(bool hasFocus)
-        {
-            if (hasFocus)
-            {
-                LoadDeliveryData();
-                ProcessMissedDeliveries();
-                Debug.Log("Приложение развернуто, обновляем данные "  + _remainingTimeForNextSpawn);
-
-                if (_items.Count > 0 && !_isSpawning)
-                    SpawnItems();
-            }
-            else
-            {
-                Debug.Log("Приложение свернуто, сохраняем данные" +  _deliveryViewer.CurrentTimer);
-                SaveLastExitTime();
-                SaveDeliveryData();
-
-                _isSpawning = false;
-
-                if(_coroutine!=null)
-                    StopCoroutine(_coroutine);
-            }
-        }*/
-
         private void Update()
         {
             if (_isSpawning && _items.Count > 0)
@@ -148,6 +124,30 @@ namespace DeliveryContent
             }
         }
 
+        public void SpawnAllItems()
+        {
+            _isSpawning = false;
+
+            while (_items.Count > 0)
+            {
+                var item = _items[0];
+                GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
+
+                if (prefab != null)
+                    Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+
+                item.Amount--;
+
+                UpdateAmountDeliveries();
+
+                if (item.Amount <= 0)
+                    _items.RemoveAt(0);
+            }
+
+            RemainingTime = 0;
+            TimeChanged?.Invoke(RemainingTime);
+        }
+        
         public void AddItemsCart(List<ItemCart> items)
         {
             foreach (var item in items)

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,13 +7,18 @@ namespace ADSContent
     public class ADS : MonoBehaviour
     {
         [SerializeField] private Image _image;
+        [SerializeField] private Image _imageOther;
         
-        public const string SDKKey =
-            "nR3VEu5EEJlq6OmqwXd1lMKHQhg3sEumJpdTgplZ-csu1yq6zIkU1auq9P1sOOoIVLg9tOWSXDaUfRvC9Uv-Ib";
-
-        public const string InterstitialKey = "11c573e3a7a6e870";
-        public const string RewardedKey = "a060c7a9e9833183";
-        public const string BannerKey = "727de43b01103410";
+        public string SDKKey = "nR3VEu5EEJlq6OmqwXd1lMKHQhg3sEumJpdTgplZ-csu1yq6zIkU1auq9P1sOOoIVLg9tOWSXDaUfRvC9Uv-Ib";
+        public string InterstitialKey ;
+        public string RewardedKey ;
+        public string BannerKey ;
+        private bool isInitialized = false;
+        
+        public delegate void RewardCallback();
+        private RewardCallback currentRewardCallback;
+        
+        public event Action _interHidden;
 
         private void Start()
         {
@@ -25,11 +31,20 @@ namespace ADSContent
             {
                 // AppLovin SDK is initialized, start loading ads
                 Debug.Log("AppLovin successfully initialized");
+                _imageOther.color = Color.green;
+                isInitialized = true;
             };
-
+            
             MaxSdk.SetSdkKey(SDKKey);
             MaxSdk.InitializeSdk();
-            InitializeBannerAds();
+
+            
+            if (!isInitialized)
+            {
+                Debug.LogError("AppLovin initialization timed out");
+                _imageOther.color = Color.red;
+            }
+            
             InitializeInterstitialAds();
             InitializeRewardedAds();
         }
@@ -43,7 +58,7 @@ namespace ADSContent
             MaxSdkCallbacks.Interstitial.OnAdClickedEvent += OnInterstitialClickedEvent;
             MaxSdkCallbacks.Interstitial.OnAdHiddenEvent += OnInterstitialHiddenEvent;
             MaxSdkCallbacks.Interstitial.OnAdDisplayFailedEvent += OnInterstitialAdFailedToDisplayEvent;
-
+            
             // Load the first interstitial
             LoadInterstitial();
         }
@@ -79,6 +94,7 @@ namespace ADSContent
 
         private void OnInterstitialHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            _interHidden?.Invoke();
             // Interstitial ad is hidden. Pre-load the next ad.
             LoadInterstitial();
         }
@@ -87,7 +103,13 @@ namespace ADSContent
         {
             if (MaxSdk.IsInterstitialReady(InterstitialKey))
             {
+                _image.color = Color.green;
                 MaxSdk.ShowInterstitial(InterstitialKey);
+            }
+            else
+            {
+                _image.color = Color.red;
+                LoadInterstitial();
             }
         }
 
@@ -115,7 +137,7 @@ namespace ADSContent
 
         private void OnRewardedAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
-            _image.color = Color.grey+Color.white;
+            _image.color = Color.grey + Color.white;
             Debug.Log("OnRewardedAdLoadedEvent");
             //
         }
@@ -144,7 +166,6 @@ namespace ADSContent
 
         private void OnRewardedAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
-            
             _image.color = Color.gray;
             Debug.Log("OnRewardedAdClickedEvent");
         }
@@ -161,6 +182,12 @@ namespace ADSContent
         {
             _image.color = Color.black;
             Debug.Log("OnRewardedAdReceivedRewardEvent");
+            
+            if (currentRewardCallback != null)
+            {
+                currentRewardCallback();
+                currentRewardCallback = null; //// Вызываем делегат
+            }
             // The rewarded ad displayed and the user should receive the reward.
         }
 
@@ -171,10 +198,11 @@ namespace ADSContent
             // Ad revenue paid. Use this callback to track user revenue.
         }
 
-        public void ShowRewarded()
+        public void ShowRewarded(RewardCallback rewardCallback)
         {
             if (MaxSdk.IsRewardedAdReady(RewardedKey))
             {
+                currentRewardCallback = rewardCallback; 
                 _image.color = Color.yellow;
                 MaxSdk.ShowRewardedAd(RewardedKey);
             }
@@ -183,8 +211,8 @@ namespace ADSContent
                 _image.color = Color.cyan;
             }
         }
-        
-        
+
+
         public void InitializeBannerAds()
         {
             // Banners are automatically sized to 320×50 on phones and 728×90 on tablets
@@ -194,31 +222,43 @@ namespace ADSContent
             // Set background color for banners to be fully functional
             MaxSdk.SetBannerBackgroundColor(BannerKey, Color.clear);
 
-            MaxSdkCallbacks.Banner.OnAdLoadedEvent      += OnBannerAdLoadedEvent;
-            MaxSdkCallbacks.Banner.OnAdLoadFailedEvent  += OnBannerAdLoadFailedEvent;
-            MaxSdkCallbacks.Banner.OnAdClickedEvent     += OnBannerAdClickedEvent;
+            MaxSdkCallbacks.Banner.OnAdLoadedEvent += OnBannerAdLoadedEvent;
+            MaxSdkCallbacks.Banner.OnAdLoadFailedEvent += OnBannerAdLoadFailedEvent;
+            MaxSdkCallbacks.Banner.OnAdClickedEvent += OnBannerAdClickedEvent;
             MaxSdkCallbacks.Banner.OnAdRevenuePaidEvent += OnBannerAdRevenuePaidEvent;
-            MaxSdkCallbacks.Banner.OnAdExpandedEvent    += OnBannerAdExpandedEvent;
-            MaxSdkCallbacks.Banner.OnAdCollapsedEvent   += OnBannerAdCollapsedEvent;
+            MaxSdkCallbacks.Banner.OnAdExpandedEvent += OnBannerAdExpandedEvent;
+            MaxSdkCallbacks.Banner.OnAdCollapsedEvent += OnBannerAdCollapsedEvent;
         }
 
-        private void OnBannerAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) {}
+        private void OnBannerAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        {
+        }
 
-        private void OnBannerAdLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo) {}
+        private void OnBannerAdLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo)
+        {
+        }
 
-        private void OnBannerAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) {}
+        private void OnBannerAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        {
+        }
 
-        private void OnBannerAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) {}
+        private void OnBannerAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        {
+        }
 
-        private void OnBannerAdExpandedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)  {}
+        private void OnBannerAdExpandedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        {
+        }
 
-        private void OnBannerAdCollapsedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) {}
+        private void OnBannerAdCollapsedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        {
+        }
 
         public void ShowBanner()
         {
             MaxSdk.ShowBanner(BannerKey);
         }
-        
+
         public void HideBanner()
         {
             MaxSdk.HideBanner(BannerKey);
