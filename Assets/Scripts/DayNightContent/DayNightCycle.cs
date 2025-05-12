@@ -27,7 +27,8 @@ namespace DayNightContent
         // [SerializeField] private BuyersCounter _buyersCounter;
         [SerializeField]private Light sceneLight;
 
-        private TMP_Text _timeText;
+        [SerializeField] private TMP_Text _timeText;
+        
         public float minExposure = 0.5f;
         public float maxExposure = 1.65f;
         private float timeOfDay;
@@ -44,6 +45,9 @@ namespace DayNightContent
         
         private void Start()
         {
+            _isDay = true;
+            _isNight = !_isDay;
+            
             /*_isDay = PlayerPrefs.GetInt(IS_DAY_KEY, 1) == 1;
             Debug.Log("_isDay" + _isDay);
             // _isNight = PlayerPrefs.GetInt(IS_NIGHT_KEY, 0) == 1;
@@ -55,14 +59,7 @@ namespace DayNightContent
                 timeOfDay = (START_HOUR - 9f) / (END_HOUR - 9f);
 
             RenderSettings.skybox = skyboxMaterial;
-            // GameObject lightObject = GameObject.Find("Light");
-
-            /*if (lightObject != null)
-                sceneLight = lightObject.GetComponent<Light>();
-            else
-                Debug.LogError("SceneLight not found in the scene.");*/
-
-
+            
             if (!_isDay && !_isStatisticDayOpened)
             {
                 DayOverCompleted?.Invoke();
@@ -114,6 +111,8 @@ namespace DayNightContent
 
         public void ResetDay()
         {
+            timeOfDay = 0f;
+            Debug.Log("новый день" );
             _isDay = true;
             _isNight = false;
             SetDayTime();
@@ -122,11 +121,6 @@ namespace DayNightContent
         public void SetOpenValue(bool value)
         {
             _isOpen = value;
-        }
-
-        public void InitTimeText(TMP_Text timeText)
-        {
-            _timeText = timeText;
         }
 
         private void UpdateSkyboxColor(Color currentTintColor, Color targetTintColor, float duration,
@@ -194,11 +188,13 @@ Debug.Log("Time "+ _timeText);
             {
                 if (isNight)
                 {
+                    Debug.Log("DayOverCompleted " );
                     DayOverCompleted?.Invoke();
                     _isDay = isDay;
                 }
                 else
                 {
+                    Debug.Log(" _isDay = isDay; " );
                     timeOfDay = 0;
                     _isDay = isDay;
                     _isNight = isNight;
@@ -206,14 +202,14 @@ Debug.Log("Time "+ _timeText);
             }
         }
 
-        public void StartNewDay()
+        /*public void StartNewDay()
         {
             timeOfDay = 0f;
             _isDay = false;
             _isNight = true;
             _isStatisticDayOpened = true;
             NewDayStarted?.Invoke();
-        }
+        }*/
 
         /*private void OnApplicationQuit()
         {

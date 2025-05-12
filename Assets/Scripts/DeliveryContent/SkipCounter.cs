@@ -14,8 +14,12 @@ namespace DeliveryContent
             Debug.Log("OnEnableDelivery");
             _skipFreeButton.SetActive(_isFirstSkip);
             _skipAdButton.SetActive(!_isFirstSkip);
+        }
 
-            _isFirstSkip = false;
+        public void SkipFirstActivate()
+        {
+            if (_isFirstSkip)
+                _isFirstSkip = false;
         }
     }
 }
