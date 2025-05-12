@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ADSContent
 {
     public class ADS : MonoBehaviour
     {
+        [SerializeField] private Image _image;
+        
         public const string SDKKey =
             "nR3VEu5EEJlq6OmqwXd1lMKHQhg3sEumJpdTgplZ-csu1yq6zIkU1auq9P1sOOoIVLg9tOWSXDaUfRvC9Uv-Ib";
 
@@ -21,6 +24,7 @@ namespace ADSContent
             MaxSdkCallbacks.OnSdkInitializedEvent += (MaxSdkBase.SdkConfiguration sdkConfiguration) =>
             {
                 // AppLovin SDK is initialized, start loading ads
+                Debug.Log("AppLovin successfully initialized");
             };
 
             MaxSdk.SetSdkKey(SDKKey);
@@ -111,24 +115,28 @@ namespace ADSContent
 
         private void OnRewardedAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            _image.color = Color.grey+Color.white;
             Debug.Log("OnRewardedAdLoadedEvent");
             //
         }
 
         private void OnRewardedAdLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo)
         {
+            _image.color = Color.clear;
             Debug.Log("OnRewardedAdLoadFailedEvent");
             LoadRewardedAd();
         }
 
         private void OnRewardedAdDisplayedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            _image.color = Color.blue;
             Debug.Log("OnRewardedAdDisplayedEvent");
         }
 
         private void OnRewardedAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo,
             MaxSdkBase.AdInfo adInfo)
         {
+            _image.color = Color.red;
             Debug.Log("OnRewardedAdFailedToDisplayEvent");
             // Rewarded ad failed to display. AppLovin recommends that you load the next ad.
             LoadRewardedAd();
@@ -136,11 +144,14 @@ namespace ADSContent
 
         private void OnRewardedAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            
+            _image.color = Color.gray;
             Debug.Log("OnRewardedAdClickedEvent");
         }
 
         private void OnRewardedAdHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            _image.color = Color.green;
             Debug.Log("OnRewardedAdHiddenEvent");
             // Rewarded ad is hidden. Pre-load the next ad
             LoadRewardedAd();
@@ -148,12 +159,14 @@ namespace ADSContent
 
         private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdk.Reward reward, MaxSdkBase.AdInfo adInfo)
         {
+            _image.color = Color.black;
             Debug.Log("OnRewardedAdReceivedRewardEvent");
             // The rewarded ad displayed and the user should receive the reward.
         }
 
         private void OnRewardedAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            _image.color = Color.magenta;
             Debug.Log("OnRewardedAdRevenuePaidEvent");
             // Ad revenue paid. Use this callback to track user revenue.
         }
@@ -162,7 +175,12 @@ namespace ADSContent
         {
             if (MaxSdk.IsRewardedAdReady(RewardedKey))
             {
+                _image.color = Color.yellow;
                 MaxSdk.ShowRewardedAd(RewardedKey);
+            }
+            else
+            {
+                _image.color = Color.cyan;
             }
         }
         

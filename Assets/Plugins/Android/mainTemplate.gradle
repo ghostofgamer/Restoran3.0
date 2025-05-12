@@ -7,6 +7,7 @@ dependencies {
 // Android Resolver Dependencies Start
     implementation 'com.applovin.mediation:google-ad-manager-adapter:[24.2.0.0]' // Packages/com.applovin.mediation.adapters.googleadmanager.android/Editor/Dependencies.xml:4
     implementation 'com.applovin:applovin-sdk:13.2.0' // Packages/com.applovin.mediation.ads/AppLovin/Editor/Dependencies.xml:4
+ implementation 'androidx.multidex:multidex:2.0.1'
 // Android Resolver Dependencies End
 **DEPS**}
 
@@ -43,6 +44,7 @@ android {
         }
         versionCode **VERSIONCODE**
         versionName '**VERSIONNAME**'
+  multiDexEnabled true
         consumerProguardFiles 'proguard-unity.txt'**USER_PROGUARD**
 **DEFAULT_CONFIG_SETUP**
     }
