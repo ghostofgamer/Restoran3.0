@@ -12,6 +12,9 @@ namespace WalletContent
 
         public event Action<DollarValue> DollarValueChanged;
 
+        public event Action<int> IncomeChanged;
+        public event Action<int> ExpensesChanged;
+
         private void Start()
         {
             DollarValue = new DollarValue(100, 10);
@@ -34,6 +37,7 @@ namespace WalletContent
             DollarValue = FromTotalCents(totalCents);
             DollarValueChanged.Invoke(DollarValue);
             _flyValue.ShowFly(other,true);
+            IncomeChanged?.Invoke(ToTotalCents(other));
         }
 
         public void Subtract(DollarValue other)
@@ -42,6 +46,7 @@ namespace WalletContent
             DollarValue = FromTotalCents(totalCents);
             DollarValueChanged.Invoke(DollarValue);
             _flyValue.ShowFly(other,false);
+            ExpensesChanged?.Invoke(ToTotalCents(other));
         }
 
         public int ToTotalCents(DollarValue dollarValue)

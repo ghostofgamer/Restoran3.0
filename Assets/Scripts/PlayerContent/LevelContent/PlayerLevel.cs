@@ -17,6 +17,9 @@ namespace PlayerContent.LevelContent
 
         public event Action<int> LevelChanged;
         public event Action<int, int> ExpChanged;
+        
+        public event Action<int> ExpAdded;
+        public event Action LevelAdded;
 
         public int CurrentLevel { get; private set; }
         
@@ -43,6 +46,8 @@ namespace PlayerContent.LevelContent
             _flyValue.ShowFly(valueExp);
             _currentExp += valueExp;
             
+            ExpAdded?.Invoke(valueExp);
+            
             while (_currentExp >= _targetExp && CurrentLevel < levelConfigs.Count)
             {
                 int excessExp = _currentExp - _targetExp;
@@ -60,6 +65,7 @@ namespace PlayerContent.LevelContent
             PlayerPrefs.SetInt("Level", CurrentLevel);
             _targetExp = GetExpForLevel(CurrentLevel);
             Debug.Log("_targetExp " + _targetExp);
+            LevelAdded?.Invoke();
             LevelChanged?.Invoke(CurrentLevel);
             ExpChanged?.Invoke(_currentExp, _targetExp);
         }

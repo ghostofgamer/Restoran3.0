@@ -28,6 +28,7 @@ namespace StatisticContent
         public void ShowStatistics()
         {
             _statisticsScreen.OpenScreen();
+            _statisticsScreen.ShowStatistic();
             _statButton.SetActive(false);
         }
 

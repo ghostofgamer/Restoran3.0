@@ -39,11 +39,11 @@ namespace ADSContent
             MaxSdk.InitializeSdk();
 
             
-            if (!isInitialized)
+            /*if (!isInitialized)
             {
                 Debug.LogError("AppLovin initialization timed out");
                 _imageOther.color = Color.red;
-            }
+            }*/
             
             InitializeInterstitialAds();
             InitializeRewardedAds();
