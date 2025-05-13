@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ClientsContent;
@@ -33,6 +32,9 @@ namespace OrdersContent
 
         public event Action<int> UpdateOrders;
 
+        public event Action OrderAdded;
+        public event Action OrderCompleted;
+
         public List<Order> CurrentOrders => _currentOrders;
         
 
@@ -56,11 +58,13 @@ namespace OrdersContent
                 _burgersCounter.CheckWaitNeedBurgers(order.BurgerItemOrder);
                 _coffeeCounter.CheckWaitNeedCoffee(order.DrinkItemOrder);
                 _sodaCounter.CheckWaitNeedSoda(order.DrinkItemOrder);
+                OrderAdded?.Invoke();
             }
             else
             {
                 _orderQueue.Enqueue(order);
                 _clientQueue.Enqueue(client);
+                OrderAdded?.Invoke();
                 Debug.Log("Добавлен новый заказ в очередь: " + order.IndexTable);
             }
         }
@@ -96,6 +100,7 @@ namespace OrdersContent
                 Debug.Log("_currentOrders " + _currentOrders.Count);
                 UpdateOrders?.Invoke(_currentOrders.Count);
                 OrdersChanged?.Invoke(_currentOrders);
+                OrderCompleted?.Invoke();
                 Debug.Log("FFF ");
                 // TryActivateOrder();
             }

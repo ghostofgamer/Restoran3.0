@@ -43,6 +43,8 @@ namespace ClientsContent
         private float _nextSpawnTime = 0f;
         private bool _isNightTime;
 
+        public event Action ClientCreated;
+
         private void Start()
         {
             _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);
@@ -141,7 +143,7 @@ namespace ClientsContent
                 Client client = _clientsSpawner.SpawnRandomClient();
                 client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
                     _queueCashRegister, _priceOrderCounter,_clientsCounter);
-                
+                ClientCreated?.Invoke();
                 _queueCashRegister.AddClientQueue(client);
                 _clients.Add(client);
             }
@@ -167,7 +169,7 @@ namespace ClientsContent
             Client client = _clientsSpawner.SpawnRandomClient();
             client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
                 _queueCashRegister, _priceOrderCounter,_clientsCounter);
-
+            ClientCreated?.Invoke();
             Debug.Log("Пешком");
             _queueCashRegister.AddClientToQueue(client);
         }
