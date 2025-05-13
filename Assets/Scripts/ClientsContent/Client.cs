@@ -29,6 +29,7 @@ namespace ClientsContent
         private Transform _exitPosition;
         private QueueCashRegister _queueCashRegister;
         private ClientCar _clientCar;
+        private ClientsCounter _clientsCounter;
         
         public DollarValue PriceOrder{ get; private set; }
 
@@ -39,7 +40,8 @@ namespace ClientsContent
         public Table Table { get; private set; }
 
         public void Init(Order order, Restaurant restaurant, Table table, Transform exitPosition,
-            CashRegister cashRegister, QueueCashRegister queueCashRegister, PriceOrderCounter priceOrderCounter)
+            CashRegister cashRegister, QueueCashRegister queueCashRegister, PriceOrderCounter priceOrderCounter,
+            ClientsCounter clientsCounter)
         {
             Order = order;
             PriceOrder = priceOrderCounter.GetPriceOrder(Order);
@@ -50,12 +52,12 @@ namespace ClientsContent
             _exitPosition = exitPosition;
             _cashRegister = cashRegister;
             _queueCashRegister = queueCashRegister;
-
+            _clientsCounter = clientsCounter;
+            _clientsCounter.AddClient(this);
             // _clientCar = null;
             
             Cash = new DollarValue(0, 0);
             Cash = priceOrderCounter.GetCash(PriceOrder);
-            
             // InitCash(PriceOrder);
         }
 
@@ -188,7 +190,8 @@ namespace ClientsContent
             Table.SetBusyValue(false);
             _animator.SetBool("Sit", false);
             _currentState = ClientState.GoAway;
-
+            _clientsCounter.RemoveClient(this);
+            
             if (_clientCar != null)
             {
                 SetDestination(_clientCar.ExitPosition.position, () =>

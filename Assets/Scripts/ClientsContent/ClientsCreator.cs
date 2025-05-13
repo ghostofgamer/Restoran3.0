@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using OrdersContent;
@@ -35,9 +36,12 @@ namespace ClientsContent
         [SerializeField] private Transform _exitCarPosition;
 
         [SerializeField] private PriceOrderCounter _priceOrderCounter;
+        [SerializeField] private OpenCloseRestaurant _openCloseRestaurant;
+        [SerializeField] private ClientsCounter _clientsCounter;
 
         private float _elapsedTime;
         private float _nextSpawnTime = 0f;
+        private bool _isNightTime;
 
         private void Start()
         {
@@ -46,7 +50,7 @@ namespace ClientsContent
 
         private void Update()
         {
-            if (_isWork)
+            if (_isWork && _openCloseRestaurant.IsOpened && !_isNightTime)
             {
                 _elapsedTime += Time.deltaTime;
 
@@ -116,6 +120,11 @@ namespace ClientsContent
             yield return null;
         }
 
+        public void SetNightTime(bool value)
+        {
+            _isNightTime = value;
+        }
+
         private void InitClientCar()
         {
             InitClientsCar(1);
@@ -131,7 +140,8 @@ namespace ClientsContent
                 table.SetBusyValue(true);
                 Client client = _clientsSpawner.SpawnRandomClient();
                 client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                    _queueCashRegister, _priceOrderCounter);
+                    _queueCashRegister, _priceOrderCounter,_clientsCounter);
+                
                 _queueCashRegister.AddClientQueue(client);
                 _clients.Add(client);
             }
@@ -156,7 +166,7 @@ namespace ClientsContent
             table.SetBusyValue(true);
             Client client = _clientsSpawner.SpawnRandomClient();
             client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                _queueCashRegister, _priceOrderCounter);
+                _queueCashRegister, _priceOrderCounter,_clientsCounter);
 
             Debug.Log("Пешком");
             _queueCashRegister.AddClientToQueue(client);

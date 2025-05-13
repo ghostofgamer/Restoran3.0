@@ -1,4 +1,6 @@
 using System;
+using ClientsContent;
+using RestaurantContent;
 using TMPro;
 using UnityEngine;
 
@@ -12,7 +14,8 @@ namespace DayNightContent
         private const string TIME_OF_DAY_KEY = "TimeOfDay";
         private const float START_HOUR = 9f;
         private const float END_HOUR = 22f;
-        
+
+        [SerializeField] private OpenCloseRestaurant _openCloseRestaurant;
         [SerializeField] private Material skyboxMaterial;
         [SerializeField] private float dayDuration;
         [SerializeField] private float _nightDuration;
@@ -23,43 +26,57 @@ namespace DayNightContent
         [SerializeField] private Color _dayEquatorColor;
         [SerializeField] private Color _nightEquatorColor;
         [SerializeField] private Color _dayLightColor;
+
         [SerializeField] private Color _nightLightColor;
+
         // [SerializeField] private BuyersCounter _buyersCounter;
-        [SerializeField]private Light sceneLight;
+        [SerializeField] private Light sceneLight;
 
         [SerializeField] private TMP_Text _timeText;
-        
+
+        [SerializeField] private ClientsCreator _clientsCreator;
+
         public float minExposure = 0.5f;
         public float maxExposure = 1.65f;
         private float timeOfDay;
-        [SerializeField]private bool _isDay;
+        [SerializeField] private bool _isDay;
         [SerializeField] private bool _isNight;
         private bool _isStatisticDayOpened;
-        [SerializeField]private bool _isOpen;
+        [SerializeField] private bool _isOpen;
 
         public event Action DayOverCompleted;
 
         public event Action NewDayStarted;
 
         public event Action<bool> SetNightLighting;
-        
+
+        private void OnEnable()
+        {
+            _openCloseRestaurant.OpenedChanged += SetOpenValue;
+        }
+
+        private void OnDisable()
+        {
+            _openCloseRestaurant.OpenedChanged -= SetOpenValue;
+        }
+
         private void Start()
         {
             _isDay = true;
             _isNight = !_isDay;
-            
-            /*_isDay = PlayerPrefs.GetInt(IS_DAY_KEY, 1) == 1;
+
+            _isDay = PlayerPrefs.GetInt(IS_DAY_KEY, 1) == 1;
             Debug.Log("_isDay" + _isDay);
             // _isNight = PlayerPrefs.GetInt(IS_NIGHT_KEY, 0) == 1;
-            _isNight = !_isDay;*/
+            _isNight = !_isDay;
 
-            // timeOfDay = PlayerPrefs.GetFloat(TIME_OF_DAY_KEY, 0f);
+             timeOfDay = PlayerPrefs.GetFloat(TIME_OF_DAY_KEY, 0f);
 
             if (timeOfDay == 0f)
                 timeOfDay = (START_HOUR - 9f) / (END_HOUR - 9f);
 
             RenderSettings.skybox = skyboxMaterial;
-            
+
             if (!_isDay && !_isStatisticDayOpened)
             {
                 DayOverCompleted?.Invoke();
@@ -112,7 +129,7 @@ namespace DayNightContent
         public void ResetDay()
         {
             timeOfDay = 0f;
-            Debug.Log("новый день" );
+            Debug.Log("новый день");
             _isDay = true;
             _isNight = false;
             SetDayTime();
@@ -123,20 +140,31 @@ namespace DayNightContent
             _isOpen = value;
         }
 
-        private void UpdateSkyboxColor(Color currentTintColor, Color targetTintColor, float duration,
-            float currentExposure, float targetExposure, Color startAmbientColor, Color endAmbientColor,
-            Color startEquatorColor, Color endEquatorColor, Color startLightColor, Color endLightColor)
+        private void UpdateDayCycle(float duration, bool isDay, bool isNight)
         {
-            Color currentColor = Color.Lerp(currentTintColor, targetTintColor, duration);
-            skyboxMaterial.SetColor("_Tint", currentColor);
-            float exposure = Mathf.Lerp(currentExposure, targetExposure, duration);
-            skyboxMaterial.SetFloat("_Exposure", exposure);
-            Color currentAmbientColor = Color.Lerp(startAmbientColor, endAmbientColor, duration);
-            RenderSettings.ambientSkyColor = currentAmbientColor;
-            Color currentEquatorColor = Color.Lerp(startEquatorColor, endEquatorColor, duration);
-            RenderSettings.ambientEquatorColor = currentEquatorColor;
-            Color currentLightColor = Color.Lerp(startLightColor, endLightColor, duration);
-            sceneLight.color = currentLightColor;
+            timeOfDay += Time.deltaTime / duration;
+
+            if (timeOfDay >= 1f)
+            {
+                if (isNight)
+                {
+                    Debug.Log("DayOverCompleted ");
+                    DayOverCompleted?.Invoke();
+                    _isDay = isDay;
+                }
+                else
+                {
+                    Debug.Log(" _isDay = isDay; ");
+                    timeOfDay = 0;
+                    _isDay = isDay;
+                    _isNight = isNight;
+                }
+            }
+            
+            if (RenderSettings.skybox != null)
+            {
+                RenderSettings.skybox.SetFloat("_Rotation", timeOfDay * 360f);
+            }
         }
 
         private void SetNightTime()
@@ -158,6 +186,23 @@ namespace DayNightContent
             UpdateTimeText(START_HOUR, END_HOUR, 0);
         }
 
+        private void UpdateSkyboxColor(Color currentTintColor, Color targetTintColor, float duration,
+            float currentExposure, float targetExposure, Color startAmbientColor, Color endAmbientColor,
+            Color startEquatorColor, Color endEquatorColor, Color startLightColor, Color endLightColor)
+        {
+            Color currentColor = Color.Lerp(currentTintColor, targetTintColor, duration);
+            skyboxMaterial.SetColor("_Tint", currentColor);
+            float exposure = Mathf.Lerp(currentExposure, targetExposure, duration);
+            skyboxMaterial.SetFloat("_Exposure", exposure);
+            Color currentAmbientColor = Color.Lerp(startAmbientColor, endAmbientColor, duration);
+            RenderSettings.ambientSkyColor = currentAmbientColor;
+            Color currentEquatorColor = Color.Lerp(startEquatorColor, endEquatorColor, duration);
+            RenderSettings.ambientEquatorColor = currentEquatorColor;
+            Color currentLightColor = Color.Lerp(startLightColor, endLightColor, duration);
+            sceneLight.color = currentLightColor;
+        }
+
+
         private void UpdateTimeText(float startHour, float endHour, float duration)
         {
             if (_timeText != null)
@@ -167,11 +212,12 @@ namespace DayNightContent
                 int hour = Mathf.FloorToInt(currentHour);
                 int minute = Mathf.FloorToInt((currentHour - hour) * 60f);
                 _timeText.text = string.Format("{0:00}:{1:00}", hour, minute);
-Debug.Log("Time "+ _timeText);
-                /*if (hour >= 21 && minute >= 0)
-                    _buyersCounter.SetAllowedSpawnBuyers(false);
+                Debug.Log("Time " + _timeText);
+
+                if (hour >= 21 && minute >= 0)
+                    _clientsCreator.SetNightTime(true);
                 else
-                    _buyersCounter.SetAllowedSpawnBuyers(true);*/
+                    _clientsCreator.SetNightTime(false);
 
                 if (hour >= 18 && minute >= 0)
                     SetNightLighting?.Invoke(true);
@@ -179,29 +225,6 @@ Debug.Log("Time "+ _timeText);
                     SetNightLighting?.Invoke(false);
             }
         }
-
-        private void UpdateDayCycle(float duration, bool isDay, bool isNight)
-        {
-            timeOfDay += Time.deltaTime / duration;
-
-            if (timeOfDay >= 1f)
-            {
-                if (isNight)
-                {
-                    Debug.Log("DayOverCompleted " );
-                    DayOverCompleted?.Invoke();
-                    _isDay = isDay;
-                }
-                else
-                {
-                    Debug.Log(" _isDay = isDay; " );
-                    timeOfDay = 0;
-                    _isDay = isDay;
-                    _isNight = isNight;
-                }
-            }
-        }
-
         /*public void StartNewDay()
         {
             timeOfDay = 0f;
@@ -211,13 +234,13 @@ Debug.Log("Time "+ _timeText);
             NewDayStarted?.Invoke();
         }*/
 
-        /*private void OnApplicationQuit()
+        private void OnApplicationQuit()
         {
             Debug.Log("_isDay OnApplicationQuit " + _isDay);
             PlayerPrefs.SetInt(IS_DAY_KEY, _isDay ? 1 : 0);
             // PlayerPrefs.SetInt(IS_NIGHT_KEY, _isNight ? 1 : 0);
             PlayerPrefs.SetFloat(TIME_OF_DAY_KEY, timeOfDay);
             PlayerPrefs.Save();
-        }*/
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using InteractableContent;
 using PlayerContent;
 using TMPro;
@@ -5,12 +6,14 @@ using UnityEngine;
 
 namespace RestaurantContent
 {
-    public class OpenCloseRestaraunt : MonoBehaviour
+    public class OpenCloseRestaurant : MonoBehaviour
     {
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private TMP_Text[] _texts;
 
-        private bool _isOpened;
+        public bool IsOpened { get; private set; }
+
+        public event Action<bool> OpenedChanged;
 
         private void OnEnable()
         {
@@ -29,14 +32,15 @@ namespace RestaurantContent
 
         private void SetValue(PlayerInteraction playerInteraction)
         {
-            _isOpened = !_isOpened;
+            IsOpened = !IsOpened;
+            OpenedChanged?.Invoke(IsOpened);
             Show();
         }
 
         private void Show()
         {
             foreach (var text in _texts)
-                text.text = _isOpened ? "Open" : "Close";
+                text.text = IsOpened ? "Open" : "Close";
         }
     }
 }

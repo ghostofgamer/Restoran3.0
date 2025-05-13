@@ -1,3 +1,5 @@
+using System;
+using ClientsContent;
 using DayNightContent;
 using UI.Screens;
 using UnityEngine;
@@ -8,20 +10,33 @@ namespace StatisticContent
     {
         [SerializeField] private DayNightCycle _dayNightCycle;
         [SerializeField] private StatisticsScreen _statisticsScreen;
+        [SerializeField] private GameObject _statButton;
+        [SerializeField] private ClientsCounter _clientsCounter;
 
         private void OnEnable()
         {
-            _dayNightCycle.DayOverCompleted += ShowStatistics;
+            _dayNightCycle.DayOverCompleted += ShowStatButton;
+            _clientsCounter.ClientsListEmpted += ShowStatButton;
         }
 
         private void OnDisable()
         {
-            _dayNightCycle.DayOverCompleted -= ShowStatistics;
+            _dayNightCycle.DayOverCompleted -= ShowStatButton;
+            _clientsCounter.ClientsListEmpted -= ShowStatButton;
         }
 
-        private void ShowStatistics()
+        public void ShowStatistics()
         {
             _statisticsScreen.OpenScreen();
+            _statButton.SetActive(false);
+        }
+
+        private void ShowStatButton()
+        {
+            if (_clientsCounter.Clients.Count > 0)
+                return;
+            
+            _statButton.SetActive(true);
         }
     }
 }
