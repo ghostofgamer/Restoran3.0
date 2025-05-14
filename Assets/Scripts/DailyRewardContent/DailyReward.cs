@@ -17,10 +17,11 @@ namespace DailyRewardContent
         [SerializeField] private Color _defaultSprite;
         [SerializeField] private Color _currentDaySprite;
         [SerializeField] private Color _lastDayDefaultSprite;
+        [SerializeField] private Animator _openButtonAnimation;
         [SerializeField] private GameObject[] _prizes;
+
         private int _currentDayIndex;
         private bool _rewardClaimedToday;
-
 
         public int _testDaysOffset;
         public bool _isTesting;
@@ -114,6 +115,18 @@ namespace DailyRewardContent
             }
 
             _claimButton.interactable = (_currentDayIndex < _dayButtons.Length && !_rewardClaimedToday);
+            AnimateOpenScreenButton();
+        }
+
+        private void AnimateOpenScreenButton()
+        {
+            if (_currentDayIndex < _dayButtons.Length && !_rewardClaimedToday)
+                _openButtonAnimation.enabled = true;
+            else
+            {
+                _openButtonAnimation.enabled = false;
+                _openButtonAnimation.transform.localScale = Vector3.one;
+            }
         }
 
         public bool IsRewardDay()
