@@ -1,5 +1,6 @@
 using System;
 using ClientsContent;
+using PlayerContent.LevelContent;
 using RestaurantContent;
 using TMPro;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace DayNightContent
         [SerializeField] private Color _dayEquatorColor;
         [SerializeField] private Color _nightEquatorColor;
         [SerializeField] private Color _dayLightColor;
+        [SerializeField] private PlayerLevel _playerLevel;
 
         [SerializeField] private Color _nightLightColor;
 
@@ -128,6 +130,7 @@ namespace DayNightContent
 
         public void ResetDay()
         {
+            _playerLevel.AddExp(50);
             timeOfDay = 0f;
             Debug.Log("новый день");
             _isDay = true;

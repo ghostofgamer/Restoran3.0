@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Enums;
 using SoContent;
 using UI.Screens.ShopContent;
 using UnityEngine;
@@ -89,7 +90,7 @@ namespace DeliveryContent
 
             TimeSpan elapsedTime = currentTime - _exitTime;
             double secondsElapsed = elapsedTime.TotalSeconds;
-            
+
 
             if (secondsElapsed < RemainingTime)
             {
@@ -103,12 +104,12 @@ namespace DeliveryContent
                 int deliveriesToSpawn = (int)(secondsElapsed / _deliveryConfig.MinValueTimer);
 
                 double remainingSeconds;
-                
+
                 if (secondsElapsed >= _deliveryConfig.MinValueTimer)
                     remainingSeconds = secondsElapsed % _deliveryConfig.MinValueTimer;
                 else
                     remainingSeconds = _deliveryConfig.MinValueTimer - secondsElapsed;
-                
+
                 int actualDeliveriesToSpawn = Math.Min(deliveriesToSpawn, CurrentItems.Count);
 
                 for (int i = 0; i < actualDeliveriesToSpawn; i++)
@@ -147,7 +148,7 @@ namespace DeliveryContent
             RemainingTime = 0;
             TimeChanged?.Invoke(RemainingTime);
         }
-        
+
         public void AddItemsCart(List<ItemCart> items)
         {
             foreach (var item in items)
@@ -185,6 +186,17 @@ namespace DeliveryContent
 
                 if (item.Amount <= 0)
                     _items.RemoveAt(0);
+            }
+        }
+
+        public void SpawnPrize(ItemType itemType, int value)
+        {
+            for (int i = 0; i < value; i++)
+            {
+                GameObject prefab = _deliveryConfig.GetPrefabByItemType(itemType);
+
+                if (prefab != null)
+                    Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
             }
         }
 
