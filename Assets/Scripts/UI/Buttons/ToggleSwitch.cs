@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
 {
+    [SerializeField] private GameObject _settingsScreen;
     [Header("Slider setup")] [SerializeField, Range(0, 1f)]
     protected float sliderValue;
 
@@ -107,10 +108,18 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
                 onToggleOff?.Invoke();
         }
 
-        if (_animateSliderCoroutine != null)
-            StopCoroutine(_animateSliderCoroutine);
 
-        _animateSliderCoroutine = StartCoroutine(AnimateSlider());
+        if (_settingsScreen.activeSelf)
+        {
+            if (_animateSliderCoroutine != null)
+                StopCoroutine(_animateSliderCoroutine);
+
+            _animateSliderCoroutine = StartCoroutine(AnimateSlider());
+        }
+        else
+        {
+            _slider.value = CurrentValue ? 1 : 0;
+        }
     }
 
 

@@ -22,6 +22,7 @@ namespace KitchenEquipmentContent
         [SerializeField] private GameObject _progressFryUI;
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
+        [SerializeField] private AudioSource _audioSource;
         
         public TMP_Text grillText;
         public Image fillImage;
@@ -365,7 +366,7 @@ namespace KitchenEquipmentContent
 
             _animator.SetBool("FryCutlet", true);
             _boxCollider.enabled = false;
-
+            _audioSource.Play();
             yield return new WaitForSeconds(1f);
             _progressFryUI.SetActive(true);
             grillText.text = "Grill <color=yellow>Raw</color>";
@@ -378,7 +379,7 @@ namespace KitchenEquipmentContent
                 fillImage.fillAmount = elapsedTime / grillTime;
                 yield return null;
             }
-
+            _audioSource.Stop();
             grillText.text = "Grill <color=green>Medium</color>";
 
             // _animator.SetBool("FryCutlet",false);
