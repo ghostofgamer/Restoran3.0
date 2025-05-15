@@ -1,4 +1,5 @@
 using System;
+using CalendarContent;
 using ClientsContent;
 using PlayerContent.LevelContent;
 using RestaurantContent;
@@ -28,6 +29,7 @@ namespace DayNightContent
         [SerializeField] private Color _nightEquatorColor;
         [SerializeField] private Color _dayLightColor;
         [SerializeField] private PlayerLevel _playerLevel;
+        [SerializeField] private Calendar _calendar;
 
         [SerializeField] private Color _nightLightColor;
 
@@ -136,6 +138,7 @@ namespace DayNightContent
             _isDay = true;
             _isNight = false;
             SetDayTime();
+            _calendar.NextDay();
         }
 
         public void SetOpenValue(bool value)

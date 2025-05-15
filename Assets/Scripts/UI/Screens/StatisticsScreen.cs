@@ -3,6 +3,7 @@ using StatisticContent;
 using TMPro;
 using UnityEngine;
 using WalletContent;
+using Calendar = CalendarContent.Calendar;
 
 namespace UI.Screens
 {
@@ -10,6 +11,8 @@ namespace UI.Screens
     {
         [SerializeField] private StatisticCounter _statisticCounter;
         [SerializeField] private Wallet _wallet;
+        [SerializeField] private Calendar _calendar;
+        [SerializeField] private TMP_Text _labelText;
         [SerializeField] private TMP_Text _totalClientsText;
         [SerializeField] private TMP_Text _totalOrdersText;
         [SerializeField] private TMP_Text _completedOrdersText;
@@ -23,6 +26,7 @@ namespace UI.Screens
 
         public void ShowStatistic()
         {
+            _labelText.text = $"Report of the day (Day {_calendar.CurrentDay})";
             _totalClientsText.text = $"Total clients: {_statisticCounter.TotalClients}";
             _totalOrdersText.text = $"Total orders: {_statisticCounter.TotalOrders}";
             _completedOrdersText.text = $"Completed orders: {_statisticCounter.CompletedOrders}";
