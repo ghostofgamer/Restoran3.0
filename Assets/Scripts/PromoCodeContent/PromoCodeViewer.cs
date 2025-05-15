@@ -12,6 +12,7 @@ namespace PromoCodeContent
         [SerializeField] private TMP_Text _messageFailedText;
         [SerializeField] private GameObject _failTextBackground;
         [SerializeField] private PromoCodeScreen _promoCodeScreen;
+        [SerializeField] private PromoCodeActivator _promoCodeActivator;
 
         public void AcceptPromoCode()
         {
@@ -30,6 +31,7 @@ namespace PromoCodeContent
                 }
                 else
                 {
+                    _promoCodeActivator.ActivatePrizePromo();
                     PlayerPrefs.SetInt("AcceptedCode" + currentPromoCode, 1);
                     PlayerPrefs.Save();
                     _promoCodeScreen.CloseScreen();
