@@ -1,3 +1,4 @@
+using ADSContent;
 using DeliveryContent;
 using Enums;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace IAP
     {
         [SerializeField] private UIInfo _uiInfo;
         [SerializeField] private Wallet _wallet;
+        [SerializeField] private InterstitialTimer _interstitialTimer;
 
         private Delivery _delivery;
 
@@ -56,9 +58,9 @@ namespace IAP
             PlayerPrefs.SetInt("removeADS", 1);
             Debug.Log("On Purchase RemoveAds Completed");
 
-            /*if (_gui != null)
-                _gui.TopUiContainer.DeactivateRemoveInterPurchase();*/
-
+            if(_interstitialTimer!=null)
+                _interstitialTimer.SetValue(false);
+            
             if (_uiInfo != null)
                 _uiInfo.UpdateRemoveAdsButton();
         }

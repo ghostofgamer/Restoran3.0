@@ -23,8 +23,8 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
 
     private Coroutine _animateSliderCoroutine;
 
-    [Header("Events")] [SerializeField] private UnityEvent onToggleOn;
-    [SerializeField] private UnityEvent onToggleOff;
+    [Header("Events")] [SerializeField] public UnityEvent onToggleOn;
+    [SerializeField] public UnityEvent onToggleOff;
 
     private ToggleSwitchGroupManager _toggleSwitchGroupManager;
 
@@ -94,7 +94,7 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
     }
 
 
-    private void SetStateAndStartAnimation(bool state)
+    public void SetStateAndStartAnimation(bool state)
     {
         _previousValue = CurrentValue;
         CurrentValue = state;
