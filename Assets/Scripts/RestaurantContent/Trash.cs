@@ -20,7 +20,21 @@ namespace RestaurantContent
 
         private void Action(PlayerInteraction playerInteraction)
         {
-            
+            if (playerInteraction.CurrentDraggable != null)
+                playerInteraction.ThrowItem();
+            else
+                Debug.Log("Не то в руках или вообще пусто ");
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            Draggable draggable = other.GetComponentInParent<Draggable>();
+
+            if (draggable != null)
+            {
+                if (!draggable.InHands)
+                    draggable.gameObject.SetActive(false);
+            }
         }
     }
 }
