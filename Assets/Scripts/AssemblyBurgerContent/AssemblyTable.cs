@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using AssemblyBurgerContent;
 using CameraContent;
 using Enums;
 using InteractableContent;
 using PlayerContent;
+using SaveContent;
 using UnityEngine;
 
 public class AssemblyTable : MonoBehaviour
@@ -18,6 +20,7 @@ public class AssemblyTable : MonoBehaviour
 
     [SerializeField] private Transform _cameraCurrentPosition;
     [SerializeField] private CameraPositionChanger _cameraPositionChanger;
+    [SerializeField] private BurgersSaver _burgersSaver;
 
     private Dictionary<ItemType, ItemContainer> _containersByItemType;
 
@@ -41,6 +44,14 @@ public class AssemblyTable : MonoBehaviour
     private void OnDisable()
     {
         _interactableObject.OnAction -= HandlePlayerInteraction;
+    }
+
+    private void Start()
+    {
+        List<ItemType> itemTypes = _burgersSaver.LoadItemTypesFromIndices();
+            
+        if (itemTypes.Count > 0)
+            LoadWellBurgers(itemTypes.Count,itemTypes);
     }
 
     public void HandlePlayerInteraction(PlayerInteraction playerInteraction)
@@ -175,5 +186,29 @@ public class AssemblyTable : MonoBehaviour
         }
 
         return null;
+    }
+    
+    private void LoadWellBurgers(int value,List<ItemType> itemType)
+    {
+        StartCoroutine(StartLoad(value,itemType));
+    }
+
+    private IEnumerator StartLoad(int value,List<ItemType> itemType)
+    {
+        yield return new WaitForSeconds(1f);
+
+        for (int i = 0; i < value; i++)
+        {
+            _assemblyBurger.SimpleCreateStartBurgers(itemType[i]);
+            
+            /*
+            Transform availablePosition = _wellPositions.FirstOrDefault(position => position.childCount == 0);
+            Item sodaInstance = _burgerIngridientSpawner.SpawnItem(itemType[i]);
+            sodaInstance.gameObject.SetActive(true);
+            sodaInstance.transform.SetParent(availablePosition);
+            sodaInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(itemType[i]);
+            sodaInstance.transform.position = availablePosition.position;
+            _sodaCounter.AddSoda(sodaInstance);*/
+        }
     }
 }

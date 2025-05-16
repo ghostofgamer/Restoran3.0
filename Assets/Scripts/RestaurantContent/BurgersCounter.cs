@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -12,15 +13,18 @@ namespace RestaurantContent
         [SerializeField] private Restaurant _restaurant;
         
         private List<Item> _burgers = new List<Item>();
+        public event Action<List<Item>> BurgerItemsValueChanged;
 
         public void AddBurger(Item item)
         {
             _burgers.Add(item);
+            BurgerItemsValueChanged?.Invoke(_burgers);
         }
 
         public void RemoveBurger(Item item)
         {
             _burgers.Remove(item);
+            BurgerItemsValueChanged?.Invoke(_burgers);
         }
 
         public void CheckWaitNeedBurgers(ItemType itemType)

@@ -259,8 +259,11 @@ public class ItemBasket : MonoBehaviour
     {
         SetActiveValue(true);
 
+        Debug.Log("фывфывфывфвывф");
+        
         if (Shelf != null)
         {
+            Debug.Log("ыыыыыыыы");
             Shelf.Remove(this);
             Shelf = null;
         }

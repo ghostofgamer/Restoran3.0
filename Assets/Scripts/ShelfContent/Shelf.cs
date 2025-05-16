@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Enums;
 using InteractableContent;
 using ItemContent;
 using PlayerContent;
+using SoContent;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace ShelfContent
@@ -13,6 +17,9 @@ namespace ShelfContent
         [SerializeField] private Transform[] _positions;
         [SerializeField] private List<ItemBasket> _itemBaskets = new List<ItemBasket>();
         [SerializeField] private List<ItemDrinkPackage> _itemDrinkPackages = new List<ItemDrinkPackage>();
+        [SerializeField] private DeliveryConfig _deliveryConfig;
+
+        public event Action<List<ItemBasket>, List<ItemDrinkPackage>> ListItemChanged;
 
         private void OnEnable()
         {
@@ -41,19 +48,20 @@ namespace ShelfContent
                 if (draggable != null)
                 {
                     draggable.PutOnShelf();
-                    
+
                     Transform position = GetFreePosition();
-                    
+
                     Sequence sequence = DOTween.Sequence();
-                    
+
                     if (basket != null)
                     {
                         _itemBaskets.Add(basket);
-
                         basket.SetShelf(this);
 
                         playerInteraction.ClearDraggableObject();
                         basket.transform.SetParent(position);
+
+                        ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
 
                         sequence.Append(basket.transform.DOMove(position.position, 0.3f)
                             .SetEase(Ease.InOutQuad));
@@ -68,8 +76,9 @@ namespace ShelfContent
                         drinkPackage.SetShelf(this);
                         playerInteraction.ClearDraggableObject();
                         drinkPackage.transform.SetParent(position);
-                        
-                        
+
+                        ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
+
                         sequence.Append(drinkPackage.transform.DOMove(position.position, 0.3f)
                             .SetEase(Ease.InOutQuad));
                         sequence.Join(drinkPackage.transform
@@ -111,11 +120,54 @@ namespace ShelfContent
         public void Remove(ItemBasket itemBasket)
         {
             _itemBaskets.Remove(itemBasket);
+            ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
         }
-        
+
         public void RemoveDrinkPackage(ItemDrinkPackage drinkPackage)
         {
             _itemDrinkPackages.Remove(drinkPackage);
+            ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
+        }
+
+        public void Initialization(List<ItemType> itemTypes)
+        {
+            foreach (var itemType in itemTypes)
+            {
+                Transform position = GetFreePosition();
+                GameObject prefab = _deliveryConfig.GetPrefabByItemType(itemType);
+
+                if (position == null)
+                    return;
+
+                if (prefab != null)
+                {
+                    GameObject instance = Instantiate(prefab, position.position, Quaternion.identity);
+                    ItemBasket basket = instance.GetComponent<ItemBasket>();
+                    ItemDrinkPackage drinkPackage = instance.GetComponent<ItemDrinkPackage>();
+                    
+                    if (basket != null)
+                    {
+                        _itemBaskets.Add(basket);
+                        basket.SetShelf(this);
+                        basket.transform.SetParent(position);
+                        ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
+                        basket.GetComponent<Rigidbody>().isKinematic = true;
+                        /*basket.transform.position = position.position;
+                        basket.transform.rotation = quaternion.identity;*/
+                    }
+
+                    if (drinkPackage != null)
+                    {
+                        _itemDrinkPackages.Add(drinkPackage);
+                        drinkPackage.SetShelf(this);
+                        drinkPackage.transform.SetParent(position);
+                        ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
+                        drinkPackage.GetComponent<Rigidbody>().isKinematic = true;
+                        /*drinkPackage.transform.position = position.position;
+                        drinkPackage.transform.rotation = quaternion.identity;*/
+                    }
+                }
+            }
         }
     }
 }

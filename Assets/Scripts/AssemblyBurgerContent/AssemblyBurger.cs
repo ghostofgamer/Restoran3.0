@@ -65,7 +65,7 @@ namespace AssemblyBurgerContent
                         if (selectedContainer.IsAdditionalItemsContainer)
                         {
                             int[] activeItems = selectedContainer.GetActivePositions();
-                            
+
                             if (_ingredientStack.Count > 0)
                             {
                                 if (activeItems[0] <= 0)
@@ -73,7 +73,7 @@ namespace AssemblyBurgerContent
                                     Debug.Log("булочек не хватает");
                                     return;
                                 }
-                                
+
                                 Debug.Log("selectedContainer.CurrentItemsType[0] " +
                                           selectedContainer.CurrentItemsType[0]);
                                 HandleContainerSelection(selectedContainer.CurrentItemsType[0], selectedContainer,
@@ -86,7 +86,7 @@ namespace AssemblyBurgerContent
                                     Debug.Log("булочек не хватает");
                                     return;
                                 }
-                                
+
                                 Debug.Log("selectedContainer.CurrentItemsType[1] " +
                                           selectedContainer.CurrentItemsType[1]);
                                 HandleContainerSelection(selectedContainer.CurrentItemsType[1], selectedContainer,
@@ -129,7 +129,7 @@ namespace AssemblyBurgerContent
 
                             if (burgerType != ItemType.Empty)
                             {
-                                CreateBurger(burgerType,selectedContainer);
+                                CreateBurger(burgerType, selectedContainer);
                                 Debug.Log("Бургер " + burgerType);
                                 // selectedContainer.DeactivateItems(1);
                             }
@@ -334,7 +334,7 @@ namespace AssemblyBurgerContent
             return ItemType.Empty;
         }
 
-        private void CreateBurger(ItemType burgerType,ItemContainer containerPackageBurger)
+        private void CreateBurger(ItemType burgerType, ItemContainer containerPackageBurger)
         {
             GameObject burgerPrefab =
                 _burgerPrefabPairs.FirstOrDefault(pair => pair.BurgerType == burgerType)?.BurgerPrefab;
@@ -353,9 +353,9 @@ namespace AssemblyBurgerContent
                     burgerInstance.gameObject.SetActive(true);
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                     burgerInstance.transform.rotation = Quaternion.identity;
-                    
+
                     containerPackageBurger.DeactivateItems(1);
-                    
+
                     _playerLevel.AddExp(5);
 
                     /*GameObject burgerInstance =
@@ -419,9 +419,9 @@ namespace AssemblyBurgerContent
                         burgerInstance.gameObject.SetActive(true);
                         burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                         burgerInstance.transform.rotation = Quaternion.identity;
-                        
+
                         containerPackageBurger.DeactivateItems(1);
-                        
+
                         _restaurant.SetBurgerOrder(tray, burgerInstance);
                         _playerLevel.AddExp(5);
 
@@ -464,6 +464,18 @@ namespace AssemblyBurgerContent
             {
                 Debug.LogError("Префаб для бургера типа " + burgerType + " не найден.");
             }
+        }
+
+        public void SimpleCreateStartBurgers(ItemType burgerType)
+        {
+            Transform availablePosition = _burgerPositions.FirstOrDefault(position => position.childCount == 0);
+            Item burgerInstance = _burgerIngridientSpawner.SpawnItem(burgerType);
+            burgerInstance.gameObject.SetActive(true);
+            burgerInstance.transform.SetParent(availablePosition);
+            burgerInstance.transform.position = availablePosition.position;
+            burgerInstance.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            burgerInstance.transform.localScale = Vector3.one;
+            _burgersCounter.AddBurger(burgerInstance);
         }
     }
 }
