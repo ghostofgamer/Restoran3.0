@@ -8,6 +8,7 @@ using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
 using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
+using SaveContent;
 using SoContent.AssemblyBurger;
 using UI.Screens;
 using UnityEngine;
@@ -27,12 +28,18 @@ namespace KitchenEquipmentContent
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private SodaFullnessCounter[] _sodaFullnessCounters;
         [SerializeField] private EquipmentUIProduct _equipmentUIProduct;
+        [SerializeField] private SodaSaver _sodaSaver;
         
         private Coroutine _coroutine;
         private bool _isWorking = false;
 
         private void Start()
         {
+            List<ItemType> itemTypes = _sodaSaver.LoadItemTypesFromIndices();
+            
+            if (itemTypes.Count > 0)
+                LoadWellCups(itemTypes.Count,itemTypes);
+            
             gameObject.SetActive(_equipmentUIProduct.IsBuyed());
         }
         
@@ -177,6 +184,27 @@ namespace KitchenEquipmentContent
         public SodaFullnessCounter GetSodaFullnessCounter(ItemType itemType)
         {
             return _sodaFullnessCounters.FirstOrDefault(counter => counter.ItemType == itemType);
+        }
+        
+        private void LoadWellCups(int value,List<ItemType> itemType)
+        {
+            StartCoroutine(StartLoad(value,itemType));
+        }
+
+        private IEnumerator StartLoad(int value,List<ItemType> itemType)
+        {
+            yield return new WaitForSeconds(1f);
+
+            for (int i = 0; i < value; i++)
+            {
+                Transform availablePosition = _wellPositions.FirstOrDefault(position => position.childCount == 0);
+                Item sodaInstance = _burgerIngridientSpawner.SpawnItem(itemType[i]);
+                sodaInstance.gameObject.SetActive(true);
+                sodaInstance.transform.SetParent(availablePosition);
+                sodaInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(itemType[i]);
+                sodaInstance.transform.position = availablePosition.position;
+                _sodaCounter.AddSoda(sodaInstance);
+            }
         }
     }
 }

@@ -94,13 +94,6 @@ namespace KitchenEquipmentContent
         public void SetValueCollider(bool value)
         {
             _collider.enabled = value;
-            // _assemblyBurger.enabled = !value;
-
-            /*foreach (var containerCollidder in _containerColliders)
-            {
-                containerCollidder.enabled = !value;
-                Debug.Log("value " + !value);
-            }*/
         }
 
         public abstract void FillDrinkMachine(ItemDrinkPackage itemDrinkPackage);

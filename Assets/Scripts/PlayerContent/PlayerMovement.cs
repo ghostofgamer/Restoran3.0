@@ -37,8 +37,6 @@ namespace PlayerContent
             
             if (_moveDirection.magnitude > 3f && Time.time >= _nextStepTime)
             {
-                Debug.Log("_moveDirection.magnitude " + _moveDirection.magnitude);
-                Debug.Log(" Time.time >= _nextStepTime.magnitude " + ( Time.time >= _nextStepTime));
                 PlayFootstepSound();
                 _nextStepTime = Time.time + _stepInterval;
             }

@@ -1,14 +1,18 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Enums;
 using PlayerContent;
+using SaveContent;
 
 namespace InteractableContent
 {
     public class ItemContainer : MonoBehaviour, IPointerClickHandler
     {
+        [SerializeField] private ItemContainerSaver _itemContainerSaver;
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private Item[] _items;
         [SerializeField] private Transform[] _positions;
@@ -23,6 +27,8 @@ namespace InteractableContent
         [SerializeField] private ItemType[] _currentItemsType;
         [SerializeField] private Item[][] _itemsAdditionalArray;
 
+        public event Action<int> ItemsActiveCountChanged;
+
         public Transform[][] AdditionalArrayPositions { get; private set; }
 
         public Transform[] Positions => _positions;
@@ -30,7 +36,6 @@ namespace InteractableContent
         public ItemType CurrentItemContainer => _currentItemContainer;
 
         public ItemType[] CurrentItemsType => _currentItemsType;
-
 
         public bool IsAdditionalItemsContainer => _isAdditionalItemsContainer;
 
@@ -48,6 +53,17 @@ namespace InteractableContent
 
         private void Start()
         {
+            if (!_isAdditionalItemsContainer)
+            {
+                int value = PlayerPrefs.GetInt("ItemContainer" + CurrentItemContainer, 0);
+                DeactivateAllItem();
+                Debug.Log("Value "+ value);
+                ActivateItems(value);
+            }
+            else
+            {
+            }
+
             _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
             AdditionalArrayPositions = new Transform[][] { _positions, _additioanlPositions };
         }
@@ -151,6 +167,9 @@ namespace InteractableContent
             {
                 inactiveItems[i].gameObject.SetActive(true);
             }
+
+            List<Item> activeItems = _items.Where(p => p.gameObject.activeSelf).ToList();
+            ItemsActiveCountChanged?.Invoke(activeItems.Count);
         }
 
         public void ActivateItems(int value, int index)
@@ -183,6 +202,9 @@ namespace InteractableContent
             {
                 inactiveItems[i].gameObject.SetActive(false);
             }
+
+            List<Item> activeItems = _items.Where(p => p.gameObject.activeSelf).ToList();
+            ItemsActiveCountChanged?.Invoke(activeItems.Count);
         }
 
         public void DeactivateItems(int value, int index)
@@ -200,6 +222,12 @@ namespace InteractableContent
             {
                 inactiveItems[i].gameObject.SetActive(false);
             }
+        }
+
+        private void DeactivateAllItem()
+        {
+            foreach (var item in _items)
+                item.gameObject.SetActive(false);
         }
     }
 }
