@@ -35,7 +35,6 @@ namespace SaveContent
 
         private void SaveWellCoffee(int value)
         {
-            Debug.Log("SAVE CoffeeWellCups " + value);
             PlayerPrefs.SetInt("CoffeeWellCups", value);
         }
     }

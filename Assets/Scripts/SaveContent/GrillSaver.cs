@@ -29,9 +29,6 @@ namespace SaveContent
         {
             PlayerPrefs.SetInt("RawCutletGrill", rawValue);
             PlayerPrefs.SetInt("WellCutletGrill", wellValue);
-            
-            Debug.Log("RAwCutLetValue " + rawValue);
-            Debug.Log("WellCutletGrill " + wellValue);
         }
     }
 }

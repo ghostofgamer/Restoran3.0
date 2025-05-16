@@ -36,8 +36,7 @@ namespace SaveContent
         private void SaveWellSoda(List<Item> items)
         {
             int[] itemTypeIndices = items.Select(item => (int)item.ItemType).ToArray();
-
-            // Сохраняем массив индексов ItemType в PlayerPrefs
+            
             string indicesString = string.Join(",", itemTypeIndices);
             PlayerPrefs.SetString("SodaItemTypeIndices", indicesString);
             PlayerPrefs.Save();
@@ -45,16 +44,13 @@ namespace SaveContent
 
         public List<ItemType> LoadItemTypesFromIndices()
         {
-            // Загружаем строку индексов ItemType из PlayerPrefs
             string indicesString = PlayerPrefs.GetString("SodaItemTypeIndices", "");
-
-            // Преобразуем строку индексов в массив int
+            
             int[] itemTypeIndices = indicesString.Split(',')
                 .Where(s => !string.IsNullOrEmpty(s))
                 .Select(int.Parse)
                 .ToArray();
-
-            // Преобразуем массив индексов в список ItemType
+            
             List<ItemType> itemTypes = itemTypeIndices.Select(index => (ItemType)index).ToList();
 
             return itemTypes;
