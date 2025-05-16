@@ -5,8 +5,10 @@ apply from: '../shared/keepUnitySymbols.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
+    implementation 'androidx.annotation:annotation:1.7.1' // Packages/io.appmetrica.analytics/Editor/AppMetricaDependencies.xml:5
     implementation 'com.applovin.mediation:google-ad-manager-adapter:[24.2.0.0]' // Packages/com.applovin.mediation.adapters.googleadmanager.android/Editor/Dependencies.xml:4
     implementation 'com.applovin:applovin-sdk:13.2.0' // Packages/com.applovin.mediation.ads/AppLovin/Editor/Dependencies.xml:4
+    implementation 'io.appmetrica.analytics:analytics:7.7.0' // Packages/io.appmetrica.analytics/Editor/AppMetricaDependencies.xml:4
 // Android Resolver Dependencies End
 **DEPS**}
 
