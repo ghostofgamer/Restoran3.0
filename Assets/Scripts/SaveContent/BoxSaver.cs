@@ -30,9 +30,11 @@ namespace SaveContent
         {
             // Преобразуем данные коробок в формат для сохранения
             List<BoxData> boxesToSave = _boxesCounter.ItemBaskets
-                .Select(item => new BoxData((int)item.ItemType, item.transform.position))
+                .Select(item => new BoxData((int)item.ItemType, item.transform.position, item.GetActiveValueItems(),
+                    item.IsAdditionalItemsBasket, item.GetActiveValueArrayItems()))
                 .Concat(_boxesCounter.ItemDrinkPackages
-                    .Select(item => new BoxData((int)item.ItemType, item.transform.position)))
+                    .Select(item => new BoxData((int)item.ItemType, item.transform.position, item.CurrentFullness,
+                        false, null)))
                 .ToList();
 
             // Сохраняем данные в JSON файл
@@ -53,6 +55,23 @@ namespace SaveContent
             }
 
             return new List<BoxData>();
+        }
+
+        [ContextMenu("ClearSavedData")]
+        public void ClearSavedData()
+        {
+            _boxesCounter.Clear();
+
+            string path = Application.persistentDataPath + "/boxData.json";
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                Debug.Log("Saved data cleared.");
+            }
+            else
+            {
+                Debug.Log("No saved data found.");
+            }
         }
 
 
@@ -96,11 +115,17 @@ namespace SaveContent
     {
         public int itemType;
         public Vector3 position;
+        public int amount;
+        public bool additional;
+        public int[] additionalAmountItems;
 
-        public BoxData(int type, Vector3 pos)
+        public BoxData(int type, Vector3 pos, int amount, bool additional, int[] additionalAmount)
         {
             itemType = type;
             position = pos;
+            this.amount = amount;
+            this.additional = additional;
+            additionalAmountItems = additionalAmount;
         }
     }
 

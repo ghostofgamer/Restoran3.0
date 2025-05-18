@@ -34,18 +34,24 @@ namespace ItemContent
             Load();
         }
 
-        private void AddBox(GameObject box)
+        public void RemoveBox(GameObject box)
         {
+            Debug.Log("ыфвфвфывфывфывфывфывфывфывфывфывфывфывфвфвф");
+
             if (box.TryGetComponent(out ItemBasket itemBasket))
-            {
-                Debug.Log("!Добавили баскет бокс");
-                _itemBaskets.Add(itemBasket);
-            }
+                _itemBaskets.Remove(itemBasket);
 
             if (box.TryGetComponent(out ItemDrinkPackage itemDrinkPackage))
-            {
+                _itemDrinkPackages.Remove(itemDrinkPackage);
+        }
+
+        public void AddBox(GameObject box)
+        {
+            if (box.TryGetComponent(out ItemBasket itemBasket))
+                _itemBaskets.Add(itemBasket);
+
+            if (box.TryGetComponent(out ItemDrinkPackage itemDrinkPackage))
                 _itemDrinkPackages.Add(itemDrinkPackage);
-            }
         }
 
         private void Load()
@@ -60,9 +66,39 @@ namespace ItemContent
                 if (prefab != null)
                 {
                     GameObject box = Instantiate(prefab, boxData.position, Quaternion.identity);
-                    AddBox(box);
+                    LoadBox(box, boxData);
                 }
             }
+        }
+
+        private void LoadBox(GameObject box, BoxData boxData)
+        {
+            if (box.TryGetComponent(out ItemBasket itemBasket))
+            {
+                _itemBaskets.Add(itemBasket);
+
+                if (boxData.additional)
+                {
+                    Debug.Log("Additional BOX " + boxData.itemType);
+                    itemBasket.LoadItems(true,boxData.amount,boxData.additionalAmountItems);
+                }
+                else
+                {
+                    itemBasket.LoadItems(false,boxData.amount,boxData.additionalAmountItems);
+                }
+            }
+
+            if (box.TryGetComponent(out ItemDrinkPackage itemDrinkPackage))
+            {
+                _itemDrinkPackages.Add(itemDrinkPackage);
+                itemDrinkPackage.SetFullness(boxData.amount);
+            }
+        }
+
+        public void Clear()
+        {
+            _itemBaskets.Clear();
+            _itemDrinkPackages.Clear();
         }
     }
 }

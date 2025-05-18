@@ -95,6 +95,14 @@ public class ItemBasket : MonoBehaviour
             Debug.Log("ActiveCount in row " + i + ": " + rowActiveCount);
         }
 
+        foreach (var asd in activeCounts)
+        {
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("additionalAmountItem" +asd);
+        }
+        
         Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
         return activeCounts;
 
@@ -269,6 +277,30 @@ public class ItemBasket : MonoBehaviour
     private void DeactivateItems()
     {
         SetActiveValue(false);
+    }
+
+    public void LoadItems(bool additional , int amountItems, int[] additionalAmountItems)
+    {
+        if (!additional)
+        {
+            foreach (var item in _itemsActivity)
+                item.SetValue(false);
+
+            for (int i = 0; i < amountItems; i++)
+                _itemsActivity[i].SetValue(true);
+        }
+        else
+        {
+            
+            foreach (var item in _additionalItemsActivity)
+                item.SetValue(false);
+
+            for (int i = 0; i < additionalAmountItems.Length; i++)
+            {
+                if (i < _additionalItemsActivity.Length)
+                    _additionalItemsActivity[i].SetValue(true);
+            }
+        }
     }
 
     public void SetShelf(Shelf shelf)
