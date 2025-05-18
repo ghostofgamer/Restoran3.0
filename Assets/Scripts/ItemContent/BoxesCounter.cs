@@ -81,6 +81,7 @@ namespace ItemContent
                 {
                     Debug.Log("Additional BOX " + boxData.itemType);
                     itemBasket.LoadItems(true,boxData.amount,boxData.additionalAmountItems);
+                    Debug.Log("16" );
                 }
                 else
                 {

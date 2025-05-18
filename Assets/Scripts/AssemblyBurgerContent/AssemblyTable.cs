@@ -92,9 +92,11 @@ public class AssemblyTable : MonoBehaviour
                                 {
                                     int itemsToPlace = Mathf.Min(emptyPositions[i], activeItems[i]);
                                     Debug.Log("itemsToPlace " + itemsToPlace);
+                                    Debug.Log("emptyPositions[i] " + emptyPositions[i]);
+                                    Debug.Log("activeItems[i] " + activeItems[i]);
 
                                     SoundPlayer.Instance.PlayPutTray();
-                                    basket.RemoveItem(itemsToPlace, i);
+                                    // basket.RemoveItem(itemsToPlace, i);
                                     basket.TransferProduct(itemsToPlace, i, targetContainer.AdditionalArrayPositions);
                                     targetContainer.ActivateItems(itemsToPlace, i);
                                 }

@@ -28,6 +28,8 @@ namespace InteractableContent
         [SerializeField] private Item[][] _itemsAdditionalArray;
 
         public event Action<int> ItemsActiveCountChanged;
+        
+        public event Action<int,int> ItemsAdditionalActiveCountChanged;
 
         public Transform[][] AdditionalArrayPositions { get; private set; }
 
@@ -53,6 +55,9 @@ namespace InteractableContent
 
         private void Start()
         {
+            _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
+            AdditionalArrayPositions = new Transform[][] { _positions, _additioanlPositions };
+            
             if (!_isAdditionalItemsContainer)
             {
                 int value = PlayerPrefs.GetInt("ItemContainer" + CurrentItemContainer, 0);
@@ -62,10 +67,13 @@ namespace InteractableContent
             }
             else
             {
+                int firstValue = PlayerPrefs.GetInt("ItemContainer_FirstItemsValue" + CurrentItemContainer, 0);
+                int secondValue = PlayerPrefs.GetInt("ItemContainer_AdditionalItemsValue" + CurrentItemContainer, 0);
+                DeactivateAllItem();
+                ActivateItems(firstValue,0);
+                ActivateItems(secondValue,1);
             }
 
-            _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
-            AdditionalArrayPositions = new Transform[][] { _positions, _additioanlPositions };
         }
 
         public virtual void ActionContainer(PlayerInteraction playerInteraction)
@@ -186,6 +194,11 @@ namespace InteractableContent
             {
                 inactiveItems[i].gameObject.SetActive(true);
             }
+            
+            int firstItemsAmountValue = _itemsAdditionalArray[0].Where(p => p.gameObject.activeSelf).Count();
+            int secondItemsAmountValue = _itemsAdditionalArray[1].Where(p => p.gameObject.activeSelf).Count();
+            
+            ItemsAdditionalActiveCountChanged?.Invoke(firstItemsAmountValue,secondItemsAmountValue);
         }
 
         public void DeactivateItems(int value)
@@ -222,6 +235,11 @@ namespace InteractableContent
             {
                 inactiveItems[i].gameObject.SetActive(false);
             }
+            
+            int firstItemsAmountValue = _itemsAdditionalArray[0].Where(p => p.gameObject.activeSelf).Count();
+            int secondItemsAmountValue = _itemsAdditionalArray[1].Where(p => p.gameObject.activeSelf).Count();
+            
+            ItemsAdditionalActiveCountChanged?.Invoke(firstItemsAmountValue,secondItemsAmountValue);
         }
 
         private void DeactivateAllItem()

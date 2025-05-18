@@ -31,7 +31,7 @@ namespace SaveContent
             // Преобразуем данные коробок в формат для сохранения
             List<BoxData> boxesToSave = _boxesCounter.ItemBaskets
                 .Select(item => new BoxData((int)item.ItemType, item.transform.position, item.GetActiveValueItems(),
-                    item.IsAdditionalItemsBasket, item.GetActiveValueArrayItems()))
+                    item.IsAdditionalItemsBasket, item.GetActiveValueArrayItems().ToList()))
                 .Concat(_boxesCounter.ItemDrinkPackages
                     .Select(item => new BoxData((int)item.ItemType, item.transform.position, item.CurrentFullness,
                         false, null)))
@@ -117,15 +117,15 @@ namespace SaveContent
         public Vector3 position;
         public int amount;
         public bool additional;
-        public int[] additionalAmountItems;
+        public List<int> additionalAmountItems;
 
-        public BoxData(int type, Vector3 pos, int amount, bool additional, int[] additionalAmount)
+        public BoxData(int type, Vector3 pos, int amount, bool additional, List<int> addAmtItems)
         {
             itemType = type;
             position = pos;
             this.amount = amount;
             this.additional = additional;
-            additionalAmountItems = additionalAmount;
+            additionalAmountItems = addAmtItems;
         }
     }
 

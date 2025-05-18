@@ -35,6 +35,8 @@ public class ItemBasket : MonoBehaviour
     [SerializeField] private Item[][] _itemsAdditionalArray;
     [SerializeField] private ActivityItem[][] _itemsActivityAdditionalArray;
 
+    private bool _firstLoad = true;
+
     private void OnEnable()
     {
         _draggable.DraggablePicked += ActivateItems;
@@ -51,6 +53,9 @@ public class ItemBasket : MonoBehaviour
 
     private void Start()
     {
+        if (!_firstLoad)
+            return;
+        
         _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
         _itemsActivityAdditionalArray = new ActivityItem[][] { _itemsActivity, _additionalItemsActivity };
         DeactivateItems();
@@ -93,14 +98,6 @@ public class ItemBasket : MonoBehaviour
 
             activeCounts[i] = rowActiveCount;
             Debug.Log("ActiveCount in row " + i + ": " + rowActiveCount);
-        }
-
-        foreach (var asd in activeCounts)
-        {
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            Debug.Log("additionalAmountItem" +asd);
         }
         
         Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
@@ -279,10 +276,14 @@ public class ItemBasket : MonoBehaviour
         SetActiveValue(false);
     }
 
-    public void LoadItems(bool additional , int amountItems, int[] additionalAmountItems)
+    public void LoadItems(bool additional , int amountItems, List<int> additionalAmountItems)
     {
+        Debug.Log("17" );
+        
+        
         if (!additional)
         {
+            Debug.Log("18" );
             foreach (var item in _itemsActivity)
                 item.SetValue(false);
 
@@ -291,15 +292,56 @@ public class ItemBasket : MonoBehaviour
         }
         else
         {
-            
-            foreach (var item in _additionalItemsActivity)
-                item.SetValue(false);
-
-            for (int i = 0; i < additionalAmountItems.Length; i++)
+            _firstLoad = false;
+            _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
+            _itemsActivityAdditionalArray = new ActivityItem[][] { _itemsActivity, _additionalItemsActivity };
+            DeactivateItems();
+            Debug.Log("19" );
+            // Сбрасываем все элементы в _itemsActivityAdditionalArray в false
+            foreach (var row in _itemsActivityAdditionalArray)
             {
-                if (i < _additionalItemsActivity.Length)
-                    _additionalItemsActivity[i].SetValue(true);
+                foreach (var item in row)
+                    item.SetValue(false);
             }
+            Debug.Log("20" );
+            // Устанавливаем элементы в true в соответствии с additionalAmountItems
+            
+            for (int i = 0; i < additionalAmountItems.Count; i++)
+            {
+                if (i < _itemsActivityAdditionalArray.Length)
+                {
+                    int count = additionalAmountItems[i];
+                    
+                    for (int j = 0; j < count && j < _itemsActivityAdditionalArray[i].Length; j++)
+                    {
+                        _itemsActivityAdditionalArray[i][j].SetValue(true);
+                    }
+                }
+            }
+            
+            
+            
+            
+            
+            /*for (int i = 0; i < additionalAmountItems.Count; i++)
+            {
+                Debug.Log("++++++++++ " + additionalAmountItems[i]);
+                Debug.Log("21" );
+
+                for (int j = 0; j < additionalAmountItems[i]; j++)
+                {
+                    _itemsActivityAdditionalArray[i]
+                }
+                
+                if (i < _itemsActivityAdditionalArray.Length)
+                {
+                    int rowIndex = i;
+                    int colIndex = additionalAmountItems[i];
+
+                    if (rowIndex < _itemsActivityAdditionalArray.Length && colIndex < _itemsActivityAdditionalArray[rowIndex].Length)
+                        _itemsActivityAdditionalArray[rowIndex][colIndex].SetValue(true);
+                }
+            }*/
         }
     }
 
