@@ -5,12 +5,14 @@ using SettingsContent.SoundContent;
 using SoContent;
 using UI.Screens.ShopContent;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace DeliveryContent
 {
     public class Delivery : MonoBehaviour
     {
         [SerializeField] private Transform _spawnPosition;
+        [SerializeField] private Transform []_spawnPositions;
         [SerializeField] private DeliveryConfig _deliveryConfig;
         [SerializeField] private DeliveryViewer _deliveryViewer;
         [SerializeField] private DeliverySaver _deliverySaver;
@@ -139,7 +141,7 @@ namespace DeliveryContent
 
                 if (prefab != null)
                 {
-                    GameObject newBox = Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+                    GameObject newBox = Instantiate(prefab, GetPosition().position, Quaternion.identity);
                     SpawnCompleted?.Invoke(newBox);
                 }
 
@@ -185,7 +187,7 @@ namespace DeliveryContent
                 GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
 
                 if (prefab != null)
-                    Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+                    Instantiate(prefab, GetPosition().position, Quaternion.identity);
 
                 item.Amount--;
 
@@ -206,7 +208,7 @@ namespace DeliveryContent
                 SoundPlayer.Instance.PlayDostavka();
 
                 if (prefab != null)
-                    Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+                    Instantiate(prefab, GetPosition().position, Quaternion.identity);
             }
         }
 
@@ -218,6 +220,14 @@ namespace DeliveryContent
                 _amountDeliveries += item.Amount;
 
             AmountItemsDeliveriesChanged?.Invoke(_amountDeliveries);
+        }
+
+        private Transform GetPosition()
+        {
+            int index = Random.Range(0, _spawnPositions.Length);
+            return _spawnPositions[index];
+
+
         }
     }
 }

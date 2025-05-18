@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DeliveryContent;
 using Enums;
@@ -15,9 +14,10 @@ namespace ItemContent
         [SerializeField] private BoxSaver _boxSaver;
 
         private List<ItemBasket> _itemBaskets = new List<ItemBasket>();
+        private List<ItemDrinkPackage> _itemDrinkPackages = new List<ItemDrinkPackage>();
 
-        private List<BoxData> _itemType = new List<BoxData>();
         public List<ItemBasket> ItemBaskets => _itemBaskets;
+        public List<ItemDrinkPackage> ItemDrinkPackages => _itemDrinkPackages;
 
         private void OnEnable()
         {
@@ -31,36 +31,7 @@ namespace ItemContent
 
         private void Start()
         {
-            // _itemType = _boxSaver.LoadData();
-
-            List<BoxData> loadedBoxes = _boxSaver.LoadData();
-            Debug.Log("loadedBoxes " + loadedBoxes.Count);
-            
-            foreach (BoxData boxData in loadedBoxes)
-            {
-                GameObject prefab = _deliveryConfig.GetPrefabByItemType((ItemType)boxData.itemType);
-                
-                if (prefab != null)
-                    Instantiate(prefab, boxData.position, Quaternion.identity);
-                
-                /*GameObject box = Instantiate(boxPrefab, boxData.position, Quaternion.identity);
-                // Дополнительная логика для настройки коробки*/
-            }
-            
-            
-            
-            
-            
-            /*if (_itemType.Count > 0)
-            {
-                foreach (var itemType in _itemType)
-                {
-                    GameObject prefab = _deliveryConfig.GetPrefabByItemType(itemType);
-                    
-                    if (prefab != null)
-                        Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
-                }
-            }*/
+            Load();
         }
 
         private void AddBox(GameObject box)
@@ -73,6 +44,24 @@ namespace ItemContent
 
             if (box.TryGetComponent(out ItemDrinkPackage itemDrinkPackage))
             {
+                _itemDrinkPackages.Add(itemDrinkPackage);
+            }
+        }
+
+        private void Load()
+        {
+            List<BoxData> loadedBoxes = _boxSaver.LoadData();
+            Debug.Log("loadedBoxes " + loadedBoxes.Count);
+
+            foreach (BoxData boxData in loadedBoxes)
+            {
+                GameObject prefab = _deliveryConfig.GetPrefabByItemType((ItemType)boxData.itemType);
+
+                if (prefab != null)
+                {
+                    GameObject box = Instantiate(prefab, boxData.position, Quaternion.identity);
+                    AddBox(box);
+                }
             }
         }
     }

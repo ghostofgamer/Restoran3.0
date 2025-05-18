@@ -31,6 +31,8 @@ namespace SaveContent
             // Преобразуем данные коробок в формат для сохранения
             List<BoxData> boxesToSave = _boxesCounter.ItemBaskets
                 .Select(item => new BoxData((int)item.ItemType, item.transform.position))
+                .Concat(_boxesCounter.ItemDrinkPackages
+                    .Select(item => new BoxData((int)item.ItemType, item.transform.position)))
                 .ToList();
 
             // Сохраняем данные в JSON файл
@@ -52,8 +54,8 @@ namespace SaveContent
 
             return new List<BoxData>();
         }
-        
-        
+
+
         /*private void SaveDate()
         {
             int[] combinedIndices = _boxesCounter.ItemBaskets.Select(item => (int)item.ItemType).ToArray();
@@ -88,7 +90,7 @@ namespace SaveContent
             return new List<ItemType>();
         }*/
     }
-    
+
     [System.Serializable]
     public struct BoxData
     {
@@ -101,7 +103,7 @@ namespace SaveContent
             position = pos;
         }
     }
-    
+
     [System.Serializable]
     public class BoxDataWrapper
     {
