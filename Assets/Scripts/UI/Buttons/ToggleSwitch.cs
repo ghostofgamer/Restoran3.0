@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using SettingsContent.SoundContent;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -77,6 +78,7 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("КЛИК");
+        SoundPlayer.Instance.PlayButtonClick();
         Toggle();
     }
 

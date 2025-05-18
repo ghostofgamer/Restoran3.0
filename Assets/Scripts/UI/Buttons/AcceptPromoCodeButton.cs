@@ -1,4 +1,5 @@
 using PromoCodeContent;
+using SettingsContent.SoundContent;
 using UnityEngine;
 
 namespace UI.Buttons
@@ -9,6 +10,7 @@ namespace UI.Buttons
         
         public override void OnClick()
         {
+            SoundPlayer.Instance.PlayButtonClick();
             _promoCodeViewer.AcceptPromoCode();
         }
     }

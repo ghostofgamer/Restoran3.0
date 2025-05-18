@@ -1,3 +1,4 @@
+using SettingsContent.SoundContent;
 using UI.Screens;
 using UnityEngine;
 
@@ -7,6 +8,10 @@ namespace UI.Buttons.SettingsScreenButton
     {
         [SerializeField] private SettingsScreen _settingsScreen;
 
-        public override void OnClick() => _settingsScreen.OpenLifeFrameSite();
+        public override void OnClick()
+        {
+            SoundPlayer.Instance.PlayButtonClick();
+            _settingsScreen.OpenLifeFrameSite();
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using SettingsContent.SoundContent;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -151,13 +152,8 @@ namespace CoppraGames
         
         public void OnTriggerNeedle()
         {
-            /*if (_isStarted)
-                sounds.Play(SoundType.WheelTick);*/
+            if (_isStarted)
+               SoundPlayer.Instance.PlayWheelFortune();
         }
-
-        /*public void Close()
-        {
-            Main.instance.ShowSpinWheelWindow(false);
-        }*/
     }
 }

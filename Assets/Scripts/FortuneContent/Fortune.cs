@@ -4,6 +4,7 @@ using ADSContent;
 using CoppraGames;
 using DailyTimerContent;
 using PlayerContent.LevelContent;
+using SettingsContent.SoundContent;
 using TMPro;
 using UI.Screens;
 using UnityEngine;
@@ -94,7 +95,8 @@ namespace FortuneContent
 
             if (_spinWheelController.IsStarted)
                 return;
-
+            
+            SoundPlayer.Instance.PlayButtonClick();
             _currentValueSpin--;
             SaveSpinData();
             Spin();
@@ -105,7 +107,8 @@ namespace FortuneContent
         {
             if (_spinWheelController.IsStarted)
                 return;
-
+            
+            SoundPlayer.Instance.PlayButtonClick();
             _dailyTimerFortune.StartButtonClick();
             FreeSpinDayCompleted?.Invoke();
             Spin();
@@ -116,8 +119,8 @@ namespace FortuneContent
             if (_spinWheelController.IsStarted)
                 return;
 
+            SoundPlayer.Instance.PlayButtonClick();
             _dailyTimerADSFortune.StartButtonClick();
-
             _ads.ShowRewarded(() => { Spin(); });
         }
 
