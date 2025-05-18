@@ -1,4 +1,5 @@
 using Enums;
+using SettingsContent.SoundContent;
 using TMPro;
 using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
@@ -45,6 +46,8 @@ namespace UI.Screens.ShopContent
         
         public void IncreaseAmount()
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             if (CurrentAmount >= 9)
                 return;
 
@@ -54,6 +57,8 @@ namespace UI.Screens.ShopContent
 
         public void DecreaseAmount()
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             if (CurrentAmount > 1)
             {
                 CurrentAmount--;

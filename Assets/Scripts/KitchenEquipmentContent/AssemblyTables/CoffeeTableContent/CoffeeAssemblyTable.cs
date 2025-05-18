@@ -7,6 +7,7 @@ using ItemContent;
 using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
+using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
 using UI.Screens;
 using UnityEngine;
@@ -63,6 +64,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
                 ItemContainer.DeactivateItems(1);
                 _fullnessCoffeeCounter.UseCoffee();
                 _emptyCup.SetActive(true);
+                SoundPlayer.Instance.PlayPourDrink();
                 yield return new WaitForSeconds(1f);
                 _emptyCup.SetActive(false);
                 Item coffeeInstance = _burgerIngridientSpawner.SpawnItem(ItemType.Coffee);
@@ -116,7 +118,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
             {
                 Debug.Log("нету пустых позиций");
             }
-
+            
             yield return new WaitForSeconds(1f);
             _isWorking = false;
         }

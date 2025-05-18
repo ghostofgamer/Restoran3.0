@@ -1,6 +1,7 @@
 using System;
 using ClientsContent;
 using DayNightContent;
+using SettingsContent.SoundContent;
 using UI.Screens;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ namespace StatisticContent
 
         public void ShowStatistics()
         {
+            SoundPlayer.Instance.PlayButtonClick();
             _statisticsScreen.OpenScreen();
             _statisticsScreen.ShowStatistic();
             _statButton.SetActive(false);

@@ -1,4 +1,5 @@
 using DayNightContent;
+using SettingsContent.SoundContent;
 using StatisticContent;
 using UI.Screens;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace UI.Buttons
     
         public override void OnClick()
         {
-            Debug.Log("новый");
+            SoundPlayer.Instance.PlayButtonClick();
             _dayNightCycle.ResetDay();
             _statisticCounter.ClearData();
             _statisticsScreen.CloseScreen();

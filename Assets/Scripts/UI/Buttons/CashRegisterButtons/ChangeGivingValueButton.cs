@@ -1,4 +1,5 @@
 using RestaurantContent.CashRegisterContent;
+using SettingsContent.SoundContent;
 using UnityEngine;
 
 namespace UI.Buttons
@@ -10,6 +11,7 @@ namespace UI.Buttons
         
         public override void OnClick()
         {
+            SoundPlayer.Instance.PlayCoins();
             _cashRegister.ChangeGivingValue(_valueCents);
         }
     }

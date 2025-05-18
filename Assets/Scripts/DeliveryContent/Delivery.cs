@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Enums;
+using SettingsContent.SoundContent;
 using SoContent;
 using UI.Screens.ShopContent;
 using UnityEngine;
@@ -145,6 +146,7 @@ namespace DeliveryContent
                     _items.RemoveAt(0);
             }
 
+            SoundPlayer.Instance.PlayDostavka();
             RemainingTime = 0;
             TimeChanged?.Invoke(RemainingTime);
         }
@@ -181,7 +183,9 @@ namespace DeliveryContent
                     Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
 
                 item.Amount--;
-
+                
+                SoundPlayer.Instance.PlayDostavka();
+                
                 UpdateAmountDeliveries();
 
                 if (item.Amount <= 0)
@@ -194,7 +198,8 @@ namespace DeliveryContent
             for (int i = 0; i < value; i++)
             {
                 GameObject prefab = _deliveryConfig.GetPrefabByItemType(itemType);
-
+                SoundPlayer.Instance.PlayDostavka();
+                
                 if (prefab != null)
                     Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
             }

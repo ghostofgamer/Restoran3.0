@@ -1,3 +1,4 @@
+using SettingsContent.SoundContent;
 using TMPro;
 using UI.Screens.ShopContent;
 using UnityEngine;
@@ -48,10 +49,12 @@ namespace UI.Screens
         {
             if (_wallet.DollarValue.ToTotalCents() < _currentPrice.ToTotalCents())
             {
+                SoundPlayer.Instance.PlayError();
                 Debug.Log("Не хватает денег ");
                 return;
             }
-
+            
+            SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_currentPrice);
             _shopScreen.MakePurchase();
             _isOwned = true;

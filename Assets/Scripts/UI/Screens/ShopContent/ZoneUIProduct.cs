@@ -1,6 +1,7 @@
 using System;
 using Enums;
 using RestaurantContent;
+using SettingsContent.SoundContent;
 using TMPro;
 using Unity.AI.Navigation;
 using UnityEngine;
@@ -69,10 +70,12 @@ namespace UI.Screens.ShopContent
         {
             if (_wallet.DollarValue.ToTotalCents() < _dollarValue.ToTotalCents())
             {
+                SoundPlayer.Instance.PlayError();
                 Debug.Log("Не хватает денег ");
                 return;
             }
             
+            SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
             _shopScreen.MakePurchase();
             IsOwned = true;

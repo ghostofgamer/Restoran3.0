@@ -1,3 +1,4 @@
+using SettingsContent.SoundContent;
 using UI.Screens;
 using UI.Screens.ShopContent;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace UI.Buttons.PageShopButtons
 
         public override void OnClick()
         {
+            SoundPlayer.Instance.PlayButtonClick();
             _shopScreen.OpenPage(_index);
         }
 

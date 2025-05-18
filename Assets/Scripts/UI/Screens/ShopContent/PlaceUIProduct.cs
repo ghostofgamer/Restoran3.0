@@ -1,4 +1,5 @@
 using RestaurantContent;
+using SettingsContent.SoundContent;
 using TMPro;
 using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
@@ -49,13 +50,6 @@ namespace UI.Screens.ShopContent
                     _zoneProduct.IsBuyed() && IsOwned,
                     _zoneProduct.IsBuyed() && !IsOwned);
             }
-
-            Debug.Log("_buyButtonImage" + _buyButtonImage);
-            Debug.Log("_wallet" + _wallet);
-            Debug.Log("_wallet.DollarValue.ToTotalCents()" + _wallet.DollarValue.ToTotalCents());
-            Debug.Log("_dollarValue.ToTotalCents()" + _dollarValue.ToTotalCents());
-            Debug.Log("_activeButtonColor" + _activeButtonColor);
-            Debug.Log("_notActiveButtonColor" + _notActiveButtonColor);
             
             _buyButtonImage.color = _wallet.DollarValue.ToTotalCents() >= _dollarValue.ToTotalCents()
                 ? _activeButtonColor
@@ -71,10 +65,12 @@ namespace UI.Screens.ShopContent
         {
             if (_wallet.DollarValue.ToTotalCents() < _dollarValue.ToTotalCents())
             {
+                SoundPlayer.Instance.PlayError();
                 Debug.Log("Не хватает денег ");
                 return;
             }
 
+            SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
             _shopScreen.MakePurchase();
             IsOwned = true;

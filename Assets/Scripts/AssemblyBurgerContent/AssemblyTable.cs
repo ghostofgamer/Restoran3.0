@@ -7,6 +7,7 @@ using Enums;
 using InteractableContent;
 using PlayerContent;
 using SaveContent;
+using SettingsContent.SoundContent;
 using UnityEngine;
 
 public class AssemblyTable : MonoBehaviour
@@ -92,6 +93,7 @@ public class AssemblyTable : MonoBehaviour
                                     int itemsToPlace = Mathf.Min(emptyPositions[i], activeItems[i]);
                                     Debug.Log("itemsToPlace " + itemsToPlace);
 
+                                    SoundPlayer.Instance.PlayPutTray();
                                     basket.RemoveItem(itemsToPlace, i);
                                     basket.TransferProduct(itemsToPlace, i, targetContainer.AdditionalArrayPositions);
                                     targetContainer.ActivateItems(itemsToPlace, i);
@@ -110,6 +112,7 @@ public class AssemblyTable : MonoBehaviour
 
                         if (emptyPosition > 0 && activeItems > 0)
                         {
+                            SoundPlayer.Instance.PlayPutTray();
                             int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
                             basket.TransferProduct(itemsToPlace, targetContainer.Positions);
                             targetContainer.ActivateItems(itemsToPlace);
@@ -145,7 +148,7 @@ public class AssemblyTable : MonoBehaviour
                 if (emptyPosition > 0 && activeItems > 0)
                 {
                     int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
-
+                    SoundPlayer.Instance.PlayPutTray();
                     // basket.TransferProduct(itemsToPlace, targetContainer.Positions);
                     playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType, itemsToPlace);
                     targetContainer.ActivateItems(itemsToPlace);
@@ -159,6 +162,7 @@ public class AssemblyTable : MonoBehaviour
         }
         else
         {
+            SoundPlayer.Instance.PlayButtonClick();
             BurgerAssemblyBeginig?.Invoke();
             SetValueCollider(false);
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);

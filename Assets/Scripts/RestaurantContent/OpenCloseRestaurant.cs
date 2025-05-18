@@ -1,6 +1,7 @@
 using System;
 using InteractableContent;
 using PlayerContent;
+using SettingsContent.SoundContent;
 using TMPro;
 using UnityEngine;
 
@@ -32,6 +33,7 @@ namespace RestaurantContent
 
         private void SetValue(PlayerInteraction playerInteraction)
         {
+            SoundPlayer.Instance.PlayButtonClick();
             IsOpened = !IsOpened;
             OpenedChanged?.Invoke(IsOpened);
             Show();

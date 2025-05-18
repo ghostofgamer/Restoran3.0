@@ -6,6 +6,7 @@ using ClientsContent;
 using InteractableContent;
 using OrdersContent;
 using PlayerContent;
+using SettingsContent.SoundContent;
 using UnityEngine;
 using WalletContent;
 
@@ -58,6 +59,8 @@ namespace RestaurantContent.CashRegisterContent
 
         private void ShowAssemblyCashRegisterOrder(PlayerInteraction playerInteraction)
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             if (playerInteraction.CurrentDraggable != null || playerInteraction.PlayerTray.IsActive)
                 return;
 
@@ -94,6 +97,7 @@ namespace RestaurantContent.CashRegisterContent
             
             if (_currentGivingValue.ToTotalCents() != _currentChangeValue.ToTotalCents())
             {
+                SoundPlayer.Instance.PlayError();
                 Debug.Log("СДАЧА НЕВЕРНАЯ");
                 return;
             }
@@ -101,6 +105,7 @@ namespace RestaurantContent.CashRegisterContent
                 StopCoroutine(_coroutine);
 
             _coroutine = StartCoroutine(StartAcceptOrder());*/
+            SoundPlayer.Instance.PlayCashRegister();
             CashRegisterOrderCompleted?.Invoke();
             _currentClient.Paid();
             _wallet.Add(_currentClient.PriceOrder);

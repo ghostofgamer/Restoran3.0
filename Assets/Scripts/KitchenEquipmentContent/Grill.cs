@@ -5,6 +5,7 @@ using DG.Tweening;
 using Enums;
 using InteractableContent;
 using PlayerContent;
+using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
 using TMPro;
 using UnityEngine;
@@ -420,7 +421,7 @@ namespace KitchenEquipmentContent
 
             _audioSource.Stop();
             grillText.text = "Grill <color=green>Medium</color>";
-
+            SoundPlayer.Instance.PlayGrillWell();
             // _animator.SetBool("FryCutlet",false);
 
             int activeCount = CountActiveItems(_rawCutletItems);

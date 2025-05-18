@@ -1,5 +1,6 @@
 using ADSContent;
 using DayNightContent;
+using SettingsContent.SoundContent;
 using StatisticContent;
 using UI.Screens;
 using UnityEngine;
@@ -17,6 +18,8 @@ namespace UI.Buttons
 
         public override void OnClick()
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             _ads.ShowRewarded(() =>
             {
                 _wallet.Add(new DollarValue(25, 0));

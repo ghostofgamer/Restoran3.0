@@ -7,6 +7,7 @@ using InteractableContent;
 using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
+using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
 using UnityEngine;
 
@@ -186,7 +187,9 @@ namespace AssemblyBurgerContent
             }
 
             Item item = _burgerIngridientSpawner.SpawnItem(type);
-
+            
+            SoundPlayer.Instance.PlayPutTray();
+            
             _lastItemContainer = itemContainer;
             item.gameObject.SetActive(true);
 
@@ -251,7 +254,9 @@ namespace AssemblyBurgerContent
                 {
                     _isAnimationInProgress = true;
                     Sequence sequence = DOTween.Sequence();
-
+                    
+                    SoundPlayer.Instance.PlayPutTray();
+                    
                     sequence.Append(lastItem.transform.DOMove(container.transform.position, 0.3f)
                         .SetEase(Ease.InOutQuad));
                     sequence.Join(lastItem.transform.DORotate(container.transform.eulerAngles, 0.3f)

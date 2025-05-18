@@ -1,5 +1,6 @@
 using InputContent;
 using Interfaces;
+using SettingsContent.SoundContent;
 using UnityEngine;
 
 namespace PlayerContent
@@ -50,6 +51,7 @@ namespace PlayerContent
 
         public void SetDraggableObject(Draggable draggable)
         {
+            SoundPlayer.Instance.PlayPickUp();
             CurrentDraggable = draggable;
             draggable.transform.SetParent(_draggablePosition);
             draggable.GetComponent<Rigidbody>().isKinematic = true;
@@ -66,6 +68,7 @@ namespace PlayerContent
             if (CurrentDraggable == null)
                 return;
             
+            SoundPlayer.Instance.PlayThrow();
             Debug.Log("бросить 1 ");
             CurrentDraggable.Throw();
             CurrentDraggable.GetComponent<Rigidbody>().isKinematic = false;

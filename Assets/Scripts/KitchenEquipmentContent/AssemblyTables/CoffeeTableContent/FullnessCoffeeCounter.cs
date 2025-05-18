@@ -1,5 +1,6 @@
 using System;
 using ItemContent;
+using SettingsContent.SoundContent;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,6 +41,9 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         {
             int neededCoffee = _maxFullness - CurrentFullness;
             int coffeeToAdd = Mathf.Min(neededCoffee, itemDrinkPackage.CurrentFullness);
+
+            if (coffeeToAdd > 0)
+                SoundPlayer.Instance.PlayRefillDrinksMachine();
 
             CurrentFullness += coffeeToAdd;
             FullnessCoffeeChanged?.Invoke(CurrentFullness);

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DeliveryContent;
 using Enums;
 using PlayerContent.LevelContent;
+using SettingsContent.SoundContent;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -93,11 +94,14 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 
         public void PayItems()
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             if (_items.Count <= 0)
                 return;
 
             if (_wallet.ToTotalCents(_wallet.DollarValue) < _totalPrice.ToTotalCents(_totalPrice))
             {
+                SoundPlayer.Instance.PlayError();
                 Debug.Log("у тебя мало денег ");
                 return;
             }
@@ -110,7 +114,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
             }
 
             _playerLevel.AddExp(amountItems * 5);
-
+            SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_totalPrice);
             _delivery.AddItemsCart(_items);
             ClearItems();

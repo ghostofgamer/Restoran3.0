@@ -1,3 +1,4 @@
+using SettingsContent.SoundContent;
 using UI.Screens.ShopContent.WorkersContent;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace UI.Buttons.WorkerContent
     
         public override void OnClick()
         {
+            SoundPlayer.Instance.PlayButtonClick();
             _workerUIProduct.DismissWorker();
         }
     }

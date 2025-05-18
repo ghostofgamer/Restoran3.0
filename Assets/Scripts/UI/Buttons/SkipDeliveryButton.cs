@@ -1,5 +1,6 @@
 using ADSContent;
 using DeliveryContent;
+using SettingsContent.SoundContent;
 using UnityEngine;
 
 namespace UI.Buttons
@@ -13,6 +14,8 @@ namespace UI.Buttons
 
         public override void OnClick()
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             if (_isAdButton)
                 _ads.ShowRewarded(() => _delivery.SpawnAllItems());
             else

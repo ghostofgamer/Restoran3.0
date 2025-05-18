@@ -1,4 +1,5 @@
 using System.Collections;
+using SettingsContent.SoundContent;
 using UI.Buttons;
 using UnityEngine;
 using WalletContent;
@@ -15,15 +16,11 @@ namespace ADSContent.Popups
         private WaitForSeconds _waitForSeconds;
         private Coroutine _coroutine;
 
-        /*private void Start()
-        {
-            _waitForSeconds = new WaitForSeconds(_duration);
-        }*/
-
         public void Activate()
         {
             _waitForSeconds = new WaitForSeconds(_duration);
             gameObject.SetActive(true);
+            
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
@@ -32,6 +29,8 @@ namespace ADSContent.Popups
 
         public override void OnClick()
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             _ads.ShowRewarded(() =>
             {
                 _wallet.Add(new DollarValue(50, 00));

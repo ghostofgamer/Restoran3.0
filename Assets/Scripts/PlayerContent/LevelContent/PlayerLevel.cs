@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SettingsContent.SoundContent;
 using UI;
 using UnityEngine;
 
@@ -61,6 +62,7 @@ namespace PlayerContent.LevelContent
 
         private void LevelUp()
         {
+           SoundPlayer.Instance.PlayLevelUp();
             CurrentLevel++;
             PlayerPrefs.SetInt("Level", CurrentLevel);
             _targetExp = GetExpForLevel(CurrentLevel);

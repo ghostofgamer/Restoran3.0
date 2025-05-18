@@ -1,4 +1,5 @@
 using System;
+using SettingsContent.SoundContent;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -177,14 +178,14 @@ namespace DailyRewardContent
             DateTime lastClaimDate = GetLastClaimDate();
             // DateTime currentDate = DateTime.Now;
             DateTime currentDate = _isTesting ? DateTime.Now.AddDays(_testDaysOffset) : DateTime.Now;
-            /*sounds.Play(SoundType.ButtonClickWet);
-            sounds.Play(SoundType.DailyReward);*/
+            SoundPlayer.Instance.PlayButtonClick();
 
             if ((currentDate - lastClaimDate).TotalDays >= 1)
             {
                 if (_currentDayIndex < _dayButtons.Length)
                 {
                     Debug.Log("Награда за день " + (_currentDayIndex + 1) + " получена!");
+                    SoundPlayer.Instance.PlayDailyReward();
                     PlayerPrefs.SetString(LastClaimDateKey, DateTime.Now.ToString());
                     PlayerPrefs.SetInt(CurrentDayIndexKey, _currentDayIndex);
                     _rewardClaimedToday = true;
