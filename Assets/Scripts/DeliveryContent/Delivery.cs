@@ -28,6 +28,8 @@ namespace DeliveryContent
 
         public event Action<float> TimeChanged;
 
+        public event Action<GameObject> SpawnCompleted;
+
         public List<ItemDeliveryInfo> CurrentItems => _items;
 
         public float RemainingTimeForNextSpawn => _remainingTimeForNextSpawn;
@@ -136,7 +138,10 @@ namespace DeliveryContent
                 GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
 
                 if (prefab != null)
-                    Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+                {
+                    GameObject newBox = Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+                    SpawnCompleted?.Invoke(newBox);
+                }
 
                 item.Amount--;
 
@@ -183,9 +188,9 @@ namespace DeliveryContent
                     Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
 
                 item.Amount--;
-                
+
                 SoundPlayer.Instance.PlayDostavka();
-                
+
                 UpdateAmountDeliveries();
 
                 if (item.Amount <= 0)
@@ -199,7 +204,7 @@ namespace DeliveryContent
             {
                 GameObject prefab = _deliveryConfig.GetPrefabByItemType(itemType);
                 SoundPlayer.Instance.PlayDostavka();
-                
+
                 if (prefab != null)
                     Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
             }
