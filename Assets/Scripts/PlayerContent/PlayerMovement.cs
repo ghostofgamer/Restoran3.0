@@ -1,9 +1,15 @@
+using Enums;
+using TutorialContent;
+using UI.Screens.TutorialScreens;
 using UnityEngine;
 
 namespace PlayerContent
 {
     public class PlayerMovement : MonoBehaviour
     {
+        [SerializeField] private TutorialType _tutorialType;
+        [SerializeField] private Tutorial _tutorial;
+        [SerializeField] private MoveScreen _moveScreen;
         [SerializeField] private float _moveSpeed;
         [SerializeField] private AudioSource _audioSource;
         [SerializeField] private AudioClip[] _footstepSounds;
@@ -23,6 +29,12 @@ namespace PlayerContent
 
         public void MovePlayer(float horizontal,float vertical)
         {
+            if ((int)_tutorial.CurrentType < (int)_tutorialType)
+            {
+                Debug.Log("(int)_tutorial.CurrentType < (int)_tutorialType");
+                return;
+            }
+            
             _moveDirection = new Vector3(horizontal, 0, vertical);
             _moveDirection = transform.TransformDirection(_moveDirection);
             _moveDirection *= _moveSpeed;
@@ -37,6 +49,14 @@ namespace PlayerContent
             
             if (_moveDirection.magnitude > 3f && Time.time >= _nextStepTime)
             {
+                if ((int)_tutorial.CurrentType == (int)_tutorialType)
+                {
+                    Debug.Log("Выполнил Current этап тутора");
+                    _moveScreen.CloseScreen();
+                    _tutorial.SetCurrentTutorialStage(_tutorialType);
+                }
+                
+                
                 PlayFootstepSound();
                 _nextStepTime = Time.time + _stepInterval;
             }

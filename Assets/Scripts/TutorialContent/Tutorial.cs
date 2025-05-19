@@ -12,9 +12,11 @@ namespace TutorialContent
 
         private void Start()
         {
-            int savedTutorialStage = PlayerPrefs.GetInt("CurrentTutorialStage", 0);
-            CurrentType = (TutorialType)savedTutorialStage;
+            /*int savedTutorialStage = PlayerPrefs.GetInt("CurrentTutorialStage", 0);
+            CurrentType = (TutorialType)savedTutorialStage;*/
 
+
+            CurrentType = TutorialType.NameRestaurant;
             CheckCurrentTutorialStage();
         }
 

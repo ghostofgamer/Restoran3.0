@@ -77,7 +77,7 @@ public class ItemBasket : MonoBehaviour
                 activeCount++;
         }
 
-        Debug.Log("ActiveCount " + activeCount);
+        // Debug.Log("ActiveCount " + activeCount);
         return activeCount;
     }
 
@@ -97,10 +97,10 @@ public class ItemBasket : MonoBehaviour
             }
 
             activeCounts[i] = rowActiveCount;
-            Debug.Log("ActiveCount in row " + i + ": " + rowActiveCount);
+            // Debug.Log("ActiveCount in row " + i + ": " + rowActiveCount);
         }
         
-        Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
+        // Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
         return activeCounts;
 
         /*int[] activeCounts = new int[_itemsAdditionalArray.Length];
