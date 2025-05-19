@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace UI.Screens
+namespace UI.Screens.TutorialScreens
 {
     public class NameRestaurantScreen : AbstractScreen
     {

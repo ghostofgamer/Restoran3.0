@@ -1,5 +1,6 @@
 using TMPro;
 using UI.Screens;
+using UI.Screens.TutorialScreens;
 using UnityEngine;
 using UnityEngine.UI;
 
