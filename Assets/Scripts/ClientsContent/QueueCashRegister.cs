@@ -11,13 +11,22 @@ namespace ClientsContent
         private Client currentClient;
         private int _maxQueueSize = 5;
 
+        public Queue<Client> ClientQueue => clientQueue;
+
         public void AddClientToQueue(Client client)
         {
             clientQueue.Enqueue(client);
             UpdateQueuePositions();
+            Debug.Log("Колличество людей в очереди " +clientQueue.Count);
         }
 
-        private void UpdateQueuePositions()
+        public void AddClientQueue(Client client)
+        {
+            clientQueue.Enqueue(client);
+            Debug.Log("Колличество людей в очереди " +clientQueue.Count);
+        }
+
+        public void UpdateQueuePositions()
         {
             int index = 0;
 
@@ -25,7 +34,11 @@ namespace ClientsContent
             {
                 if (index < _queuePositions.Length)
                 {
-                    client.GoToQueuePosition(_queuePositions[index].position, index);
+                    if (client.gameObject.activeSelf)
+                    {
+                        client.GoToQueuePosition(_queuePositions[index].position, index);
+                    }
+
                     index++;
                 }
             }
@@ -44,7 +57,14 @@ namespace ClientsContent
         public bool IsQueueFull()
         {
             Debug.Log("IsQueueFull " + (clientQueue.Count >= _maxQueueSize));
+            Debug.Log("clientQueue.Count " + clientQueue.Count );
+      
             return clientQueue.Count >= _maxQueueSize;
+        }
+
+        public int GetFreeQueuePositions()
+        {
+            return _maxQueueSize - clientQueue.Count;
         }
     }
 }

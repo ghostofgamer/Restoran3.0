@@ -1,0 +1,91 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using GarbageContent;
+using PlayerContent.LevelContent;
+using UnityEngine;
+using Random = System.Random;
+
+namespace RestaurantContent.TableContent
+{
+    public class TableCleanliness : MonoBehaviour
+    {
+        [SerializeField] private GarbagePackage[] _garbagePackages;
+        [SerializeField] private PlayerLevel _playerLevel;
+        [SerializeField] private Transform _cleanerPosition;
+        [SerializeField] private Transform  _lookDirtyPosition;
+        
+        private int _maxPollutionLevel = 3;
+
+        public event Action<TableCleanliness> TablePolluted;
+        public event Action<TableCleanliness> TableCleaned;
+        
+        public int PollutionLevel { get; private set; }
+        public Transform CleanerPosition => _cleanerPosition;
+        public Transform LookDirtyPosition => _lookDirtyPosition;
+
+        [ContextMenu("PolluteTable")]
+        public void PolluteTable()
+        {
+            if (_garbagePackages.Length <= 0) return;
+
+            if (PollutionLevel >= _maxPollutionLevel) return;
+            
+            PollutionLevel++;
+            // _dirtyCounter.AddDirtyTable(this);
+            TablePolluted?.Invoke(this);
+            
+            Random random = new Random();
+            List<GarbagePackage> garbagesTable = _garbagePackages.Where(t => !t.IsActive).ToList();
+
+            if (garbagesTable.Count > 0)
+            {
+                int randomIndex = random.Next(garbagesTable.Count);
+
+                garbagesTable[randomIndex].SetValue(true);
+                Debug.Log("Рандомный индекс " + randomIndex);
+            }
+        }
+        
+        public int GetTrashActiveCount()
+        {
+            int amount = 0;
+
+            foreach (var garbage in _garbagePackages)
+            {
+                if (garbage.gameObject.activeSelf)
+                    amount++;
+            }
+
+            return amount;
+        }
+        
+        public void DecreasePollutionLevel()
+        {
+            if (PollutionLevel <= 0) return;
+
+            PollutionLevel--;
+            _playerLevel.AddExp(5);
+            
+            if (PollutionLevel == 0)
+                TableCleaned?.Invoke(this);
+            
+            Debug.Log("Decreased pollution level: " + PollutionLevel);
+        }
+
+        public void ClearTable()
+        {
+            if (PollutionLevel <= 0) return;
+            PollutionLevel = 0;
+            DeactivateGarbages();
+            
+            TableCleaned?.Invoke(this);
+        }
+
+        private void DeactivateGarbages()
+        {
+            foreach (var garbage in _garbagePackages)
+                garbage.gameObject.SetActive(false);
+        }
+    }
+}

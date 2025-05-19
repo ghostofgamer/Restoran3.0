@@ -4,9 +4,12 @@ using System.Linq;
 using DG.Tweening;
 using Enums;
 using ItemContent;
+using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
+using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
+using UI.Screens;
 using UnityEngine;
 
 namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
@@ -20,9 +23,23 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         [SerializeField] private List<Transform> _wellPositions;
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private FullnessCoffeeCounter _fullnessCoffeeCounter;
+        [SerializeField] private EquipmentUIProduct _equipmentUIProduct;
+        [SerializeField] private PlayerLevel _playerLevel;
 
         private Coroutine _coroutine;
         private bool _isWorking = false;
+
+        private void Start()
+        {
+            int value = PlayerPrefs.GetInt("CoffeeWellCups", 0);
+
+            Debug.Log("CoffeeWellCups " + value);
+
+            if (value > 0)
+                LoadWellCups(value);
+            
+            gameObject.SetActive(_equipmentUIProduct.IsBuyed());
+        }
 
         public void PourCoffee()
         {
@@ -47,6 +64,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
                 ItemContainer.DeactivateItems(1);
                 _fullnessCoffeeCounter.UseCoffee();
                 _emptyCup.SetActive(true);
+                SoundPlayer.Instance.PlayPourDrink();
                 yield return new WaitForSeconds(1f);
                 _emptyCup.SetActive(false);
                 Item coffeeInstance = _burgerIngridientSpawner.SpawnItem(ItemType.Coffee);
@@ -55,6 +73,8 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
                 coffeeInstance.transform.position = _emptyCup.transform.position;
                 coffeeInstance.transform.rotation = Quaternion.identity;
                 coffeeInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(ItemType.Coffee);
+
+                _playerLevel.AddExp(5);
 
                 Sequence sequence = DOTween.Sequence();
 
@@ -98,10 +118,32 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
             {
                 Debug.Log("нету пустых позиций");
             }
-
+            
             yield return new WaitForSeconds(1f);
             _isWorking = false;
         }
+
+        private void LoadWellCups(int value)
+        {
+            StartCoroutine(StartLoad(value));
+        }
+
+        private IEnumerator StartLoad(int value)
+        {
+            yield return new WaitForSeconds(1f);
+
+            for (int i = 0; i < value; i++)
+            {
+                Transform availablePosition = _wellPositions.FirstOrDefault(position => position.childCount == 0);
+                Item coffeeInstance = _burgerIngridientSpawner.SpawnItem(ItemType.Coffee);
+                coffeeInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(ItemType.Coffee);
+                coffeeInstance.gameObject.SetActive(true);
+                coffeeInstance.transform.SetParent(availablePosition);
+                coffeeInstance.transform.position = availablePosition.position;
+                _coffeeCounter.AddCoffee(coffeeInstance);
+            }
+        }
+
 
         public override void FillDrinkMachine(ItemDrinkPackage itemDrinkPackage)
         {

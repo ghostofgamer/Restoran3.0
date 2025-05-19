@@ -4,8 +4,10 @@ using System.Linq;
 using DG.Tweening;
 using Enums;
 using InteractableContent;
+using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
+using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
 using UnityEngine;
 
@@ -21,6 +23,7 @@ namespace AssemblyBurgerContent
         [SerializeField] private List<Transform> _burgerPositions;
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private BurgersCounter _burgersCounter;
+        [SerializeField] private PlayerLevel _playerLevel;
 
         // private Stack<Item> _ingredientStack = new Stack<Item>();
 
@@ -66,6 +69,12 @@ namespace AssemblyBurgerContent
 
                             if (_ingredientStack.Count > 0)
                             {
+                                if (activeItems[0] <= 0)
+                                {
+                                    Debug.Log("булочек не хватает");
+                                    return;
+                                }
+
                                 Debug.Log("selectedContainer.CurrentItemsType[0] " +
                                           selectedContainer.CurrentItemsType[0]);
                                 HandleContainerSelection(selectedContainer.CurrentItemsType[0], selectedContainer,
@@ -73,16 +82,17 @@ namespace AssemblyBurgerContent
                             }
                             else
                             {
+                                if (activeItems[1] <= 0)
+                                {
+                                    Debug.Log("булочек не хватает");
+                                    return;
+                                }
+
                                 Debug.Log("selectedContainer.CurrentItemsType[1] " +
                                           selectedContainer.CurrentItemsType[1]);
                                 HandleContainerSelection(selectedContainer.CurrentItemsType[1], selectedContainer,
                                     1, true);
                             }
-
-                            /*for (int i = 0; i < activeItems.Length; i++)
-                            {
-                                Debug.Log("Active count in sub-array " + i + ": " + activeItems[i]);
-                            }*/
                         }
                         else
                         {
@@ -105,16 +115,29 @@ namespace AssemblyBurgerContent
                              selectedContainer.CurrentItemContainer == ItemType.PackageBurgerPaper)
                     {
                         Debug.Log("пробуем собрать бургер по рецепту");
-                        ItemType burgerType = GetMatchingRecipe();
 
-                        if (burgerType != ItemType.Empty)
+                        int activePackageBurgerPaper = selectedContainer.GetActiveItemsValue();
+
+                        if (activePackageBurgerPaper <= 0)
                         {
-                            CreateBurger(burgerType);
-                            Debug.Log("Бургер " + burgerType);
+                            Debug.Log("упаковок нету уже");
                         }
                         else
                         {
-                            Debug.Log("Не правильная сборка Бургер ");
+                            Debug.Log("упаковок осталось " + activePackageBurgerPaper);
+
+                            ItemType burgerType = GetMatchingRecipe();
+
+                            if (burgerType != ItemType.Empty)
+                            {
+                                CreateBurger(burgerType, selectedContainer);
+                                Debug.Log("Бургер " + burgerType);
+                                // selectedContainer.DeactivateItems(1);
+                            }
+                            else
+                            {
+                                Debug.Log("Не правильная сборка Бургер ");
+                            }
                         }
                     }
 
@@ -153,7 +176,7 @@ namespace AssemblyBurgerContent
                 AssemblyIngredient assemblyIngredient = previousItem.GetComponent<AssemblyIngredient>();
 
                 // StackChanged?.Invoke();
-                
+
                 if (assemblyIngredient != null)
                 {
                     if (assemblyIngredient.PositionUpIngredient != null)
@@ -164,7 +187,9 @@ namespace AssemblyBurgerContent
             }
 
             Item item = _burgerIngridientSpawner.SpawnItem(type);
-
+            
+            SoundPlayer.Instance.PlayPutTray();
+            
             _lastItemContainer = itemContainer;
             item.gameObject.SetActive(true);
 
@@ -208,6 +233,7 @@ namespace AssemblyBurgerContent
             }
 
             _ingredientStack.Push((item, itemContainer));
+            Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
             StackChanged?.Invoke();
         }
 
@@ -221,14 +247,16 @@ namespace AssemblyBurgerContent
             if (_ingredientStack.Count > 0)
             {
                 var (lastItem, container) = _ingredientStack.Pop();
-
+                Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
                 StackChanged?.Invoke();
-                
+
                 if (container != null)
                 {
                     _isAnimationInProgress = true;
                     Sequence sequence = DOTween.Sequence();
-
+                    
+                    SoundPlayer.Instance.PlayPutTray();
+                    
                     sequence.Append(lastItem.transform.DOMove(container.transform.position, 0.3f)
                         .SetEase(Ease.InOutQuad));
                     sequence.Join(lastItem.transform.DORotate(container.transform.eulerAngles, 0.3f)
@@ -282,11 +310,11 @@ namespace AssemblyBurgerContent
 
             return ItemType.Empty;
         }*/
-        
+
         private ItemType GetMatchingRecipe()
         {
             List<ItemType> itemTypes = _ingredientStack.Select(tuple => tuple.item.ItemType).ToList();
-            
+
             foreach (var recipe in _burgerRecipeConfig.recipes)
             {
                 // Получаем список типов ингредиентов рецепта
@@ -301,7 +329,7 @@ namespace AssemblyBurgerContent
                     // Выводим исключенный ингредиент в консоль
                     Debug.Log($"Excluded ingredient from recipe {recipe.BurgerType}: {excludedItemType}");
                 }
-                
+
                 if (recipeItemTypes.SequenceEqual(itemTypes))
                 {
                     return recipe.BurgerType;
@@ -311,7 +339,7 @@ namespace AssemblyBurgerContent
             return ItemType.Empty;
         }
 
-        private void CreateBurger(ItemType burgerType)
+        private void CreateBurger(ItemType burgerType, ItemContainer containerPackageBurger)
         {
             GameObject burgerPrefab =
                 _burgerPrefabPairs.FirstOrDefault(pair => pair.BurgerType == burgerType)?.BurgerPrefab;
@@ -330,6 +358,10 @@ namespace AssemblyBurgerContent
                     burgerInstance.gameObject.SetActive(true);
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                     burgerInstance.transform.rotation = Quaternion.identity;
+
+                    containerPackageBurger.DeactivateItems(1);
+
+                    _playerLevel.AddExp(5);
 
                     /*GameObject burgerInstance =
                         Instantiate(burgerPrefab, _burgerBoard.CenterPosition.position, Quaternion.identity);*/
@@ -372,33 +404,16 @@ namespace AssemblyBurgerContent
                             .OnComplete(() => _burgersCounter.AddBurger(burgerInstance));
                     }
 
-
-                    /*Sequence sequence = DOTween.Sequence();
-                    sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
-                    sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
-                    sequence.Append(burgerInstance.transform.DOMove(availablePosition.position, 0.5f)
-                        .SetEase(Ease.InOutQuad));
-
-                    burgerInstance.transform.SetParent(availablePosition);
-
-                    sequence.Join(burgerInstance.transform.DOLocalRotate(new Vector3(0,0,0), 0.5f, RotateMode.FastBeyond360)
-                        .SetEase(Ease.Linear));*/
-
-                    // burgerInstance.transform.position = Vector3.zero;
                     Debug.Log("Бургер создан: " + burgerType);
-
-                    // _restaurant.CheckOrderBurger(burgerType);
-
 
                     while (_ingredientStack.Count > 0)
                     {
                         var (lastItem, container) = _ingredientStack.Pop();
+                        Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
                         lastItem.gameObject.SetActive(false);
-                        
-                        
-                        // Destroy(lastItem.gameObject);
                     }
-                        StackChanged?.Invoke();
+
+                    StackChanged?.Invoke();
                 }
                 else
                 {
@@ -410,7 +425,10 @@ namespace AssemblyBurgerContent
                         burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                         burgerInstance.transform.rotation = Quaternion.identity;
 
+                        containerPackageBurger.DeactivateItems(1);
+
                         _restaurant.SetBurgerOrder(tray, burgerInstance);
+                        _playerLevel.AddExp(5);
 
                         Sequence sequence = DOTween.Sequence();
                         Debug.Log("TRUE");
@@ -431,11 +449,13 @@ namespace AssemblyBurgerContent
                         while (_ingredientStack.Count > 0)
                         {
                             var (lastItem, container) = _ingredientStack.Pop();
+                            Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
                             lastItem.gameObject.SetActive(false);
-                            
+
                             // Destroy(lastItem.gameObject);
                         }
-                            StackChanged?.Invoke();
+
+                        StackChanged?.Invoke();
                     }
 
                     else
@@ -449,6 +469,18 @@ namespace AssemblyBurgerContent
             {
                 Debug.LogError("Префаб для бургера типа " + burgerType + " не найден.");
             }
+        }
+
+        public void SimpleCreateStartBurgers(ItemType burgerType)
+        {
+            Transform availablePosition = _burgerPositions.FirstOrDefault(position => position.childCount == 0);
+            Item burgerInstance = _burgerIngridientSpawner.SpawnItem(burgerType);
+            burgerInstance.gameObject.SetActive(true);
+            burgerInstance.transform.SetParent(availablePosition);
+            burgerInstance.transform.position = availablePosition.position;
+            burgerInstance.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            burgerInstance.transform.localScale = Vector3.one;
+            _burgersCounter.AddBurger(burgerInstance);
         }
     }
 }

@@ -21,6 +21,8 @@ namespace ItemContent
 
         public ItemType ItemType => _itemType;
 
+        private bool _firstFullness=true;
+
         private void OnEnable()
         {
             _draggable.DraggablePicked += () => ActivateCanvas();
@@ -37,6 +39,9 @@ namespace ItemContent
 
         private void Start()
         {
+            if (!_firstFullness)
+                return;
+            
             CurrentFullness = _maxFullnes;
             UpdateFullUI();
         }
@@ -59,6 +64,14 @@ namespace ItemContent
         public void SetShelf(Shelf shelf)
         {
             Shelf = shelf;
+        }
+
+        public void SetFullness(int fullness)
+        {
+            Debug.Log("SETFULLNES");
+            _firstFullness = false;
+            CurrentFullness = fullness;
+            UpdateFullUI();
         }
 
         private void ActivateCanvas()

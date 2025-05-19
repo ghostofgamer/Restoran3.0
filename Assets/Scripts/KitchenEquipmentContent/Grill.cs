@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Linq;
 using DG.Tweening;
 using Enums;
 using InteractableContent;
 using PlayerContent;
+using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
 using TMPro;
 using UnityEngine;
@@ -22,11 +24,14 @@ namespace KitchenEquipmentContent
         [SerializeField] private GameObject _progressFryUI;
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
-        
+        [SerializeField] private AudioSource _audioSource;
+
         public TMP_Text grillText;
         public Image fillImage;
         public float grillTime = 3f;
         private bool _isClosed;
+
+        public event Action<int, int> ValueActiveItemsChanged;
 
         private void OnEnable()
         {
@@ -36,6 +41,34 @@ namespace KitchenEquipmentContent
         private void OnDisable()
         {
             _interactableObject.OnAction -= Action;
+        }
+
+        private void Start()
+        {
+            foreach (var rawCutlet in _rawCutletItems)
+                rawCutlet.gameObject.SetActive(false);
+
+            foreach (var readyCutlet in _readyCutletItems)
+                readyCutlet.gameObject.SetActive(false);
+
+            int rawValue = PlayerPrefs.GetInt("RawCutletGrill", 0);
+            int readyValue = PlayerPrefs.GetInt("WellCutletGrill", 0);
+
+            if (rawValue > 0)
+            {
+                _currentType = ItemType.RawCutlet;
+                
+                for (int i = 0; i < rawValue; i++)
+                                _rawCutletItems[i].gameObject.SetActive(true);
+            }
+            
+            if (readyValue > 0)
+            {
+                _currentType = ItemType.Cutlet;
+                
+                 for (int i = 0; i < readyValue; i++)
+                                _readyCutletItems[i].gameObject.SetActive(true);
+            }
         }
 
         public void Action(PlayerInteraction playerInteraction)
@@ -64,19 +97,19 @@ namespace KitchenEquipmentContent
                     if (itemsToPlace > 0)
                     {
                         playerInteraction.PlayerTray.PutAway(ItemType.Cutlet, itemsToPlace);
-                        
+
                         int completedAnimations = 0;
                         Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.Cutlet);
-                        
+
                         for (int i = 0; i < itemsToPlace; i++)
                         {
                             Debug.Log("ТУТА!!!!");
-                            
+
                             Item newItem = _burgerIngridientSpawner.SpawnItem(ItemType.Cutlet);
                             newItem.gameObject.SetActive(true);
                             newItem.transform.position = playerInteraction.PlayerTray.Positions[i].position;
                             newItem.transform.localScale = scale;
-                            
+
                             Sequence sequence = DOTween.Sequence();
                             sequence.Append(newItem.transform
                                 .DOMove(_readyCutletItems[i].transform.position, 0.15f)
@@ -96,7 +129,7 @@ namespace KitchenEquipmentContent
                                 }
                             });
                         }
-                        
+
                         // ActivateItems(_readyCutletItems, itemsToPlace);
                     }
                 }
@@ -109,7 +142,7 @@ namespace KitchenEquipmentContent
                     if (itemsToPlace > 0)
                     {
                         DeactivateItems(_readyCutletItems, itemsToPlace);
-                        
+
                         int completedAnimations = 0;
                         Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.Cutlet);
 
@@ -119,7 +152,7 @@ namespace KitchenEquipmentContent
                             newItem.gameObject.SetActive(true);
                             newItem.transform.position = _readyCutletItems[i].transform.position;
                             newItem.transform.localScale = scale;
-                            
+
                             Sequence sequence = DOTween.Sequence();
                             sequence.Append(newItem.transform
                                 .DOMove(playerInteraction.PlayerTray.transform.position, 0.15f)
@@ -139,7 +172,7 @@ namespace KitchenEquipmentContent
                                 }
                             });
                         }
-                        
+
                         // playerInteraction.PlayerTray.Put(ItemType.Cutlet, itemsToPlace);
                     }
                 }
@@ -160,19 +193,19 @@ namespace KitchenEquipmentContent
                     if (itemsToPlace > 0)
                     {
                         playerInteraction.PlayerTray.PutAway(ItemType.RawCutlet, itemsToPlace);
-                        
+
                         int completedAnimations = 0;
                         Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.RawCutlet);
-                        
+
                         for (int i = 0; i < itemsToPlace; i++)
                         {
                             Debug.Log("ТУТА!!!! " + playerInteraction.PlayerTray.CurrentType);
-                            
+
                             Item newItem = _burgerIngridientSpawner.SpawnItem(ItemType.RawCutlet);
                             newItem.gameObject.SetActive(true);
                             newItem.transform.position = playerInteraction.PlayerTray.Positions[i].position;
                             newItem.transform.localScale = scale;
-                            
+
                             Sequence sequence = DOTween.Sequence();
                             sequence.Append(newItem.transform
                                 .DOMove(_readyCutletItems[i].transform.position, 0.15f)
@@ -192,7 +225,7 @@ namespace KitchenEquipmentContent
                                 }
                             });
                         }
-                        
+
                         // ActivateItems(item, itemsToPlace);
                     }
                 }
@@ -222,19 +255,19 @@ namespace KitchenEquipmentContent
                     {
                         _currentType = playerInteraction.PlayerTray.CurrentType;
                         playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType, itemsToPlace);
-                        
+
                         int completedAnimations = 0;
                         Vector3 scale = _assemblyBurgerItemConfig.GetScale(playerInteraction.PlayerTray.CurrentType);
-                        
+
                         for (int i = 0; i < itemsToPlace; i++)
                         {
                             Debug.Log("ТУТА!!!! " + playerInteraction.PlayerTray.CurrentType);
-                            
+
                             Item newItem = _burgerIngridientSpawner.SpawnItem(_currentType);
                             newItem.gameObject.SetActive(true);
                             newItem.transform.position = playerInteraction.PlayerTray.Positions[i].position;
                             newItem.transform.localScale = scale;
-                            
+
                             Sequence sequence = DOTween.Sequence();
                             sequence.Append(newItem.transform
                                 .DOMove(_readyCutletItems[i].transform.position, 0.15f)
@@ -254,8 +287,8 @@ namespace KitchenEquipmentContent
                                 }
                             });
                         }
-                        
-                        
+
+
                         // ActivateItems(item, itemsToPlace);
                     }
                 }
@@ -297,6 +330,10 @@ namespace KitchenEquipmentContent
                         break;
                 }
             }
+
+            int countRaw = _rawCutletItems.Count(item => item.gameObject.activeInHierarchy);
+            int countWell = _readyCutletItems.Count(item => item.gameObject.activeInHierarchy);
+            ValueActiveItemsChanged?.Invoke(countRaw, countWell);
         }
 
         private void DeactivateItems(Item[] items, int value)
@@ -323,6 +360,10 @@ namespace KitchenEquipmentContent
 
             if (items.All(item => !item.gameObject.activeSelf))
                 _currentType = ItemType.Empty;
+
+            int countRaw = _rawCutletItems.Count(item => item.gameObject.activeInHierarchy);
+            int countWell = _readyCutletItems.Count(item => item.gameObject.activeInHierarchy);
+            ValueActiveItemsChanged?.Invoke(countRaw, countWell);
         }
 
         private int CountActiveItems(Item[] items)
@@ -362,11 +403,10 @@ namespace KitchenEquipmentContent
         private IEnumerator StartFryCutlets()
         {
             _isClosed = true;
-
             _animator.SetBool("FryCutlet", true);
             _boxCollider.enabled = false;
-
             yield return new WaitForSeconds(1f);
+            _audioSource.Play();
             _progressFryUI.SetActive(true);
             grillText.text = "Grill <color=yellow>Raw</color>";
             fillImage.fillAmount = 0f;
@@ -379,8 +419,9 @@ namespace KitchenEquipmentContent
                 yield return null;
             }
 
+            _audioSource.Stop();
             grillText.text = "Grill <color=green>Medium</color>";
-
+            SoundPlayer.Instance.PlayGrillWell();
             // _animator.SetBool("FryCutlet",false);
 
             int activeCount = CountActiveItems(_rawCutletItems);
@@ -390,6 +431,8 @@ namespace KitchenEquipmentContent
 
             for (int i = 0; i < activeCount; i++)
                 _readyCutletItems[i].gameObject.SetActive(true);
+
+            ValueActiveItemsChanged?.Invoke(0, activeCount);
 
             _currentType = ItemType.Cutlet;
             _boxCollider.enabled = true;

@@ -15,18 +15,18 @@ namespace UI.MenuUIContent
         [SerializeField] private Image _image;
         [SerializeField] private TMP_Text _nameItemText;
     
-        private ItemConfig _itemConfig;
+        protected ItemConfig ItemConfig;
     
         public ItemType ItemType => _itemType;
     
-        public void Init(ItemsConfig itemsConfig)
+        public virtual void Init(ItemsConfig itemsConfig)
         {
-            _itemConfig = itemsConfig.GetItemConfig(_itemType);
+            ItemConfig = itemsConfig.GetItemConfig(_itemType);
 
-            if (_itemConfig != null)
+            if (ItemConfig != null)
             {
-                _image.sprite = _itemConfig.Sprite;
-                _nameItemText.text = _itemConfig.ItemName;
+                _image.sprite = ItemConfig.Sprite;
+                _nameItemText.text = ItemConfig.ItemName;
             }
             else
             {

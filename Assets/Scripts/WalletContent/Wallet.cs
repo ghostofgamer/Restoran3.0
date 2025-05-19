@@ -1,13 +1,19 @@
 using System;
+using UI;
 using UnityEngine;
 
 namespace WalletContent
 {
     public class Wallet : MonoBehaviour
     {
+        [SerializeField] private FlyValue _flyValue;
+        
         public DollarValue DollarValue { get; private set; }
 
         public event Action<DollarValue> DollarValueChanged;
+
+        public event Action<int> IncomeChanged;
+        public event Action<int> ExpensesChanged;
 
         private void Start()
         {
@@ -30,6 +36,8 @@ namespace WalletContent
             int totalCents = ToTotalCents(DollarValue) + ToTotalCents(other);
             DollarValue = FromTotalCents(totalCents);
             DollarValueChanged.Invoke(DollarValue);
+            _flyValue.ShowFly(other,true);
+            IncomeChanged?.Invoke(ToTotalCents(other));
         }
 
         public void Subtract(DollarValue other)
@@ -37,6 +45,8 @@ namespace WalletContent
             int totalCents = ToTotalCents(DollarValue) - ToTotalCents(other);
             DollarValue = FromTotalCents(totalCents);
             DollarValueChanged.Invoke(DollarValue);
+            _flyValue.ShowFly(other,false);
+            ExpensesChanged?.Invoke(ToTotalCents(other));
         }
 
         public int ToTotalCents(DollarValue dollarValue)

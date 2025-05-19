@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using SettingsContent.SoundContent;
+using UI;
 using UnityEngine;
 
 namespace PlayerContent.LevelContent
 {
     public class PlayerLevel : MonoBehaviour
     {
+        [SerializeField] private FlyValue _flyValue;
+        
         public List<LevelConfig> levelConfigs;
         
         private int _minLevel = 1;
@@ -14,6 +18,9 @@ namespace PlayerContent.LevelContent
 
         public event Action<int> LevelChanged;
         public event Action<int, int> ExpChanged;
+        
+        public event Action<int> ExpAdded;
+        public event Action LevelAdded;
 
         public int CurrentLevel { get; private set; }
         
@@ -22,7 +29,6 @@ namespace PlayerContent.LevelContent
             CurrentLevel = PlayerPrefs.GetInt("Level", _minLevel);
             _currentExp = PlayerPrefs.GetInt("Exp", 0);
             _targetExp = GetExpForLevel(CurrentLevel);
-            Debug.Log("_targetStartExp " + _targetExp);
             LevelChanged?.Invoke(CurrentLevel);
             ExpChanged?.Invoke(_currentExp, _targetExp);
         }
@@ -30,24 +36,24 @@ namespace PlayerContent.LevelContent
         [ContextMenu("TestAddCurrentExp")]
         public void TestAddExp()
         {
-            AddExp(1350);
+            AddExp(15);
         }
 
         public void AddExp(int valueExp)
         {
             if (valueExp <= 0)
                 return;
-
+            
+            _flyValue.ShowFly(valueExp);
             _currentExp += valueExp;
-
-            /*if (_currentExp >= _targetExp)
-            {
-                LevelUp();
-            }*/
+            
+            ExpAdded?.Invoke(valueExp);
             
             while (_currentExp >= _targetExp && CurrentLevel < levelConfigs.Count)
             {
+                int excessExp = _currentExp - _targetExp;
                 LevelUp();
+                _currentExp = excessExp;
             }
             
             PlayerPrefs.SetInt("Exp", _currentExp);
@@ -56,11 +62,14 @@ namespace PlayerContent.LevelContent
 
         private void LevelUp()
         {
+           SoundPlayer.Instance.PlayLevelUp();
             CurrentLevel++;
             PlayerPrefs.SetInt("Level", CurrentLevel);
             _targetExp = GetExpForLevel(CurrentLevel);
             Debug.Log("_targetExp " + _targetExp);
+            LevelAdded?.Invoke();
             LevelChanged?.Invoke(CurrentLevel);
+            ExpChanged?.Invoke(_currentExp, _targetExp);
         }
         
         private int GetExpForLevel(int level)

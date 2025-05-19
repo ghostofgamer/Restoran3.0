@@ -1,75 +1,148 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Enums;
+using SettingsContent.SoundContent;
 using SoContent;
 using UI.Screens.ShopContent;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace DeliveryContent
 {
     public class Delivery : MonoBehaviour
     {
         [SerializeField] private Transform _spawnPosition;
+        [SerializeField] private Transform []_spawnPositions;
         [SerializeField] private DeliveryConfig _deliveryConfig;
+        [SerializeField] private DeliveryViewer _deliveryViewer;
+        [SerializeField] private DeliverySaver _deliverySaver;
 
         private List<ItemDeliveryInfo> _items = new List<ItemDeliveryInfo>();
         private bool _isSpawning = false;
         private Coroutine _coroutine;
         private int _amountDeliveries;
+        private float _remainingTimeForNextSpawn;
+        private DateTime _exitTime;
+
+        public float RemainingTime { get; private set; }
+
         public event Action<int> AmountItemsDeliveriesChanged;
 
-        private const string SavedItemsKey = "SavedDeliveryItems";
-        private DateTime _lastExitTime;
+        public event Action<float> TimeChanged;
+
+        public event Action<GameObject> SpawnCompleted;
+
+        public List<ItemDeliveryInfo> CurrentItems => _items;
+
+        public float RemainingTimeForNextSpawn => _remainingTimeForNextSpawn;
 
         private void Start()
         {
-            LoadDeliveryData();
-
-            if (_items.Count > 0 && !_isSpawning)
-                SpawnItems();
+            _deliverySaver.LoadDeliveryData();
         }
 
-        public void AddItemsCart(List<ItemCart> items)
+        private void Update()
         {
-            foreach (var item in items)
+            if (_isSpawning && _items.Count > 0)
             {
-                _items.Add(new ItemDeliveryInfo(item.ItemType, item.CurrentAmount));
-            }
+                RemainingTime -= Time.deltaTime;
 
-            if (!_isSpawning)
+                TimeChanged?.Invoke(RemainingTime);
+
+                if (RemainingTime <= 0)
+                {
+                    SpawnItem();
+
+                    TimeChanged?.Invoke(0);
+
+                    if (_items.Count > 0)
+                        StartSpawning();
+                }
+            }
+        }
+
+        public void SetItemsList(List<ItemDeliveryInfo> items)
+        {
+            _items = new List<ItemDeliveryInfo>();
+
+            if (items.Count > 0)
             {
-                SpawnItems();
+                _items = items;
             }
 
             UpdateAmountDeliveries();
-            SaveDeliveryData();
         }
 
-        private void SpawnItems()
+        public void Init(List<ItemDeliveryInfo> items, float remainingTime, DateTime exitTime)
         {
-            _isSpawning = true;
+            SetItemsList(items);
+            RemainingTime = remainingTime;
+            _exitTime = exitTime;
 
-            if (_coroutine != null)
-                StopCoroutine(_coroutine);
-
-            StartCoroutine(Spawn());
+            if (items.Count > 0)
+            {
+                CheckDeliveryProgress();
+            }
+            else
+            {
+                // Debug.Log("Посылок нету");
+            }
         }
 
-        private IEnumerator Spawn()
+        public void CheckDeliveryProgress()
         {
+            DateTime currentTime = DateTime.UtcNow;
+
+            TimeSpan elapsedTime = currentTime - _exitTime;
+            double secondsElapsed = elapsedTime.TotalSeconds;
+
+
+            if (secondsElapsed < RemainingTime)
+            {
+                RemainingTime -= (float)secondsElapsed;
+                _isSpawning = true;
+            }
+            else
+            {
+                secondsElapsed -= RemainingTime;
+                SpawnItem();
+                int deliveriesToSpawn = (int)(secondsElapsed / _deliveryConfig.MinValueTimer);
+
+                double remainingSeconds;
+
+                if (secondsElapsed >= _deliveryConfig.MinValueTimer)
+                    remainingSeconds = secondsElapsed % _deliveryConfig.MinValueTimer;
+                else
+                    remainingSeconds = _deliveryConfig.MinValueTimer - secondsElapsed;
+
+                int actualDeliveriesToSpawn = Math.Min(deliveriesToSpawn, CurrentItems.Count);
+
+                for (int i = 0; i < actualDeliveriesToSpawn; i++)
+                {
+                    SpawnItem();
+                }
+
+                if (CurrentItems.Count > 0)
+                {
+                    RemainingTime = (float)remainingSeconds;
+                    _isSpawning = true;
+                }
+            }
+        }
+
+        public void SpawnAllItems()
+        {
+            _isSpawning = false;
+
             while (_items.Count > 0)
             {
-                yield return new WaitForSeconds(_deliveryConfig.MinValueTimer);
-                Debug.Log("СПАВН " + _items.Count);
-
                 var item = _items[0];
-                Debug.Log(" item.Amount " + item.Amount + "   " + item.ItemType);
                 GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
 
                 if (prefab != null)
                 {
-                    Instantiate(prefab, _spawnPosition.position, Quaternion.identity);
+                    GameObject newBox = Instantiate(prefab, GetPosition().position, Quaternion.identity);
+                    SpawnCompleted?.Invoke(newBox);
                 }
 
                 item.Amount--;
@@ -77,14 +150,66 @@ namespace DeliveryContent
                 UpdateAmountDeliveries();
 
                 if (item.Amount <= 0)
-                {
                     _items.RemoveAt(0);
-                }
-                
-                SaveDeliveryData();
             }
 
+            SoundPlayer.Instance.PlayDostavka();
+            RemainingTime = 0;
+            TimeChanged?.Invoke(RemainingTime);
+        }
+
+        public void AddItemsCart(List<ItemCart> items)
+        {
+            foreach (var item in items)
+                _items.Add(new ItemDeliveryInfo(item.ItemType, item.CurrentAmount));
+
+            if (!_isSpawning)
+                StartSpawning();
+
+            UpdateAmountDeliveries();
+            _deliverySaver.SaveDeliveryData();
+        }
+
+        private void StartSpawning()
+        {
+            _isSpawning = true;
+            RemainingTime = _deliveryConfig.MinValueTimer;
+            TimeChanged?.Invoke(RemainingTime);
+        }
+
+        private void SpawnItem()
+        {
             _isSpawning = false;
+
+            if (_items.Count > 0)
+            {
+                var item = _items[0];
+                GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
+
+                if (prefab != null)
+                    Instantiate(prefab, GetPosition().position, Quaternion.identity);
+
+                item.Amount--;
+
+                SoundPlayer.Instance.PlayDostavka();
+
+                UpdateAmountDeliveries();
+
+                if (item.Amount <= 0)
+                    _items.RemoveAt(0);
+            }
+        }
+
+        public void SpawnPrize(ItemType itemType, int value)
+        {
+            for (int i = 0; i < value; i++)
+            {
+                GameObject prefab = _deliveryConfig.GetPrefabByItemType(itemType);
+                SoundPlayer.Instance.PlayDostavka();
+
+                if (prefab != null)
+                    Instantiate(prefab, GetPosition().position, Quaternion.identity);
+            }
         }
 
         private void UpdateAmountDeliveries()
@@ -92,128 +217,17 @@ namespace DeliveryContent
             _amountDeliveries = 0;
 
             foreach (var item in _items)
-            {
                 _amountDeliveries += item.Amount;
-            }
 
             AmountItemsDeliveriesChanged?.Invoke(_amountDeliveries);
-
-            Debug.Log($"Общее количество доставок: {_amountDeliveries}");
-        }
-        
-        private DeliverySaveWrapper ConvertToSaveData()
-        {
-            var wrapper = new DeliverySaveWrapper
-            {
-                SaveTime = DateTime.UtcNow.ToString("O")
-            };
-
-            foreach (var item in _items)
-            {
-                wrapper.Items.Add(new SavedItemData(item.ItemType, item.Amount));
-            }
-
-            return wrapper;
-        }
-        
-        private List<ItemDeliveryInfo> ConvertFromSaveData(DeliverySaveWrapper wrapper)
-        {
-            var result = new List<ItemDeliveryInfo>();
-            
-            if (wrapper?.Items != null)
-            {
-                foreach (var savedItem in wrapper.Items)
-                {
-                    // Используем конструктор вместо приведения типов
-                    result.Add(new ItemDeliveryInfo(
-                        (ItemType)savedItem.ItemTypeInt,
-                        savedItem.Amount
-                    ));
-                }
-            }
-
-            return result;
         }
 
-        // 6. Сохранение данных
-        private void SaveDeliveryData()
+        private Transform GetPosition()
         {
-            try
-            {
-                var saveData = ConvertToSaveData();
-                string json = JsonUtility.ToJson(saveData);
-
-                PlayerPrefs.SetString("DeliverySave_v4", json);
-                PlayerPrefs.Save();
-
-                Debug.Log($"Сохранено {_items.Count} предметов. JSON:\n{json}");
-                LogItems(_items);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Ошибка сохранения: {e.Message}");
-            }
-        }
-
-        // 7. Загрузка данных
-        private void LoadDeliveryData()
-        {
-            try
-            {
-                if (!PlayerPrefs.HasKey("DeliverySave_v4"))
-                {
-                    Debug.Log("Нет сохраненных данных");
-                    _items = new List<ItemDeliveryInfo>();
-                    return;
-                }
-
-                string json = PlayerPrefs.GetString("DeliverySave_v4");
-                var saveData = JsonUtility.FromJson<DeliverySaveWrapper>(json);
-
-                _items = ConvertFromSaveData(saveData);
-                Debug.Log($"Загружено {_items.Count} предметов");
-                LogItems(_items);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Ошибка загрузки: {e.Message}");
-                _items = new List<ItemDeliveryInfo>();
-            }
-        }
-
-        private void LogItems(List<ItemDeliveryInfo> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.Log($"{item.ItemType} ({(int)item.ItemType}) x{item.Amount}");
-            }
-        }
+            int index = Random.Range(0, _spawnPositions.Length);
+            return _spawnPositions[index];
 
 
-        [System.Serializable]
-        private class ItemListWrapper
-        {
-            public List<ItemDeliveryInfo> Items;
-        }
-        
-        [System.Serializable]
-        private class DeliverySaveWrapper
-        {
-            public List<SavedItemData> Items = new List<SavedItemData>();
-            public string SaveTime;
-        }
-        
-        [System.Serializable]
-        private class SavedItemData
-        {
-            public int ItemTypeInt;
-            public int Amount;
-
-            public SavedItemData(ItemType type, int amount)
-            {
-                ItemTypeInt = (int)type;
-                Amount = amount;
-            }
         }
     }
 }

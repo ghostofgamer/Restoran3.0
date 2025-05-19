@@ -17,6 +17,8 @@ public class Draggable : MonoBehaviour, IDraggable
 
     public event Action PutOnShelfCompleting;
 
+    public bool InHands;
+
     private void OnEnable()
     {
         _interactableObject.OnAction += Drag;
@@ -35,6 +37,7 @@ public class Draggable : MonoBehaviour, IDraggable
         }
         else
         {
+            InHands = true;
             Debug.Log("DRAG");
             _parentObject.transform.parent = playerInteraction.DraggablePosition;
             _parentObject.DOLocalMove(Vector3.zero, 0.15f).SetEase(Ease.InOutQuad);
@@ -47,11 +50,13 @@ public class Draggable : MonoBehaviour, IDraggable
 
     public void Throw()
     {
+        InHands = false;
         DraggableThrowed?.Invoke();
     }
 
     public void PutOnShelf()
     {
+        InHands = false;
         PutOnShelfCompleting?.Invoke();
     }
 }

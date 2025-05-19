@@ -8,6 +8,7 @@ namespace RestaurantContent.TableContent
         [SerializeField] private Transform _clientSitPosition;
         [SerializeField] private Transform _clientStandPosition;
         [SerializeField] private Transform _trayPosition;
+        [SerializeField] private TableCleanliness _tableCleanliness;
 
         public Transform ClientSitPosition => _clientSitPosition;
 
@@ -22,6 +23,11 @@ namespace RestaurantContent.TableContent
         public void SetBusyValue(bool value)
         {
             IsBusy = value;
+        }
+
+        public void DirtyTable()
+        {
+            _tableCleanliness.PolluteTable();
         }
     }
 }

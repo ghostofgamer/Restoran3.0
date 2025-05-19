@@ -1,11 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ClientsContent;
 using Enums;
 using KitchenEquipmentContent.AssemblyTables.CoffeeTableContent;
 using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
+using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using UnityEngine;
@@ -20,7 +20,8 @@ namespace OrdersContent
         [SerializeField] private BurgersCounter _burgersCounter;
         [SerializeField] private CoffeeCounter _coffeeCounter;
         [SerializeField] private SodaCounter _sodaCounter;
-
+        [SerializeField] private PlayerLevel _playerLevel;
+        
         private const int MaxActiveOrders = 4;
 
         private List<Order> _currentOrders;
@@ -28,6 +29,11 @@ namespace OrdersContent
         private Queue<Client> _clientQueue;
         
         public event Action<List<Order>> OrdersChanged;
+
+        public event Action<int> UpdateOrders;
+
+        public event Action OrderAdded;
+        public event Action OrderCompleted;
 
         public List<Order> CurrentOrders => _currentOrders;
         
@@ -52,33 +58,55 @@ namespace OrdersContent
                 _burgersCounter.CheckWaitNeedBurgers(order.BurgerItemOrder);
                 _coffeeCounter.CheckWaitNeedCoffee(order.DrinkItemOrder);
                 _sodaCounter.CheckWaitNeedSoda(order.DrinkItemOrder);
+                OrderAdded?.Invoke();
             }
             else
             {
                 _orderQueue.Enqueue(order);
                 _clientQueue.Enqueue(client);
+                OrderAdded?.Invoke();
                 Debug.Log("Добавлен новый заказ в очередь: " + order.IndexTable);
             }
         }
 
         public void CompleteOrder(Order order, Tray tray)
         {
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            
             if (_currentOrders.Contains(order))
             {
+                Debug.Log(" нашли заказ ");
+                
                 _currentOrders.Remove(order);
                 // OrderDeleted?.Invoke(order);
-                
-                OrdersChanged?.Invoke(_currentOrders);
-                
+                Debug.Log(" 1 ");
+                Debug.Log(" 3 ");
                 Client client = _activeOrderWaitClients.FirstOrDefault(c => c.Order == order);
-
+                
+                Debug.Log(" client");
+                
                 if (client != null)
                 {
+                    Debug.Log(" client иди за заказом " + client);
                     _activeOrderWaitClients.Remove(client);
                     client.OrderCompleted(tray);
+                _playerLevel.AddExp(5);
                 }
-
+                else
+                {
+                    Debug.Log(" Не анходит клиента  которого заказ! ");
+                }
+                
+                Debug.Log("_currentOrders " + _currentOrders.Count);
+                UpdateOrders?.Invoke(_currentOrders.Count);
+                OrdersChanged?.Invoke(_currentOrders);
+                OrderCompleted?.Invoke();
+                Debug.Log("FFF ");
                 // TryActivateOrder();
+            }
+            else
+            {
+                Debug.Log("не находит нужный выполненный заказ");
             }
         }
 

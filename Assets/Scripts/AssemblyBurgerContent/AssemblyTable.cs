@@ -1,13 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using AssemblyBurgerContent;
 using CameraContent;
-using DG.Tweening;
 using Enums;
 using InteractableContent;
 using PlayerContent;
+using SaveContent;
+using SettingsContent.SoundContent;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class AssemblyTable : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class AssemblyTable : MonoBehaviour
 
     [SerializeField] private Transform _cameraCurrentPosition;
     [SerializeField] private CameraPositionChanger _cameraPositionChanger;
+    [SerializeField] private BurgersSaver _burgersSaver;
 
     private Dictionary<ItemType, ItemContainer> _containersByItemType;
 
@@ -43,6 +45,14 @@ public class AssemblyTable : MonoBehaviour
     private void OnDisable()
     {
         _interactableObject.OnAction -= HandlePlayerInteraction;
+    }
+
+    private void Start()
+    {
+        List<ItemType> itemTypes = _burgersSaver.LoadItemTypesFromIndices();
+            
+        if (itemTypes.Count > 0)
+            LoadWellBurgers(itemTypes.Count,itemTypes);
     }
 
     public void HandlePlayerInteraction(PlayerInteraction playerInteraction)
@@ -82,8 +92,11 @@ public class AssemblyTable : MonoBehaviour
                                 {
                                     int itemsToPlace = Mathf.Min(emptyPositions[i], activeItems[i]);
                                     Debug.Log("itemsToPlace " + itemsToPlace);
+                                    Debug.Log("emptyPositions[i] " + emptyPositions[i]);
+                                    Debug.Log("activeItems[i] " + activeItems[i]);
 
-                                    basket.RemoveItem(itemsToPlace, i);
+                                    SoundPlayer.Instance.PlayPutTray();
+                                    // basket.RemoveItem(itemsToPlace, i);
                                     basket.TransferProduct(itemsToPlace, i, targetContainer.AdditionalArrayPositions);
                                     targetContainer.ActivateItems(itemsToPlace, i);
                                 }
@@ -101,6 +114,7 @@ public class AssemblyTable : MonoBehaviour
 
                         if (emptyPosition > 0 && activeItems > 0)
                         {
+                            SoundPlayer.Instance.PlayPutTray();
                             int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
                             basket.TransferProduct(itemsToPlace, targetContainer.Positions);
                             targetContainer.ActivateItems(itemsToPlace);
@@ -136,7 +150,7 @@ public class AssemblyTable : MonoBehaviour
                 if (emptyPosition > 0 && activeItems > 0)
                 {
                     int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
-
+                    SoundPlayer.Instance.PlayPutTray();
                     // basket.TransferProduct(itemsToPlace, targetContainer.Positions);
                     playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType, itemsToPlace);
                     targetContainer.ActivateItems(itemsToPlace);
@@ -150,6 +164,7 @@ public class AssemblyTable : MonoBehaviour
         }
         else
         {
+            SoundPlayer.Instance.PlayButtonClick();
             BurgerAssemblyBeginig?.Invoke();
             SetValueCollider(false);
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
@@ -177,5 +192,29 @@ public class AssemblyTable : MonoBehaviour
         }
 
         return null;
+    }
+    
+    private void LoadWellBurgers(int value,List<ItemType> itemType)
+    {
+        StartCoroutine(StartLoad(value,itemType));
+    }
+
+    private IEnumerator StartLoad(int value,List<ItemType> itemType)
+    {
+        yield return new WaitForSeconds(1f);
+
+        for (int i = 0; i < value; i++)
+        {
+            _assemblyBurger.SimpleCreateStartBurgers(itemType[i]);
+            
+            /*
+            Transform availablePosition = _wellPositions.FirstOrDefault(position => position.childCount == 0);
+            Item sodaInstance = _burgerIngridientSpawner.SpawnItem(itemType[i]);
+            sodaInstance.gameObject.SetActive(true);
+            sodaInstance.transform.SetParent(availablePosition);
+            sodaInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(itemType[i]);
+            sodaInstance.transform.position = availablePosition.position;
+            _sodaCounter.AddSoda(sodaInstance);*/
+        }
     }
 }

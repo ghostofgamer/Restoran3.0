@@ -35,6 +35,8 @@ public class ItemBasket : MonoBehaviour
     [SerializeField] private Item[][] _itemsAdditionalArray;
     [SerializeField] private ActivityItem[][] _itemsActivityAdditionalArray;
 
+    private bool _firstLoad = true;
+
     private void OnEnable()
     {
         _draggable.DraggablePicked += ActivateItems;
@@ -51,6 +53,9 @@ public class ItemBasket : MonoBehaviour
 
     private void Start()
     {
+        if (!_firstLoad)
+            return;
+        
         _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
         _itemsActivityAdditionalArray = new ActivityItem[][] { _itemsActivity, _additionalItemsActivity };
         DeactivateItems();
@@ -72,7 +77,7 @@ public class ItemBasket : MonoBehaviour
                 activeCount++;
         }
 
-        Debug.Log("ActiveCount " + activeCount);
+        // Debug.Log("ActiveCount " + activeCount);
         return activeCount;
     }
 
@@ -92,10 +97,10 @@ public class ItemBasket : MonoBehaviour
             }
 
             activeCounts[i] = rowActiveCount;
-            Debug.Log("ActiveCount in row " + i + ": " + rowActiveCount);
+            // Debug.Log("ActiveCount in row " + i + ": " + rowActiveCount);
         }
-
-        Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
+        
+        // Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
         return activeCounts;
 
         /*int[] activeCounts = new int[_itemsAdditionalArray.Length];
@@ -258,7 +263,7 @@ public class ItemBasket : MonoBehaviour
     private void ActivateItems()
     {
         SetActiveValue(true);
-
+        
         if (Shelf != null)
         {
             Shelf.Remove(this);
@@ -269,6 +274,75 @@ public class ItemBasket : MonoBehaviour
     private void DeactivateItems()
     {
         SetActiveValue(false);
+    }
+
+    public void LoadItems(bool additional , int amountItems, List<int> additionalAmountItems)
+    {
+        Debug.Log("17" );
+        
+        
+        if (!additional)
+        {
+            Debug.Log("18" );
+            foreach (var item in _itemsActivity)
+                item.SetValue(false);
+
+            for (int i = 0; i < amountItems; i++)
+                _itemsActivity[i].SetValue(true);
+        }
+        else
+        {
+            _firstLoad = false;
+            _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
+            _itemsActivityAdditionalArray = new ActivityItem[][] { _itemsActivity, _additionalItemsActivity };
+            DeactivateItems();
+            Debug.Log("19" );
+            // Сбрасываем все элементы в _itemsActivityAdditionalArray в false
+            foreach (var row in _itemsActivityAdditionalArray)
+            {
+                foreach (var item in row)
+                    item.SetValue(false);
+            }
+            Debug.Log("20" );
+            // Устанавливаем элементы в true в соответствии с additionalAmountItems
+            
+            for (int i = 0; i < additionalAmountItems.Count; i++)
+            {
+                if (i < _itemsActivityAdditionalArray.Length)
+                {
+                    int count = additionalAmountItems[i];
+                    
+                    for (int j = 0; j < count && j < _itemsActivityAdditionalArray[i].Length; j++)
+                    {
+                        _itemsActivityAdditionalArray[i][j].SetValue(true);
+                    }
+                }
+            }
+            
+            
+            
+            
+            
+            /*for (int i = 0; i < additionalAmountItems.Count; i++)
+            {
+                Debug.Log("++++++++++ " + additionalAmountItems[i]);
+                Debug.Log("21" );
+
+                for (int j = 0; j < additionalAmountItems[i]; j++)
+                {
+                    _itemsActivityAdditionalArray[i]
+                }
+                
+                if (i < _itemsActivityAdditionalArray.Length)
+                {
+                    int rowIndex = i;
+                    int colIndex = additionalAmountItems[i];
+
+                    if (rowIndex < _itemsActivityAdditionalArray.Length && colIndex < _itemsActivityAdditionalArray[rowIndex].Length)
+                        _itemsActivityAdditionalArray[rowIndex][colIndex].SetValue(true);
+                }
+            }*/
+        }
     }
 
     public void SetShelf(Shelf shelf)

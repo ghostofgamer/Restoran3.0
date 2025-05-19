@@ -21,7 +21,7 @@ namespace WalletContent
         
         private void ShowDollarValue(DollarValue dollarValue)
         {
-            _currentDollarValue.text = $"${dollarValue.Dollars}.{dollarValue.Cents:D2}";
+            _currentDollarValue.text = $"{dollarValue.Dollars}.{dollarValue.Cents:D2}";
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -14,14 +15,18 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         
         private List<Item> _coffeeItems = new List<Item>();
 
+        public event Action<int> CoffeeItemsValueChanged;
+
         public void AddCoffee(Item item)
         {
             _coffeeItems.Add(item);
+            CoffeeItemsValueChanged?.Invoke(_coffeeItems.Count);
         }
 
         public void RemoveCoffee(Item item)
         {
             _coffeeItems.Remove(item);
+            CoffeeItemsValueChanged?.Invoke(_coffeeItems.Count);
         }
         
         public void CheckWaitNeedCoffee(ItemType itemType)

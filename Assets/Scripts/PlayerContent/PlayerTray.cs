@@ -14,6 +14,8 @@ namespace PlayerContent
         [SerializeField] private GameObject _cutletTray;
         [SerializeField] private Transform[] _positions;
 
+        public event Action<int, int> CutletItemsActiveChanged;
+
         public Transform[] Positions => _positions;
 
         public ItemType CurrentType { get; private set; }
@@ -58,8 +60,11 @@ namespace PlayerContent
 
         public void Put(ItemType itemType, int value)
         {
+            Debug.Log("IsActive %%%%%%%%%%%%%%%%%%%%%%%" + IsActive);
+            
             if (!IsActive)
             {
+                Debug.Log("IsActive !!!!!!!!!!!!!!!!" + IsActive);
                 IsActive = true;
                 gameObject.SetActive(true);
                 ActivateTray(itemType);
@@ -131,11 +136,20 @@ namespace PlayerContent
                     }
                 }
             }
+
+            int countRaw = _rawCutlets.Count(item => item.gameObject.activeInHierarchy);
+            int countWell = _readyCutlets.Count(item => item.gameObject.activeInHierarchy);
+            CutletItemsActiveChanged?.Invoke(countRaw, countWell);
         }
 
         public void SetCurrentItemType(ItemType itemType)
         {
             CurrentType = itemType;
+        }
+
+        public void SetActive(bool isActive)
+        {
+            IsActive = isActive;
         }
 
         public void Clear()

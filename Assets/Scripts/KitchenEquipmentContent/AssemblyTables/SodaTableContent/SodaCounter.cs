@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -11,17 +12,21 @@ namespace KitchenEquipmentContent.AssemblyTables.SodaTableContent
     public class SodaCounter : MonoBehaviour
     {
         [SerializeField] private Restaurant _restaurant;
-        
+
         private List<Item> _sodas = new List<Item>();
+
+        public event Action<List<Item>> SodaItemsValueChanged;
 
         public void AddSoda(Item item)
         {
             _sodas.Add(item);
+            SodaItemsValueChanged?.Invoke(_sodas);
         }
 
         public void RemoveSoda(Item item)
         {
             _sodas.Remove(item);
+            SodaItemsValueChanged?.Invoke(_sodas);
         }
 
         public void CheckWaitNeedSoda(ItemType itemType)
@@ -50,7 +55,7 @@ namespace KitchenEquipmentContent.AssemblyTables.SodaTableContent
             }
             else
             {
-                Debug.Log("FALSE Автоматическое "  + itemType );
+                Debug.Log("FALSE Автоматическое " + itemType);
             }
         }
 

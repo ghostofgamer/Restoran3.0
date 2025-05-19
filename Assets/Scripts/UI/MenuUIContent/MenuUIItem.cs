@@ -1,10 +1,26 @@
+using SoContent;
+using TMPro;
+using UnityEngine;
+using WalletContent;
+
 namespace UI.MenuUIContent
 {
     public class MenuUIItem : AbstractUIMenuItem
     {
+        private const string CurrentPriceKey = "CurrentPrice";
+
+        [SerializeField] private TMP_Text _priceText;
+
         public void RemoveItemToMenu()
         {
             _menuScrollContent.RemoveItem(ItemType);
+        }
+
+        public override void Init(ItemsConfig itemsConfig)
+        {
+            base.Init(itemsConfig);
+            int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
+            _priceText.text = $"PRICE {new DollarValue(0, 0).FromTotalCents(totalCents)}";
         }
     }
 }

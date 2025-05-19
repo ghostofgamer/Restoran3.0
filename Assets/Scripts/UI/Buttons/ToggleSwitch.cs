@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using SettingsContent.SoundContent;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 
 public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
 {
+    [SerializeField] private GameObject _settingsScreen;
     [Header("Slider setup")] [SerializeField, Range(0, 1f)]
     protected float sliderValue;
 
@@ -23,8 +25,8 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
 
     private Coroutine _animateSliderCoroutine;
 
-    [Header("Events")] [SerializeField] private UnityEvent onToggleOn;
-    [SerializeField] private UnityEvent onToggleOff;
+    [Header("Events")] [SerializeField] public UnityEvent onToggleOn;
+    [SerializeField] public UnityEvent onToggleOff;
 
     private ToggleSwitchGroupManager _toggleSwitchGroupManager;
 
@@ -76,6 +78,7 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("КЛИК");
+        SoundPlayer.Instance.PlayButtonClick();
         Toggle();
     }
 
@@ -94,7 +97,7 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
     }
 
 
-    private void SetStateAndStartAnimation(bool state)
+    public void SetStateAndStartAnimation(bool state)
     {
         _previousValue = CurrentValue;
         CurrentValue = state;
@@ -107,10 +110,18 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
                 onToggleOff?.Invoke();
         }
 
-        if (_animateSliderCoroutine != null)
-            StopCoroutine(_animateSliderCoroutine);
 
-        _animateSliderCoroutine = StartCoroutine(AnimateSlider());
+        if (_settingsScreen.activeSelf)
+        {
+            if (_animateSliderCoroutine != null)
+                StopCoroutine(_animateSliderCoroutine);
+
+            _animateSliderCoroutine = StartCoroutine(AnimateSlider());
+        }
+        else
+        {
+            _slider.value = CurrentValue ? 1 : 0;
+        }
     }
 
 

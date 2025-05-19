@@ -1,4 +1,3 @@
-using DeliveryContent;
 using TMPro;
 using UnityEngine;
 
@@ -14,16 +13,25 @@ namespace DeliveryContent
         private void OnEnable()
         {
             _delivery.AmountItemsDeliveriesChanged += ShowAmountDeliveries;
+            _delivery.TimeChanged += ShowTimer;
         }
 
         private void OnDisable()
         {
             _delivery.AmountItemsDeliveriesChanged -= ShowAmountDeliveries;
+            _delivery.TimeChanged -= ShowTimer;
         }
 
         private void ShowAmountDeliveries(int amount)
         {
+            _deliveryScreen.SetActive(amount > 0);
             _amountDelivers.text = amount.ToString();
+        }
+
+        private void ShowTimer(float currentTime)
+        {
+            int seconds = Mathf.CeilToInt(currentTime);
+            _timerDeliveryText.text = $"{seconds / 60}:{seconds % 60:00}";
         }
     }
 }
