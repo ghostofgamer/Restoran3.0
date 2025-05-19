@@ -1,4 +1,5 @@
 using TMPro;
+using UI.Screens;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ namespace TutorialContent
 {
     public class NameRestaurant : MonoBehaviour
     {
+        [SerializeField] private NameRestaurantScreen _nameRestaurantScreen;
         [SerializeField] private TMP_InputField _nameInputField;
         [SerializeField] private Button _saveButton;
         
@@ -20,12 +22,13 @@ namespace TutorialContent
             _saveButton.interactable = name.Length >= 1 && name.Length <= 13;
         }
         
-        private void Save()
+        public void Save()
         {
             string restaurantName = _nameInputField.text;
             
             if (!string.IsNullOrEmpty(restaurantName) && restaurantName.Length <= 13)
             {
+                _nameRestaurantScreen.CloseScreen();
                 PlayerPrefs.SetString("RestaurantName", restaurantName);
                 PlayerPrefs.Save();
                 Debug.Log("Restaurant name saved: " + restaurantName);
