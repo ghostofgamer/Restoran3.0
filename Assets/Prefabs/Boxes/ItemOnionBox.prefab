@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7712370902062953471}
   - component: {fileID: 2859378739543908338}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -499,7 +499,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8420351869613323791}
   - component: {fileID: 3409812893824840013}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Icon (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -588,7 +588,7 @@ GameObject:
   - component: {fileID: 7404527243623834005}
   - component: {fileID: 3878820986312290188}
   - component: {fileID: 3107112129628752122}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ItemOnionBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -654,6 +654,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parentObject: {fileID: 893277251021769326}
   _interactableObject: {fileID: 5354301398846982014}
+  InHands: 0
 --- !u!114 &3107112129628752122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,13 +1204,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3265130670166237621}
     m_Modifications:
+    - target: {fileID: 2042885087992899584, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_Name
       value: onion (2)
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899590, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087993132066, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_LocalScale.x
@@ -1266,6 +1279,10 @@ PrefabInstance:
     - target: {fileID: 2089720802554392481, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: _itemType
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307123976260694862, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1307,13 +1324,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5313262971827879663}
     m_Modifications:
+    - target: {fileID: 2042885087992899584, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_Name
       value: onion
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899590, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087993132066, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_LocalScale.x
@@ -1370,6 +1399,10 @@ PrefabInstance:
     - target: {fileID: 2089720802554392481, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: _itemType
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307123976260694862, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1411,13 +1444,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2603595116894702701}
     m_Modifications:
+    - target: {fileID: 2042885087992899584, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_Name
       value: onion (3)
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899590, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087993132066, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_LocalScale.x
@@ -1474,6 +1519,10 @@ PrefabInstance:
     - target: {fileID: 2089720802554392481, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: _itemType
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307123976260694862, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1515,13 +1564,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6723870706436906333}
     m_Modifications:
+    - target: {fileID: 2042885087992899584, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_Name
       value: onion (7)
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899590, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087993132066, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_LocalScale.x
@@ -1578,6 +1639,10 @@ PrefabInstance:
     - target: {fileID: 2089720802554392481, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: _itemType
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307123976260694862, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1619,13 +1684,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3234755798150473310}
     m_Modifications:
+    - target: {fileID: 2042885087992899584, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_Name
       value: onion (1)
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899590, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087993132066, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_LocalScale.x
@@ -1682,6 +1759,10 @@ PrefabInstance:
     - target: {fileID: 2089720802554392481, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: _itemType
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307123976260694862, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1723,13 +1804,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1883899933477013283}
     m_Modifications:
+    - target: {fileID: 2042885087992899584, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_Name
       value: onion (6)
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899590, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087993132066, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_LocalScale.x
@@ -1786,6 +1879,10 @@ PrefabInstance:
     - target: {fileID: 2089720802554392481, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: _itemType
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307123976260694862, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1827,13 +1924,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4372239139761515653}
     m_Modifications:
+    - target: {fileID: 2042885087992899584, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_Name
       value: onion (4)
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899590, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087993132066, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_LocalScale.x
@@ -1890,6 +1999,10 @@ PrefabInstance:
     - target: {fileID: 2089720802554392481, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: _itemType
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307123976260694862, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1931,13 +2044,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1376374494634783116}
     m_Modifications:
+    - target: {fileID: 2042885087992899584, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_Name
       value: onion (5)
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899586, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2042885087992899590, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2042885087993132066, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: m_LocalScale.x
@@ -1994,6 +2119,10 @@ PrefabInstance:
     - target: {fileID: 2089720802554392481, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
       propertyPath: _itemType
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307123976260694862, guid: 6ff6544247da3c84cae3214f850c21af, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

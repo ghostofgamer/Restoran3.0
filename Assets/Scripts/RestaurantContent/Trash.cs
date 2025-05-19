@@ -1,5 +1,7 @@
+using Enums;
 using InteractableContent;
 using PlayerContent;
+using TutorialContent;
 using UnityEngine;
 
 namespace RestaurantContent
@@ -7,6 +9,7 @@ namespace RestaurantContent
     public class Trash : MonoBehaviour
     {
         [SerializeField] private InteractableObject _interactableObject;
+        [SerializeField] private Tutorial _tutorial;
 
         private void OnEnable()
         {
@@ -33,7 +36,12 @@ namespace RestaurantContent
             if (draggable != null)
             {
                 if (!draggable.InHands)
+                {
                     draggable.gameObject.SetActive(false);
+
+                    if (_tutorial.CurrentType == TutorialType.ThrowEmptyBoxInTrash)
+                        _tutorial.SetCurrentTutorialStage(TutorialType.ThrowEmptyBoxInTrash);
+                }
             }
         }
     }

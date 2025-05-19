@@ -1,12 +1,17 @@
+using Enums;
 using InputContent;
 using Interfaces;
 using SettingsContent.SoundContent;
+using TutorialContent;
 using UnityEngine;
 
 namespace PlayerContent
 {
     public class PlayerInteraction : MonoBehaviour
     {
+        [SerializeField] private Tutorial _tutorial;
+        
+        
         [SerializeField] private Transform _draggablePosition;
         [SerializeField] private GameObject _throwButton;
         [SerializeField] private PlayerTray _playerTray;
@@ -56,6 +61,13 @@ namespace PlayerContent
             draggable.transform.SetParent(_draggablePosition);
             draggable.GetComponent<Rigidbody>().isKinematic = true;
             _throwButton.SetActive(true);
+
+            if (_tutorial.CurrentType == draggable.GetComponent<TutorialObject>().ItemType)
+            {
+                Debug.Log("типы совпадают");
+                draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
+                _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBuns);
+            }
         }
 
         public void SetCurrentDraggable(Draggable draggable)

@@ -8,10 +8,12 @@ using InteractableContent;
 using PlayerContent;
 using SaveContent;
 using SettingsContent.SoundContent;
+using TutorialContent;
 using UnityEngine;
 
 public class AssemblyTable : MonoBehaviour
 {
+    [SerializeField] private Tutorial _tutorial;
     [SerializeField] private ItemContainer[] _itemContainers;
     [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
     [SerializeField] private InteractableObject _interactableObject;
@@ -95,6 +97,12 @@ public class AssemblyTable : MonoBehaviour
                                     Debug.Log("emptyPositions[i] " + emptyPositions[i]);
                                     Debug.Log("activeItems[i] " + activeItems[i]);
 
+
+                                    if (_tutorial.CurrentType == TutorialType.PutBunsAssemblyTable)
+                                    {
+                                        _tutorial.SetCurrentTutorialStage(TutorialType.PutBunsAssemblyTable);
+                                    }
+                                    
                                     SoundPlayer.Instance.PlayPutTray();
                                     // basket.RemoveItem(itemsToPlace, i);
                                     basket.TransferProduct(itemsToPlace, i, targetContainer.AdditionalArrayPositions);
