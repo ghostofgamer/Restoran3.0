@@ -14,9 +14,7 @@ namespace TutorialContent
 
         public void ActivateTutorPoint()
         {
-            Debug.Log("ActivateTutorPoint 1");
             _waypointTarget.ActivateWaypoint();
-            Debug.Log("ActivateTutorPoint 3");
             _rawTutor.SetActive(true);
         }
 

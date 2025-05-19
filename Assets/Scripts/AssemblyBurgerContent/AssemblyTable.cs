@@ -99,9 +99,7 @@ public class AssemblyTable : MonoBehaviour
 
 
                                     if (_tutorial.CurrentType == TutorialType.PutBunsAssemblyTable)
-                                    {
                                         _tutorial.SetCurrentTutorialStage(TutorialType.PutBunsAssemblyTable);
-                                    }
                                     
                                     SoundPlayer.Instance.PlayPutTray();
                                     // basket.RemoveItem(itemsToPlace, i);
@@ -127,6 +125,9 @@ public class AssemblyTable : MonoBehaviour
                             basket.TransferProduct(itemsToPlace, targetContainer.Positions);
                             targetContainer.ActivateItems(itemsToPlace);
                             Debug.Log($"Placed {itemsToPlace} items in container for {basket.ItemType}");
+                            
+                            if (_tutorial.CurrentType == TutorialType.PutPackagesAssemblyTable)
+                                _tutorial.SetCurrentTutorialStage(TutorialType.PutPackagesAssemblyTable);
                         }
                         else
                         {

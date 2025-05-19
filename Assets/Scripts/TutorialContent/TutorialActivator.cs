@@ -1,4 +1,6 @@
+using System.Text;
 using Enums;
+using InputContent;
 using SoContent;
 using UI.Screens.TutorialScreens;
 using UnityEngine;
@@ -17,7 +19,11 @@ namespace TutorialContent
         [SerializeField] private TutorDescriptionUI _tutorDescriptionUI;
         [SerializeField] private TutorialDescription _tutorialDescription;
         [SerializeField] private Tutorial _tutorial;
-
+        [SerializeField] private PlayerInput _playerInput;
+        [SerializeField] private LookAroundEventTrigger _lookAroundEventTrigger;
+        [SerializeField] private GameObject _joystick;
+        [SerializeField] private GameObject _touchShopImage;
+        
         public void ActivateNameRestaurant()
         {
             _nameRestaurantScreen.OpenScreen();
@@ -65,9 +71,24 @@ namespace TutorialContent
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
         }
 
+        public void PutPackagesAssemblyTable()
+        {
+            Debug.Log("PutPackagesAssemblyTable");
+            // _burgerPackageBox.DeactivateTutorPoint();
+            _assemblyTable.ActivateTutorPoint();
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+        }
         
-        
-        
+        public void OrderBurgerPatties()
+        {
+            Debug.Log("OrderBurgerPatties");
+            _assemblyTable.DeactivateTutorPoint();
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            // _playerInput.enabled = false;
+            _lookAroundEventTrigger.gameObject.SetActive(false);
+            _joystick.SetActive(false);
+            _touchShopImage.SetActive(true);
+        }
         
         
         

@@ -118,11 +118,11 @@ namespace TutorialContent
                     break;
                 case TutorialType.PutPackagesAssemblyTable:
                     Debug.Log("Current Tutorial Stage: PutPackagesAssemblyTable");
-                    // Логика для этапа PutPackagesAssemblyTable
+                    _tutorialActivator.PutPackagesAssemblyTable();
                     break;
                 case TutorialType.OrderBurgerPatties:
                     Debug.Log("Current Tutorial Stage: OrderBurgerPatties");
-                    // Логика для этапа OrderBurgerPatties
+                    _tutorialActivator.OrderBurgerPatties();
                     break;
                 case TutorialType.SkipDelivery:
                     Debug.Log("Current Tutorial Stage: SkipDelivery");
