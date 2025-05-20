@@ -14,7 +14,7 @@ namespace SettingsContent
         
         private float _minSensitivity = 0.5f;
         private float _maxSensitivity = 600f;
-        private float _defaultSensitivity = 100f;
+        private float _defaultSensitivity = 300f;
         private float _min = 0.5f;
         private float _max = 5f;
 
