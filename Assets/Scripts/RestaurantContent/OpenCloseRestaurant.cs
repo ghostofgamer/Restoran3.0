@@ -14,6 +14,12 @@ namespace RestaurantContent
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private TMP_Text[] _texts;
         [SerializeField] private Tutorial _tutorial;
+        [SerializeField] private TMP_Text _text;
+        [SerializeField] private Material _openMaterial;
+        [SerializeField] private Material _closeMaterial;
+        [SerializeField] private Renderer _colorObject;
+        [SerializeField] private Color _openColor;
+        [SerializeField] private Color _closeColor;
 
         public bool IsOpened { get; private set; }
 
@@ -50,8 +56,21 @@ namespace RestaurantContent
 
         private void Show()
         {
-            foreach (var text in _texts)
-                text.text = IsOpened ? "Open" : "Close";
+            /*foreach (var text in _texts)
+                text.text = IsOpened ? "Open" : "Close";*/
+            
+            if (IsOpened)
+            {
+                _text.text = "OPEN";
+                _text.color = _openColor; 
+                _colorObject.material = _openMaterial; 
+            }
+            else
+            {
+                _text.text = "CLOSE";
+                _text.color =_closeColor; 
+                _colorObject.material = _closeMaterial; 
+            }
         }
     }
 }

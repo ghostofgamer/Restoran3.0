@@ -1,7 +1,6 @@
 using System.Collections;
 using Enums;
 using InputContent;
-using Io.AppMetrica;
 using ItemContent;
 using SoContent;
 using UI.Screens;
@@ -41,6 +40,9 @@ namespace TutorialContent
         [SerializeField] private Button _dailyReward;
         [SerializeField] private Button _fortune;
 
+
+        private ItemBasket basketRawCutlet;
+        
         public void ActivateNameRestaurant()
         {
             SetValueButtonTopUI(false);
@@ -70,6 +72,7 @@ namespace TutorialContent
 
         public void PutBunsAssemblyTableBunBox()
         {
+            _boxesCounter.AddBox(bunObject.gameObject);
             SetValueButtonTopUI(false);
             Debug.Log("PutBunsAssemblyTableBunBox");
             _assemblyTable.ActivateTutorPoint();
@@ -97,6 +100,7 @@ namespace TutorialContent
 
         public void PutPackagesAssemblyTable()
         {
+            _boxesCounter.AddBox(_burgerPackageBox.gameObject);
             SetValueButtonTopUI(false);
             Debug.Log("PutPackagesAssemblyTable");
             // _burgerPackageBox.DeactivateTutorPoint();
@@ -137,12 +141,13 @@ namespace TutorialContent
         private IEnumerator SearchBoxOutside()
         {
             yield return new WaitForSeconds(0.15f);
-            ItemBasket basketRawCutlet = _boxesCounter.GetItemBasketByType(ItemType.RawCutlet);
+            basketRawCutlet = _boxesCounter.GetItemBasketByType(ItemType.RawCutlet);
             basketRawCutlet.GetComponent<TutorialObject>().ActivateTutorPoint();
         }
 
         public void PutRawCutletInContainer()
         {
+           _boxesCounter.AddBox(basketRawCutlet.gameObject);
             SetValueButtonTopUI(false);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
             _rawCutletContainer.ActivateTutorPoint();

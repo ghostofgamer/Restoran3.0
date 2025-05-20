@@ -1,3 +1,4 @@
+using System;
 using Enums;
 using Io.AppMetrica;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace TutorialContent
 
         public TutorialType CurrentType { get; private set; }
 
+        public event Action TutorCompleted;
 
         private void Start()
         {
@@ -22,6 +24,7 @@ namespace TutorialContent
             if (value > 0)
             {
                 CurrentType = TutorialType.TutorCompleted;
+                TutorCompleted?.Invoke();
                 return;
             }
 
@@ -221,6 +224,7 @@ namespace TutorialContent
                 case TutorialType.TutorCompleted:
                     Debug.Log("Current Tutorial Stage: TutorCompleted");
                     _tutorialActivator.TutorCompleted();
+                    TutorCompleted?.Invoke();
                     break;
 
                 default:
