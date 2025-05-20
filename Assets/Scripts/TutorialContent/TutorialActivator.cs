@@ -161,6 +161,32 @@ namespace TutorialContent
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
         }
         
+        public void LetsSetPrice()
+        {
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _lookAroundEventTrigger.gameObject.SetActive(false);
+            _joystick.SetActive(false);
+            _touchShopImage.SetActive(true);
+        }
+        
+        public void OpenRestaurant()
+        {
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _lookAroundEventTrigger.gameObject.SetActive(true);
+            _joystick.SetActive(true);
+         
+        }
+        
+        public void TakeFirstOrder()
+        {
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+        }
+        
+        public void CleanTable()
+        {
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+        }
+        
         private string GetDescriptionText(TutorialType currentType)
         {
             TutorialDescription.Description description =

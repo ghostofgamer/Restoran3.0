@@ -9,6 +9,7 @@ using RestaurantContent;
 using RestaurantContent.TrayContent;
 using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
+using TutorialContent;
 using UnityEngine;
 
 namespace AssemblyBurgerContent
@@ -24,6 +25,8 @@ namespace AssemblyBurgerContent
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private BurgersCounter _burgersCounter;
         [SerializeField] private PlayerLevel _playerLevel;
+        [SerializeField] private Tutorial _tutorial;
+        [SerializeField] private TutorialAssemblyBurger _tutorialAssemblyBurger;
 
         // private Stack<Item> _ingredientStack = new Stack<Item>();
 
@@ -75,6 +78,11 @@ namespace AssemblyBurgerContent
                                     return;
                                 }
 
+                                if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
+                                {
+                                    _tutorialAssemblyBurger.NextItemPackages();
+                                }
+
                                 Debug.Log("selectedContainer.CurrentItemsType[0] " +
                                           selectedContainer.CurrentItemsType[0]);
                                 HandleContainerSelection(selectedContainer.CurrentItemsType[0], selectedContainer,
@@ -86,6 +94,11 @@ namespace AssemblyBurgerContent
                                 {
                                     Debug.Log("булочек не хватает");
                                     return;
+                                }
+
+                                if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
+                                {
+                                    _tutorialAssemblyBurger.NextItemCutlet();
                                 }
 
                                 Debug.Log("selectedContainer.CurrentItemsType[1] " +
@@ -103,6 +116,12 @@ namespace AssemblyBurgerContent
 
                             if (activeItems > 0)
                             {
+                                if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
+                                {
+                                    if (selectedContainer.CurrentItemContainer == ItemType.Cutlet)
+                                        _tutorialAssemblyBurger.NextItemKetchup();
+                                }
+
                                 HandleContainerSelection(selectedContainer.CurrentItemContainer, selectedContainer);
                             }
                             else
@@ -146,6 +165,12 @@ namespace AssemblyBurgerContent
 
                     if (sauce != null)
                     {
+                        if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
+                        {
+                            if (sauce.ItemType == ItemType.Ketchup)
+                                _tutorialAssemblyBurger.NextItemBunTop();
+                        }
+
                         HandleContainerSelection(sauce.ItemType);
                     }
 
@@ -187,9 +212,9 @@ namespace AssemblyBurgerContent
             }
 
             Item item = _burgerIngridientSpawner.SpawnItem(type);
-            
+
             SoundPlayer.Instance.PlayPutTray();
-            
+
             _lastItemContainer = itemContainer;
             item.gameObject.SetActive(true);
 
@@ -239,6 +264,9 @@ namespace AssemblyBurgerContent
 
         public void UndoLastSelection()
         {
+            if ((int)_tutorial.CurrentType < (int)TutorialType.LetsSetPrice)
+                return;
+
             if (_isAnimationInProgress)
             {
                 return;
@@ -254,9 +282,9 @@ namespace AssemblyBurgerContent
                 {
                     _isAnimationInProgress = true;
                     Sequence sequence = DOTween.Sequence();
-                    
+
                     SoundPlayer.Instance.PlayPutTray();
-                    
+
                     sequence.Append(lastItem.transform.DOMove(container.transform.position, 0.3f)
                         .SetEase(Ease.InOutQuad));
                     sequence.Join(lastItem.transform.DORotate(container.transform.eulerAngles, 0.3f)
@@ -359,6 +387,12 @@ namespace AssemblyBurgerContent
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                     burgerInstance.transform.rotation = Quaternion.identity;
 
+                    if(_tutorial.CurrentType==TutorialType.LetsMakeFirstBurger)
+                    {
+                        _tutorialAssemblyBurger.CompletedAssemblyBurger();
+                        _tutorial.SetCurrentTutorialStage(TutorialType.LetsMakeFirstBurger);
+                    }
+                    
                     containerPackageBurger.DeactivateItems(1);
 
                     _playerLevel.AddExp(5);

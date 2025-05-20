@@ -18,7 +18,8 @@ namespace TutorialContent
             
            
             // CurrentType = TutorialType.OrderBurgerPatties;
-            CurrentType = TutorialType.LetsMakeFirstBurger;
+            // CurrentType = TutorialType.LetsMakeFirstBurger;
+            CurrentType = TutorialType.LetsSetPrice;
             
             CheckCurrentTutorialStage();
         }
@@ -170,9 +171,25 @@ namespace TutorialContent
                     _tutorialActivator.LetsMakeFirstBurger();
                     break;
                 
+                case TutorialType.LetsSetPrice:
+                    Debug.Log("Current Tutorial Stage: LetsSetPrice");
+                    _tutorialActivator.LetsSetPrice();
+                    break;
                 
+                case TutorialType.OpenRestaurant:
+                    Debug.Log("Current Tutorial Stage: OpenRestaurant");
+                    _tutorialActivator.OpenRestaurant();
+                    break;
                 
+                case TutorialType.TakeFirstOrder:
+                    Debug.Log("Current Tutorial Stage: TakeFirstOrder");
+                    _tutorialActivator.TakeFirstOrder();
+                    break;
                 
+                case TutorialType.CleanTable:
+                    Debug.Log("Current Tutorial Stage: CleanTable");
+                    _tutorialActivator.CleanTable();
+                    break;
                 
                 default:
                     Debug.Log("Unknown Tutorial Stage");

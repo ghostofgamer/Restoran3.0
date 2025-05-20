@@ -13,7 +13,8 @@ namespace UI.Screens.ShopContent
         [SerializeField] private Button[] _tutorDeactivateButton;
         [SerializeField] private ScrollRect _pageScroolTutor;
         [SerializeField] private ShopTutorialChanger _shopTutorialChanger;
-        
+        [SerializeField] private Button _tutorWorkPageButton;
+        [SerializeField] private GameObject _touchShopImage;
         
         [SerializeField] private PageShopButton[] _pageShopButtons;
         [SerializeField] private ShopPage[] _shopPages;
@@ -35,9 +36,18 @@ namespace UI.Screens.ShopContent
 
         public virtual void OpenPage(int index)
         {
-            DeactivateShopPages();
-            ActivateShopButton(index);
-            _shopPages[index].Open(0);
+            if (_tutorial.CurrentType == TutorialType.LetsSetPrice)
+            {
+                DeactivateShopPages();
+                ActivateShopButton(index);
+                _shopPages[1].Open(0);
+            }
+            else
+            {
+                DeactivateShopPages();
+                ActivateShopButton(index);
+                _shopPages[index].Open(0);
+            }
         }
 
         private void ActivateShopButton(int index)
@@ -51,6 +61,20 @@ namespace UI.Screens.ShopContent
                     tButton.interactable = false;
 
                 _shopTutorialChanger.ActivateRawCutlet();
+            }
+            else if (_tutorial.CurrentType == TutorialType.LetsSetPrice)
+            {
+                _closeButton.interactable = false;
+                _touchShopImage.SetActive(false);
+                _shopTutorialChanger.SetValueAddBurgerToMenuButton(false);
+                /*foreach (var tButton in _tutorDeactivateButton)
+                    tButton.interactable = false;
+
+                foreach (var tButton in _pageShopButtons)
+                    tButton.GetComponent<Button>().interactable = false;*/
+
+                /*_tutorWorkPageButton.interactable = true;
+                _shopTutorialChanger.DeactivateProducts();*/
             }
             else
             {

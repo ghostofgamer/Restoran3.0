@@ -20,6 +20,7 @@ public class AssemblyTable : MonoBehaviour
     [SerializeField] private Collider _collider;
     [SerializeField] private Collider[] _containerColliders;
     [SerializeField] private AssemblyBurger _assemblyBurger;
+    [SerializeField] private TutorialAssemblyBurger _tutorialAssemblyBurger;
 
     [SerializeField] private Transform _cameraCurrentPosition;
     [SerializeField] private CameraPositionChanger _cameraPositionChanger;
@@ -194,6 +195,17 @@ public class AssemblyTable : MonoBehaviour
         }
         else
         {
+            if ((int)_tutorial.CurrentType < (int)TutorialType.LetsMakeFirstBurger)
+            {
+                Debug.Log("рано тебе еще ");
+            }
+
+            if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
+            {
+                _tutorialAssemblyBurger.StartTutorAssemblyBurger();
+            }
+            
+            
             SoundPlayer.Instance.PlayButtonClick();
             BurgerAssemblyBeginig?.Invoke();
             SetValueCollider(false);

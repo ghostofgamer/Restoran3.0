@@ -20,8 +20,9 @@ namespace Enums
         TakeWellCutlet,
         PutWellCutletToContainer,
         LetsMakeFirstBurger,
-        
-        
-        
+        LetsSetPrice,
+        OpenRestaurant,
+        TakeFirstOrder,
+        CleanTable,
     }
 }
