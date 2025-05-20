@@ -1,5 +1,6 @@
 using ADSContent;
 using DayNightContent;
+using Io.AppMetrica;
 using SettingsContent.SoundContent;
 using StatisticContent;
 using UI.Screens;
@@ -22,6 +23,7 @@ namespace UI.Buttons
             
             _ads.ShowRewarded(() =>
             {
+                AppMetrica.ReportEvent("ExperienceOverDay");
                 _wallet.Add(new DollarValue(25, 0));
                 _dayNightCycle.ResetDay();
                 _statisticCounter.ClearData();

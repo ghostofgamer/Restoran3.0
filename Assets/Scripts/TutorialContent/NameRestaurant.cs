@@ -1,6 +1,6 @@
 using Enums;
+using Io.AppMetrica;
 using TMPro;
-using UI.Screens;
 using UI.Screens.TutorialScreens;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +36,6 @@ namespace TutorialContent
             {
                 if ((int)_tutorial.CurrentType == (int)_tutorialType)
                 {
-                    Debug.Log("Выполнил Current этап тутора");
                     _tutorial.SetCurrentTutorialStage(_tutorialType);
                 }
 
@@ -44,7 +43,6 @@ namespace TutorialContent
                 _nameText.text = restaurantName;
                 PlayerPrefs.SetString("RestaurantName", restaurantName);
                 PlayerPrefs.Save();
-                Debug.Log("Restaurant name saved: " + restaurantName);
             }
             else
             {

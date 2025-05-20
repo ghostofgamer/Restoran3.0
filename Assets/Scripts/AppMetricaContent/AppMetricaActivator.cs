@@ -20,8 +20,8 @@ public static class AppMetricaActivator
 
         AppMetrica.Activate(appMetricaConfig);
 
-        // int level = 1;
-        // AppMetrica.ReportEvent("LevelUp", "{\"" + level.ToString() + "\":null}");
+         /*int level = 1;
+        AppMetrica.ReportEvent("LevelUp", "{\"" + level.ToString() + "\":null}");*/
     }
 
     private static bool IsFirstLaunch()

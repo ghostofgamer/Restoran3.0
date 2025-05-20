@@ -3,6 +3,7 @@ using System.IO;
 using ADSContent;
 using CoppraGames;
 using DailyTimerContent;
+using Io.AppMetrica;
 using PlayerContent.LevelContent;
 using SettingsContent.SoundContent;
 using TMPro;
@@ -121,7 +122,11 @@ namespace FortuneContent
 
             SoundPlayer.Instance.PlayButtonClick();
             _dailyTimerADSFortune.StartButtonClick();
-            _ads.ShowRewarded(() => { Spin(); });
+            _ads.ShowRewarded(() =>
+            {
+                AppMetrica.ReportEvent("FortuneSpinADS");
+                Spin();
+            });
         }
 
         private void AnimateButton()
