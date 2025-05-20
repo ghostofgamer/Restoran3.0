@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Enums;
 using OrdersContent;
 using ParkingContent;
 using RestaurantContent;
@@ -49,7 +50,10 @@ namespace ClientsContent
 
         private void Start()
         {
-            _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);
+            if ((int)_tutorial.CurrentType <= (int)TutorialType.TakeFirstOrder)
+                _nextSpawnTime = 1;
+            else
+                _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);
         }
 
         private void Update()
@@ -61,7 +65,10 @@ namespace ClientsContent
                 if (_elapsedTime >= _nextSpawnTime)
                 {
                     _elapsedTime = 0;
+
+
                     _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);
+
                     CreateClients();
                 }
             }
@@ -144,7 +151,7 @@ namespace ClientsContent
                 table.SetBusyValue(true);
                 Client client = _clientsSpawner.SpawnRandomClient();
                 client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                    _queueCashRegister, _priceOrderCounter,_clientsCounter);
+                    _queueCashRegister, _priceOrderCounter, _clientsCounter);
                 ClientCreated?.Invoke();
                 _queueCashRegister.AddClientQueue(client);
                 _clients.Add(client);
@@ -170,7 +177,7 @@ namespace ClientsContent
             table.SetBusyValue(true);
             Client client = _clientsSpawner.SpawnRandomClient();
             client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                _queueCashRegister, _priceOrderCounter,_clientsCounter);
+                _queueCashRegister, _priceOrderCounter, _clientsCounter);
             ClientCreated?.Invoke();
             Debug.Log("Пешком");
             _queueCashRegister.AddClientToQueue(client);
