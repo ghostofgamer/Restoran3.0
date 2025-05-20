@@ -7,6 +7,7 @@ namespace TutorialContent
     {
         [SerializeField] private TutorialData _tutorialData;
         [SerializeField] private TutorialActivator _tutorialActivator;
+        [SerializeField] private TutorDescriptionUI _tutorialDescriptionUI;
         
         public TutorialType CurrentType { get; private set; }
 
@@ -14,9 +15,8 @@ namespace TutorialContent
         {
             /*int savedTutorialStage = PlayerPrefs.GetInt("CurrentTutorialStage", 0);
             CurrentType = (TutorialType)savedTutorialStage;*/
-
-
-            CurrentType = TutorialType.NameRestaurant;
+            
+            CurrentType = TutorialType.TakeBoxBuns;
             CheckCurrentTutorialStage();
         }
 
@@ -102,27 +102,27 @@ namespace TutorialContent
                     break;
                 case TutorialType.TakeBoxBuns:
                     Debug.Log("Current Tutorial Stage: TakeBoxBuns");
-                    // Логика для этапа TakeBoxBuns
+                    _tutorialActivator.TakeBunBox();
                     break;
                 case TutorialType.PutBunsAssemblyTable:
                     Debug.Log("Current Tutorial Stage: PutBunsAssemblyTable");
-                    // Логика для этапа PutBunsAssemblyTable
+                    _tutorialActivator.PutBunsAssemblyTableBunBox();
                     break;
                 case TutorialType.ThrowEmptyBoxInTrash:
                     Debug.Log("Current Tutorial Stage: ThrowEmptyBoxInTrash");
-                    // Логика для этапа ThrowEmptyBoxInTrash
+                    _tutorialActivator.ThrowEmptyBoxInTrash();
                     break;
                 case TutorialType.TakeBoxBurgerPackages:
                     Debug.Log("Current Tutorial Stage: TakeBoxBurgerPackages");
-                    // Логика для этапа TakeBoxBurgerPackages
+                    _tutorialActivator.TakeBoxBurgerPackages();
                     break;
                 case TutorialType.PutPackagesAssemblyTable:
                     Debug.Log("Current Tutorial Stage: PutPackagesAssemblyTable");
-                    // Логика для этапа PutPackagesAssemblyTable
+                    _tutorialActivator.PutPackagesAssemblyTable();
                     break;
                 case TutorialType.OrderBurgerPatties:
                     Debug.Log("Current Tutorial Stage: OrderBurgerPatties");
-                    // Логика для этапа OrderBurgerPatties
+                    _tutorialActivator.OrderBurgerPatties();
                     break;
                 case TutorialType.SkipDelivery:
                     Debug.Log("Current Tutorial Stage: SkipDelivery");

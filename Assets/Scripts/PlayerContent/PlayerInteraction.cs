@@ -1,12 +1,17 @@
+using Enums;
 using InputContent;
 using Interfaces;
 using SettingsContent.SoundContent;
+using TutorialContent;
 using UnityEngine;
 
 namespace PlayerContent
 {
     public class PlayerInteraction : MonoBehaviour
     {
+        [SerializeField] private Tutorial _tutorial;
+
+
         [SerializeField] private Transform _draggablePosition;
         [SerializeField] private GameObject _throwButton;
         [SerializeField] private PlayerTray _playerTray;
@@ -14,8 +19,8 @@ namespace PlayerContent
         private IInteractable _currentInteractable;
         private Vector3 _originalScale;
         private PlayerInput _playerInput;
-        
-        public PlayerTray PlayerTray =>_playerTray;
+
+        public PlayerTray PlayerTray => _playerTray;
 
         public Draggable CurrentDraggable { get; private set; }
 
@@ -56,6 +61,23 @@ namespace PlayerContent
             draggable.transform.SetParent(_draggablePosition);
             draggable.GetComponent<Rigidbody>().isKinematic = true;
             _throwButton.SetActive(true);
+
+            if (_tutorial.CurrentType == draggable.GetComponent<TutorialObject>().ItemType)
+            {
+                if (draggable.GetComponent<TutorialObject>().ItemType == TutorialType.TakeBoxBuns)
+                {
+                    Debug.Log("типы совпадают");
+                    draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
+                    _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBuns);
+                }
+
+                if (draggable.GetComponent<TutorialObject>().ItemType == TutorialType.TakeBoxBurgerPackages)
+                {
+                    Debug.Log("типы совпадают");
+                    draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
+                    _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBurgerPackages);
+                }
+            }
         }
 
         public void SetCurrentDraggable(Draggable draggable)
@@ -67,7 +89,7 @@ namespace PlayerContent
         {
             if (CurrentDraggable == null)
                 return;
-            
+
             SoundPlayer.Instance.PlayThrow();
             Debug.Log("бросить 1 ");
             CurrentDraggable.Throw();
