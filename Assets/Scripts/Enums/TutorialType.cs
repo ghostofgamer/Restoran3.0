@@ -14,5 +14,16 @@ namespace Enums
         SkipDelivery,
         TakeBoxesOutside,
         PutRawCutletInContainer,
+        TakeRawCutletInTrayPlayer,
+        PutCutletsOnGrill,
+        FryCutletGrill,
+        TakeWellCutlet,
+        PutWellCutletToContainer,
+        LetsMakeFirstBurger,
+        LetsSetPrice,
+        OpenRestaurant,
+        TakeFirstOrder,
+        CleanTable,
+        TutorCompleted,
     }
 }

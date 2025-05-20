@@ -3,7 +3,10 @@ using Enums;
 using InteractableContent;
 using PlayerContent;
 using SoContent.AssemblyBurger;
+using TutorialContent;
+using Unity.VisualScripting;
 using UnityEngine;
+using Sequence = DG.Tweening.Sequence;
 
 namespace ItemContent
 {
@@ -11,6 +14,7 @@ namespace ItemContent
     {
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
+        [SerializeField] private Tutorial _tutorial;
 
         public override void ActionContainer(PlayerInteraction playerInteraction)
         {
@@ -25,6 +29,10 @@ namespace ItemContent
 
                     if (emptyPosition > 0 && activeItems > 0)
                     {
+                        if (_tutorial.CurrentType == TutorialType.PutRawCutletInContainer)
+                            _tutorial.SetCurrentTutorialStage(TutorialType.PutRawCutletInContainer);
+
+
                         int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
                         basket.TransferProduct(itemsToPlace, Positions);
                         ActivateItems(itemsToPlace);
@@ -99,12 +107,12 @@ namespace ItemContent
                         int activeItems = playerInteraction.PlayerTray.GetActivePositionValue(CurrentItemContainer);
                         int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
 
-                        
+
                         if (itemsToPlace > 0)
                         {
                             playerInteraction.PlayerTray.PutAway(CurrentItemContainer, itemsToPlace);
                             // playerInteraction.PlayerTray.PutAway(CurrentItemContainer, itemsToPlace);
-                            
+
                             int completedAnimations = 0;
                             Vector3 scale = _assemblyBurgerItemConfig.GetScale(ItemType.RawCutlet);
 
@@ -112,12 +120,12 @@ namespace ItemContent
                             {
                                 Item item = _burgerIngridientSpawner.SpawnItem(ItemType.RawCutlet);
                                 item.gameObject.SetActive(true);
-                                
+
                                 item.transform.position = playerInteraction.PlayerTray.Positions[i].position;
                                 item.transform.localScale = scale;
-                                
+
                                 Sequence sequence = DOTween.Sequence();
-                                
+
                                 sequence.Append(item.transform
                                     .DOMove(Positions[i].position, 0.15f)
                                     .SetEase(Ease.InOutQuad));
@@ -136,7 +144,7 @@ namespace ItemContent
                                     }
                                 });
                             }
-                            
+
                             // ActivateItems(itemsToPlace);
                         }
                     }

@@ -1,5 +1,6 @@
 using ADSContent;
 using DeliveryContent;
+using Io.AppMetrica;
 using SettingsContent.SoundContent;
 using UnityEngine;
 
@@ -15,9 +16,12 @@ namespace UI.Buttons
         public override void OnClick()
         {
             SoundPlayer.Instance.PlayButtonClick();
-            
+
             if (_isAdButton)
+            {
                 _ads.ShowRewarded(() => _delivery.SpawnAllItems());
+                AppMetrica.ReportEvent("SkipDelivery");
+            }
             else
             {
                 _delivery.SpawnAllItems();

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Enums;
+using TutorialContent;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,6 +14,7 @@ namespace PlayerContent
         [SerializeField] private GameObject _rawCutletTray;
         [SerializeField] private GameObject _cutletTray;
         [SerializeField] private Transform[] _positions;
+        [SerializeField] private Tutorial _tutorial;
 
         public event Action<int, int> CutletItemsActiveChanged;
 
@@ -61,7 +63,7 @@ namespace PlayerContent
         public void Put(ItemType itemType, int value)
         {
             Debug.Log("IsActive %%%%%%%%%%%%%%%%%%%%%%%" + IsActive);
-            
+
             if (!IsActive)
             {
                 Debug.Log("IsActive !!!!!!!!!!!!!!!!" + IsActive);
@@ -69,6 +71,18 @@ namespace PlayerContent
                 gameObject.SetActive(true);
                 ActivateTray(itemType);
                 ToggleItems(GetItemsByType(itemType), value, true);
+
+                if (_tutorial.CurrentType == TutorialType.TakeRawCutletInTrayPlayer)
+                {
+                    if (itemType == ItemType.RawCutlet)
+                        _tutorial.SetCurrentTutorialStage(TutorialType.TakeRawCutletInTrayPlayer);
+                }
+                
+                if (_tutorial.CurrentType == TutorialType.TakeWellCutlet)
+                {
+                    if (itemType == ItemType.Cutlet)
+                        _tutorial.SetCurrentTutorialStage(TutorialType.TakeWellCutlet);
+                }
             }
         }
 

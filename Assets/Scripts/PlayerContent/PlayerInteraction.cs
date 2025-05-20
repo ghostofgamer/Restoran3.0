@@ -62,7 +62,30 @@ namespace PlayerContent
             draggable.GetComponent<Rigidbody>().isKinematic = true;
             _throwButton.SetActive(true);
 
-            if (_tutorial.CurrentType == draggable.GetComponent<TutorialObject>().ItemType)
+            var tutorialObject = draggable.GetComponent<TutorialObject>();
+            
+            if (tutorialObject != null && _tutorial.CurrentType == tutorialObject.ItemType)
+            {
+                switch (tutorialObject.ItemType)
+                {
+                    case TutorialType.TakeBoxBuns:
+                        Debug.Log("типы совпадают");
+                        tutorialObject.DeactivateTutorPoint();
+                        _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBuns);
+                        break;
+                    case TutorialType.TakeBoxBurgerPackages:
+                        Debug.Log("типы совпадают");
+                        tutorialObject.DeactivateTutorPoint();
+                        _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBurgerPackages);
+                        break;
+                    case TutorialType.TakeBoxesOutside:
+                        tutorialObject.DeactivateTutorPoint();
+                        _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxesOutside);
+                        break;
+                }
+            }
+            
+            /*if (_tutorial.CurrentType == draggable.GetComponent<TutorialObject>().ItemType)
             {
                 if (draggable.GetComponent<TutorialObject>().ItemType == TutorialType.TakeBoxBuns)
                 {
@@ -77,7 +100,13 @@ namespace PlayerContent
                     draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
                     _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBurgerPackages);
                 }
-            }
+
+                if (draggable.GetComponent<TutorialObject>().ItemType == TutorialType.TakeBoxesOutside)
+                {
+                    draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
+                    _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxesOutside);
+                }
+            }*/
         }
 
         public void SetCurrentDraggable(Draggable draggable)

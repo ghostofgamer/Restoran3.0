@@ -31,7 +31,7 @@ namespace DeliveryContent
         private void ShowTimer(float currentTime)
         {
             int seconds = Mathf.CeilToInt(currentTime);
-            _timerDeliveryText.text = $"{seconds / 60}:{seconds % 60:00}";
+            _timerDeliveryText.text = $"Delivery in: {seconds / 60}:{seconds % 60:00}";
         }
     }
 }

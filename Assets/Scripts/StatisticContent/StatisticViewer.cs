@@ -36,9 +36,9 @@ namespace StatisticContent
 
         private void ShowStatButton()
         {
-            if (_clientsCounter.Clients.Count > 0)
+            if (_clientsCounter.Clients.Count > 0 || _dayNightCycle.IsDay)
                 return;
-            
+
             _statButton.SetActive(true);
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using CalendarContent;
 using ClientsContent;
+using Io.AppMetrica;
 using PlayerContent.LevelContent;
 using RestaurantContent;
 using TMPro;
@@ -53,6 +54,8 @@ namespace DayNightContent
         public event Action NewDayStarted;
 
         public event Action<bool> SetNightLighting;
+
+        public bool IsDay => _isDay;
 
         private void OnEnable()
         {
@@ -132,6 +135,7 @@ namespace DayNightContent
 
         public void ResetDay()
         {
+            AppMetrica.ReportEvent("NewDaY");
             _playerLevel.AddExp(50);
             timeOfDay = 0f;
             Debug.Log("новый день");
@@ -155,8 +159,8 @@ namespace DayNightContent
                 if (isNight)
                 {
                     Debug.Log("DayOverCompleted ");
-                    DayOverCompleted?.Invoke();
                     _isDay = isDay;
+                    DayOverCompleted?.Invoke();
                 }
                 else
                 {
@@ -218,7 +222,6 @@ namespace DayNightContent
                 int hour = Mathf.FloorToInt(currentHour);
                 int minute = Mathf.FloorToInt((currentHour - hour) * 60f);
                 _timeText.text = string.Format("{0:00}:{1:00}", hour, minute);
-                Debug.Log("Time " + _timeText);
 
                 if (hour >= 21 && minute >= 0)
                     _clientsCreator.SetNightTime(true);

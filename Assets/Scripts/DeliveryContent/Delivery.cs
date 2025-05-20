@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Enums;
+using Io.AppMetrica;
 using SettingsContent.SoundContent;
 using SoContent;
+using TutorialContent;
 using UI.Screens.ShopContent;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,6 +18,7 @@ namespace DeliveryContent
         [SerializeField] private DeliveryConfig _deliveryConfig;
         [SerializeField] private DeliveryViewer _deliveryViewer;
         [SerializeField] private DeliverySaver _deliverySaver;
+        [SerializeField] private Tutorial _tutorial; 
 
         private List<ItemDeliveryInfo> _items = new List<ItemDeliveryInfo>();
         private bool _isSpawning = false;
@@ -153,6 +156,11 @@ namespace DeliveryContent
                     _items.RemoveAt(0);
             }
 
+            if (_tutorial.CurrentType == TutorialType.SkipDelivery)
+            {
+                _tutorial.SetCurrentTutorialStage(TutorialType.SkipDelivery);
+            }
+            
             SoundPlayer.Instance.PlayDostavka();
             RemainingTime = 0;
             TimeChanged?.Invoke(RemainingTime);
@@ -195,6 +203,11 @@ namespace DeliveryContent
 
                 UpdateAmountDeliveries();
 
+                if (_tutorial.CurrentType == TutorialType.SkipDelivery)
+                {
+                    _tutorial.SetCurrentTutorialStage(TutorialType.SkipDelivery);
+                }
+                
                 if (item.Amount <= 0)
                     _items.RemoveAt(0);
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Enums;
 using OrdersContent;
 using ParkingContent;
 using RestaurantContent;
@@ -8,6 +9,7 @@ using RestaurantContent.CashRegisterContent;
 using RestaurantContent.MenuContent;
 using RestaurantContent.TableContent;
 using SpawnContent;
+using TutorialContent;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,6 +17,7 @@ namespace ClientsContent
 {
     public class ClientsCreator : MonoBehaviour
     {
+        [SerializeField] private Tutorial _tutorial;
         [SerializeField] private ClientsSpawner _clientsSpawner;
         [SerializeField] private OrderCreator _orderCreator;
         [SerializeField] private QueueCashRegister _queueCashRegister;
@@ -25,6 +28,7 @@ namespace ClientsContent
         [SerializeField] private MenuCounter _menuCounter;
 
         [SerializeField] private ClientCar _clientCar;
+        [SerializeField] private ClientCar[] _clientCars;
         [SerializeField] private Transform _carSpawnPosition;
         [SerializeField] private Transform _carParkingPosition;
         [SerializeField] private Parking _parking;
@@ -47,7 +51,10 @@ namespace ClientsContent
 
         private void Start()
         {
-            _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);
+            if ((int)_tutorial.CurrentType <= (int)TutorialType.TakeFirstOrder)
+                _nextSpawnTime = 1;
+            else
+                _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);
         }
 
         private void Update()
@@ -59,7 +66,10 @@ namespace ClientsContent
                 if (_elapsedTime >= _nextSpawnTime)
                 {
                     _elapsedTime = 0;
+
+
                     _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);
+
                     CreateClients();
                 }
             }
@@ -142,15 +152,16 @@ namespace ClientsContent
                 table.SetBusyValue(true);
                 Client client = _clientsSpawner.SpawnRandomClient();
                 client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                    _queueCashRegister, _priceOrderCounter,_clientsCounter);
+                    _queueCashRegister, _priceOrderCounter, _clientsCounter);
                 ClientCreated?.Invoke();
                 _queueCashRegister.AddClientQueue(client);
                 _clients.Add(client);
             }
 
-            Debug.Log("В машине несколько!!!");
             ParkingSpace parkingSpace = _parking.GetFreeParkingPosition();
-            ClientCar car = Instantiate(_clientCar, _carSpawnPosition.position, Quaternion.identity, transform);
+            int randomCarIndex = Random.Range(0, _clientCars.Length);
+            
+            ClientCar car = Instantiate(_clientCars[randomCarIndex], _carSpawnPosition.position, Quaternion.identity, transform);
             parkingSpace.BusyPlace(car);
 
             foreach (var client in _clients)
@@ -168,7 +179,7 @@ namespace ClientsContent
             table.SetBusyValue(true);
             Client client = _clientsSpawner.SpawnRandomClient();
             client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                _queueCashRegister, _priceOrderCounter,_clientsCounter);
+                _queueCashRegister, _priceOrderCounter, _clientsCounter);
             ClientCreated?.Invoke();
             Debug.Log("Пешком");
             _queueCashRegister.AddClientToQueue(client);

@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using WalletContent;
@@ -12,8 +11,7 @@ namespace UI.MenuUIContent
         [SerializeField] private TMP_Text _profitText;
         [SerializeField] private TMP_Text _priceText;
         [SerializeField] private DishesUIItem _dishesUIItem;
-
-
+        
         private void OnEnable()
         {
             _dishesUIItem.ChangeCurrentPrice += ShowCurrentPrice;
@@ -30,11 +28,14 @@ namespace UI.MenuUIContent
 
         private void ShowProfit(DollarValue valueProfit)
         {
+            Debug.Log("ShowProfit " +valueProfit );
+            
             _profitText.text = $"Profit: {valueProfit.ToString()}";
         }
 
         private void ShowCurrentPrice(DollarValue valueProfit,Color color)
         {
+            Debug.Log("ShowCurrentPrice " +valueProfit );
             Debug.Log(color);
             _priceText.text = $"Price {valueProfit}";
             _priceText.color = color;

@@ -1,4 +1,5 @@
 using System;
+using Io.AppMetrica;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -90,6 +91,7 @@ namespace ADSContent
         {
             if (MaxSdk.IsInterstitialReady(InterstitialKey))
             {
+                AppMetrica.ReportEvent("ShowInterstitial");
                 MaxSdk.ShowInterstitial(InterstitialKey);
             }
             else
