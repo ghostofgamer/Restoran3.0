@@ -1,9 +1,9 @@
 using Io.AppMetrica;
 using UnityEngine;
 
-public static class AppMetricaWrapper
+public static class AppMetricaActivator
 {
-    private static readonly string _playerPrefsKey = "AppMetricaWrapper-IsFirstLaunch";
+    private static readonly string _playerPrefsKey = "AppMetricaActivator-IsFirstLaunch";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void ActivateAppMetrica()
@@ -19,6 +19,9 @@ public static class AppMetricaWrapper
         };
 
         AppMetrica.Activate(appMetricaConfig);
+
+        // int level = 1;
+        // AppMetrica.ReportEvent("LevelUp", "{\"" + level.ToString() + "\":null}");
     }
 
     private static bool IsFirstLaunch()
