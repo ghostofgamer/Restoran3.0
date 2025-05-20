@@ -1,6 +1,7 @@
 using ADSContent;
 using DeliveryContent;
 using Enums;
+using UI.Screens.AdsScreens;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using WalletContent;
@@ -12,8 +13,9 @@ namespace IAP
         [SerializeField] private UIInfo _uiInfo;
         [SerializeField] private Wallet _wallet;
         [SerializeField] private InterstitialTimer _interstitialTimer;
-
-        private Delivery _delivery;
+        [SerializeField] private Delivery _delivery;
+        [SerializeField] private RemoveAdScreen _removeAdScreen;
+        [SerializeField] private StarterPackScreen _starterPackScreen;
 
         public void OnPurchaseCompleted(Product product)
         {
@@ -58,11 +60,14 @@ namespace IAP
             PlayerPrefs.SetInt("removeADS", 1);
             Debug.Log("On Purchase RemoveAds Completed");
 
-            if(_interstitialTimer!=null)
+            if (_interstitialTimer != null)
                 _interstitialTimer.SetValue(false);
-            
+
             if (_uiInfo != null)
                 _uiInfo.UpdateRemoveAdsButton();
+
+            if (_removeAdScreen != null)
+                _removeAdScreen.CloseScreen();
         }
 
         private void StarterPack()
@@ -70,17 +75,19 @@ namespace IAP
             PlayerPrefs.SetInt("StarterPack", 1);
             AddMoney(150);
 
-            _delivery.SpawnPrize(ItemType.Bun,3);
-            _delivery.SpawnPrize(ItemType.RawCutlet,3);
+            _delivery.SpawnPrize(ItemType.Bun, 3);
+            _delivery.SpawnPrize(ItemType.RawCutlet, 3);
 
             Debug.Log("On Purchase StarterPack Completed");
+
+            if (_starterPackScreen != null)
+                _starterPackScreen.CloseScreen();
         }
 
         private void AddMoney(int value)
         {
-            _wallet.Add(new DollarValue(value,0));
+            _wallet.Add(new DollarValue(value, 0));
             Debug.Log("On Purchase AddMoney Completed");
         }
-       
     }
 }
