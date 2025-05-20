@@ -16,6 +16,12 @@ namespace Enums
         PutRawCutletInContainer,
         TakeRawCutletInTrayPlayer,
         PutCutletsOnGrill,
+        FryCutletGrill,
+        TakeWellCutlet,
+        PutWellCutletToContainer,
+        LetsMakeFirstBurger,
+        
+        
         
     }
 }

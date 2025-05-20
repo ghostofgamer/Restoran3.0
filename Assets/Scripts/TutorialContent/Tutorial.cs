@@ -16,9 +16,10 @@ namespace TutorialContent
             /*int savedTutorialStage = PlayerPrefs.GetInt("CurrentTutorialStage", 0);
             CurrentType = (TutorialType)savedTutorialStage;*/
             
-            // CurrentType = TutorialType.TakeBoxBuns;
+           
             // CurrentType = TutorialType.OrderBurgerPatties;
-            CurrentType = TutorialType.TakeBoxesOutside;
+            CurrentType = TutorialType.LetsMakeFirstBurger;
+            
             CheckCurrentTutorialStage();
         }
 
@@ -140,13 +141,33 @@ namespace TutorialContent
                     break;
                 
                 case TutorialType.TakeRawCutletInTrayPlayer:
-                    Debug.Log("Current Tutorial Stage: PutCutletsOnGrill");
+                    Debug.Log("Current Tutorial Stage: TakeRawCutletInTrayPlayer");
                     _tutorialActivator.TakeRawCutletInTrayPlayer();
                     break;
                 
                 case TutorialType.PutCutletsOnGrill:
                     Debug.Log("Current Tutorial Stage: PutCutletsOnGrill");
                     _tutorialActivator.PutCutletsOnGrill();
+                    break;
+                
+                case TutorialType.FryCutletGrill:
+                    Debug.Log("Current Tutorial Stage: FryCutletGrill");
+                    _tutorialActivator.FryCutletGrill();
+                    break;
+                
+                case TutorialType.TakeWellCutlet:
+                    Debug.Log("Current Tutorial Stage: TakeWellCutlet");
+                    _tutorialActivator.TakeWellCutlet();
+                    break;
+                
+                case TutorialType.PutWellCutletToContainer:
+                    Debug.Log("Current Tutorial Stage: PutWellCutletToContainer");
+                    _tutorialActivator.PutWellCutletToContainer();
+                    break;
+                
+                case TutorialType.LetsMakeFirstBurger:
+                    Debug.Log("Current Tutorial Stage: LetsMakeFirstBurger");
+                    _tutorialActivator.LetsMakeFirstBurger();
                     break;
                 
                 

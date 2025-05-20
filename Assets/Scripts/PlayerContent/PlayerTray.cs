@@ -77,6 +77,12 @@ namespace PlayerContent
                     if (itemType == ItemType.RawCutlet)
                         _tutorial.SetCurrentTutorialStage(TutorialType.TakeRawCutletInTrayPlayer);
                 }
+                
+                if (_tutorial.CurrentType == TutorialType.TakeWellCutlet)
+                {
+                    if (itemType == ItemType.Cutlet)
+                        _tutorial.SetCurrentTutorialStage(TutorialType.TakeWellCutlet);
+                }
             }
         }
 

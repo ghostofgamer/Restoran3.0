@@ -8,6 +8,7 @@ using PlayerContent;
 using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
 using TMPro;
+using TutorialContent;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,7 @@ namespace KitchenEquipmentContent
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
         [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private Tutorial _tutorial;
 
         public TMP_Text grillText;
         public Image fillImage;
@@ -57,17 +59,17 @@ namespace KitchenEquipmentContent
             if (rawValue > 0)
             {
                 _currentType = ItemType.RawCutlet;
-                
+
                 for (int i = 0; i < rawValue; i++)
-                                _rawCutletItems[i].gameObject.SetActive(true);
+                    _rawCutletItems[i].gameObject.SetActive(true);
             }
-            
+
             if (readyValue > 0)
             {
                 _currentType = ItemType.Cutlet;
-                
-                 for (int i = 0; i < readyValue; i++)
-                                _readyCutletItems[i].gameObject.SetActive(true);
+
+                for (int i = 0; i < readyValue; i++)
+                    _readyCutletItems[i].gameObject.SetActive(true);
             }
         }
 
@@ -192,6 +194,14 @@ namespace KitchenEquipmentContent
 
                     if (itemsToPlace > 0)
                     {
+                        if (_tutorial.CurrentType == TutorialType.PutCutletsOnGrill)
+                        {
+                            Debug.Log("МАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯК");
+                            Debug.Log("МАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯК");
+                            Debug.Log("МАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯК");
+                            _tutorial.SetCurrentTutorialStage(TutorialType.PutCutletsOnGrill);
+                        }
+
                         playerInteraction.PlayerTray.PutAway(ItemType.RawCutlet, itemsToPlace);
 
                         int completedAnimations = 0;
@@ -262,6 +272,12 @@ namespace KitchenEquipmentContent
                         for (int i = 0; i < itemsToPlace; i++)
                         {
                             Debug.Log("ТУТА!!!! " + playerInteraction.PlayerTray.CurrentType);
+
+                            if (_tutorial.CurrentType == TutorialType.PutCutletsOnGrill)
+                            {
+                                Debug.Log("МАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯК");
+                                    _tutorial.SetCurrentTutorialStage(TutorialType.PutCutletsOnGrill);
+                            }
 
                             Item newItem = _burgerIngridientSpawner.SpawnItem(_currentType);
                             newItem.gameObject.SetActive(true);
@@ -417,6 +433,11 @@ namespace KitchenEquipmentContent
                 elapsedTime += Time.deltaTime;
                 fillImage.fillAmount = elapsedTime / grillTime;
                 yield return null;
+            }
+
+            if (_tutorial.CurrentType == TutorialType.FryCutletGrill)
+            {
+                _tutorial.SetCurrentTutorialStage(TutorialType.FryCutletGrill);
             }
 
             _audioSource.Stop();

@@ -52,9 +52,9 @@ public class AssemblyTable : MonoBehaviour
     private void Start()
     {
         List<ItemType> itemTypes = _burgersSaver.LoadItemTypesFromIndices();
-            
+
         if (itemTypes.Count > 0)
-            LoadWellBurgers(itemTypes.Count,itemTypes);
+            LoadWellBurgers(itemTypes.Count, itemTypes);
     }
 
     public void HandlePlayerInteraction(PlayerInteraction playerInteraction)
@@ -100,7 +100,7 @@ public class AssemblyTable : MonoBehaviour
 
                                     if (_tutorial.CurrentType == TutorialType.PutBunsAssemblyTable)
                                         _tutorial.SetCurrentTutorialStage(TutorialType.PutBunsAssemblyTable);
-                                    
+
                                     SoundPlayer.Instance.PlayPutTray();
                                     // basket.RemoveItem(itemsToPlace, i);
                                     basket.TransferProduct(itemsToPlace, i, targetContainer.AdditionalArrayPositions);
@@ -125,9 +125,21 @@ public class AssemblyTable : MonoBehaviour
                             basket.TransferProduct(itemsToPlace, targetContainer.Positions);
                             targetContainer.ActivateItems(itemsToPlace);
                             Debug.Log($"Placed {itemsToPlace} items in container for {basket.ItemType}");
-                            
+
                             if (_tutorial.CurrentType == TutorialType.PutPackagesAssemblyTable)
                                 _tutorial.SetCurrentTutorialStage(TutorialType.PutPackagesAssemblyTable);
+
+                            if (_tutorial.CurrentType == TutorialType.PutWellCutletToContainer)
+                            {
+                                Debug.Log("!!!!!!_tutorial.CurrentType " + _tutorial.CurrentType);
+                                Debug.Log("!!!!!!basket.ItemType " + basket.ItemType);
+
+                                if (basket.ItemType == ItemType.Cutlet)
+                                {
+                                    Debug.Log("!!!!!!ItemType.CutletItemType.CutletItemType.Cutlet" );
+                                    _tutorial.SetCurrentTutorialStage(TutorialType.PutWellCutletToContainer);
+                                }
+                            }
                         }
                         else
                         {
@@ -158,11 +170,20 @@ public class AssemblyTable : MonoBehaviour
 
                 if (emptyPosition > 0 && activeItems > 0)
                 {
+                    if (_tutorial.CurrentType == TutorialType.PutWellCutletToContainer)
+                    {
+                        Debug.Log("!!!!!!basket.ItemType " + playerInteraction.PlayerTray.CurrentType);
+
+                        if (playerInteraction.PlayerTray.CurrentType == ItemType.Cutlet)
+                            _tutorial.SetCurrentTutorialStage(TutorialType.PutWellCutletToContainer);
+                    }
+                    
                     int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
                     SoundPlayer.Instance.PlayPutTray();
                     // basket.TransferProduct(itemsToPlace, targetContainer.Positions);
                     playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType, itemsToPlace);
                     targetContainer.ActivateItems(itemsToPlace);
+                    
                 }
                 else
                 {
@@ -202,20 +223,20 @@ public class AssemblyTable : MonoBehaviour
 
         return null;
     }
-    
-    private void LoadWellBurgers(int value,List<ItemType> itemType)
+
+    private void LoadWellBurgers(int value, List<ItemType> itemType)
     {
-        StartCoroutine(StartLoad(value,itemType));
+        StartCoroutine(StartLoad(value, itemType));
     }
 
-    private IEnumerator StartLoad(int value,List<ItemType> itemType)
+    private IEnumerator StartLoad(int value, List<ItemType> itemType)
     {
         yield return new WaitForSeconds(1f);
 
         for (int i = 0; i < value; i++)
         {
             _assemblyBurger.SimpleCreateStartBurgers(itemType[i]);
-            
+
             /*
             Transform availablePosition = _wellPositions.FirstOrDefault(position => position.childCount == 0);
             Item sodaInstance = _burgerIngridientSpawner.SpawnItem(itemType[i]);

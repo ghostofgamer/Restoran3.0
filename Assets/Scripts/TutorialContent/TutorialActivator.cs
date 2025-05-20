@@ -125,6 +125,7 @@ namespace TutorialContent
         
         public void  TakeRawCutletInTrayPlayer()
         {
+            _rawCutletContainer.ActivateTutorPoint();
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
         }
         
@@ -135,10 +136,30 @@ namespace TutorialContent
             _grillTutorObject.ActivateTutorPoint();
         }
         
+        public void FryCutletGrill()
+        {
+            _grillTutorObject.ActivateTutorPoint();
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+        }
         
+        public void TakeWellCutlet()
+        {
+            _grillTutorObject.ActivateTutorPoint();
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+        }
         
+        public void PutWellCutletToContainer()
+        {
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _grillTutorObject.DeactivateTutorPoint();
+            _assemblyTable.ActivateTutorPoint();
+        }
         
-        
+        public void LetsMakeFirstBurger()
+        {
+            _assemblyTable.ActivateTutorPoint();
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+        }
         
         private string GetDescriptionText(TutorialType currentType)
         {
