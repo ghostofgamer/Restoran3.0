@@ -8,26 +8,35 @@ namespace TutorialContent
         [SerializeField] private TutorialData _tutorialData;
         [SerializeField] private TutorialActivator _tutorialActivator;
         [SerializeField] private TutorDescriptionUI _tutorialDescriptionUI;
-        
+
         public TutorialType CurrentType { get; private set; }
+
 
         private void Start()
         {
-            /*int savedTutorialStage = PlayerPrefs.GetInt("CurrentTutorialStage", 0);
-            CurrentType = (TutorialType)savedTutorialStage;*/
+            int value = PlayerPrefs.GetInt("TutorCompleted", 0);
+
+            if (value > 0)
+            {
+                CurrentType = TutorialType.TutorCompleted;
+                return;
+            }
+
+            int savedTutorialStage = PlayerPrefs.GetInt("CurrentTutorialStage", 0);
+            CurrentType = (TutorialType)savedTutorialStage;
             
-           
-            // CurrentType = TutorialType.OrderBurgerPatties;
+            /*// CurrentType = TutorialType.OrderBurgerPatties;
             // CurrentType = TutorialType.LetsMakeFirstBurger;
-            CurrentType = TutorialType.LetsSetPrice;
-            
+            // CurrentType = TutorialType.LetsSetPrice;
+            CurrentType = TutorialType.OpenRestaurant;*/
+
             CheckCurrentTutorialStage();
         }
 
         public void SetCurrentTutorialStage(int index)
         {
             TutorialType completedType = (TutorialType)index;
-            
+
             if (completedType == CurrentType)
             {
                 TutorialType nextType = GetNextTutorialType(CurrentType);
@@ -50,7 +59,7 @@ namespace TutorialContent
                 Debug.LogError("Completed tutorial stage does not match the current stage.");
             }
         }
-        
+
         public void SetCurrentTutorialStage(TutorialType completedType)
         {
             if (completedType == CurrentType)
@@ -60,8 +69,19 @@ namespace TutorialContent
                 if (nextType != CurrentType)
                 {
                     CurrentType = nextType;
-                    PlayerPrefs.SetInt("CurrentTutorialStage", (int)CurrentType);
-                    PlayerPrefs.Save();
+
+                    if ((int)CurrentType < (int)TutorialType.TakeFirstOrder)
+                    {
+                        PlayerPrefs.SetInt("CurrentTutorialStage", (int)CurrentType);
+                        PlayerPrefs.Save();
+                    }
+
+                    if (CurrentType == TutorialType.TutorCompleted)
+                    {
+                        PlayerPrefs.SetInt("TutorCompleted", 1);
+                        PlayerPrefs.SetInt("CurrentTutorialStage", (int)CurrentType);
+                        PlayerPrefs.Save();
+                    }
 
                     CheckCurrentTutorialStage();
                 }
@@ -94,7 +114,7 @@ namespace TutorialContent
             {
                 case TutorialType.NameRestaurant:
                     Debug.Log("Current Tutorial Stage: NameRestaurant");
-                   _tutorialActivator.ActivateNameRestaurant();
+                    _tutorialActivator.ActivateNameRestaurant();
                     break;
                 case TutorialType.LookAround:
                     Debug.Log("Current Tutorial Stage: LookAround");
@@ -140,57 +160,62 @@ namespace TutorialContent
                     Debug.Log("Current Tutorial Stage: PutRawCutletInContainer");
                     _tutorialActivator.PutRawCutletInContainer();
                     break;
-                
+
                 case TutorialType.TakeRawCutletInTrayPlayer:
                     Debug.Log("Current Tutorial Stage: TakeRawCutletInTrayPlayer");
                     _tutorialActivator.TakeRawCutletInTrayPlayer();
                     break;
-                
+
                 case TutorialType.PutCutletsOnGrill:
                     Debug.Log("Current Tutorial Stage: PutCutletsOnGrill");
                     _tutorialActivator.PutCutletsOnGrill();
                     break;
-                
+
                 case TutorialType.FryCutletGrill:
                     Debug.Log("Current Tutorial Stage: FryCutletGrill");
                     _tutorialActivator.FryCutletGrill();
                     break;
-                
+
                 case TutorialType.TakeWellCutlet:
                     Debug.Log("Current Tutorial Stage: TakeWellCutlet");
                     _tutorialActivator.TakeWellCutlet();
                     break;
-                
+
                 case TutorialType.PutWellCutletToContainer:
                     Debug.Log("Current Tutorial Stage: PutWellCutletToContainer");
                     _tutorialActivator.PutWellCutletToContainer();
                     break;
-                
+
                 case TutorialType.LetsMakeFirstBurger:
                     Debug.Log("Current Tutorial Stage: LetsMakeFirstBurger");
                     _tutorialActivator.LetsMakeFirstBurger();
                     break;
-                
+
                 case TutorialType.LetsSetPrice:
                     Debug.Log("Current Tutorial Stage: LetsSetPrice");
                     _tutorialActivator.LetsSetPrice();
                     break;
-                
+
                 case TutorialType.OpenRestaurant:
                     Debug.Log("Current Tutorial Stage: OpenRestaurant");
                     _tutorialActivator.OpenRestaurant();
                     break;
-                
+
                 case TutorialType.TakeFirstOrder:
                     Debug.Log("Current Tutorial Stage: TakeFirstOrder");
                     _tutorialActivator.TakeFirstOrder();
                     break;
-                
+
                 case TutorialType.CleanTable:
                     Debug.Log("Current Tutorial Stage: CleanTable");
                     _tutorialActivator.CleanTable();
                     break;
-                
+
+                case TutorialType.TutorCompleted:
+                    Debug.Log("Current Tutorial Stage: TutorCompleted");
+                    _tutorialActivator.TutorCompleted();
+                    break;
+
                 default:
                     Debug.Log("Unknown Tutorial Stage");
                     break;

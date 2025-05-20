@@ -54,6 +54,8 @@ namespace DayNightContent
 
         public event Action<bool> SetNightLighting;
 
+        public bool IsDay => _isDay;
+
         private void OnEnable()
         {
             _openCloseRestaurant.OpenedChanged += SetOpenValue;
@@ -155,8 +157,8 @@ namespace DayNightContent
                 if (isNight)
                 {
                     Debug.Log("DayOverCompleted ");
-                    DayOverCompleted?.Invoke();
                     _isDay = isDay;
+                    DayOverCompleted?.Invoke();
                 }
                 else
                 {

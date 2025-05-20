@@ -24,5 +24,6 @@ namespace Enums
         OpenRestaurant,
         TakeFirstOrder,
         CleanTable,
+        TutorCompleted,
     }
 }

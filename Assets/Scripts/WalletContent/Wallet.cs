@@ -17,7 +17,8 @@ namespace WalletContent
 
         private void Start()
         {
-            DollarValue = new DollarValue(100, 10);
+            LoadDollarValue();
+            // DollarValue = new DollarValue(100, 10);
             DollarValueChanged.Invoke(DollarValue);
         }
 
@@ -38,6 +39,7 @@ namespace WalletContent
             DollarValueChanged.Invoke(DollarValue);
             _flyValue.ShowFly(other,true);
             IncomeChanged?.Invoke(ToTotalCents(other));
+            SaveDollarValue();
         }
 
         public void Subtract(DollarValue other)
@@ -47,6 +49,7 @@ namespace WalletContent
             DollarValueChanged.Invoke(DollarValue);
             _flyValue.ShowFly(other,false);
             ExpensesChanged?.Invoke(ToTotalCents(other));
+            SaveDollarValue();
         }
 
         public int ToTotalCents(DollarValue dollarValue)
@@ -59,6 +62,27 @@ namespace WalletContent
             int dollars = totalCents / 100;
             int cents = totalCents % 100;
             return new DollarValue(dollars, cents);
+        }
+        
+        private void SaveDollarValue()
+        {
+            PlayerPrefs.SetInt("DollarValue_Dollars", DollarValue.Dollars);
+            PlayerPrefs.SetInt("DollarValue_Cents", DollarValue.Cents);
+            PlayerPrefs.Save();
+        }
+
+        private void LoadDollarValue()
+        {
+            if (PlayerPrefs.HasKey("DollarValue_Dollars") && PlayerPrefs.HasKey("DollarValue_Cents"))
+            {
+                int dollars = PlayerPrefs.GetInt("DollarValue_Dollars");
+                int cents = PlayerPrefs.GetInt("DollarValue_Cents");
+                DollarValue = new DollarValue(dollars, cents);
+            }
+            else
+            {
+                DollarValue = new DollarValue(100, 10);
+            }
         }
     }
 }

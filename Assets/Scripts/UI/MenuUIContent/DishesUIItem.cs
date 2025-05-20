@@ -34,6 +34,32 @@ namespace UI.MenuUIContent
 
         public event Action<string, DollarValue> InitCompleted;
 
+        private void Start()
+        {
+            int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
+
+            if (totalCents > 0)
+            {
+                Debug.Log("INIT " + totalCents);
+
+                _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
+                UpdateProfitText();
+
+                Color color = _currentPrice.ToTotalCents() <= _recommendedPrice.ToTotalCents() * 1.10
+                    ? Color.green
+                    : _colorRed;
+
+                ChangeCurrentPrice?.Invoke(_currentPrice, color);
+
+                if (ItemConfig != null)
+                {
+                    _levelOpened = ItemConfig.LevelOpened;
+                    _purchasePrice = ItemConfig.PurchasePrice;
+                    InitCompleted?.Invoke($"Required is {_levelOpened} level", _purchasePrice);
+                }
+            }
+        }
+
         public void AddItemToMenu()
         {
             if (_tutorial != null && _shopTutorialChanger != null &&
@@ -41,7 +67,7 @@ namespace UI.MenuUIContent
             {
                 _shopTutorialChanger.SetValueShopButton(true);
             }
-            
+
             _menuScrollContent.AddItem(ItemType);
         }
 

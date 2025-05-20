@@ -1,4 +1,6 @@
 using System;
+using Enums;
+using TutorialContent;
 using UnityEngine;
 
 namespace ADSContent
@@ -6,7 +8,8 @@ namespace ADSContent
     public class InterstitialTimer : MonoBehaviour
     {
         [SerializeField] private ADS _ads;
-        [SerializeField]private float interval; 
+        [SerializeField]private float interval;
+        [SerializeField] private Tutorial _tutorial;
     
         private float timer = 0f;
         private DateTime lastAdTime;
@@ -24,7 +27,13 @@ namespace ADSContent
         {
             if (!_showInter)
                 return;
-            
+
+            if ((int)_tutorial.CurrentType < (int)TutorialType.TutorCompleted)
+            {
+                Debug.Log("рекламы не будет");
+                return;
+            }
+            Debug.Log("реклама будет");
             timer += Time.unscaledDeltaTime;
 
             if (timer >= interval)

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using CameraContent;
 using ClientsContent;
+using Enums;
 using InteractableContent;
 using OrdersContent;
 using PlayerContent;
 using SettingsContent.SoundContent;
+using TutorialContent;
 using UnityEngine;
 using WalletContent;
 
@@ -14,6 +16,7 @@ namespace RestaurantContent.CashRegisterContent
 {
     public class CashRegister : MonoBehaviour
     {
+        [SerializeField] private Tutorial _tutorial;
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private Transform _clientPosition;
@@ -68,20 +71,20 @@ namespace RestaurantContent.CashRegisterContent
                 return;
             
             
-            CashRegisterOrderCompleted?.Invoke();
+            /*CashRegisterOrderCompleted?.Invoke();
             _currentClient.Paid();
             _wallet.Add(_currentClient.PriceOrder);
             Client client = _currentClient;
             _currentClient = null;
             SetCanvasActive(_currentClient != null);
-            _restaurant.AcceptOrder(client.Order, client);
+            _restaurant.AcceptOrder(client.Order, client);*/
             
             
 
-            /*CashRegisterAssemblyBeginig?.Invoke();
+            CashRegisterAssemblyBeginig?.Invoke();
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
             _currentGivingValue = new DollarValue(0, 0);
-            _cashRegisterViewer.Init(_currentClient, _currentGivingValue);*/
+            _cashRegisterViewer.Init(_currentClient, _currentGivingValue);
         }
 
         public void SetCanvasActive(bool value)
@@ -101,6 +104,12 @@ namespace RestaurantContent.CashRegisterContent
                 Debug.Log("СДАЧА НЕВЕРНАЯ");
                 return;
             }
+
+            if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
+            {
+                _tutorial.SetCurrentTutorialStage(TutorialType.TakeFirstOrder);
+            }
+            
             /*if (_coroutine != null)
                 StopCoroutine(_coroutine);
 

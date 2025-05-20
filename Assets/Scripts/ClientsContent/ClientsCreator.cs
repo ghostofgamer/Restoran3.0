@@ -8,6 +8,7 @@ using RestaurantContent.CashRegisterContent;
 using RestaurantContent.MenuContent;
 using RestaurantContent.TableContent;
 using SpawnContent;
+using TutorialContent;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,6 +16,7 @@ namespace ClientsContent
 {
     public class ClientsCreator : MonoBehaviour
     {
+        [SerializeField] private Tutorial _tutorial;
         [SerializeField] private ClientsSpawner _clientsSpawner;
         [SerializeField] private OrderCreator _orderCreator;
         [SerializeField] private QueueCashRegister _queueCashRegister;
