@@ -16,6 +16,7 @@ namespace IAP
         [SerializeField] private Delivery _delivery;
         [SerializeField] private RemoveAdScreen _removeAdScreen;
         [SerializeField] private StarterPackScreen _starterPackScreen;
+        [SerializeField] private GameObject _starterPackButton;
 
         public void OnPurchaseCompleted(Product product)
         {
@@ -82,6 +83,9 @@ namespace IAP
 
             if (_starterPackScreen != null)
                 _starterPackScreen.CloseScreen();
+            
+            if (_starterPackButton != null)
+                _starterPackButton.SetActive(false);
         }
 
         private void AddMoney(int value)

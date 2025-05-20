@@ -1,6 +1,7 @@
 using System;
 using Enums;
 using TutorialContent;
+using UI.Screens.AdsScreens;
 using UnityEngine;
 
 namespace ADSContent
@@ -8,18 +9,20 @@ namespace ADSContent
     public class InterstitialTimer : MonoBehaviour
     {
         [SerializeField] private ADS _ads;
-        [SerializeField]private float interval;
+        [SerializeField] private float interval;
         [SerializeField] private Tutorial _tutorial;
-    
+        [SerializeField] private RemoveAdScreen _removeAdScreen;
+
         private float timer = 0f;
         private DateTime lastAdTime;
-        private bool _showInter= true;
+        private bool _showInter = true;
+        private int adShowCount = 0;
 
         private void Start()
         {
             bool removeAds = PlayerPrefs.GetInt("removeADS") == 1;
             SetValue(!removeAds);
-            
+
             lastAdTime = DateTime.Now;
         }
 
@@ -32,7 +35,7 @@ namespace ADSContent
             {
                 return;
             }
-          
+
             timer += Time.unscaledDeltaTime;
 
             if (timer >= interval)
@@ -64,6 +67,14 @@ namespace ADSContent
         private void ShowInterstitial()
         {
             _ads.ShowInterstitial();
+
+            adShowCount++;
+
+            if (adShowCount >= 2)
+            {
+                _removeAdScreen.OpenScreen();
+                adShowCount = 0;
+            }
         }
     }
 }

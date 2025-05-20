@@ -85,7 +85,7 @@ namespace TutorialContent
             StartNewStage(text);
             _animator.SetBool("Close", false);
             _animator.SetBool("Open", true);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
             CompleteStage();
             _animator.SetBool("Open", false);
             _animator.SetBool("Close", true);
