@@ -30,10 +30,9 @@ namespace ADSContent
 
             if ((int)_tutorial.CurrentType < (int)TutorialType.TutorCompleted)
             {
-                Debug.Log("рекламы не будет");
                 return;
             }
-            Debug.Log("реклама будет");
+          
             timer += Time.unscaledDeltaTime;
 
             if (timer >= interval)

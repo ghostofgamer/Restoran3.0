@@ -28,6 +28,7 @@ namespace ClientsContent
         [SerializeField] private MenuCounter _menuCounter;
 
         [SerializeField] private ClientCar _clientCar;
+        [SerializeField] private ClientCar[] _clientCars;
         [SerializeField] private Transform _carSpawnPosition;
         [SerializeField] private Transform _carParkingPosition;
         [SerializeField] private Parking _parking;
@@ -157,9 +158,10 @@ namespace ClientsContent
                 _clients.Add(client);
             }
 
-            Debug.Log("В машине несколько!!!");
             ParkingSpace parkingSpace = _parking.GetFreeParkingPosition();
-            ClientCar car = Instantiate(_clientCar, _carSpawnPosition.position, Quaternion.identity, transform);
+            int randomCarIndex = Random.Range(0, _clientCars.Length);
+            
+            ClientCar car = Instantiate(_clientCars[randomCarIndex], _carSpawnPosition.position, Quaternion.identity, transform);
             parkingSpace.BusyPlace(car);
 
             foreach (var client in _clients)

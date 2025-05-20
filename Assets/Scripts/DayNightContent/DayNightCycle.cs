@@ -220,7 +220,6 @@ namespace DayNightContent
                 int hour = Mathf.FloorToInt(currentHour);
                 int minute = Mathf.FloorToInt((currentHour - hour) * 60f);
                 _timeText.text = string.Format("{0:00}:{1:00}", hour, minute);
-                Debug.Log("Time " + _timeText);
 
                 if (hour >= 21 && minute >= 0)
                     _clientsCreator.SetNightTime(true);
