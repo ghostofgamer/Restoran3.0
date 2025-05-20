@@ -77,6 +77,12 @@ namespace PlayerContent
                     draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
                     _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBurgerPackages);
                 }
+
+                if (draggable.GetComponent<TutorialObject>().ItemType == TutorialType.TakeBoxesOutside)
+                {
+                    draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
+                    _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxesOutside);
+                }
             }
         }
 

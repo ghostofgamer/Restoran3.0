@@ -14,5 +14,8 @@ namespace Enums
         SkipDelivery,
         TakeBoxesOutside,
         PutRawCutletInContainer,
+        TakeRawCutletInTrayPlayer,
+        PutCutletsOnGrill,
+        
     }
 }

@@ -10,10 +10,16 @@ namespace UI.Screens.ShopContent
 {
     public class ShopScreen : AbstractScreen
     {
+        [SerializeField] private Button[] _tutorDeactivateButton;
+        [SerializeField] private ScrollRect _pageScroolTutor;
+        [SerializeField] private ShopTutorialChanger _shopTutorialChanger;
+        
+        
         [SerializeField] private PageShopButton[] _pageShopButtons;
         [SerializeField] private ShopPage[] _shopPages;
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private Tutorial _tutorial;
+        [SerializeField] private Button _closeButton;
 
         public override void OpenScreen()
         {
@@ -39,9 +45,20 @@ namespace UI.Screens.ShopContent
             if (_tutorial.CurrentType == TutorialType.OrderBurgerPatties)
             {
                 SetInteractableButton(false);
+                _closeButton.interactable = false;
+
+                foreach (var tButton in _tutorDeactivateButton)
+                    tButton.interactable = false;
+
+                _shopTutorialChanger.ActivateRawCutlet();
             }
             else
             {
+                _closeButton.interactable = true;
+
+                foreach (var tButton in _tutorDeactivateButton)
+                    tButton.interactable = true;
+
                 SetInteractableButton(true);
                 DeactivateShopButtons();
                 _pageShopButtons[index].ActivateButton();

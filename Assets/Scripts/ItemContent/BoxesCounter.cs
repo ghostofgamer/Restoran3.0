@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DeliveryContent;
 using Enums;
 using SaveContent;
@@ -54,6 +55,11 @@ namespace ItemContent
                 _itemDrinkPackages.Add(itemDrinkPackage);
         }
 
+        public ItemBasket GetItemBasketByType(ItemType itemType)
+        {
+            return ItemBaskets.FirstOrDefault(item => item.ItemType == itemType);
+        }
+        
         private void Load()
         {
             List<BoxData> loadedBoxes = _boxSaver.LoadData();

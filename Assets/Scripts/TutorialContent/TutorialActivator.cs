@@ -1,6 +1,7 @@
-using System.Text;
+using System.Collections;
 using Enums;
 using InputContent;
+using ItemContent;
 using SoContent;
 using UI.Screens.TutorialScreens;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace TutorialContent
         [SerializeField] private TutorialObject _assemblyTable;
         [SerializeField] private TutorialObject _trash;
         [SerializeField] private TutorialObject _burgerPackageBox;
+        [SerializeField] private TutorialObject _rawCutletContainer;
+        [SerializeField] private TutorialObject _grillTutorObject;
         [SerializeField] private TutorDescriptionUI _tutorDescriptionUI;
         [SerializeField] private TutorialDescription _tutorialDescription;
         [SerializeField] private Tutorial _tutorial;
@@ -23,7 +26,9 @@ namespace TutorialContent
         [SerializeField] private LookAroundEventTrigger _lookAroundEventTrigger;
         [SerializeField] private GameObject _joystick;
         [SerializeField] private GameObject _touchShopImage;
-        
+        [SerializeField] private GameObject _touchSkipImage;
+        [SerializeField] private BoxesCounter _boxesCounter;
+
         public void ActivateNameRestaurant()
         {
             _nameRestaurantScreen.OpenScreen();
@@ -53,7 +58,7 @@ namespace TutorialContent
             _assemblyTable.ActivateTutorPoint();
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
         }
-        
+
         public void ThrowEmptyBoxInTrash()
         {
             Debug.Log("ThrowEmptyBoxInTrash");
@@ -61,7 +66,7 @@ namespace TutorialContent
             _trash.ActivateTutorPoint();
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
         }
-        
+
         public void TakeBoxBurgerPackages()
         {
             Debug.Log("TakeBoxBurgerPackages");
@@ -78,7 +83,7 @@ namespace TutorialContent
             _assemblyTable.ActivateTutorPoint();
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
         }
-        
+
         public void OrderBurgerPatties()
         {
             Debug.Log("OrderBurgerPatties");
@@ -89,6 +94,47 @@ namespace TutorialContent
             _joystick.SetActive(false);
             _touchShopImage.SetActive(true);
         }
+
+        public void SkipDelivery()
+        {
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _touchSkipImage.SetActive(true);
+        }
+
+        public void TakeBoxesOutside()
+        {
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _lookAroundEventTrigger.gameObject.SetActive(true);
+            _joystick.SetActive(true);
+            _touchSkipImage.SetActive(false);
+            StartCoroutine(SearchBoxOutside());
+        }
+
+        private IEnumerator SearchBoxOutside()
+        {
+            yield return new WaitForSeconds(0.15f);
+            ItemBasket basketRawCutlet = _boxesCounter.GetItemBasketByType(ItemType.RawCutlet);
+            basketRawCutlet.GetComponent<TutorialObject>().ActivateTutorPoint();
+        }
+
+        public void PutRawCutletInContainer()
+        {
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _rawCutletContainer.ActivateTutorPoint();
+        }
+        
+        public void  TakeRawCutletInTrayPlayer()
+        {
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+        }
+        
+        public void PutCutletsOnGrill()
+        {
+            _rawCutletContainer.DeactivateTutorPoint();
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _grillTutorObject.ActivateTutorPoint();
+        }
+        
         
         
         

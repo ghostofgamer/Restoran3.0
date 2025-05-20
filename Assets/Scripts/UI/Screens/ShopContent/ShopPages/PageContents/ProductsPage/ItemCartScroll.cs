@@ -4,6 +4,7 @@ using Enums;
 using PlayerContent.LevelContent;
 using SettingsContent.SoundContent;
 using TMPro;
+using TutorialContent;
 using UnityEngine;
 using UnityEngine.UI;
 using WalletContent;
@@ -22,6 +23,8 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         [SerializeField] private Color _notActiveButtonColor;
         [SerializeField] private Image _buyButtonImage;
         [SerializeField] private PlayerLevel _playerLevel;
+        [SerializeField] private Tutorial _tutorial;
+        [SerializeField] private ShopTutorialChanger _shopTutorialChanger;
 
         private List<ItemCart> _items = new List<ItemCart>();
         private DollarValue _totalPrice;
@@ -113,6 +116,13 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
                 amountItems += item.CurrentAmount;
             }
 
+            if (_tutorial.CurrentType == TutorialType.OrderBurgerPatties)
+            {
+                _shopTutorialChanger.ResetProducts();
+                _tutorial.SetCurrentTutorialStage(TutorialType.OrderBurgerPatties);
+            }
+            
+            
             _playerLevel.AddExp(amountItems * 5);
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_totalPrice);

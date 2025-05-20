@@ -17,27 +17,22 @@ namespace TutorialContent
 
         public void StartStage(string text)
         {
-            Debug.Log("Tutor 1 ");
             if (!_isOpen)
             {
-                Debug.Log("Tutor 3 ");
                 if (_isFirstStage)
                 {
-                    Debug.Log("Tutor 5 ");
                     _animator.SetBool("Open", true);
                     _isFirstStage = false;
                     StartNewStage(text);
                 }
                 else
                 {
-                    Debug.Log("Tutor 6 ");
                     MoveUI(text);
                 }
             }
             else
             {
                 MoveUI(text);
-                Debug.Log("Tutor 10 ");
             }
 
             _isOpen = true;
