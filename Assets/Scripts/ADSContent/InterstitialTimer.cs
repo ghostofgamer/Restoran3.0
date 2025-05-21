@@ -17,7 +17,8 @@ namespace ADSContent
         private DateTime lastAdTime;
         private bool _showInter = true;
         private int adShowCount = 0;
-
+        private bool _isPaused = false;
+        
         private void Start()
         {
             bool removeAds = PlayerPrefs.GetInt("removeADS") == 1;
@@ -32,11 +33,12 @@ namespace ADSContent
                 return;
 
             if ((int)_tutorial.CurrentType < (int)TutorialType.TutorCompleted)
-            {
                 return;
-            }
 
-            timer += Time.unscaledDeltaTime;
+            if (_isPaused)
+                return;
+
+            timer += Time.deltaTime;
 
             if (timer >= interval)
             {
@@ -48,15 +50,8 @@ namespace ADSContent
 
         private void OnApplicationPause(bool pauseStatus)
         {
-            if (pauseStatus)
-            {
-                lastAdTime = DateTime.Now;
-            }
-            else
-            {
-                TimeSpan timePassed = DateTime.Now - lastAdTime;
-                timer += (float)timePassed.TotalSeconds;
-            }
+            _isPaused = pauseStatus;
+            Time.timeScale = pauseStatus ? 0 : 1;
         }
 
         public void SetValue(bool value)
