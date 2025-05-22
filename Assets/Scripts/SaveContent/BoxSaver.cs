@@ -42,11 +42,27 @@ namespace SaveContent
             string path = Application.persistentDataPath + "/boxData.json";
             File.WriteAllText(path, jsonData);
         }
-
+        
+        
         public List<BoxData> LoadData()
         {
             // Загружаем данные из JSON файла
             string path = Application.persistentDataPath + "/boxData.json";
+            
+            string persistentDataPath = Application.persistentDataPath;
+            Debug.Log("Persistent Data Path: " + persistentDataPath);
+            
+            if (string.IsNullOrWhiteSpace(persistentDataPath))
+            {
+                Debug.LogError("Persistent Data Path is empty or whitespace.");
+                return new List<BoxData>();
+            }
+            
+            if (!Directory.Exists(persistentDataPath))
+            {
+                Directory.CreateDirectory(persistentDataPath);
+            }
+            
             if (File.Exists(path))
             {
                 string jsonData = File.ReadAllText(path);
