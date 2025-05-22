@@ -33,7 +33,7 @@ namespace UI.Screens
         {
             _isOwned = IsBuyed();
             _currentPrice = new DollarValue(_dollarPrice, _centPrice);
-            _requaredText.text = $"Requared is {_levelOpened} level";
+            _requaredText.text = $"Required  is {_levelOpened} level";
             _priceText.text = $"{_currentPrice.ToString()} ";
             
             _requaredObjectInfo.SetActive(levelPlayer < _levelOpened && !_isOwned);

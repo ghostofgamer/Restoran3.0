@@ -32,8 +32,8 @@ namespace ADSContent
             if (!_showInter)
                 return;
 
-            if ((int)_tutorial.CurrentType < (int)TutorialType.TutorCompleted)
-                return;
+            /*if ((int)_tutorial.CurrentType < (int)TutorialType.TutorCompleted)
+                return;*/
 
             if (_isPaused)
                 return;

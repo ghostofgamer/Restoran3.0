@@ -14,7 +14,7 @@ namespace UI.Buttons
         {
             _ads.ShowRewarded(() =>
             {
-                AppMetrica.ReportEvent("FreeMoneyAD");
+                AppMetrica.ReportEvent("RewardAD", "{\"" + "FreeMoneyAD" + "\":null}");
                 _wallet.Add(new DollarValue(10, 0));
             });
         }

@@ -34,7 +34,7 @@ namespace ADSContent.Popups
             
             _ads.ShowRewarded(() =>
             {
-                AppMetrica.ReportEvent("PopupMoneyDisappearing");
+                AppMetrica.ReportEvent("RewardAD", "{\"" + "PopUpMoneyDisappearing" + "\":null}");
                 _wallet.Add(new DollarValue(50, 00));
                 gameObject.SetActive(false);
                 _popUpAdActivator.StartTiming();

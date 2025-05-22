@@ -58,31 +58,37 @@ namespace ADSContent
 
         private void OnInterstitialLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            AppMetrica.ReportEvent("OnInterstitialLoadedEvent");
         }
 
         private void OnInterstitialLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo)
         {
+            AppMetrica.ReportEvent("OnInterstitialLoadFailedEvent");
             LoadInterstitial();
         }
 
         private void OnInterstitialDisplayedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            AppMetrica.ReportEvent("OnInterstitialDisplayedEvent");
         }
 
         private void OnInterstitialAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo,
             MaxSdkBase.AdInfo adInfo)
         {
+            AppMetrica.ReportEvent("OnInterstitialAdFailedToDisplayEvent");
             // Interstitial ad failed to display. AppLovin recommends that you load the next ad.
             LoadInterstitial();
         }
 
         private void OnInterstitialClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            AppMetrica.ReportEvent("OnInterstitialClickedEvent");
         }
 
         private void OnInterstitialHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             _interHidden?.Invoke();
+            AppMetrica.ReportEvent("OnInterstitialHiddenEvent");
             // Interstitial ad is hidden. Pre-load the next ad.
             LoadInterstitial();
         }

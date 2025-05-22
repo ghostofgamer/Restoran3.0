@@ -36,8 +36,8 @@ namespace UI.Screens.ShopContent
             _dollarValue = new DollarValue(_dollars, _cents);
             IsOwned = IsBuyed();
             _requaredText.text = _zoneProduct != null
-                ? $"Requared is  zone"
-                : $"Requared";
+                ? $"Buy Zone"
+                : $"Buy Zone";
             _priceText.text = $"{_dollarValue.ToString()} ";
             
             if (_zoneProduct == null)

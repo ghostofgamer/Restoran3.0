@@ -35,6 +35,7 @@ namespace TutorialContent
         [SerializeField] private BoxesCounter _boxesCounter;
         [SerializeField] private Button _closeCashRegister;
         [SerializeField] private AssemblyBurgerScreen _assemblyBurgerScreen;
+        [SerializeField] private GameObject _blackScreen;
 
         [SerializeField] private Button _shopButton;
         [SerializeField] private Button _dailyReward;
@@ -72,7 +73,7 @@ namespace TutorialContent
 
         public void PutBunsAssemblyTableBunBox()
         {
-            _boxesCounter.AddBox(bunObject.gameObject);
+            // _boxesCounter.AddBox(bunObject.gameObject);
             SetValueButtonTopUI(false);
             Debug.Log("PutBunsAssemblyTableBunBox");
             _assemblyTable.ActivateTutorPoint();
@@ -100,7 +101,7 @@ namespace TutorialContent
 
         public void PutPackagesAssemblyTable()
         {
-            _boxesCounter.AddBox(_burgerPackageBox.gameObject);
+            // _boxesCounter.AddBox(_burgerPackageBox.gameObject);
             SetValueButtonTopUI(false);
             Debug.Log("PutPackagesAssemblyTable");
             // _burgerPackageBox.DeactivateTutorPoint();
@@ -112,6 +113,7 @@ namespace TutorialContent
         {
             SetValueButtonTopUI(false);
             Debug.Log("OrderBurgerPatties");
+            _blackScreen.SetActive(true);
             _shopButton.interactable = true;
             _assemblyTable.DeactivateTutorPoint();
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
@@ -123,6 +125,7 @@ namespace TutorialContent
 
         public void SkipDelivery()
         {
+            _blackScreen.SetActive(false);
             SetValueButtonTopUI(false);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
             _touchSkipImage.SetActive(true);
@@ -147,7 +150,7 @@ namespace TutorialContent
 
         public void PutRawCutletInContainer()
         {
-           _boxesCounter.AddBox(basketRawCutlet.gameObject);
+           // _boxesCounter.AddBox(basketRawCutlet.gameObject);
             SetValueButtonTopUI(false);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
             _rawCutletContainer.ActivateTutorPoint();
@@ -202,6 +205,7 @@ namespace TutorialContent
             _assemblyBurgerScreen.CloseScreen();
             SetValueButtonTopUI(false);
             _shopButton.interactable = true;
+            _blackScreen.SetActive(true);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
             _lookAroundEventTrigger.gameObject.SetActive(false);
             _joystick.SetActive(false);
@@ -210,6 +214,7 @@ namespace TutorialContent
         
         public void OpenRestaurant()
         {
+            _blackScreen.SetActive(false);
             SetValueButtonTopUI(false);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
             _lookAroundEventTrigger.gameObject.SetActive(true);

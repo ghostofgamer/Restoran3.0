@@ -23,7 +23,7 @@ namespace UI.Buttons
             
             _ads.ShowRewarded(() =>
             {
-                AppMetrica.ReportEvent("ExperienceOverDay");
+                AppMetrica.ReportEvent("RewardAD", "{\"" + "ExperienceOverDay" + "\":null}");
                 _wallet.Add(new DollarValue(25, 0));
                 _dayNightCycle.ResetDay();
                 _statisticCounter.ClearData();

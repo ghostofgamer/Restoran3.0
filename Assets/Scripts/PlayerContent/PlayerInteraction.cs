@@ -1,6 +1,7 @@
 using Enums;
 using InputContent;
 using Interfaces;
+using ItemContent;
 using SettingsContent.SoundContent;
 using TutorialContent;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace PlayerContent
         [SerializeField] private Transform _draggablePosition;
         [SerializeField] private GameObject _throwButton;
         [SerializeField] private PlayerTray _playerTray;
+        [SerializeField] private BoxesCounter _boxesCounter;
 
         private IInteractable _currentInteractable;
         private Vector3 _originalScale;
@@ -71,15 +73,18 @@ namespace PlayerContent
                     case TutorialType.TakeBoxBuns:
                         Debug.Log("типы совпадают");
                         tutorialObject.DeactivateTutorPoint();
+                        _boxesCounter.AddBox(draggable.gameObject);
                         _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBuns);
                         break;
                     case TutorialType.TakeBoxBurgerPackages:
                         Debug.Log("типы совпадают");
                         tutorialObject.DeactivateTutorPoint();
+                        _boxesCounter.AddBox(draggable.gameObject);
                         _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBurgerPackages);
                         break;
                     case TutorialType.TakeBoxesOutside:
                         tutorialObject.DeactivateTutorPoint();
+                        _boxesCounter.AddBox(draggable.gameObject);
                         _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxesOutside);
                         break;
                 }
@@ -133,6 +138,12 @@ namespace PlayerContent
         {
             CurrentDraggable.transform.SetParent(null);
             CurrentDraggable = null;
+        }
+
+        public void PutItemShelf()
+        {
+            _throwButton.SetActive(false);
+            ClearDraggableObject();
         }
     }
 }

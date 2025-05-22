@@ -61,7 +61,7 @@ namespace ShelfContent
 
                         _boxesCounter.RemoveBox(basket.gameObject);
                         
-                        playerInteraction.ClearDraggableObject();
+                        playerInteraction.PutItemShelf();
                         basket.transform.SetParent(position);
 
                         ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
@@ -77,7 +77,7 @@ namespace ShelfContent
                     {
                         _itemDrinkPackages.Add(drinkPackage);
                         drinkPackage.SetShelf(this);
-                        playerInteraction.ClearDraggableObject();
+                        playerInteraction.PutItemShelf();
                         drinkPackage.transform.SetParent(position);
                         
                         _boxesCounter.RemoveBox(drinkPackage.gameObject);

@@ -124,7 +124,7 @@ namespace FortuneContent
             _dailyTimerADSFortune.StartButtonClick();
             _ads.ShowRewarded(() =>
             {
-                AppMetrica.ReportEvent("FortuneSpinADS");
+                AppMetrica.ReportEvent("RewardAD", "{\"" + "FortuneSpinADS" + "\":null}");
                 Spin();
             });
         }

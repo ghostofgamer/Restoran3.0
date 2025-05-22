@@ -1,3 +1,4 @@
+using System.Collections;
 using TutorialContent;
 using UI.Screens.AdsScreens;
 using UnityEngine;
@@ -9,6 +10,9 @@ namespace ADSContent.Popups
         [SerializeField] private StarterPackScreen _starterPackScreen;
         [SerializeField] private Tutorial _tutorial;
         [SerializeField] private GameObject _starterPackButton;
+
+        private Coroutine _starterPackCoroutine;
+        private WaitForSeconds _waitForSecondsStarterPack = new WaitForSeconds(6f);
 
         private void OnEnable()
         {
@@ -26,7 +30,16 @@ namespace ADSContent.Popups
 
             if (value > 0)
                 return;
+            
+            if (_starterPackCoroutine != null)
+                StopCoroutine(_starterPackCoroutine);
 
+            _starterPackCoroutine = StartCoroutine(StarterPack());
+        }
+
+        private IEnumerator StarterPack()
+        {
+            yield return _waitForSecondsStarterPack;
             _starterPackScreen.OpenScreen();
             _starterPackButton.SetActive(true);
         }

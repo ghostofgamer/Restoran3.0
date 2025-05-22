@@ -20,7 +20,7 @@ namespace UI.Buttons
             if (_isAdButton)
             {
                 _ads.ShowRewarded(() => _delivery.SpawnAllItems());
-                AppMetrica.ReportEvent("SkipDelivery");
+                AppMetrica.ReportEvent("RewardAD", "{\"" + "SkipDeliveryADS" + "\":null}");
             }
             else
             {

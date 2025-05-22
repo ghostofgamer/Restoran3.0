@@ -67,6 +67,9 @@ namespace UI.Screens.ShopContent
                 _closeButton.interactable = false;
                 _touchShopImage.SetActive(false);
                 _shopTutorialChanger.SetValueAddBurgerToMenuButton(false);
+                
+                foreach (var tButton in _pageShopButtons)
+                    tButton.GetComponent<Button>().interactable = false;
                 /*foreach (var tButton in _tutorDeactivateButton)
                     tButton.interactable = false;
 
