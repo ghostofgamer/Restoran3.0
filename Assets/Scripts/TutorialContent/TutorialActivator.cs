@@ -36,13 +36,14 @@ namespace TutorialContent
         [SerializeField] private Button _closeCashRegister;
         [SerializeField] private AssemblyBurgerScreen _assemblyBurgerScreen;
         [SerializeField] private GameObject _blackScreen;
+        [SerializeField] private ActionButtonActivator _actionButtonActivator;
 
         [SerializeField] private Button _shopButton;
         [SerializeField] private Button _dailyReward;
         [SerializeField] private Button _fortune;
-
-
+        
         private ItemBasket basketRawCutlet;
+        private Coroutine _searchBoxCoroutine;
         
         public void ActivateNameRestaurant()
         {
@@ -73,6 +74,7 @@ namespace TutorialContent
 
         public void PutBunsAssemblyTableBunBox()
         {
+            _actionButtonActivator.Completed();
             // _boxesCounter.AddBox(bunObject.gameObject);
             SetValueButtonTopUI(false);
             Debug.Log("PutBunsAssemblyTableBunBox");
@@ -138,13 +140,18 @@ namespace TutorialContent
             _lookAroundEventTrigger.gameObject.SetActive(true);
             _joystick.SetActive(true);
             _touchSkipImage.SetActive(false);
-            StartCoroutine(SearchBoxOutside());
+            
+            if(_searchBoxCoroutine!=null)
+                StopCoroutine(_searchBoxCoroutine);
+            
+            _searchBoxCoroutine=  StartCoroutine(SearchBoxOutside());
         }
 
         private IEnumerator SearchBoxOutside()
         {
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.3f);
             basketRawCutlet = _boxesCounter.GetItemBasketByType(ItemType.RawCutlet);
+            Debug.Log("basketRawCutlet " + basketRawCutlet.gameObject.name);
             basketRawCutlet.GetComponent<TutorialObject>().ActivateTutorPoint();
         }
 

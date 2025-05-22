@@ -15,7 +15,7 @@ namespace TutorialContent
 
         public event Action TutorCompleted;
 
-        private void Start()
+        private void Awake()
         {
             AppMetrica.ReportEvent("StartGame");
             

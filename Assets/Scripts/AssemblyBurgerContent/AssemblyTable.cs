@@ -198,13 +198,13 @@ public class AssemblyTable : MonoBehaviour
             if ((int)_tutorial.CurrentType < (int)TutorialType.LetsMakeFirstBurger)
             {
                 Debug.Log("рано тебе еще ");
+                return;
             }
 
             if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
             {
                 _tutorialAssemblyBurger.StartTutorAssemblyBurger();
             }
-            
             
             SoundPlayer.Instance.PlayButtonClick();
             BurgerAssemblyBeginig?.Invoke();

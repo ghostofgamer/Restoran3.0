@@ -1,3 +1,4 @@
+using System;
 using Enums;
 using InputContent;
 using Interfaces;
@@ -12,7 +13,6 @@ namespace PlayerContent
     {
         [SerializeField] private Tutorial _tutorial;
 
-
         [SerializeField] private Transform _draggablePosition;
         [SerializeField] private GameObject _throwButton;
         [SerializeField] private PlayerTray _playerTray;
@@ -22,6 +22,8 @@ namespace PlayerContent
         private Vector3 _originalScale;
         private PlayerInput _playerInput;
 
+        public event Action<IInteractable> CurrentDraggerChanger;
+        
         public PlayerTray PlayerTray => _playerTray;
 
         public Draggable CurrentDraggable { get; private set; }
@@ -48,6 +50,7 @@ namespace PlayerContent
         public void SetCurrentInteractableObject(IInteractable iInteractable)
         {
             _currentInteractable = iInteractable;
+            CurrentDraggerChanger?.Invoke(_currentInteractable);
         }
 
         public void Action()
@@ -65,7 +68,7 @@ namespace PlayerContent
             _throwButton.SetActive(true);
 
             var tutorialObject = draggable.GetComponent<TutorialObject>();
-            
+
             if (tutorialObject != null && _tutorial.CurrentType == tutorialObject.ItemType)
             {
                 switch (tutorialObject.ItemType)
@@ -89,29 +92,6 @@ namespace PlayerContent
                         break;
                 }
             }
-            
-            /*if (_tutorial.CurrentType == draggable.GetComponent<TutorialObject>().ItemType)
-            {
-                if (draggable.GetComponent<TutorialObject>().ItemType == TutorialType.TakeBoxBuns)
-                {
-                    Debug.Log("типы совпадают");
-                    draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
-                    _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBuns);
-                }
-
-                if (draggable.GetComponent<TutorialObject>().ItemType == TutorialType.TakeBoxBurgerPackages)
-                {
-                    Debug.Log("типы совпадают");
-                    draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
-                    _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxBurgerPackages);
-                }
-
-                if (draggable.GetComponent<TutorialObject>().ItemType == TutorialType.TakeBoxesOutside)
-                {
-                    draggable.GetComponent<TutorialObject>().DeactivateTutorPoint();
-                    _tutorial.SetCurrentTutorialStage(TutorialType.TakeBoxesOutside);
-                }
-            }*/
         }
 
         public void SetCurrentDraggable(Draggable draggable)
@@ -125,12 +105,10 @@ namespace PlayerContent
                 return;
 
             SoundPlayer.Instance.PlayThrow();
-            Debug.Log("бросить 1 ");
             CurrentDraggable.Throw();
             CurrentDraggable.GetComponent<Rigidbody>().isKinematic = false;
             CurrentDraggable.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 16f, ForceMode.Impulse);
             ClearDraggableObject();
-            Debug.Log("бросить 3 ");
             _throwButton.SetActive(false);
         }
 
