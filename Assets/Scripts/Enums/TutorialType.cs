@@ -10,6 +10,7 @@ namespace Enums
         ThrowEmptyBoxInTrash,
         TakeBoxBurgerPackages,
         PutPackagesAssemblyTable,
+        ThrowEmptyBoxInTrashSecond,
         OrderBurgerPatties,
         SkipDelivery,
         TakeBoxesOutside,

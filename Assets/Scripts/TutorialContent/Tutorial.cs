@@ -154,6 +154,12 @@ namespace TutorialContent
                     Debug.Log("Current Tutorial Stage: PutPackagesAssemblyTable");
                     _tutorialActivator.PutPackagesAssemblyTable();
                     break;
+                
+                case TutorialType.ThrowEmptyBoxInTrashSecond:
+                    Debug.Log("Current Tutorial Stage: ThrowEmptyBoxInTrashSecond");
+                    _tutorialActivator.ThrowEmptyBoxInTrashSecond();
+                    break;
+                
                 case TutorialType.OrderBurgerPatties:
                     Debug.Log("Current Tutorial Stage: OrderBurgerPatties");
                     _tutorialActivator.OrderBurgerPatties();

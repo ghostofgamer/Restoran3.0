@@ -12,15 +12,26 @@ namespace TutorialContent
         [SerializeField] private PlayerInput _playerInput;
         [SerializeField] private PlayerMovement _playerMovement;
         [SerializeField] private LookAround _lookAround;
+        [SerializeField] private GameObject _rotator;
         
         private Coroutine _rotationCoroutine;
+        private Coroutine _lookCoroutine;
         
         public void RotateToTarget(Transform target)
         {
-            if (_rotationCoroutine != null)
-                StopCoroutine(_rotationCoroutine); 
+           
+            
+            if (_lookCoroutine != null)
+            {
+                StopCoroutine(_lookCoroutine);
+            }
 
-            _rotationCoroutine = StartCoroutine(RotateToTargetCoroutine(target));
+            _lookCoroutine = StartCoroutine(LookAtTarget(target));
+
+            /*if (_rotationCoroutine != null)
+                StopCoroutine(_rotationCoroutine);
+
+            _rotationCoroutine = StartCoroutine(RotateToTargetCoroutine(target));*/
         }
         
         private IEnumerator RotateToTargetCoroutine(Transform target)
@@ -58,6 +69,52 @@ namespace TutorialContent
             _lookAround.enabled = value;
             _playerMovement.enabled = value;
             _playerInput.enabled = value;
+        }
+        
+        private float _currentRotationY;
+        private float _currentRotationX;
+        [SerializeField] private float _smoothTime = 0.1f;
+        
+        public void Looking(Transform target)
+        {
+            Vector3 direction = target.position - _rotator.transform.position;
+            direction.y = 0; 
+
+            if (direction != Vector3.zero)
+            {
+                
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+                // Плавное изменение значений вращения
+                transform.localRotation = Quaternion.Euler(_currentRotationX, 0, 0);
+                _player.rotation = Quaternion.Slerp(_player.rotation, targetRotation, _smoothTime);
+            }
+        }
+        
+        private IEnumerator LookAtTarget(Transform target)
+        {
+            while (true)
+            {
+                Vector3 direction = target.position - _rotator.transform.position;
+                direction.y = 0;
+
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+                    // Плавное изменение значений вращения
+                    transform.localRotation = Quaternion.Euler(_currentRotationX, 0, 0);
+                    _player.rotation = Quaternion.Slerp(_player.rotation, targetRotation, _smoothTime);
+
+                    // Проверяем, достиг ли объект целевого вращения
+                    if (Quaternion.Angle(_player.rotation, targetRotation) < 0.1f)
+                    {
+                        break;
+                    }
+                }
+
+                yield return null;
+            }
         }
     }
 }
