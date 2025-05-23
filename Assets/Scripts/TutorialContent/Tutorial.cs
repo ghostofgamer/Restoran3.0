@@ -92,7 +92,8 @@ namespace TutorialContent
                         PlayerPrefs.SetInt("CurrentTutorialStage", (int)CurrentType);
                         PlayerPrefs.Save();
                     }
-
+                    
+                    Debug.Log("NewStage ." + CurrentType);
                     CheckCurrentTutorialStage();
                 }
                 else
@@ -111,7 +112,7 @@ namespace TutorialContent
             TutorialType[] allTypes = (TutorialType[])System.Enum.GetValues(typeof(TutorialType));
 
             int currentIndex = System.Array.IndexOf(allTypes, currentType);
-
+Debug.Log("currentIndex " +currentIndex);
             if (currentIndex < allTypes.Length - 1)
                 return allTypes[currentIndex + 1];
 

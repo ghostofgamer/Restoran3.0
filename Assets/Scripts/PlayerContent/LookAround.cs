@@ -1,3 +1,4 @@
+using System.Collections;
 using Enums;
 using InputContent;
 using SettingsContent;
@@ -25,6 +26,9 @@ namespace PlayerContent
         private float _rotationXVelocity;
         private float _rotationYVelocity;
 
+        public float CurrentRotationX => _currentRotationX;
+        public float CurrentRotationY => _currentRotationY;
+
         public float LookSpeed => _lookSpeed;
 
         public void Looking(float x, float y)
@@ -45,7 +49,6 @@ namespace PlayerContent
             float sensitivity = _sensitivitySettings.SensitivityMouse / 100f; // Нормализация значения чувствительности
             float effectiveLookSpeed = _lookSpeed * sensitivity;
 
-            // Плавное изменение значений вращения
             _rotationX -= y * effectiveLookSpeed;
             _rotationX = Mathf.Clamp(_rotationX, -_verticalLookLimit, _verticalLookLimit);
             _currentRotationX = Mathf.SmoothDamp(_currentRotationX, _rotationX, ref _rotationXVelocity, _smoothTime);
@@ -54,6 +57,173 @@ namespace PlayerContent
 
             transform.localRotation = Quaternion.Euler(_currentRotationX, 0, 0);
             _playerBody.Rotate(Vector3.up * _currentRotationY);
+        }
+
+        public void SetCurrentRotation(float x, float y)
+        {
+            _currentRotationX = x;
+            _currentRotationY = y;
+        }
+
+        public void ResetCurrentRotation()
+        {
+            _currentRotationX = 0;
+            _currentRotationY = 0;
+            _rotationX = 0;
+        }
+
+        public void SetRotationX(float x)
+        {
+            _currentRotationX = 0;
+            _currentRotationY = 0;
+            _rotationX = x;
+        }
+
+
+        [Header("Target Look Settings")] [SerializeField]
+        private float _targetLookDuration = 1f;
+
+        [SerializeField] private AnimationCurve _lookCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        [SerializeField] private PlayerRotator _rotator;
+        
+        private Coroutine _lookAtCoroutine;
+        
+        public void LookAtPosition(Vector3 worldPosition)
+        {
+            if (_lookAtCoroutine != null)
+            {
+                StopCoroutine(_lookAtCoroutine);
+            }
+
+            _rotator.SetValue(false);
+            GameObject tempTarget = new GameObject("TempLookTarget");
+            tempTarget.transform.position = worldPosition;
+            _lookAtCoroutine = StartCoroutine(LookAtTargetCoroutine(tempTarget.transform, () => Destroy(tempTarget)));
+        }
+        
+        /*private IEnumerator LookAtTargetCoroutine(Transform target, System.Action onComplete = null)
+        {
+            // Получаем ТЕКУЩИЕ фактические значения поворота из трансформ
+            float startRotationX = transform.localEulerAngles.x;
+            float startCurrentRotationY = _playerBody.eulerAngles.y;
+    
+            // Корректируем углы для правильной интерполяции
+            startRotationX = NormalizeAngle(startRotationX);
+            startCurrentRotationY = NormalizeAngle(startCurrentRotationY);
+    
+            // Сохраняем в переменные для согласованности
+            _rotationX = startRotationX;
+            _currentRotationX = startRotationX;
+            _currentRotationY = startCurrentRotationY;
+
+            Vector3 directionToTarget = target.position - _playerBody.position;
+            directionToTarget.y = 0;
+    
+            Quaternion targetBodyRotation = Quaternion.LookRotation(directionToTarget.normalized);
+            float targetRotationX = 0f;
+            float targetCurrentRotationY = NormalizeAngle(targetBodyRotation.eulerAngles.y);
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _targetLookDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = _lookCurve.Evaluate(elapsedTime / _targetLookDuration);
+        
+                _rotationX = Mathf.LerpAngle(startRotationX, targetRotationX, t);
+                _currentRotationX = _rotationX;
+                _currentRotationY = Mathf.LerpAngle(startCurrentRotationY, targetCurrentRotationY, t);
+      
+                transform.localRotation = Quaternion.Euler(_currentRotationX, 0, 0);
+                _playerBody.rotation = Quaternion.Euler(0, _currentRotationY, 0);
+        
+                _rotationXVelocity = (_currentRotationX - startRotationX) / elapsedTime;
+                _rotationYVelocity = (_currentRotationY - startCurrentRotationY) / elapsedTime;
+
+                yield return null;
+            }
+    
+            // Финализируем значения
+            _rotationX = targetRotationX;
+            _currentRotationX = targetRotationX;
+            _currentRotationY = targetCurrentRotationY;
+    
+            _rotator.SetValue(true);
+            onComplete?.Invoke();
+        }*/
+        
+        private IEnumerator LookAtTargetCoroutine(Transform target, System.Action onComplete = null)
+        {
+            Vector3 startForward = _playerBody.forward;
+            float startCameraXRotation = NormalizeAngle(transform.localEulerAngles.x);
+            float startBodyYRotation = NormalizeAngle(_playerBody.eulerAngles.y);
+
+            // Calculate target rotations
+            Vector3 toTarget = target.position - _playerBody.position;
+            Vector3 horizontalDirection = new Vector3(toTarget.x, 0, toTarget.z).normalized;
+        
+            // Body rotation (horizontal)
+            Quaternion targetBodyRotation = Quaternion.LookRotation(horizontalDirection);
+            float targetBodyY = NormalizeAngle(targetBodyRotation.eulerAngles.y);
+
+            // Camera rotation (vertical)
+            Vector3 cameraToTarget = target.position - transform.position;
+            float targetCameraX = Mathf.Clamp(
+                Mathf.Atan2(-cameraToTarget.y, cameraToTarget.magnitude) * Mathf.Rad2Deg,
+                -_verticalLookLimit,
+                _verticalLookLimit
+            );
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _targetLookDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = _lookCurve.Evaluate(elapsedTime / _targetLookDuration);
+
+                // Interpolate body rotation
+                float currentBodyY = Mathf.LerpAngle(startBodyYRotation, targetBodyY, t);
+            
+                // Interpolate camera rotation
+                float currentCameraX = Mathf.LerpAngle(startCameraXRotation, targetCameraX, t);
+
+                // Apply rotations
+                _playerBody.rotation = Quaternion.Euler(0, currentBodyY, 0);
+                transform.localRotation = Quaternion.Euler(currentCameraX, 0, 0);
+
+                // Update state variables
+                _rotationX = currentCameraX;
+                _currentRotationX = currentCameraX;
+                _currentRotationY = currentBodyY - startBodyYRotation;
+
+                yield return null;
+            }
+            
+            
+            ResetStateAfterAnimation();
+            _rotator.SetValue(true);
+            onComplete?.Invoke();
+        }
+        
+        private float NormalizeAngle(float angle)
+        {
+            while (angle > 180) angle -= 360;
+            while (angle < -180) angle += 360;
+            return angle;
+        }
+        
+        private void ResetStateAfterAnimation()
+        {
+            // Принудительная синхронизация с текущим состоянием
+            _rotationX = NormalizeAngle(transform.localEulerAngles.x);
+            _currentRotationX = _rotationX;
+            _currentRotationY = 0f;
+            _rotationXVelocity = 0f;
+            _rotationYVelocity = 0f;
+            
+            // Сброс любых накопленных значений
+            _playerBody.rotation = Quaternion.Euler(0, _playerBody.eulerAngles.y, 0);
+            transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
         }
     }
 }

@@ -12111,6 +12111,7 @@ MonoBehaviour:
   _playerInput: {fileID: 1080682587}
   _playerMovement: {fileID: 1080682591}
   _lookAround: {fileID: 509955399}
+  _rotator: {fileID: 509955397}
 --- !u!1 &265856336
 GameObject:
   m_ObjectHideFlags: 0
@@ -23650,6 +23651,32 @@ MonoBehaviour:
   _lookSpeed: 1
   _sensitivitySettings: {fileID: 346954460}
   _smoothTime: 0.05
+  _targetLookDuration: 1
+  _lookCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _rotator: {fileID: 264343483}
 --- !u!1 &514059239
 GameObject:
   m_ObjectHideFlags: 0
@@ -47100,14 +47127,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080682586}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7692176, z: -0, w: 0.6389869}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 23.3, y: 1.42, z: -174.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 509955398}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 100.567, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1080682591
 MonoBehaviour:
   m_ObjectHideFlags: 0
