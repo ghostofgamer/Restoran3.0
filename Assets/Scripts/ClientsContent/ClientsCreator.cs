@@ -103,7 +103,10 @@ namespace ClientsContent
         {
             if (_parking.GetCountFreeParkingPositions() > 0)
             {
-                float randomValue = Random.Range(0f, 1f);
+                float randomValue = 1;
+
+                if ((int)_tutorial.CurrentType > (int)TutorialType.CleanTable)
+                    randomValue = Random.Range(0f, 1f);
 
                 if (randomValue < 0.5f)
                 {
@@ -160,8 +163,9 @@ namespace ClientsContent
 
             ParkingSpace parkingSpace = _parking.GetFreeParkingPosition();
             int randomCarIndex = Random.Range(0, _clientCars.Length);
-            
-            ClientCar car = Instantiate(_clientCars[randomCarIndex], _carSpawnPosition.position, Quaternion.identity, transform);
+
+            ClientCar car = Instantiate(_clientCars[randomCarIndex], _carSpawnPosition.position, Quaternion.identity,
+                transform);
             parkingSpace.BusyPlace(car);
 
             foreach (var client in _clients)
