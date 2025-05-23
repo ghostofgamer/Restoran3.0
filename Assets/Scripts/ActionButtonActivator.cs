@@ -1,16 +1,20 @@
-using System;
 using Enums;
 using Interfaces;
 using PlayerContent;
 using TutorialContent;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ActionButtonActivator : MonoBehaviour
 {
     [SerializeField] private PlayerInteraction _playerInteraction;
     [SerializeField] private Tutorial _tutorial;
     [SerializeField] private GameObject _touchActionAnim;
+    [SerializeField]private CanvasGroup _actionButton;
+    [SerializeField] private GameObject _strokeActionButton;
 
+    private bool _isCompletedTutorStage;
+    
     private void OnEnable()
     {
         _playerInteraction.CurrentDraggerChanger += Action;
@@ -30,11 +34,17 @@ public class ActionButtonActivator : MonoBehaviour
     public void Completed()
     {
         _touchActionAnim.SetActive(false);
-        enabled = false;
+        _isCompletedTutorStage = true;
     }
 
     private void Action(IInteractable iInteractable)
     {
+        _strokeActionButton.SetActive(iInteractable != null);
+        _actionButton.alpha = (iInteractable != null) ? 1.0f : 0.65f;
+
+        if (_isCompletedTutorStage)
+            return;
+        
         if ((int)_tutorial.CurrentType > (int)TutorialType.TakeBoxBuns)
             return;
 
