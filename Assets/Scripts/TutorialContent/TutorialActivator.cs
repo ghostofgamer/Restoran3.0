@@ -42,10 +42,10 @@ namespace TutorialContent
         [SerializeField] private Button _shopButton;
         [SerializeField] private Button _dailyReward;
         [SerializeField] private Button _fortune;
-        
+
         private ItemBasket basketRawCutlet;
         private Coroutine _searchBoxCoroutine;
-        
+
         public void ActivateNameRestaurant()
         {
             SetValueButtonTopUI(false);
@@ -69,11 +69,11 @@ namespace TutorialContent
             SetValueButtonTopUI(false);
             Debug.Log("TakeBunBox");
             bunObject.gameObject.SetActive(true);
-            
+
             _playerRotator.RotateToTarget(bunObject.transform);
-            
+
             bunObject.ActivateTutorPoint();
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
 
         public void PutBunsAssemblyTableBunBox()
@@ -84,7 +84,7 @@ namespace TutorialContent
             Debug.Log("PutBunsAssemblyTableBunBox");
             _assemblyTable.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_assemblyTable.transform);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
 
         public void ThrowEmptyBoxInTrash()
@@ -94,7 +94,7 @@ namespace TutorialContent
             _assemblyTable.DeactivateTutorPoint();
             _trash.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_trash.transform);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
 
         public void TakeBoxBurgerPackages()
@@ -105,7 +105,7 @@ namespace TutorialContent
             _burgerPackageBox.gameObject.SetActive(true);
             _burgerPackageBox.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_burgerPackageBox.transform);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
 
         public void PutPackagesAssemblyTable()
@@ -116,9 +116,9 @@ namespace TutorialContent
             // _burgerPackageBox.DeactivateTutorPoint();
             _assemblyTable.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_assemblyTable.transform);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
-        
+
         public void ThrowEmptyBoxInTrashSecond()
         {
             SetValueButtonTopUI(false);
@@ -126,7 +126,7 @@ namespace TutorialContent
             _assemblyTable.DeactivateTutorPoint();
             _trash.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_trash.transform);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
 
         public void OrderBurgerPatties()
@@ -137,7 +137,7 @@ namespace TutorialContent
             _blackScreen.SetActive(true);
             _shopButton.interactable = true;
             _assemblyTable.DeactivateTutorPoint();
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             // _playerInput.enabled = false;
             _lookAroundEventTrigger.gameObject.SetActive(false);
             _joystick.SetActive(false);
@@ -148,22 +148,22 @@ namespace TutorialContent
         {
             _blackScreen.SetActive(false);
             SetValueButtonTopUI(false);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _touchSkipImage.SetActive(true);
         }
 
         public void TakeBoxesOutside()
         {
             SetValueButtonTopUI(false);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _lookAroundEventTrigger.gameObject.SetActive(true);
             _joystick.SetActive(true);
             _touchSkipImage.SetActive(false);
-            
-            if(_searchBoxCoroutine!=null)
+
+            if (_searchBoxCoroutine != null)
                 StopCoroutine(_searchBoxCoroutine);
-            
-            _searchBoxCoroutine=  StartCoroutine(SearchBoxOutside());
+
+            _searchBoxCoroutine = StartCoroutine(SearchBoxOutside());
         }
 
         private IEnumerator SearchBoxOutside()
@@ -176,95 +176,95 @@ namespace TutorialContent
 
         public void PutRawCutletInContainer()
         {
-           // _boxesCounter.AddBox(basketRawCutlet.gameObject);
+            // _boxesCounter.AddBox(basketRawCutlet.gameObject);
             SetValueButtonTopUI(false);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _rawCutletContainer.ActivateTutorPoint();
         }
-        
+
         public void ThrowEmptyBoxInTrashThird()
         {
             SetValueButtonTopUI(false);
             Debug.Log("ThrowEmptyBoxInTrashThird");
             _trash.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_trash.transform);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
-        
-        public void  TakeRawCutletInTrayPlayer()
+
+        public void TakeRawCutletInTrayPlayer()
         {
             _trash.DeactivateTutorPoint();
             SetValueButtonTopUI(false);
             _rawCutletContainer.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_rawCutletContainer.transform);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
-        
+
         public void PutCutletsOnGrill()
         {
             SetValueButtonTopUI(false);
             _rawCutletContainer.DeactivateTutorPoint();
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _grillTutorObject.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_grillTutorObject.transform);
         }
-        
+
         public void FryCutletGrill()
         {
             SetValueButtonTopUI(false);
             _grillTutorObject.ActivateTutorPoint();
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _playerRotator.RotateToTarget(_grillTutorObject.transform);
         }
-        
+
         public void TakeWellCutlet()
         {
             SetValueButtonTopUI(false);
             _grillTutorObject.ActivateTutorPoint();
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _playerRotator.RotateToTarget(_grillTutorObject.transform);
         }
-        
+
         public void PutWellCutletToContainer()
         {
             SetValueButtonTopUI(false);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _grillTutorObject.DeactivateTutorPoint();
             _assemblyTable.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_assemblyTable.transform);
         }
-        
+
         public void LetsMakeFirstBurger()
         {
             SetValueButtonTopUI(false);
             _assemblyTable.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_assemblyTable.transform);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
-        
+
         public void LetsSetPrice()
         {
             _assemblyBurgerScreen.CloseScreen();
             SetValueButtonTopUI(false);
             _shopButton.interactable = true;
             _blackScreen.SetActive(true);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _lookAroundEventTrigger.gameObject.SetActive(false);
             _joystick.SetActive(false);
             _touchShopImage.SetActive(true);
         }
-        
+
         public void OpenRestaurant()
         {
             _blackScreen.SetActive(false);
             SetValueButtonTopUI(false);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _lookAroundEventTrigger.gameObject.SetActive(true);
             _joystick.SetActive(true);
             _openCloseRest.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_openCloseRest.transform);
         }
-        
+
         public void TakeFirstOrder()
         {
             SetValueButtonTopUI(false);
@@ -272,26 +272,26 @@ namespace TutorialContent
             _openCloseRest.DeactivateTutorPoint();
             _cashRegister.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_cashRegister.transform);
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
-        
+
         public void CleanTable()
         {
             SetValueButtonTopUI(false);
             _cashRegister.DeactivateTutorPoint();
             _tableFirstClient.ActivateTutorPoint();
             _closeCashRegister.interactable = true;
-            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _playerRotator.RotateToTarget(_tableFirstClient.transform);
         }
-        
+
         public void TutorCompleted()
         {
             SetValueButtonTopUI(true);
             _tableFirstClient.DeactivateTutorPoint();
-            _tutorDescriptionUI.StartCompleted(GetDescriptionText(_tutorial.CurrentType));
+            _tutorDescriptionUI.StartCompleted(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
-        
+
         private string GetDescriptionText(TutorialType currentType)
         {
             TutorialDescription.Description description =
