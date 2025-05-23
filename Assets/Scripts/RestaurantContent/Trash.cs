@@ -65,6 +65,9 @@ namespace RestaurantContent
                 
                 if (_tutorial.CurrentType == TutorialType.ThrowEmptyBoxInTrashSecond)
                     _tutorial.SetCurrentTutorialStage(TutorialType.ThrowEmptyBoxInTrashSecond);
+                
+                if (_tutorial.CurrentType == TutorialType.ThrowEmptyBoxInTrashThird)
+                    _tutorial.SetCurrentTutorialStage(TutorialType.ThrowEmptyBoxInTrashThird);
             }
         }
 

@@ -18,6 +18,9 @@ namespace PlayerContent
         [SerializeField] private float _lookSpeed;
         [SerializeField] private SensitivitySettings _sensitivitySettings;
         [SerializeField] private float _smoothTime = 0.1f;
+        [SerializeField] private float _targetLookDuration = 1f;
+        [SerializeField] private AnimationCurve _lookCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        [SerializeField] private PlayerRotator _rotator;
 
         private float _verticalLookLimit = 80f;
         private float _rotationX = 0;
@@ -25,9 +28,7 @@ namespace PlayerContent
         private float _currentRotationY;
         private float _rotationXVelocity;
         private float _rotationYVelocity;
-
-        public float CurrentRotationX => _currentRotationX;
-        public float CurrentRotationY => _currentRotationY;
+        private Coroutine _lookAtCoroutine;
 
         public float LookSpeed => _lookSpeed;
 
@@ -58,35 +59,7 @@ namespace PlayerContent
             transform.localRotation = Quaternion.Euler(_currentRotationX, 0, 0);
             _playerBody.Rotate(Vector3.up * _currentRotationY);
         }
-
-        public void SetCurrentRotation(float x, float y)
-        {
-            _currentRotationX = x;
-            _currentRotationY = y;
-        }
-
-        public void ResetCurrentRotation()
-        {
-            _currentRotationX = 0;
-            _currentRotationY = 0;
-            _rotationX = 0;
-        }
-
-        public void SetRotationX(float x)
-        {
-            _currentRotationX = 0;
-            _currentRotationY = 0;
-            _rotationX = x;
-        }
-
-
-        [Header("Target Look Settings")] [SerializeField]
-        private float _targetLookDuration = 1f;
-
-        [SerializeField] private AnimationCurve _lookCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        [SerializeField] private PlayerRotator _rotator;
         
-        private Coroutine _lookAtCoroutine;
         
         public void LookAtPosition(Vector3 worldPosition)
         {
@@ -100,57 +73,6 @@ namespace PlayerContent
             tempTarget.transform.position = worldPosition;
             _lookAtCoroutine = StartCoroutine(LookAtTargetCoroutine(tempTarget.transform, () => Destroy(tempTarget)));
         }
-        
-        /*private IEnumerator LookAtTargetCoroutine(Transform target, System.Action onComplete = null)
-        {
-            // Получаем ТЕКУЩИЕ фактические значения поворота из трансформ
-            float startRotationX = transform.localEulerAngles.x;
-            float startCurrentRotationY = _playerBody.eulerAngles.y;
-    
-            // Корректируем углы для правильной интерполяции
-            startRotationX = NormalizeAngle(startRotationX);
-            startCurrentRotationY = NormalizeAngle(startCurrentRotationY);
-    
-            // Сохраняем в переменные для согласованности
-            _rotationX = startRotationX;
-            _currentRotationX = startRotationX;
-            _currentRotationY = startCurrentRotationY;
-
-            Vector3 directionToTarget = target.position - _playerBody.position;
-            directionToTarget.y = 0;
-    
-            Quaternion targetBodyRotation = Quaternion.LookRotation(directionToTarget.normalized);
-            float targetRotationX = 0f;
-            float targetCurrentRotationY = NormalizeAngle(targetBodyRotation.eulerAngles.y);
-
-            float elapsedTime = 0f;
-
-            while (elapsedTime < _targetLookDuration)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = _lookCurve.Evaluate(elapsedTime / _targetLookDuration);
-        
-                _rotationX = Mathf.LerpAngle(startRotationX, targetRotationX, t);
-                _currentRotationX = _rotationX;
-                _currentRotationY = Mathf.LerpAngle(startCurrentRotationY, targetCurrentRotationY, t);
-      
-                transform.localRotation = Quaternion.Euler(_currentRotationX, 0, 0);
-                _playerBody.rotation = Quaternion.Euler(0, _currentRotationY, 0);
-        
-                _rotationXVelocity = (_currentRotationX - startRotationX) / elapsedTime;
-                _rotationYVelocity = (_currentRotationY - startCurrentRotationY) / elapsedTime;
-
-                yield return null;
-            }
-    
-            // Финализируем значения
-            _rotationX = targetRotationX;
-            _currentRotationX = targetRotationX;
-            _currentRotationY = targetCurrentRotationY;
-    
-            _rotator.SetValue(true);
-            onComplete?.Invoke();
-        }*/
         
         private IEnumerator LookAtTargetCoroutine(Transform target, System.Action onComplete = null)
         {

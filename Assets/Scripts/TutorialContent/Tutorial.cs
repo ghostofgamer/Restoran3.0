@@ -127,30 +127,37 @@ Debug.Log("currentIndex " +currentIndex);
                     Debug.Log("Current Tutorial Stage: NameRestaurant");
                     _tutorialActivator.ActivateNameRestaurant();
                     break;
+                
                 case TutorialType.LookAround:
                     Debug.Log("Current Tutorial Stage: LookAround");
                     _tutorialActivator.ActivateLookAround();
                     break;
+                
                 case TutorialType.MoveAround:
                     Debug.Log("Current Tutorial Stage: MoveAround");
                     _tutorialActivator.ActivateMove();
                     break;
+                
                 case TutorialType.TakeBoxBuns:
                     Debug.Log("Current Tutorial Stage: TakeBoxBuns");
                     _tutorialActivator.TakeBunBox();
                     break;
+                
                 case TutorialType.PutBunsAssemblyTable:
                     Debug.Log("Current Tutorial Stage: PutBunsAssemblyTable");
                     _tutorialActivator.PutBunsAssemblyTableBunBox();
                     break;
+                
                 case TutorialType.ThrowEmptyBoxInTrash:
                     Debug.Log("Current Tutorial Stage: ThrowEmptyBoxInTrash");
                     _tutorialActivator.ThrowEmptyBoxInTrash();
                     break;
+                
                 case TutorialType.TakeBoxBurgerPackages:
                     Debug.Log("Current Tutorial Stage: TakeBoxBurgerPackages");
                     _tutorialActivator.TakeBoxBurgerPackages();
                     break;
+                
                 case TutorialType.PutPackagesAssemblyTable:
                     Debug.Log("Current Tutorial Stage: PutPackagesAssemblyTable");
                     _tutorialActivator.PutPackagesAssemblyTable();
@@ -165,19 +172,27 @@ Debug.Log("currentIndex " +currentIndex);
                     Debug.Log("Current Tutorial Stage: OrderBurgerPatties");
                     _tutorialActivator.OrderBurgerPatties();
                     break;
+                
                 case TutorialType.SkipDelivery:
                     Debug.Log("Current Tutorial Stage: SkipDelivery");
                     _tutorialActivator.SkipDelivery();
                     break;
+                
                 case TutorialType.TakeBoxesOutside:
                     Debug.Log("Current Tutorial Stage: TakeBoxesOutside");
                     _tutorialActivator.TakeBoxesOutside();
                     break;
+                
                 case TutorialType.PutRawCutletInContainer:
                     Debug.Log("Current Tutorial Stage: PutRawCutletInContainer");
                     _tutorialActivator.PutRawCutletInContainer();
                     break;
 
+                case TutorialType.ThrowEmptyBoxInTrashThird:
+                    Debug.Log("Current Tutorial Stage: ThrowEmptyBoxInTrashThird");
+                    _tutorialActivator.ThrowEmptyBoxInTrashThird();
+                    break;
+                
                 case TutorialType.TakeRawCutletInTrayPlayer:
                     Debug.Log("Current Tutorial Stage: TakeRawCutletInTrayPlayer");
                     _tutorialActivator.TakeRawCutletInTrayPlayer();

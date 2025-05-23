@@ -122,7 +122,7 @@ namespace TutorialContent
         public void ThrowEmptyBoxInTrashSecond()
         {
             SetValueButtonTopUI(false);
-            Debug.Log("ThrowEmptyBoxInTrash");
+            Debug.Log("ThrowEmptyBoxInTrashSecond");
             _assemblyTable.DeactivateTutorPoint();
             _trash.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_trash.transform);
@@ -182,8 +182,18 @@ namespace TutorialContent
             _rawCutletContainer.ActivateTutorPoint();
         }
         
+        public void ThrowEmptyBoxInTrashThird()
+        {
+            SetValueButtonTopUI(false);
+            Debug.Log("ThrowEmptyBoxInTrashThird");
+            _trash.ActivateTutorPoint();
+            _playerRotator.RotateToTarget(_trash.transform);
+            _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
+        }
+        
         public void  TakeRawCutletInTrayPlayer()
         {
+            _trash.DeactivateTutorPoint();
             SetValueButtonTopUI(false);
             _rawCutletContainer.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_rawCutletContainer.transform);
