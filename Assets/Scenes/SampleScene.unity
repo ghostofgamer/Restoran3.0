@@ -12002,6 +12002,7 @@ GameObject:
   - component: {fileID: 264343482}
   - component: {fileID: 264343481}
   - component: {fileID: 264343480}
+  - component: {fileID: 264343483}
   m_Layer: 0
   m_Name: TutorialContent
   m_TagString: Untagged
@@ -12074,6 +12075,7 @@ MonoBehaviour:
   _assemblyBurgerScreen: {fileID: 680644727}
   _blackScreen: {fileID: 1253664719}
   _actionButtonActivator: {fileID: 1510097012}
+  _playerRotator: {fileID: 264343483}
   _shopButton: {fileID: 1783654460}
   _dailyReward: {fileID: 1292721948}
   _fortune: {fileID: 835843039}
@@ -12092,6 +12094,20 @@ MonoBehaviour:
   _tutorialData: {fileID: 264343480}
   _tutorialActivator: {fileID: 264343481}
   _tutorialDescriptionUI: {fileID: 60241999}
+--- !u!114 &264343483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 264343478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e1e3e6cad1b5343b3e4c000a76e5c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 1080682590}
+  _rotationSpeed: 5
 --- !u!1 &265856336
 GameObject:
   m_ObjectHideFlags: 0
@@ -47081,14 +47097,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080682586}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.052536003, z: -0, w: 0.998619}
+  m_LocalRotation: {x: -0, y: 0.7692176, z: -0, w: 0.6389869}
   m_LocalPosition: {x: 23.3, y: 1.42, z: -174.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 509955398}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 6.023, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 100.567, z: 0}
 --- !u!114 &1080682591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84800,8 +84816,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 428157621}
-  - {fileID: 421653719}
   - {fileID: 2141882646}
+  - {fileID: 421653719}
   m_Father: {fileID: 905472385}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}

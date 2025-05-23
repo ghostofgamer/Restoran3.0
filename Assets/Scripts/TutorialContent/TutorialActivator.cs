@@ -37,6 +37,7 @@ namespace TutorialContent
         [SerializeField] private AssemblyBurgerScreen _assemblyBurgerScreen;
         [SerializeField] private GameObject _blackScreen;
         [SerializeField] private ActionButtonActivator _actionButtonActivator;
+        [SerializeField] private PlayerRotator _playerRotator;
 
         [SerializeField] private Button _shopButton;
         [SerializeField] private Button _dailyReward;
@@ -68,6 +69,9 @@ namespace TutorialContent
             SetValueButtonTopUI(false);
             Debug.Log("TakeBunBox");
             bunObject.gameObject.SetActive(true);
+            
+            _playerRotator.RotateToTarget(bunObject.transform);
+            
             bunObject.ActivateTutorPoint();
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType));
         }
