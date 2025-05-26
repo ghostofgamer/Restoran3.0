@@ -39,33 +39,45 @@ namespace TutorialContent
         [SerializeField] private ActionButtonActivator _actionButtonActivator;
         [SerializeField] private PlayerRotator _playerRotator;
 
+        [Header("Guidance Lines")] [SerializeField]
+        private GuidanceLine.GuidanceLine _guidanceLine;
+
+        [SerializeField] private GuidanceLine.GuidanceLine _guidanceLineStartScene;
+        [SerializeField] private GuidanceLine.GuidanceLine _guidanceLineRawCutlet;
+        [SerializeField] private GuidanceLine.GuidanceLine _guidanceLineRawCutletStartScene;
+
         [SerializeField] private Button _shopButton;
         [SerializeField] private Button _dailyReward;
         [SerializeField] private Button _fortune;
 
         private ItemBasket basketRawCutlet;
         private Coroutine _searchBoxCoroutine;
+        private int _counter;
 
         public void ActivateNameRestaurant()
         {
+            _counter++;
             SetValueButtonTopUI(false);
             _nameRestaurantScreen.OpenScreen();
         }
 
         public void ActivateLookAround()
         {
+            _counter++;
             SetValueButtonTopUI(false);
             _lookAroundScreen.OpenScreen();
         }
 
         public void ActivateMove()
         {
+            _counter++;
             SetValueButtonTopUI(false);
             _moveScreen.OpenScreen();
         }
 
         public void TakeBunBox()
         {
+            _counter++;
             SetValueButtonTopUI(false);
             Debug.Log("TakeBunBox");
             bunObject.gameObject.SetActive(true);
@@ -78,6 +90,7 @@ namespace TutorialContent
 
         public void PutBunsAssemblyTableBunBox()
         {
+            _counter++;
             _actionButtonActivator.Completed();
             // _boxesCounter.AddBox(bunObject.gameObject);
             SetValueButtonTopUI(false);
@@ -89,6 +102,7 @@ namespace TutorialContent
 
         public void ThrowEmptyBoxInTrash()
         {
+            _counter++;
             SetValueButtonTopUI(false);
             Debug.Log("ThrowEmptyBoxInTrash");
             _assemblyTable.DeactivateTutorPoint();
@@ -99,6 +113,7 @@ namespace TutorialContent
 
         public void TakeBoxBurgerPackages()
         {
+            _counter++;
             SetValueButtonTopUI(false);
             Debug.Log("TakeBoxBurgerPackages");
             _trash.DeactivateTutorPoint();
@@ -110,6 +125,7 @@ namespace TutorialContent
 
         public void PutPackagesAssemblyTable()
         {
+            _counter++;
             // _boxesCounter.AddBox(_burgerPackageBox.gameObject);
             SetValueButtonTopUI(false);
             Debug.Log("PutPackagesAssemblyTable");
@@ -121,6 +137,7 @@ namespace TutorialContent
 
         public void ThrowEmptyBoxInTrashSecond()
         {
+            _counter++;
             SetValueButtonTopUI(false);
             Debug.Log("ThrowEmptyBoxInTrashSecond");
             _assemblyTable.DeactivateTutorPoint();
@@ -131,6 +148,7 @@ namespace TutorialContent
 
         public void OrderBurgerPatties()
         {
+            _counter++;
             _trash.DeactivateTutorPoint();
             SetValueButtonTopUI(false);
             Debug.Log("OrderBurgerPatties");
@@ -146,6 +164,7 @@ namespace TutorialContent
 
         public void SkipDelivery()
         {
+            _counter++;
             _blackScreen.SetActive(false);
             SetValueButtonTopUI(false);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
@@ -168,14 +187,40 @@ namespace TutorialContent
 
         private IEnumerator SearchBoxOutside()
         {
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(1f);
             basketRawCutlet = _boxesCounter.GetItemBasketByType(ItemType.RawCutlet);
             Debug.Log("basketRawCutlet " + basketRawCutlet.gameObject.name);
             basketRawCutlet.GetComponent<TutorialObject>().ActivateTutorPoint();
+
+            if (_counter <= 0)
+            {
+                _guidanceLineStartScene.endPoint = basketRawCutlet.transform;
+                _guidanceLineStartScene.gameObject.SetActive(true);
+            }
+            else
+            {
+                _guidanceLine.endPoint = basketRawCutlet.transform;
+                _guidanceLine.gameObject.SetActive(true);
+            }
+
+            _counter++;
         }
 
         public void PutRawCutletInContainer()
         {
+            if (_counter <= 0)
+            {
+                _guidanceLine.gameObject.SetActive(false);
+                _guidanceLineStartScene.gameObject.SetActive(false);
+                _guidanceLineRawCutletStartScene.gameObject.SetActive(true);
+            }
+            else
+            {
+                _guidanceLine.gameObject.SetActive(false);
+                _guidanceLineStartScene.gameObject.SetActive(false);
+                _guidanceLineRawCutlet.gameObject.SetActive(true);
+            }
+
             // _boxesCounter.AddBox(basketRawCutlet.gameObject);
             SetValueButtonTopUI(false);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
@@ -184,6 +229,7 @@ namespace TutorialContent
 
         public void ThrowEmptyBoxInTrashThird()
         {
+            _guidanceLineRawCutlet.gameObject.SetActive(false);
             SetValueButtonTopUI(false);
             Debug.Log("ThrowEmptyBoxInTrashThird");
             _trash.ActivateTutorPoint();

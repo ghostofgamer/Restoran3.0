@@ -17,8 +17,6 @@ namespace TutorialContent
 
         private void Awake()
         {
-            AppMetrica.ReportEvent("StartGame");
-            
             int value = PlayerPrefs.GetInt("TutorCompleted", 0);
 
             if (value > 0)

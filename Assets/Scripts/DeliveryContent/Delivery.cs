@@ -14,11 +14,11 @@ namespace DeliveryContent
     public class Delivery : MonoBehaviour
     {
         [SerializeField] private Transform _spawnPosition;
-        [SerializeField] private Transform []_spawnPositions;
+        [SerializeField] private Transform[] _spawnPositions;
         [SerializeField] private DeliveryConfig _deliveryConfig;
         [SerializeField] private DeliveryViewer _deliveryViewer;
         [SerializeField] private DeliverySaver _deliverySaver;
-        [SerializeField] private Tutorial _tutorial; 
+        [SerializeField] private Tutorial _tutorial;
 
         private List<ItemDeliveryInfo> _items = new List<ItemDeliveryInfo>();
         private bool _isSpawning = false;
@@ -160,7 +160,7 @@ namespace DeliveryContent
             {
                 _tutorial.SetCurrentTutorialStage(TutorialType.SkipDelivery);
             }
-            
+
             SoundPlayer.Instance.PlayDostavka();
             RemainingTime = 0;
             TimeChanged?.Invoke(RemainingTime);
@@ -195,7 +195,10 @@ namespace DeliveryContent
                 GameObject prefab = _deliveryConfig.GetPrefabByItemType(item.ItemType);
 
                 if (prefab != null)
-                    Instantiate(prefab, GetPosition().position, Quaternion.identity);
+                {
+                    GameObject newBox= Instantiate(prefab, GetPosition().position, Quaternion.identity);
+                    SpawnCompleted?.Invoke(newBox);
+                }
 
                 item.Amount--;
 
@@ -207,7 +210,7 @@ namespace DeliveryContent
                 {
                     _tutorial.SetCurrentTutorialStage(TutorialType.SkipDelivery);
                 }
-                
+
                 if (item.Amount <= 0)
                     _items.RemoveAt(0);
             }
@@ -239,8 +242,6 @@ namespace DeliveryContent
         {
             int index = Random.Range(0, _spawnPositions.Length);
             return _spawnPositions[index];
-
-
         }
     }
 }
