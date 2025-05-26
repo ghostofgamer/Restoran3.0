@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace SettingsContent.SoundContent
 {
@@ -22,6 +21,7 @@ namespace SettingsContent.SoundContent
         [SerializeField] private AudioClip _coins;
         [SerializeField] private AudioClip _bills;
         [SerializeField] private AudioClip _dostavka;
+        [SerializeField] private AudioClip _fortunaReward;
 
         public static SoundPlayer Instance { get; private set; }
 
@@ -116,6 +116,11 @@ namespace SettingsContent.SoundContent
         public void PlayDostavka()
         {
             _audioSource.PlayOneShot(_dostavka);
+        }
+
+        public void PlayFortunePrize()
+        {
+            _audioSource.PlayOneShot(_fortunaReward);
         }
     }
 }

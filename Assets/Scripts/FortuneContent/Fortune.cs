@@ -6,9 +6,12 @@ using DailyTimerContent;
 using Io.AppMetrica;
 using PlayerContent.LevelContent;
 using SettingsContent.SoundContent;
+using SoContent;
 using TMPro;
+using UI.Buttons;
 using UI.Screens;
 using UnityEngine;
+using UnityEngine.UI;
 using WalletContent;
 
 namespace FortuneContent
@@ -30,9 +33,13 @@ namespace FortuneContent
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private Animator _fortuneButton;
         [SerializeField] private FortuneScreen _fortuneScreen;
+        [SerializeField] private FortuneSpriteConfig _fortuneSpriteConfig;
+        [SerializeField] private SoundPlayer _soundPlayer;
+        [SerializeField] private Button _openFortuneButton;
 
         private int _currentValueSpin = 1;
         private string filePath;
+        private bool _isFreeButtonUsed = false;
 
         private Prize[] prizeMap = new Prize[]
         {
@@ -50,24 +57,33 @@ namespace FortuneContent
 
         public event Action FreeSpinDayCompleted;
 
+        public event Action FreeSpinUsed;
+
         private void OnEnable()
         {
             _spinWheelController.PrizeCompleted += SetPrize;
-            _dailyTimerFortune.TimeOverCompleted += ActivateFreeSpinButton;
+            // _dailyTimerFortune.TimeOverCompleted += ActivateFreeSpinButton;
             _dailyTimerFortune.TimeNotOverCompleted += ActiveOtherSpinButton;
             _fortuneScreen.FortuneScreenClosed += AnimateButton;
+            _playerLevel.LevelChanged += ActivateOpenFortuneButton;
         }
 
         private void OnDisable()
         {
             _spinWheelController.PrizeCompleted -= SetPrize;
-            _dailyTimerFortune.TimeOverCompleted -= ActivateFreeSpinButton;
+            // _dailyTimerFortune.TimeOverCompleted -= ActivateFreeSpinButton;
             _dailyTimerFortune.TimeNotOverCompleted -= ActiveOtherSpinButton;
             _fortuneScreen.FortuneScreenClosed -= AnimateButton;
+            _playerLevel.LevelChanged -= ActivateOpenFortuneButton;
         }
 
         private void Start()
         {
+            ActivateOpenFortuneButton(_playerLevel.CurrentLevel);
+            _isFreeButtonUsed = PlayerPrefs.GetInt("FreeSpinUsed", 0) > 0;
+            _spinFreeButton.gameObject.SetActive(!_isFreeButtonUsed);
+            Debug.Log("_isFreeButtonUsed " + _isFreeButtonUsed);
+
             _dailyTimerFortune.UpdateInfo();
             filePath = Path.Combine(Application.persistentDataPath, "spinData.json");
             LoadSpinData();
@@ -86,6 +102,7 @@ namespace FortuneContent
         public void OnShow()
         {
             _fortuneScreen.OpenScreen();
+            _spinValueButton.SetActive(_currentValueSpin > 0);
             _spinValueText.text = $"BALANCE: {_currentValueSpin.ToString()}";
         }
 
@@ -96,7 +113,7 @@ namespace FortuneContent
 
             if (_spinWheelController.IsStarted)
                 return;
-            
+
             SoundPlayer.Instance.PlayButtonClick();
             _currentValueSpin--;
             SaveSpinData();
@@ -108,7 +125,7 @@ namespace FortuneContent
         {
             if (_spinWheelController.IsStarted)
                 return;
-            
+
             SoundPlayer.Instance.PlayButtonClick();
             _dailyTimerFortune.StartButtonClick();
             FreeSpinDayCompleted?.Invoke();
@@ -156,15 +173,26 @@ namespace FortuneContent
             _spinFreeButton.SetActive(true);
         }
 
+        private void ActivateOpenFortuneButton(int playerLevel)
+        {
+            _openFortuneButton.interactable = playerLevel >= 3;
+        }
+
         private void ActiveOtherSpinButton()
         {
             Debug.Log("ActiveOtherSpinButton");
             DeactivationButtons();
 
             if (_currentValueSpin <= 0)
+            {
+                Debug.Log("_currentValueSpin " + _currentValueSpin);
                 _dailyTimerADSFortune.UpdateInfo();
+            }
             else
+            {
+                Debug.Log("_spinValueButton TRUE ");
                 _spinValueButton.SetActive(true);
+            }
         }
 
         private void DeactivationButtons()
@@ -178,8 +206,18 @@ namespace FortuneContent
             Debug.Log(index);
 
             Prize prize = prizeMap[index];
-            _backWinText.SetActive(true);
-            _prizeText.text = $"You Win: + {prize.Value}  {prize.Type.ToString()}";
+            /*_backWinText.SetActive(true);
+            _prizeText.text = $"You Win: + {prize.Value}  {prize.Type.ToString()}";*/
+
+            if (!_isFreeButtonUsed)
+            {
+                AppMetrica.ReportEvent("TaskFortuna");
+                FreeSpinUsed?.Invoke();
+                PlayerPrefs.SetInt("FreeSpinUsed", 1);
+            }
+
+            _fortuneScreen.OpenPopupPrize(_fortuneSpriteConfig.GetSpriteByType(prize.Type), prize.Value);
+            _soundPlayer.PlayFortunePrize();
 
             switch (prize.Type)
             {

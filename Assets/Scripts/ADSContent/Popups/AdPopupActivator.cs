@@ -1,4 +1,5 @@
 using System.Collections;
+using Enums;
 using TutorialContent;
 using UI.Screens.AdsScreens;
 using UnityEngine;
@@ -22,6 +23,12 @@ namespace ADSContent.Popups
         private void OnDisable()
         {
             _tutorial.TutorCompleted -= ShowStarterPack;
+        }
+
+        private void Start()
+        {
+            if ((int)_tutorial.CurrentType >= (int)TutorialType.TutorCompleted)
+                ShowStarterPack();
         }
 
         private void ShowStarterPack()

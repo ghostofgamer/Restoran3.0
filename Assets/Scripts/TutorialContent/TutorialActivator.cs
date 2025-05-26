@@ -229,6 +229,7 @@ namespace TutorialContent
 
         public void ThrowEmptyBoxInTrashThird()
         {
+            _guidanceLineRawCutletStartScene.gameObject.SetActive(false);
             _guidanceLineRawCutlet.gameObject.SetActive(false);
             SetValueButtonTopUI(false);
             Debug.Log("ThrowEmptyBoxInTrashThird");
@@ -349,7 +350,7 @@ namespace TutorialContent
         {
             _shopButton.interactable = value;
             _dailyReward.interactable = value;
-            _fortune.interactable = value;
+            // _fortune.interactable = value;
         }
     }
 }
