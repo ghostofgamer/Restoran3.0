@@ -16362,6 +16362,7 @@ GameObject:
   - component: {fileID: 311262407}
   - component: {fileID: 311262406}
   - component: {fileID: 311262405}
+  - component: {fileID: 311262408}
   m_Layer: 5
   m_Name: GetButton
   m_TagString: Untagged
@@ -16472,6 +16473,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 311262403}
   m_CullTransparentMesh: 1
+--- !u!114 &311262408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311262403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5212a5f167d1b7459a1481712e55041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _disablerInter: {fileID: 638939753}
 --- !u!1 &314247759
 GameObject:
   m_ObjectHideFlags: 0
@@ -32908,6 +32922,7 @@ GameObject:
   m_Component:
   - component: {fileID: 638939752}
   - component: {fileID: 638939753}
+  - component: {fileID: 638939754}
   m_Layer: 0
   m_Name: DisableInter6Hour
   m_TagString: Untagged
@@ -32944,6 +32959,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerLevel: {fileID: 1217972363}
   _buttonOpenDisableInterScreen: {fileID: 482702726}
+--- !u!114 &638939754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638939751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31f60dcf8fa0cb84e8c4d60f3e62f9e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _disablerInter: {fileID: 638939753}
+  _fillImage: {fileID: 154061227}
 --- !u!1001 &642766974
 PrefabInstance:
   m_ObjectHideFlags: 0

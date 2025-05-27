@@ -1,5 +1,4 @@
 using UI.Screens;
-using UnityEngine;
 
 namespace DisableInterContent
 {
