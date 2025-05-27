@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using ADSContent;
 using Io.AppMetrica;
 using PlayerContent.LevelContent;
@@ -16,6 +17,7 @@ namespace DisableInterContent
         [SerializeField] private OpenScreenButton _openScreenButton;
         [SerializeField] private DisablerInterTimer _disablerInterTimer;
         [SerializeField] private DisableInterViewer _disableInterViewer;
+        [SerializeField] private Animator _animator;
 
         private int _currentValueShowReward = 0;
         private bool _isActivateDisableInter = false;
@@ -39,9 +41,6 @@ namespace DisableInterContent
         private void Start()
         {
             Load();
-            SetValue(_playerLevel.CurrentLevel);
-            _openScreenButton.enabled = !_isActivateDisableInter;
-            CurrentValueChanged?.Invoke(_currentValueShowReward);
         }
 
         private void OnApplicationQuit()
@@ -59,11 +58,13 @@ namespace DisableInterContent
                 if (_currentValueShowReward >= 3)
                     _currentValueShowReward = 3;
 
+                Save();
                 CurrentValueChanged?.Invoke(_currentValueShowReward);
                 AppMetrica.ReportEvent("RewardAD", "{\"" + "RewardAD_removeInter" + "\":null}");
 
                 if (_currentValueShowReward > 2)
                 {
+                    SetAnimButton(false);
                     StartTimerDisableInter?.Invoke();
                     _isActivateDisableInter = true;
                     _openScreenButton.enabled = !_isActivateDisableInter;
@@ -75,6 +76,7 @@ namespace DisableInterContent
 
         public void Reset()
         {
+            SetAnimButton(true);
             _currentValueShowReward = 0;
             _isActivateDisableInter = false;
             _openScreenButton.enabled = !_isActivateDisableInter;
@@ -98,10 +100,23 @@ namespace DisableInterContent
 
             if (_currentValueShowReward > 2)
             {
+                SetAnimButton(false);
                 _disableInterViewer.ActivateTimer();
                 _isActivateDisableInter = true;
                 _openScreenButton.enabled = !_isActivateDisableInter;
             }
+
+            SetValue(_playerLevel.CurrentLevel);
+            _openScreenButton.enabled = !_isActivateDisableInter;
+            CurrentValueChanged?.Invoke(_currentValueShowReward);
+        }
+
+        private void SetAnimButton(bool value)
+        {
+            _animator.enabled = value;
+
+            if (!value)
+                _buttonOpenDisableInterScreen.transform.localScale = Vector3.one;
         }
     }
 }
