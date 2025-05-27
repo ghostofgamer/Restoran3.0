@@ -25,10 +25,24 @@ public static class AppMetricaActivator
     {
         if (PlayerPrefs.HasKey(_playerPrefsKey))
         {
+            return false;
+        }
+
+        // Если ключа нет - сохраняем и возвращаем true (первый запуск)
+        PlayerPrefs.SetInt(_playerPrefsKey, 1); // Используем числовое значение для ясности
+        PlayerPrefs.Save(); // Явное сохранение
+        return true;
+        
+        
+        
+        
+        
+        /*if (PlayerPrefs.HasKey(_playerPrefsKey))
+        {
             return true;
         }
 
         PlayerPrefs.SetString(_playerPrefsKey, string.Empty);
-        return false;
+        return false;*/
     }
 }

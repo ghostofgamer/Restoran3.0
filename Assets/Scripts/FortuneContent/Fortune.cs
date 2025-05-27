@@ -37,7 +37,7 @@ namespace FortuneContent
         [SerializeField] private SoundPlayer _soundPlayer;
         [SerializeField] private Button _openFortuneButton;
 
-        private int _currentValueSpin = 1;
+        private int _currentValueSpin = 0;
         private string filePath;
         private bool _isFreeButtonUsed = false;
 
