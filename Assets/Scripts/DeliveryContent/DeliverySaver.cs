@@ -27,11 +27,9 @@ namespace DeliveryContent
             if (hasFocus)
             {
                 LoadDeliveryData();
-               
             }
             else
             {
-               
                 SaveLastExitTime();
                 SaveDeliveryData();
             }
@@ -71,14 +69,10 @@ namespace DeliveryContent
             try
             {
                 if (!PlayerPrefs.HasKey(SavedItemsKey))
-                {
                     return;
-                }
 
                 string json = PlayerPrefs.GetString(SavedItemsKey);
                 var saveData = JsonUtility.FromJson<DeliverySaveData>(json);
-                
-               
                 
                 DateTime saveTime = DateTime.Parse(saveData.SaveTime).ToUniversalTime();
                 _delivery.Init(ConvertFromSaveData(saveData),saveData.RemainingTime,saveTime);

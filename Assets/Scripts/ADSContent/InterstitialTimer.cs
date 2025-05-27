@@ -18,6 +18,7 @@ namespace ADSContent
         private bool _showInter = true;
         private int adShowCount = 0;
         private bool _isPaused = false;
+        private bool _temporaryStopInters = false;
         
         private void Start()
         {
@@ -29,11 +30,11 @@ namespace ADSContent
 
         private void Update()
         {
+            if (_temporaryStopInters)
+                return;
+            
             if (!_showInter)
                 return;
-
-            /*if ((int)_tutorial.CurrentType < (int)TutorialType.TutorCompleted)
-                return;*/
 
             if (_isPaused)
                 return;
@@ -57,6 +58,11 @@ namespace ADSContent
         public void SetValue(bool value)
         {
             _showInter = value;
+        }
+
+        public void SetTemporaryIntersValue(bool value)
+        {
+            _temporaryStopInters = value;
         }
 
         private void ShowInterstitial()
