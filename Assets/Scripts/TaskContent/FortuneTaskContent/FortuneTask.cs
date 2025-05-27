@@ -27,7 +27,6 @@ namespace TaskContent
             foreach (var button in _buttons)
                 button.interactable = false;
             
-            _touchFortune.SetActive(true);
             _fortuneTaskScreen.OpenScreen();
         }
 
