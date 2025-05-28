@@ -37,13 +37,13 @@ namespace ItemContent
 
         public void RemoveBox(GameObject box)
         {
-            Debug.Log("ыфвфвфывфывфывфывфывфывфывфывфывфывфывфвфвф");
-
             if (box.TryGetComponent(out ItemBasket itemBasket))
                 _itemBaskets.Remove(itemBasket);
 
             if (box.TryGetComponent(out ItemDrinkPackage itemDrinkPackage))
                 _itemDrinkPackages.Remove(itemDrinkPackage);
+            
+            // _boxSaver.SaveData();
         }
 
         public void AddBox(GameObject box)
@@ -53,6 +53,8 @@ namespace ItemContent
 
             if (box.TryGetComponent(out ItemDrinkPackage itemDrinkPackage))
                 _itemDrinkPackages.Add(itemDrinkPackage);
+            
+            // _boxSaver.SaveData();
         }
 
         public ItemBasket GetItemBasketByType(ItemType itemType)

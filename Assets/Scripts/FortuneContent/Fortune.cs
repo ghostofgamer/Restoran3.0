@@ -36,8 +36,9 @@ namespace FortuneContent
         [SerializeField] private FortuneSpriteConfig _fortuneSpriteConfig;
         [SerializeField] private SoundPlayer _soundPlayer;
         [SerializeField] private Button _openFortuneButton;
+        [SerializeField] private GameObject _touchTaskFreeSpin;
 
-        private int _currentValueSpin = 0;
+        private int _currentValueSpin = 1;
         private string filePath;
         private bool _isFreeButtonUsed = false;
 
@@ -80,8 +81,12 @@ namespace FortuneContent
         private void Start()
         {
             ActivateOpenFortuneButton(_playerLevel.CurrentLevel);
+            
             _isFreeButtonUsed = PlayerPrefs.GetInt("FreeSpinUsed", 0) > 0;
+            
+            _touchTaskFreeSpin.SetActive(!_isFreeButtonUsed);
             _spinFreeButton.gameObject.SetActive(!_isFreeButtonUsed);
+            
             Debug.Log("_isFreeButtonUsed " + _isFreeButtonUsed);
 
             _dailyTimerFortune.UpdateInfo();
@@ -96,6 +101,7 @@ namespace FortuneContent
             _currentValueSpin += value;
             _dailyTimerFortune.UpdateInfo();
             _spinValueText.text = $"BALANCE: {_currentValueSpin.ToString()}";
+            _spinValueButton.SetActive(_currentValueSpin > 0);
             SaveSpinData();
         }
 
@@ -126,10 +132,15 @@ namespace FortuneContent
             if (_spinWheelController.IsStarted)
                 return;
 
-            SoundPlayer.Instance.PlayButtonClick();
+            SpinWheel();
+            _touchTaskFreeSpin.SetActive(false);
+            _spinFreeButton.gameObject.SetActive(false);
+            _spinValueButton.SetActive(_currentValueSpin > 0);
+            
+            /*SoundPlayer.Instance.PlayButtonClick();
             _dailyTimerFortune.StartButtonClick();
             FreeSpinDayCompleted?.Invoke();
-            Spin();
+            Spin();*/
         }
 
         public void SpinADS()
@@ -251,6 +262,20 @@ namespace FortuneContent
                 SpinData data = JsonUtility.FromJson<SpinData>(json);
                 _currentValueSpin = data.currentValueSpin;
                 Debug.Log("Загрузка " + data.currentValueSpin);
+            }
+        }
+        
+        [ContextMenu("DeleteSpinData")]
+        private void DeleteSpinData()
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+                Debug.Log("Сохраненные данные удалены.");
+            }
+            else
+            {
+                Debug.Log("Файл сохраненных данных не найден.");
             }
         }
     }

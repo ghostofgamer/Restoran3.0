@@ -26,12 +26,8 @@ namespace TaskContent
 
         private void ActivateTask(int levelPlayer)
         {
-            switch (levelPlayer)
-            {
-                case 3:
-                    StartFortuneTask();
-                    break;
-            }
+            if (levelPlayer >= 3)
+                StartFortuneTask();
         }
 
         private void StartFortuneTask()

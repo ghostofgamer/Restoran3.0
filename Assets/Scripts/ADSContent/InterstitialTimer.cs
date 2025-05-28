@@ -19,6 +19,7 @@ namespace ADSContent
         private int adShowCount = 0;
         private bool _isPaused = false;
         private bool _temporaryStopInters = false;
+        private float _nextCheckTime;
         
         private void Start()
         {
@@ -43,9 +44,20 @@ namespace ADSContent
 
             if (timer >= interval)
             {
-                ShowInterstitial();
+                if (_ads.IsInterstitialReady)
+                {
+                    ShowInterstitial();
+                    ResetTimer();
+                }
+                else if (Time.time >= _nextCheckTime)
+                {
+                    CheckAdReadiness();
+                    _nextCheckTime = Time.time + 5f; // Следующая проверка через 5 сек
+                }
+                
+                /*ShowInterstitial();
                 timer = 0f;
-                lastAdTime = DateTime.Now;
+                lastAdTime = DateTime.Now;*/
             }
         }
 
@@ -76,6 +88,25 @@ namespace ADSContent
                 _removeAdScreen.OpenScreen();
                 adShowCount = 0;
             }
+        }
+        
+        private void CheckAdReadiness()
+        {
+            if (_ads.IsInterstitialReady)
+            {
+                ShowInterstitial();
+                ResetTimer();
+            }
+            else if (timer >= interval + 60f) // Превысили максимальное время ожидания
+            {
+                ResetTimer(); // Сбрасываем, чтобы попробовать через 2 минуты
+            }
+        }
+        
+        private void ResetTimer()
+        {
+            timer = 0f;
+            lastAdTime = DateTime.Now;
         }
     }
 }

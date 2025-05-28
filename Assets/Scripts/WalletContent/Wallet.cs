@@ -93,7 +93,7 @@ namespace WalletContent
             }
             else
             {
-                DollarValue = new DollarValue(100, 10);
+                DollarValue = new DollarValue(25, 00);
             }
         }
 

@@ -26,7 +26,7 @@ namespace SaveContent
             SaveData();
         }
 
-        private void SaveData()
+        public void SaveData()
         {
             // Преобразуем данные коробок в формат для сохранения
             List<BoxData> boxesToSave = _boxesCounter.ItemBaskets
