@@ -19,6 +19,7 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private Transform _cameraCurrentPosition;
         [SerializeField] private Collider _collider;
         [SerializeField] private Collider[] _containerColliders;
+        [SerializeField] private AssemblyFromDeepFry _assemblyFromDeepFry;
 
         public event Action FriersAssemblyBeginig;
         
@@ -118,7 +119,7 @@ namespace KitchenEquipmentContent.FryerContent
         public void SetValueCollider(bool value)
         {
             _collider.enabled = value;
-            // _assemblyBurger.enabled = !value;
+            _assemblyFromDeepFry.enabled = !value;
 
             foreach (var containerCollidder in _containerColliders)
             {

@@ -21,6 +21,12 @@ namespace KitchenEquipmentContent.FryerContent
             return inactiveItems.Count;
         }
         
+        public int GetActiveValue()
+        {
+            List<GameObject> inactiveItems = _items.Where(p => p.gameObject.activeSelf).ToList();
+            return inactiveItems.Count;
+        }
+        
         public void ActivateItems(int value)
         {
             if (_items.Length <= 0)
