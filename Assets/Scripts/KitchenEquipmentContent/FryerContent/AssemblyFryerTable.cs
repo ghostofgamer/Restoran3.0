@@ -11,6 +11,7 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private FryerContainer[] _fryerContainers;
         [SerializeField] private FryerFrying _fryerFrying;
         [SerializeField] private FryerTool[] _fryerTools;
+        [SerializeField] private ItemContainer[] _itemContainersPackage;
 
         private void OnEnable()
         {
@@ -27,6 +28,35 @@ namespace KitchenEquipmentContent.FryerContent
         private void Action(PlayerInteraction playerInteraction)
         {
             Debug.Log("сборочный стол фритюрницы");
+
+            if (playerInteraction.CurrentDraggable != null)
+            {
+                Debug.Log("В руках есть");
+
+                ItemBasket itemBasket = playerInteraction.CurrentDraggable.GetComponent<ItemBasket>();
+
+                if (itemBasket != null)
+                {
+                    foreach (var itemContainer in _itemContainersPackage)
+                    {
+                        if (itemBasket.ItemType == itemContainer.CurrentItemContainer)
+                        {
+                            Debug.Log("Совпадение контенера и коробки по типу " + itemBasket.ItemType);
+
+                           int emptyPosContainer =  itemContainer.GetEmptyPosition();
+                           int activeItemBasket = itemBasket.GetActiveValueItems();
+
+                           if (emptyPosContainer > 0 && activeItemBasket > 0)
+                           {
+                               int itemsToPlace = Mathf.Min(emptyPosContainer, activeItemBasket);
+                               
+                               itemBasket.TransferProduct(itemsToPlace, itemContainer.Positions);
+                               itemContainer.ActivateItems(itemsToPlace);
+                           }
+                        }
+                    }
+                }
+            }
         }
 
         private void FillTable()

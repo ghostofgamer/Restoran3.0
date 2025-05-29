@@ -34,5 +34,7 @@ namespace Enums
     SodaPlum,
     FrenchFries,
     Nuggets,
+    FrenchFriesPackage,
+    NuggetsPackage,
   }
 }
