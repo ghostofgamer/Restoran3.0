@@ -16,9 +16,16 @@ namespace KitchenEquipmentContent.FryerContent
 
             if (compatibleTool != null)
             {
+                if (!compatibleTool.IsRaw)
+                {
+                    Debug.Log("лежат готовые фри");
+                    return;
+                }
+                
                 Debug.Log("Item type is compatible with fryer tool: " + compatibleTool.name);
                 int emptyPosition = compatibleTool.GetCountInactiveItems();
                 int activeItems = itemBasket.GetActiveValueItems();
+                Debug.Log("emptyPosition " + emptyPosition + " activeItems " + activeItems);
 
                 if (emptyPosition > 0 && activeItems > 0)
                 {
@@ -27,7 +34,7 @@ namespace KitchenEquipmentContent.FryerContent
                     Debug.Log("emptyPosition " + emptyPosition);
                     Debug.Log("activeItems " + activeItems);
 
-                    compatibleTool.ActivateItems(itemsToPlace);
+                    compatibleTool.ActivateRawItems(itemsToPlace);
                     itemBasket.TransferProduct(itemsToPlace, compatibleTool.Positions);
                     // targetContainer.ActivateItems(itemsToPlace);
                 }
@@ -38,7 +45,7 @@ namespace KitchenEquipmentContent.FryerContent
             }
         }
 
-        private FryerTool GetCompatibleFryerTool(ItemType itemType)
+        public FryerTool GetCompatibleFryerTool(ItemType itemType)
         {
             foreach (var fryerTool in _fryerTools)
             {
