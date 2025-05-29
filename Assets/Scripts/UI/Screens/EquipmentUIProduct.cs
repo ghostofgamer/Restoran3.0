@@ -25,7 +25,9 @@ namespace UI.Screens
         [SerializeField] private Color _activeButtonColor;
         [SerializeField] private Color _notActiveButtonColor;
         [SerializeField] private Image _buyButtonImage;
-
+        [SerializeField] private bool _dependsOnZone;
+        [SerializeField] private ZoneUIProduct _zoneUIProduct;
+        
         private bool _isOwned;
         private DollarValue _currentPrice;
 
@@ -33,12 +35,14 @@ namespace UI.Screens
         {
             _isOwned = IsBuyed();
             _currentPrice = new DollarValue(_dollarPrice, _centPrice);
-            _requaredText.text = $"Required  is {_levelOpened} level";
+
+            Initialization(levelPlayer);
+            /*_requaredText.text = $"Required  is {_levelOpened} level";
             _priceText.text = $"{_currentPrice.ToString()} ";
             
             _requaredObjectInfo.SetActive(levelPlayer < _levelOpened && !_isOwned);
             _ownedObjectInfo.SetActive(levelPlayer >= _levelOpened && _isOwned);
-            _buyObjectInfo.SetActive(levelPlayer >= _levelOpened && !_isOwned);
+            _buyObjectInfo.SetActive(levelPlayer >= _levelOpened && !_isOwned);*/
             
             _buyButtonImage.color = _wallet.DollarValue.ToTotalCents() >= _currentPrice.ToTotalCents()
                 ? _activeButtonColor
@@ -68,6 +72,36 @@ namespace UI.Screens
         public bool IsBuyed()
         {
             return PlayerPrefs.GetInt(Equipment + _levelOpened, 0) > 0;
+        }
+
+        private void Initialization(int levelPlayer)
+        {
+            Debug.Log("!!!!!!!!!!!!!!!! 1"+ _levelOpened);
+            
+            if (_dependsOnZone)
+            {
+                Debug.Log("!!!!!!!!!!!!!!!! 3"+ _levelOpened);
+                _requaredText.text = $"Required  is kitchen Zone";
+                _priceText.text = $"{_currentPrice.ToString()} ";
+
+                if (_zoneUIProduct != null)
+                {
+                    Debug.Log("!!!!!!!!!!!!!!!! 5"+ _levelOpened);
+                    _requaredObjectInfo.SetActive(!_zoneUIProduct.IsBuyed() && !_isOwned);
+                    _ownedObjectInfo.SetActive(_zoneUIProduct.IsBuyed() && _isOwned);
+                    _buyObjectInfo.SetActive(_zoneUIProduct.IsBuyed() && !_isOwned);
+                }
+            }
+            else
+            {
+                Debug.Log("!!!!!!!!!!!!!!!! 6 " + _levelOpened);
+                _requaredText.text = $"Required  is {_levelOpened} level";
+                _priceText.text = $"{_currentPrice.ToString()} ";
+
+                _requaredObjectInfo.SetActive(levelPlayer < _levelOpened && !_isOwned);
+                _ownedObjectInfo.SetActive(levelPlayer >= _levelOpened && _isOwned);
+                _buyObjectInfo.SetActive(levelPlayer >= _levelOpened && !_isOwned);
+            }
         }
     }
 }
