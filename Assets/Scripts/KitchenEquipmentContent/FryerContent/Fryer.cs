@@ -1,4 +1,3 @@
-using Enums;
 using InteractableContent;
 using PlayerContent;
 using UI.Screens;
@@ -12,6 +11,7 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private GameObject[] _friersContentTables;
         [SerializeField] private EquipmentUIProduct _equipmentUIProduct;
         [SerializeField] private FryerPacking _fryerPacking;
+        [SerializeField] private FryerFrying _fryerFrying;
         
         private void OnEnable()
         {
@@ -29,17 +29,12 @@ namespace KitchenEquipmentContent.FryerContent
                 friersContentTable.SetActive(_equipmentUIProduct.IsBuyed());
         }
 
-        public void Action(PlayerInteraction playerInteraction)
+        private void Action(PlayerInteraction playerInteraction)
         {
             if (playerInteraction.CurrentDraggable != null)
-            {
-                Debug.Log("в РУКАХ ЧТОТО ЕСТЬ ");
                 _fryerPacking.Packing(playerInteraction.CurrentDraggable.GetComponent<ItemBasket>());
-            }
             else
-            {
-                Debug.Log("в РУКАХ ПУСТО ");
-            }
+                _fryerFrying.Fry();
         }
     }
 }
