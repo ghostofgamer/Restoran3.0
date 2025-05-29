@@ -1,4 +1,5 @@
 using KitchenEquipmentContent;
+using KitchenEquipmentContent.FryerContent;
 using RestaurantContent.CashRegisterContent;
 using UI.Screens.AssemblyScreens;
 using UnityEngine;
@@ -15,6 +16,8 @@ namespace UI.Screens
         [SerializeField] private AssemblyDrinkTable _assemblySodaTable;
         [SerializeField] private AssemblyCashRegisterOrderScreen _assemblyCashRegisterOrderScreen;
         [SerializeField] private CashRegister _cashRegister;
+        [SerializeField] private AssemblyFryerTable _assemblyFryerTable;
+        [SerializeField] private AssemblyFryerScreen _assemblyFryerScreen;
 
         private void OnEnable()
         {
@@ -23,6 +26,7 @@ namespace UI.Screens
             _assemblySodaTable.DrinkAssemblyBeginig += OpenAssemblySodaScreen;
             _cashRegister.CashRegisterAssemblyBeginig += OpenCashRegisterOrderScreen;
             _cashRegister.CashRegisterOrderCompleted += CloseCashRegisterScreen;
+            _assemblyFryerTable.FriersAssemblyBeginig += OpenAssemblyFryerScreen;
         }
 
         private void OnDisable()
@@ -32,6 +36,7 @@ namespace UI.Screens
             _assemblySodaTable.DrinkAssemblyBeginig -= OpenAssemblySodaScreen;
             _cashRegister.CashRegisterAssemblyBeginig -= OpenCashRegisterOrderScreen;
             _cashRegister.CashRegisterOrderCompleted -= CloseCashRegisterScreen;
+            _assemblyFryerTable.FriersAssemblyBeginig -= OpenAssemblyFryerScreen;
         }
 
         private void OpenAssemblyBurgerScreen()
@@ -57,6 +62,11 @@ namespace UI.Screens
         private void CloseCashRegisterScreen()
         {
             _assemblyCashRegisterOrderScreen.CloseScreen();
+        }
+        
+        private void OpenAssemblyFryerScreen()
+        {
+            _assemblyFryerScreen.OpenScreen();
         }
     }
 }
