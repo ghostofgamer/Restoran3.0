@@ -86,6 +86,8 @@ namespace KitchenEquipmentContent.FryerContent
             itemInstance.transform.position = _centerPos.position;
             itemInstance.transform.rotation = Quaternion.identity;
             
+            itemContainer.DeactivateItems(1);
+            fryerContainer.DeactivateItems(1);
             _playerLevel.AddExp(5);
             
             Sequence sequence = DOTween.Sequence();

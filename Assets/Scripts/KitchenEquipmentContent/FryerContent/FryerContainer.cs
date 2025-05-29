@@ -43,5 +43,24 @@ namespace KitchenEquipmentContent.FryerContent
             /*List<Item> activeItems = _items.Where(p => p.gameObject.activeSelf).ToList();
             ItemsActiveCountChanged?.Invoke(activeItems.Count);*/
         }
+        
+        public void DeactivateItems(int value)
+        {
+            if (_items == null)
+            {
+                Debug.LogError("_items array is not initialized.");
+                return;
+            }
+
+            List<GameObject> inactiveItems = _items.Where(p => p.gameObject.activeSelf).ToList();
+
+            for (int i = inactiveItems.Count - 1; i >= inactiveItems.Count - value && i >= 0; i--)
+            {
+                inactiveItems[i].gameObject.SetActive(false);
+            }
+
+            /*List<Item> activeItems = _items.Where(p => p.gameObject.activeSelf).ToList();
+            ItemsActiveCountChanged?.Invoke(activeItems.Count);*/
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private AssemblyFryerTable _assemblyFryerTable;
         [SerializeField] private FryerContainer[] _fryerContainers;
         [SerializeField] private FryerPacking _fryerPacking;
+        [SerializeField] private Collider _collider;
 
         private Coroutine _coroutine;
         private List<FryerTool> _fryerTools = new List<FryerTool>();
@@ -20,7 +21,6 @@ namespace KitchenEquipmentContent.FryerContent
         public void Fry()
         {
             Debug.Log("Жарить");
-
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
@@ -29,6 +29,8 @@ namespace KitchenEquipmentContent.FryerContent
 
         private IEnumerator StartFry()
         {
+            _collider.enabled = false;
+            
             foreach (var fryerContainer in _fryerContainers)
             {
                 Debug.Log("В контейнере пустых мест " + fryerContainer.GetInactiveValue() + " ??? " +
@@ -41,6 +43,7 @@ namespace KitchenEquipmentContent.FryerContent
             yield return new WaitForSeconds(4f);
             Debug.Log("закончили жарить ");
             FryCompleted?.Invoke();
+            _collider.enabled = true;
         }
 
         private void SelectFryerTool(ItemType itemType)
