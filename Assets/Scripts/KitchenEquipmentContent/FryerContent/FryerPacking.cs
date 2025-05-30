@@ -57,5 +57,18 @@ namespace KitchenEquipmentContent.FryerContent
 
             return null;
         }
+        
+        public int GetFullTools()
+        {
+            int value = 0;
+            
+            foreach (var fryerTool in _fryerTools)
+            {
+                if (fryerTool.GetCountActiveItems()>0)
+                    value++;
+            }
+
+            return value;
+        }
     }
 }

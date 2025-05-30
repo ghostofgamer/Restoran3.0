@@ -20,13 +20,37 @@ namespace KitchenEquipmentContent.FryerContent
         
         public void Fry()
         {
+            if (_fryerPacking.GetFullTools() <= 0)
+            {
+                Debug.Log("нечего жарить ");
+                return;
+            }
+                
+            int value = 0;
+            
+            foreach (var fryerContainer in _fryerContainers)
+            {
+                Debug.Log("В контейнере пустых мест " + fryerContainer.GetInactiveValue() + " ??? " +
+                          fryerContainer.ItemType);
+
+                if (fryerContainer.GetInactiveValue() > 0)
+                    value++;
+            }
+
+            if (value <= 0)
+            {
+                Debug.Log("нету мест в контейнере");
+                return;
+            }
+            
             Debug.Log("Жарить");
+            
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
             _coroutine = StartCoroutine(StartFry());
         }
-
+        
         private IEnumerator StartFry()
         {
             _collider.enabled = false;

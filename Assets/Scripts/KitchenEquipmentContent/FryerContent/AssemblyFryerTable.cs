@@ -35,6 +35,11 @@ namespace KitchenEquipmentContent.FryerContent
             _fryerFrying.FryCompleted -= FillTable;
         }
 
+        private void Start()
+        {
+            FillTable();
+        }
+
         private void Action(PlayerInteraction playerInteraction)
         {
             Debug.Log("сборочный стол фритюрницы");
@@ -76,7 +81,7 @@ namespace KitchenEquipmentContent.FryerContent
             }
         }
 
-        private void FillTable()
+        public void FillTable()
         {
             Debug.Log("Пробуем пополнить стол ингриидиентами");
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enums;
@@ -10,11 +11,13 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private GameObject[] _items;
         [SerializeField] private ItemType _itemType;
         [SerializeField] private Transform[] _positions;
-
+        
+        public event Action<int> ItemArrayValueChanged;
+        
         public GameObject[] Items => _items;
 
         public ItemType ItemType => _itemType;
-
+        
         public int GetInactiveValue()
         {
             List<GameObject> inactiveItems = _items.Where(p => !p.gameObject.activeSelf).ToList();
@@ -40,8 +43,7 @@ namespace KitchenEquipmentContent.FryerContent
             for (int i = 0; i < value; i++)
                 inactiveItems[i].gameObject.SetActive(true);
 
-            /*List<Item> activeItems = _items.Where(p => p.gameObject.activeSelf).ToList();
-            ItemsActiveCountChanged?.Invoke(activeItems.Count);*/
+            ItemArraysValueChanged();
         }
         
         public void DeactivateItems(int value)
@@ -55,12 +57,15 @@ namespace KitchenEquipmentContent.FryerContent
             List<GameObject> inactiveItems = _items.Where(p => p.gameObject.activeSelf).ToList();
 
             for (int i = inactiveItems.Count - 1; i >= inactiveItems.Count - value && i >= 0; i--)
-            {
                 inactiveItems[i].gameObject.SetActive(false);
-            }
 
-            /*List<Item> activeItems = _items.Where(p => p.gameObject.activeSelf).ToList();
-            ItemsActiveCountChanged?.Invoke(activeItems.Count);*/
+            ItemArraysValueChanged();
+        }
+        
+        private void ItemArraysValueChanged()
+        {
+            List<GameObject> activeWell = _items.Where(p => p.gameObject.activeSelf).ToList();
+            ItemArrayValueChanged?.Invoke(activeWell.Count);
         }
     }
 }

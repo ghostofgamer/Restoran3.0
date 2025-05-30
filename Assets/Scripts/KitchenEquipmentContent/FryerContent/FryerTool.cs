@@ -15,6 +15,8 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private int _maxCount;
         [SerializeField] private FryerToolMover _fryerToolMover;
 
+        public event Action<int, int> ItemsValueChanged;
+
         public Transform[] Positions => _positions;
 
         public ItemType ItemType => _itemType;
@@ -22,6 +24,18 @@ namespace KitchenEquipmentContent.FryerContent
         public bool IsFull { get; private set; }
 
         public bool IsRaw { get; private set; } = true;
+
+        public void Init(int rawCount, int wellCount)
+        {
+            AllRawItemsDeactivate();
+            AllWellItemsDeactivate();
+
+            if (rawCount > 0)
+                ActivateRawItems(rawCount);
+
+            if (wellCount > 0)
+                ActivateWellItems(wellCount);
+        }
 
         public int GetCountActiveItems()
         {
@@ -45,12 +59,18 @@ namespace KitchenEquipmentContent.FryerContent
         {
             foreach (var rawItemObject in _rawItemObjects)
                 rawItemObject.SetActive(false);
+
+            ItemArraysValueChanged();
         }
 
         public void AllWellItemsDeactivate()
         {
-            foreach (var rawItemObject in _wellItemObjects)
-                rawItemObject.SetActive(false);
+            foreach (var wellItemObject in _wellItemObjects)
+                wellItemObject.SetActive(false);
+
+            IsRaw = true;
+
+            ItemArraysValueChanged();
         }
 
         public void ActivateRawItems(int value)
@@ -65,6 +85,8 @@ namespace KitchenEquipmentContent.FryerContent
 
             for (int i = 0; i < value; i++)
                 inactiveItems[i].gameObject.SetActive(true);
+
+            ItemArraysValueChanged();
 
             /*List<GameObject> activeItems = itemObjects.Where(p => p.gameObject.activeSelf).ToList();
             if()*/
@@ -83,32 +105,58 @@ namespace KitchenEquipmentContent.FryerContent
                 _wellItemObjects[i].SetActive(true);
 
             IsRaw = false;
+
+            ItemArraysValueChanged();
         }
 
-        public void DeactivateAllWellItems()
+        public void ActivateWellItems(int value)
         {
-            foreach (var wellItemObject in _wellItemObjects)
-                wellItemObject.SetActive(false);
+            for (int i = 0; i < value; i++)
+                _wellItemObjects[i].SetActive(true);
 
-            IsRaw = true;
+            IsRaw = false;
+
+            ItemArraysValueChanged();
         }
 
         public void DeactivateWellItems(int value)
         {
             List<GameObject> activeItems = _wellItemObjects.Where(p => p.gameObject.activeSelf).ToList();
+            
+            for (int i = activeItems.Count - 1; i >= 0 && value > 0; i--, value--)
+                activeItems[i].gameObject.SetActive(false);
+
+            List<GameObject> active = _wellItemObjects.Where(p => p.gameObject.activeSelf).ToList();
+
+            if (active.Count <= 0)
+                IsRaw = true;
+
+            ItemArraysValueChanged();
+            
+            /*List<GameObject> activeItems = _wellItemObjects.Where(p => p.gameObject.activeSelf).ToList();
 
             for (int i = 0; i < value; i++)
                 activeItems[i].gameObject.SetActive(false);
 
             List<GameObject> active = _wellItemObjects.Where(p => p.gameObject.activeSelf).ToList();
-            
+
             if (active.Count <= 0)
                 IsRaw = true;
+
+            ItemArraysValueChanged();*/
         }
 
         public void MoveFrying()
         {
             _fryerToolMover.MoveFrying();
+        }
+
+        private void ItemArraysValueChanged()
+        {
+            List<GameObject> activeRaw = _rawItemObjects.Where(p => p.gameObject.activeSelf).ToList();
+            List<GameObject> activeWell = _wellItemObjects.Where(p => p.gameObject.activeSelf).ToList();
+
+            ItemsValueChanged?.Invoke(activeRaw.Count, activeWell.Count);
         }
     }
 }

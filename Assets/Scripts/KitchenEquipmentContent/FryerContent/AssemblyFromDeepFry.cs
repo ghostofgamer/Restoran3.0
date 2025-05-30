@@ -11,6 +11,7 @@ namespace KitchenEquipmentContent.FryerContent
 {
     public class AssemblyFromDeepFry : MonoBehaviour
     {
+        [SerializeField] private AssemblyFryerTable _assemblyFryerTable;
         [SerializeField] private FryerContainer[] _fryerContainers;
         [SerializeField] private Transform[] _itemWellPositions;
         [SerializeField] private Transform _centerPos;
@@ -46,6 +47,15 @@ namespace KitchenEquipmentContent.FryerContent
 
                         ItemType itemType = selectedContainer.ItemType;
 
+                        int valuePackage = selectedContainer.ItemContainer.GetActiveItemsValue();
+                        Debug.Log("активных упаковок : " + valuePackage);
+                        
+                        if (valuePackage <= 0)
+                        {
+                            Debug.Log("не хватате упаковок : ");
+                            return;
+                        }
+
                         foreach (var _fryerContainer in _fryerContainers)
                         {
                             if (_fryerContainer.ItemType == itemType)
@@ -67,31 +77,31 @@ namespace KitchenEquipmentContent.FryerContent
             Debug.Log("activeItemContainers  " + activeItemContainers);
             if (activeItemContainers <= 0)
                 return;
-            
+
             GameObject itemPrefab = _itemPrefabPairs.FirstOrDefault(pair => pair.Type == itemType)?.Prefab;
 
             if (itemPrefab == null)
                 return;
             Debug.Log("itemPrefab  " + itemPrefab);
-            
+
             Transform availablePosition = _itemWellPositions.FirstOrDefault(position => position.childCount == 0);
             Debug.Log("Позиций пустых для готовых " + availablePosition);
 
             if (availablePosition == null)
                 return;
-            
+
             Item itemInstance = _burgerIngridientSpawner.SpawnItem(itemType);
             itemInstance.SetParenContainer(_burgerIngridientSpawner.transform);
             itemInstance.gameObject.SetActive(true);
             itemInstance.transform.position = _centerPos.position;
             itemInstance.transform.rotation = Quaternion.identity;
-            
+
             itemContainer.DeactivateItems(1);
             fryerContainer.DeactivateItems(1);
             _playerLevel.AddExp(5);
-            
+
             Sequence sequence = DOTween.Sequence();
-            
+
             sequence.Append(itemInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
             sequence.Append(itemInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
             sequence.Append(itemInstance.transform.DOMove(availablePosition.position, 0.5f)
@@ -102,6 +112,8 @@ namespace KitchenEquipmentContent.FryerContent
             sequence.Join(itemInstance.transform
                 .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
                 .SetEase(Ease.Linear));
+
+            _assemblyFryerTable.FillTable();
             // .OnComplete(() => _burgersCounter.AddBurger(itemInstance));
         }
     }
