@@ -16,6 +16,7 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private Transform[] _itemWellPositions;
         [SerializeField] private Transform _centerPos;
         [SerializeField] private PlayerLevel _playerLevel;
+        [SerializeField] private DeepFryerItemCounter _deepFryerItemCounter;
 
         [FormerlySerializedAs("_burgerPrefabPairs")] [SerializeField]
         private List<ItemPrefabPair> _itemPrefabPairs = new List<ItemPrefabPair>();
@@ -95,7 +96,8 @@ namespace KitchenEquipmentContent.FryerContent
             itemInstance.gameObject.SetActive(true);
             itemInstance.transform.position = _centerPos.position;
             itemInstance.transform.rotation = Quaternion.identity;
-
+            
+            _deepFryerItemCounter.AddItem(itemInstance);
             itemContainer.DeactivateItems(1);
             fryerContainer.DeactivateItems(1);
             _playerLevel.AddExp(5);
@@ -115,6 +117,18 @@ namespace KitchenEquipmentContent.FryerContent
 
             _assemblyFryerTable.FillTable();
             // .OnComplete(() => _burgersCounter.AddBurger(itemInstance));
+        }
+
+        public void SimpleCreatItem(ItemType itemType)
+        {
+            Transform availablePosition = _itemWellPositions.FirstOrDefault(position => position.childCount == 0);
+            Item itemInstance = _burgerIngridientSpawner.SpawnItem(itemType);
+            itemInstance.gameObject.SetActive(true);
+            itemInstance.transform.SetParent(availablePosition);
+            itemInstance.transform.position = availablePosition.position;
+            itemInstance.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            itemInstance.transform.localScale = Vector3.one;
+            _deepFryerItemCounter.AddItem(itemInstance);
         }
     }
 }

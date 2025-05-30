@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using CameraContent;
 using Enums;
 using InteractableContent;
@@ -20,9 +22,10 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private Collider _collider;
         [SerializeField] private Collider[] _containerColliders;
         [SerializeField] private AssemblyFromDeepFry _assemblyFromDeepFry;
+        [SerializeField] private DeepFryerCounterSaver _deepFryerCounterSaver;
 
         public event Action FriersAssemblyBeginig;
-        
+
         private void OnEnable()
         {
             _interactableObject.OnAction += Action;
@@ -37,6 +40,26 @@ namespace KitchenEquipmentContent.FryerContent
 
         private void Start()
         {
+            List<ItemType> itemTypes = _deepFryerCounterSaver.LoadItemTypesFromIndices();
+
+            if (itemTypes.Count > 0)
+                LoadWellItems(itemTypes.Count, itemTypes);
+            else
+                FillTable();
+        }
+
+        private void LoadWellItems(int value, List<ItemType> itemType)
+        {
+            StartCoroutine(StartLoad(value, itemType));
+        }
+
+        private IEnumerator StartLoad(int value, List<ItemType> itemType)
+        {
+            yield return new WaitForSeconds(0.3f);
+
+            for (int i = 0; i < value; i++)
+                _assemblyFromDeepFry.SimpleCreatItem(itemType[i]);
+
             FillTable();
         }
 
@@ -120,7 +143,7 @@ namespace KitchenEquipmentContent.FryerContent
 
             return null;
         }
-        
+
         public void SetValueCollider(bool value)
         {
             _collider.enabled = value;
