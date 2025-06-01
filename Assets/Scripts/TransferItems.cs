@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TransferItems : MonoBehaviour
 {
-    public void TransferListItems(int value,GameObject[] objects,Transform[] targetPositions,Action callback)
+    public void TransferJumpListItems(int value, GameObject[] objects, Transform[] targetPositions, Action callback)
     {
         Debug.Log("VALUE " + value);
         Debug.Log("objects " + objects.Length);
@@ -22,24 +22,23 @@ public class TransferItems : MonoBehaviour
         for (int i = 0; i < value; i++)
         {
             int index = i;
-            
-            if (index < activeItems.Count && index < targetPositions.Length)
+
+            /*if (index < activeItems.Count && index < targetPositions.Length)
             {
                 sequence.Join(activeItems[index].transform.DOMove(targetPositions[index].position, 1f)
                     .SetEase(Ease.InOutQuad));
+            }*/
+
+            if (index < activeItems.Count && index < targetPositions.Length)
+            {
+                sequence.Join(activeItems[index].transform.DOJump(
+                    targetPositions[index].position, 1.65f, 1, 1f).SetEase(Ease.InOutQuad));
             }
         }
 
-        sequence.OnComplete(() =>
-        {
-            /*foreach (var item in activeItems)
-                item.transform.localPosition = Vector3.zero;*/
-            
-            callback?.Invoke();
-        });
-        
-        
-        
+        sequence.OnComplete(() => { callback?.Invoke(); });
+
+
         /*List<GameObject> activeItems = objects.Where(p => p.activeSelf).ToList();
 
         if (value > activeItems.Count)
@@ -57,24 +56,10 @@ public class TransferItems : MonoBehaviour
                     callback?.Invoke();
                 });
         }*/
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
         /*Sequence sequence = DOTween.Sequence();
-        
+
         sequence.Append(currentObject.transform.DOMove(targetPos.position, 0.5f)
             .SetEase(Ease.InOutQuad));
 

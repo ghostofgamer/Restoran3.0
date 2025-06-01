@@ -41,11 +41,11 @@ namespace KitchenEquipmentContent.FryerContent
 
         private void Start()
         {
-            List<ItemType> itemTypes = _deepFryerCounterSaver.LoadItemTypesFromIndices();
+            /*List<ItemType> itemTypes = _deepFryerCounterSaver.LoadItemTypesFromIndices();
 
             if (itemTypes.Count > 0)
                 LoadWellItems(itemTypes.Count, itemTypes);
-            else
+            else*/
                 FillTable();
         }
 
@@ -125,7 +125,7 @@ namespace KitchenEquipmentContent.FryerContent
                             int itemsToPlace = Mathf.Min(emptyContainerPosition, valueFryerTool);
                             Debug.Log("Меньшее число  " + itemsToPlace);
                             
-                            _transferItems.TransferListItems(itemsToPlace,fryerTool.WellItems,fryerContainer.Positions,
+                            _transferItems.TransferJumpListItems(itemsToPlace,fryerTool.WellItems,fryerContainer.Positions,
                                 () =>
                                 {
                                     Debug.Log("itemsToPlace");
