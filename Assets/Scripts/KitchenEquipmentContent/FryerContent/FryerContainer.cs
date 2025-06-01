@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Enums;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace KitchenEquipmentContent.FryerContent
 {
@@ -10,26 +11,28 @@ namespace KitchenEquipmentContent.FryerContent
     {
         [SerializeField] private GameObject[] _items;
         [SerializeField] private ItemType _itemType;
-        [SerializeField] private Transform[] _positions;
-        
+        [FormerlySerializedAs("_positions")] [SerializeField] private Transform[] positionses;
+
         public event Action<int> ItemArrayValueChanged;
-        
+
+        public Transform[] Positions => positionses;
+
         public GameObject[] Items => _items;
 
         public ItemType ItemType => _itemType;
-        
+
         public int GetInactiveValue()
         {
             List<GameObject> inactiveItems = _items.Where(p => !p.gameObject.activeSelf).ToList();
             return inactiveItems.Count;
         }
-        
+
         public int GetActiveValue()
         {
             List<GameObject> inactiveItems = _items.Where(p => p.gameObject.activeSelf).ToList();
             return inactiveItems.Count;
         }
-        
+
         public void ActivateItems(int value)
         {
             if (_items.Length <= 0)
@@ -45,7 +48,7 @@ namespace KitchenEquipmentContent.FryerContent
 
             ItemArraysValueChanged();
         }
-        
+
         public void DeactivateItems(int value)
         {
             if (_items == null)
@@ -61,7 +64,7 @@ namespace KitchenEquipmentContent.FryerContent
 
             ItemArraysValueChanged();
         }
-        
+
         private void ItemArraysValueChanged()
         {
             List<GameObject> activeWell = _items.Where(p => p.gameObject.activeSelf).ToList();

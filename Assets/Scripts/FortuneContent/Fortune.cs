@@ -129,24 +129,31 @@ namespace FortuneContent
 
         public void SpinFree()
         {
-            if (_spinWheelController.IsStarted)
-                return;
-
             SpinWheel();
+            
+            if (!_isFreeButtonUsed)
+            {
+                AppMetrica.ReportEvent("TaskFortuna");
+                FreeSpinUsed?.Invoke();
+                PlayerPrefs.SetInt("FreeSpinUsed", 1);
+            }
+            
             _touchTaskFreeSpin.SetActive(false);
             _spinFreeButton.gameObject.SetActive(false);
             _spinValueButton.SetActive(_currentValueSpin > 0);
-            
-            /*SoundPlayer.Instance.PlayButtonClick();
-            _dailyTimerFortune.StartButtonClick();
-            FreeSpinDayCompleted?.Invoke();
-            Spin();*/
         }
 
         public void SpinADS()
         {
             if (_spinWheelController.IsStarted)
                 return;
+            
+            if (!_isFreeButtonUsed)
+            {
+                AppMetrica.ReportEvent("TaskFortuna");
+                FreeSpinUsed?.Invoke();
+                PlayerPrefs.SetInt("FreeSpinUsed", 1);
+            }
 
             SoundPlayer.Instance.PlayButtonClick();
             _dailyTimerADSFortune.StartButtonClick();
@@ -220,12 +227,12 @@ namespace FortuneContent
             /*_backWinText.SetActive(true);
             _prizeText.text = $"You Win: + {prize.Value}  {prize.Type.ToString()}";*/
 
-            if (!_isFreeButtonUsed)
+            /*if (!_isFreeButtonUsed)
             {
                 AppMetrica.ReportEvent("TaskFortuna");
                 FreeSpinUsed?.Invoke();
                 PlayerPrefs.SetInt("FreeSpinUsed", 1);
-            }
+            }*/
 
             _fortuneScreen.OpenPopupPrize(_fortuneSpriteConfig.GetSpriteByType(prize.Type), prize.Value);
             _soundPlayer.PlayFortunePrize();

@@ -17,6 +17,8 @@ namespace KitchenEquipmentContent.FryerContent
 
         public event Action<int, int> ItemsValueChanged;
 
+        public GameObject[] WellItems => _wellItemObjects;
+
         public Transform[] Positions => _positions;
 
         public ItemType ItemType => _itemType;
@@ -122,7 +124,7 @@ namespace KitchenEquipmentContent.FryerContent
         public void DeactivateWellItems(int value)
         {
             List<GameObject> activeItems = _wellItemObjects.Where(p => p.gameObject.activeSelf).ToList();
-            
+
             for (int i = activeItems.Count - 1; i >= 0 && value > 0; i--, value--)
                 activeItems[i].gameObject.SetActive(false);
 
@@ -132,18 +134,6 @@ namespace KitchenEquipmentContent.FryerContent
                 IsRaw = true;
 
             ItemArraysValueChanged();
-            
-            /*List<GameObject> activeItems = _wellItemObjects.Where(p => p.gameObject.activeSelf).ToList();
-
-            for (int i = 0; i < value; i++)
-                activeItems[i].gameObject.SetActive(false);
-
-            List<GameObject> active = _wellItemObjects.Where(p => p.gameObject.activeSelf).ToList();
-
-            if (active.Count <= 0)
-                IsRaw = true;
-
-            ItemArraysValueChanged();*/
         }
 
         public void MoveFrying()
@@ -157,6 +147,15 @@ namespace KitchenEquipmentContent.FryerContent
             List<GameObject> activeWell = _wellItemObjects.Where(p => p.gameObject.activeSelf).ToList();
 
             ItemsValueChanged?.Invoke(activeRaw.Count, activeWell.Count);
+        }
+
+        public void ResetPosition()
+        {
+            foreach (var item in _wellItemObjects)
+                item.transform.localPosition = Vector3.zero;
+            
+            foreach (var item in _rawItemObjects)
+                item.transform.localPosition = Vector3.zero;
         }
     }
 }

@@ -23,6 +23,7 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private Collider[] _containerColliders;
         [SerializeField] private AssemblyFromDeepFry _assemblyFromDeepFry;
         [SerializeField] private DeepFryerCounterSaver _deepFryerCounterSaver;
+        [SerializeField] private TransferItems _transferItems;
 
         public event Action FriersAssemblyBeginig;
 
@@ -87,7 +88,6 @@ namespace KitchenEquipmentContent.FryerContent
                             if (emptyPosContainer > 0 && activeItemBasket > 0)
                             {
                                 int itemsToPlace = Mathf.Min(emptyPosContainer, activeItemBasket);
-
                                 itemBasket.TransferProduct(itemsToPlace, itemContainer.Positions);
                                 itemContainer.ActivateItems(itemsToPlace);
                             }
@@ -124,9 +124,18 @@ namespace KitchenEquipmentContent.FryerContent
                             Debug.Log("Пустых мест в контейнере " + emptyContainerPosition);
                             int itemsToPlace = Mathf.Min(emptyContainerPosition, valueFryerTool);
                             Debug.Log("Меньшее число  " + itemsToPlace);
-
-                            fryerContainer.ActivateItems(itemsToPlace);
-                            fryerTool.DeactivateWellItems(itemsToPlace);
+                            
+                            _transferItems.TransferListItems(itemsToPlace,fryerTool.WellItems,fryerContainer.Positions,
+                                () =>
+                                {
+                                    Debug.Log("itemsToPlace");
+                                    fryerContainer.ActivateItems(itemsToPlace);
+                                    fryerTool.ResetPosition();
+                                    fryerTool.DeactivateWellItems(itemsToPlace);
+                                });
+                            
+                            // fryerContainer.ActivateItems(itemsToPlace);
+                            // fryerTool.DeactivateWellItems(itemsToPlace);
                         }
                     }
                 }

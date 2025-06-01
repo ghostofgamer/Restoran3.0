@@ -1,11 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using Enums;
 using ItemContent;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SaveContent
@@ -13,8 +9,6 @@ namespace SaveContent
     public class BoxSaver : MonoBehaviour
     {
         [SerializeField] private BoxesCounter _boxesCounter;
-
-        private List<ItemType> _itemBaskets = new List<ItemType>();
 
         private void Start()
         {
@@ -89,41 +83,6 @@ namespace SaveContent
                 Debug.Log("No saved data found.");
             }
         }
-
-
-        /*private void SaveDate()
-        {
-            int[] combinedIndices = _boxesCounter.ItemBaskets.Select(item => (int)item.ItemType).ToArray();
-
-            string combinedIndicesString = string.Join(",", combinedIndices);
-
-            /*int[] combinedIndices = itemBasketList.Select(item => (int)item.ItemType)
-                .Concat(itemDrinkList.Select(item => (int)item.ItemType))
-                .ToArray();#1#
-
-            // string combinedIndicesString = string.Join(",", combinedIndices);
-
-            PlayerPrefs.SetString("combinedBoxesIndices", combinedIndicesString);
-            PlayerPrefs.Save();
-        }
-
-        public List<ItemType> LoadData()
-        {
-            string combinedIndicesString = PlayerPrefs.GetString("combinedBoxesIndices", "");
-
-            if (!string.IsNullOrEmpty(combinedIndicesString))
-            {
-                string[] indicesArray = combinedIndicesString.Split(',');
-                int[] indices = Array.ConvertAll(indicesArray, int.Parse);
-
-                foreach (var index in indices)
-                    _itemBaskets.Add((ItemType)index);
-
-                return _itemBaskets;
-            }
-
-            return new List<ItemType>();
-        }*/
     }
 
     [System.Serializable]
