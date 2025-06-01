@@ -41,11 +41,11 @@ namespace KitchenEquipmentContent.FryerContent
 
         private void Start()
         {
-            /*List<ItemType> itemTypes = _deepFryerCounterSaver.LoadItemTypesFromIndices();
+            List<ItemType> itemTypes = _deepFryerCounterSaver.LoadItemTypesFromIndices();
 
             if (itemTypes.Count > 0)
                 LoadWellItems(itemTypes.Count, itemTypes);
-            else*/
+            else
                 FillTable();
         }
 

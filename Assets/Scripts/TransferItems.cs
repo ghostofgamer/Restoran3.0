@@ -8,10 +8,6 @@ public class TransferItems : MonoBehaviour
 {
     public void TransferJumpListItems(int value, GameObject[] objects, Transform[] targetPositions, Action callback)
     {
-        Debug.Log("VALUE " + value);
-        Debug.Log("objects " + objects.Length);
-        Debug.Log("targetPositions " + targetPositions.Length);
-
         List<GameObject> activeItems = objects.Where(p => p.activeSelf).ToList();
 
         if (value > activeItems.Count)
@@ -22,13 +18,7 @@ public class TransferItems : MonoBehaviour
         for (int i = 0; i < value; i++)
         {
             int index = i;
-
-            /*if (index < activeItems.Count && index < targetPositions.Length)
-            {
-                sequence.Join(activeItems[index].transform.DOMove(targetPositions[index].position, 1f)
-                    .SetEase(Ease.InOutQuad));
-            }*/
-
+            
             if (index < activeItems.Count && index < targetPositions.Length)
             {
                 sequence.Join(activeItems[index].transform.DOJump(
@@ -37,26 +27,6 @@ public class TransferItems : MonoBehaviour
         }
 
         sequence.OnComplete(() => { callback?.Invoke(); });
-
-
-        /*List<GameObject> activeItems = objects.Where(p => p.activeSelf).ToList();
-
-        if (value > activeItems.Count)
-            value = activeItems.Count;
-
-        for (int i = objects.Length - 1; i >= objects.Length - value; i--)
-        {
-            int index = i;
-
-            activeItems[index].transform.DOMove(targetPositions[index].transform.position, 1f)
-                .SetEase(Ease.InOutQuad)
-                .OnComplete(() =>
-                {
-                    activeItems[index].transform.localPosition = Vector3.zero;
-                    callback?.Invoke();
-                });
-        }*/
-
 
         /*Sequence sequence = DOTween.Sequence();
 
@@ -67,5 +37,23 @@ public class TransferItems : MonoBehaviour
                 .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
                 .SetEase(Ease.Linear))
             .OnComplete(() => callback?.Invoke());*/
+    }
+
+    public void TransferToTray(GameObject currentObject,Transform targetPosition,Action callback)
+    {
+        Sequence sequence = DOTween.Sequence();
+        
+        sequence.Append(currentObject.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+        sequence.Append(currentObject.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
+        sequence.Append(currentObject.transform.DOMove(targetPosition.position, 0.5f)
+            .SetEase(Ease.InOutQuad));
+
+        currentObject.transform.SetParent(targetPosition);
+
+        sequence.Join(currentObject.transform
+            .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
+            .SetEase(Ease.Linear));
+        
+        sequence.OnComplete(() => { callback?.Invoke(); });
     }
 }

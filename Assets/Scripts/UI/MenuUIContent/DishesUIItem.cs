@@ -14,8 +14,6 @@ namespace UI.MenuUIContent
 
         [SerializeField] private Tutorial _tutorial;
         [SerializeField] private ShopTutorialChanger _shopTutorialChanger;
-
-
         [SerializeField] private GameObject _openedContent;
         [SerializeField] private GameObject _closedContent;
         [SerializeField] private Slider _slider;

@@ -4,6 +4,8 @@ using DG.Tweening;
 using Enums;
 using InteractableContent;
 using PlayerContent.LevelContent;
+using RestaurantContent;
+using RestaurantContent.TrayContent;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,6 +19,8 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private Transform _centerPos;
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private DeepFryerItemCounter _deepFryerItemCounter;
+        [SerializeField] private Restaurant _restaurant;
+        [SerializeField] private TransferItems _transferItems;
 
         [FormerlySerializedAs("_burgerPrefabPairs")] [SerializeField]
         private List<ItemPrefabPair> _itemPrefabPairs = new List<ItemPrefabPair>();
@@ -50,7 +54,7 @@ namespace KitchenEquipmentContent.FryerContent
 
                         int valuePackage = selectedContainer.ItemContainer.GetActiveItemsValue();
                         Debug.Log("активных упаковок : " + valuePackage);
-                        
+
                         if (valuePackage <= 0)
                         {
                             Debug.Log("не хватате упаковок : ");
@@ -73,9 +77,8 @@ namespace KitchenEquipmentContent.FryerContent
 
         private void Create(FryerContainer fryerContainer, ItemContainer itemContainer, ItemType itemType)
         {
-            Debug.Log("Пробуем собрать  " + itemType);
             int activeItemContainers = fryerContainer.GetActiveValue();
-            Debug.Log("activeItemContainers  " + activeItemContainers);
+
             if (activeItemContainers <= 0)
                 return;
 
@@ -83,40 +86,76 @@ namespace KitchenEquipmentContent.FryerContent
 
             if (itemPrefab == null)
                 return;
-            Debug.Log("itemPrefab  " + itemPrefab);
 
+            Debug.Log("Создали ");
             Transform availablePosition = _itemWellPositions.FirstOrDefault(position => position.childCount == 0);
-            Debug.Log("Позиций пустых для готовых " + availablePosition);
 
-            if (availablePosition == null)
-                return;
+            if (availablePosition != null)
+            {
+                Debug.Log("1");
+                Item itemInstance = _burgerIngridientSpawner.SpawnItem(itemType);
+                itemInstance.SetParenContainer(_burgerIngridientSpawner.transform);
+                itemInstance.gameObject.SetActive(true);
+                itemInstance.transform.position = _centerPos.position;
+                itemInstance.transform.rotation = Quaternion.identity;
 
-            Item itemInstance = _burgerIngridientSpawner.SpawnItem(itemType);
-            itemInstance.SetParenContainer(_burgerIngridientSpawner.transform);
-            itemInstance.gameObject.SetActive(true);
-            itemInstance.transform.position = _centerPos.position;
-            itemInstance.transform.rotation = Quaternion.identity;
-            
-            _deepFryerItemCounter.AddItem(itemInstance);
-            itemContainer.DeactivateItems(1);
-            fryerContainer.DeactivateItems(1);
-            _playerLevel.AddExp(5);
+                itemContainer.DeactivateItems(1);
+                fryerContainer.DeactivateItems(1);
+                _playerLevel.AddExp(5);
+                Sequence sequence = DOTween.Sequence();
 
-            Sequence sequence = DOTween.Sequence();
+                _deepFryerItemCounter.AddItem(itemInstance);
 
-            sequence.Append(itemInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
-            sequence.Append(itemInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
-            sequence.Append(itemInstance.transform.DOMove(availablePosition.position, 0.5f)
-                .SetEase(Ease.InOutQuad));
-
-            itemInstance.transform.SetParent(availablePosition);
-
-            sequence.Join(itemInstance.transform
-                .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
-                .SetEase(Ease.Linear));
-
-            _assemblyFryerTable.FillTable();
-            // .OnComplete(() => _burgersCounter.AddBurger(itemInstance));
+                if (_restaurant.TryGetTrayExtraOrder(itemType, out Tray tray))
+                {
+                    Debug.Log("3");
+                    _restaurant.SetExtraOrder(tray, itemInstance);
+                    Transform position = tray.GetFirstAvailablePosition();
+                    
+                    _transferItems.TransferToTray(itemInstance.gameObject,position,() =>
+                    {
+                        _assemblyFryerTable.FillTable();
+                        tray.TryCompletedOrder();
+                    });
+                }
+                else
+                {
+                    Debug.Log("5");
+                    _transferItems.TransferToTray(itemInstance.gameObject,availablePosition, ()=>
+                    {
+                        _assemblyFryerTable.FillTable();
+                        _deepFryerItemCounter.AddItem(itemInstance);
+                    });
+                }
+            }
+            else
+            {
+                Debug.Log("6");
+                if (_restaurant.TryGetTrayExtraOrder(itemType, out Tray tray))
+                {
+                    
+                    Debug.Log("10");
+                    Item itemInstance = _burgerIngridientSpawner.SpawnItem(itemType);
+                    itemInstance.SetParenContainer(_burgerIngridientSpawner.transform);
+                    itemInstance.gameObject.SetActive(true);
+                    itemInstance.transform.position = _centerPos.position;
+                    itemInstance.transform.rotation = Quaternion.identity;
+                    
+                    itemContainer.DeactivateItems(1);
+                    fryerContainer.DeactivateItems(1);
+                    
+                    _restaurant.SetExtraOrder(tray, itemInstance);
+                    _playerLevel.AddExp(5);
+                    
+                    Transform position = tray.GetFirstAvailablePosition();
+                    
+                    _transferItems.TransferToTray(itemInstance.gameObject,position,() =>
+                    {
+                        _assemblyFryerTable.FillTable();
+                        tray.TryCompletedOrder();
+                    });
+                }
+            }
         }
 
         public void SimpleCreatItem(ItemType itemType)
