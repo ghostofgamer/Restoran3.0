@@ -1,14 +1,17 @@
+using System;
 using Enums;
 using SoContent;
 using UnityEngine;
 using WalletContent;
+using Random = System.Random;
 
 namespace OrdersContent
 {
     public class PriceOrderCounter : MonoBehaviour
     {
         private const string CurrentPriceKey = "CurrentPrice";
-
+        private static readonly Random _random = new Random();
+        
         [SerializeField] private ItemsConfig _itemsConfig;
 
         public DollarValue Price;
@@ -48,7 +51,20 @@ namespace OrdersContent
 
         public DollarValue GetCash(DollarValue dollarValuePriceOrder)
         {
-            return dollarValuePriceOrder.Dollars switch
+            int dollars = dollarValuePriceOrder.Dollars;
+            
+            int minThreshold = (dollars < 100) 
+                ? Math.Max(10, (dollars / 10 + 1) * 10) 
+                : 100;
+            
+            if (minThreshold > 100) 
+                return dollarValuePriceOrder;
+            
+            int randomAmount = _random.Next(minThreshold / 10, 11) * 10;
+    
+            return new DollarValue(randomAmount, 0);
+            
+            /*return dollarValuePriceOrder.Dollars switch
             {
                 < 10 => new DollarValue(10, 0),
                 < 20 => new DollarValue(20, 0),
@@ -61,7 +77,7 @@ namespace OrdersContent
                 < 90 => new DollarValue(90, 0),
                 < 100 => new DollarValue(100, 0),
                 _ => dollarValuePriceOrder
-            };
+            };*/
         }
 
         public DollarValue GetChange(DollarValue price, DollarValue cash)

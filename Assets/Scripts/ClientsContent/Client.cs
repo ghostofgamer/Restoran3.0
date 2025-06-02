@@ -103,32 +103,12 @@ namespace ClientsContent
 
         public void OrderCompleted(Tray tray)
         {
-            // StartCoroutine(PickUpOrder(tray));
             GoToOrderTray(tray);
         }
-
-        /*private void InitCash(DollarValue dollarValuePriceOrder)
-        {
-            Cash = dollarValuePriceOrder.Dollars switch
-            {
-                < 10 => new DollarValue(10, 0),
-                < 20 => new DollarValue(20, 0),
-                < 30 => new DollarValue(30, 0),
-                < 40 => new DollarValue(40, 0),
-                < 50 => new DollarValue(50, 0),
-                < 60 => new DollarValue(60, 0),
-                < 70 => new DollarValue(70, 0),
-                < 80 => new DollarValue(80, 0),
-                < 90 => new DollarValue(90, 0),
-                < 100 => new DollarValue(100, 0),
-                _ => Cash
-            };
-        }*/
 
         private void GoToOrderTray(Tray tray)
         {
             _currentState = ClientState.PickUpOrder;
-            // Debug.Log("GoToOrderTray");
 
             SetDestination(tray.transform.position, () =>
             {
@@ -156,26 +136,6 @@ namespace ClientsContent
                     Eat(tray);
                 });
             }));
-
-
-            /*tray.transform.parent = this.transform;
-            tray.transform.position = _trayPositionHand.position;
-            tray.transform.localRotation = _trayPositionHand.localRotation;
-
-            _restaurant.RemoveClientTray(tray);
-            _currentState = ClientState.Eat;
-
-            // _navMeshAgent.SetDestination(Table.ClientPosition.transform.position);
-
-            SetDestination(Table.ClientSitPosition.transform.position, () =>
-            {
-                _navMeshAgent.enabled = false;
-                transform.position = Table.ClientSitPosition.transform.position;
-                transform.rotation = Table.ClientSitPosition.transform.rotation;
-                _animator.SetBool("Sit", true);
-                // Debug.Log("Вернулся за стол с едой");
-                Eat(tray);
-            });*/
         }
 
         private IEnumerator SmoothMoveTray(Tray tray, System.Action onComplete)
