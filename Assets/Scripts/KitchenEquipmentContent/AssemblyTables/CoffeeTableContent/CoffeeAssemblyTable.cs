@@ -10,6 +10,7 @@ using RestaurantContent.TrayContent;
 using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
 using UI.Screens;
+using UI.Screens.EquipmentContent;
 using UnityEngine;
 
 namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent

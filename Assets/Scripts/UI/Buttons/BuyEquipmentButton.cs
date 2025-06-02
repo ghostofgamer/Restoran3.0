@@ -1,5 +1,6 @@
 using SettingsContent.SoundContent;
 using UI.Screens;
+using UI.Screens.EquipmentContent;
 using UnityEngine;
 
 namespace UI.Buttons

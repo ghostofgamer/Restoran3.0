@@ -96,7 +96,7 @@ namespace TutorialContent
             SetValueButtonTopUI(false);
             Debug.Log("PutBunsAssemblyTableBunBox");
             _assemblyTable.ActivateTutorPoint();
-            _playerRotator.RotateToTarget(_assemblyTable.transform);
+            _playerRotator.RotateToTarget(_assemblyTable.LookPosition);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
 
@@ -131,7 +131,7 @@ namespace TutorialContent
             Debug.Log("PutPackagesAssemblyTable");
             // _burgerPackageBox.DeactivateTutorPoint();
             _assemblyTable.ActivateTutorPoint();
-            _playerRotator.RotateToTarget(_assemblyTable.transform);
+            _playerRotator.RotateToTarget(_assemblyTable.LookPosition);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
 
@@ -253,7 +253,7 @@ namespace TutorialContent
             _rawCutletContainer.DeactivateTutorPoint();
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _grillTutorObject.ActivateTutorPoint();
-            _playerRotator.RotateToTarget(_grillTutorObject.transform);
+            _playerRotator.RotateToTarget(_grillTutorObject.LookPosition);
         }
 
         public void FryCutletGrill()
@@ -261,7 +261,7 @@ namespace TutorialContent
             SetValueButtonTopUI(false);
             _grillTutorObject.ActivateTutorPoint();
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
-            _playerRotator.RotateToTarget(_grillTutorObject.transform);
+            _playerRotator.RotateToTarget(_grillTutorObject.LookPosition);
         }
 
         public void TakeWellCutlet()
@@ -269,7 +269,7 @@ namespace TutorialContent
             SetValueButtonTopUI(false);
             _grillTutorObject.ActivateTutorPoint();
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
-            _playerRotator.RotateToTarget(_grillTutorObject.transform);
+            _playerRotator.RotateToTarget(_grillTutorObject.LookPosition);
         }
 
         public void PutWellCutletToContainer()
@@ -278,14 +278,14 @@ namespace TutorialContent
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _grillTutorObject.DeactivateTutorPoint();
             _assemblyTable.ActivateTutorPoint();
-            _playerRotator.RotateToTarget(_assemblyTable.transform);
+            _playerRotator.RotateToTarget(_assemblyTable.LookPosition);
         }
 
         public void LetsMakeFirstBurger()
         {
             SetValueButtonTopUI(false);
             _assemblyTable.ActivateTutorPoint();
-            _playerRotator.RotateToTarget(_assemblyTable.transform);
+            _playerRotator.RotateToTarget(_assemblyTable.LookPosition);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
 
