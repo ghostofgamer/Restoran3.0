@@ -10,5 +10,6 @@ namespace Enums
         Zone3,
         StaffRoom,
         KitchenZone,
+        Storage,
     }
 }
