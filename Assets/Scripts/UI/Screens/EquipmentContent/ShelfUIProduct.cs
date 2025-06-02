@@ -1,4 +1,5 @@
 using Enums;
+using Io.AppMetrica;
 using SettingsContent.SoundContent;
 using SoContent;
 using TMPro;
@@ -34,7 +35,8 @@ namespace UI.Screens.EquipmentContent
                     Debug.Log("Не хватает денег ");
                     return;
                 }
-
+                
+                AppMetrica.ReportEvent("Equipment", "{\"" + "Shelf" + "\":null}");
                 SoundPlayer.Instance.PlayPayment();
                 _wallet.Subtract(CurrentPrice);
                 _shopScreen.MakePurchase();
