@@ -125,6 +125,25 @@ namespace RestaurantContent.CashRegisterContent
             ClearGivingValue();
         }
 
+        public void AcceptCardOrder()
+        {
+            if (_currentClient == null)
+                return;
+            
+            if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
+                _tutorial.SetCurrentTutorialStage(TutorialType.TakeFirstOrder);
+            
+            SoundPlayer.Instance.PlayCashRegister();
+            CashRegisterOrderCompleted?.Invoke();
+            _currentClient.Paid();
+            _wallet.Add(_currentClient.PriceOrder);
+            Client client = _currentClient;
+            _currentClient = null;
+            SetCanvasActive(_currentClient != null);
+            _restaurant.AcceptOrder(client.Order, client);
+            ClearGivingValue();
+        }
+
         public void ChangeGivingValue(int cents)
         {
             int total = _currentGivingValue.ToTotalCents() + cents;

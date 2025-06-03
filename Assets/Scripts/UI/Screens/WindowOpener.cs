@@ -66,6 +66,7 @@ namespace UI.Screens
         private void CloseCashRegisterScreen()
         {
             _assemblyCashRegisterOrderScreen.CloseScreen();
+            _assemblyCardRegisterOrderScreen.CloseScreen();
         }
 
         private void OpenAssemblyFryerScreen()

@@ -18,6 +18,8 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private CashRegister _cashRegister;
         [SerializeField] private GameObject _panelCardPaymentGiving;
         [SerializeField] private TMP_Text _totalCardPaymentText;
+        [SerializeField] private CardPaymentAccountant _cardPaymentAccountant;
+        
         private DollarValue _currentChangeValue;
 
         private void OnEnable()
@@ -44,6 +46,7 @@ namespace RestaurantContent.CashRegisterContent
 
         public void Init(Client client, DollarValue givingValue)
         {
+            _cardPaymentAccountant.Init(client.PriceOrder);
             _currentChangeValue = _priceOrderCounter.GetChange(client.PriceOrder, client.Cash);
             _totalText.text = $"Total:{client.PriceOrder}";
             _totalCardPaymentText.text = $"Total:{client.PriceOrder}";
