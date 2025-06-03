@@ -70,14 +70,6 @@ namespace UI.Screens.ShopContent
                 
                 foreach (var tButton in _pageShopButtons)
                     tButton.GetComponent<Button>().interactable = false;
-                /*foreach (var tButton in _tutorDeactivateButton)
-                    tButton.interactable = false;
-
-                foreach (var tButton in _pageShopButtons)
-                    tButton.GetComponent<Button>().interactable = false;*/
-
-                /*_tutorWorkPageButton.interactable = true;
-                _shopTutorialChanger.DeactivateProducts();*/
             }
             else
             {
@@ -107,6 +99,13 @@ namespace UI.Screens.ShopContent
         public void MakePurchase()
         {
             _playerLevel.AddExp(5);
+        }
+
+        public void OpenMenuScreen()
+        {
+            base.OpenScreen();
+            ActivateShopButton(0);
+            OpenPage(1);
         }
 
         private void SetInteractableButton(bool value)

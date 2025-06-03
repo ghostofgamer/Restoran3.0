@@ -8,9 +8,10 @@ namespace UI.Buttons
     {
         [SerializeField] private ShopScreen _shop;
         [SerializeField] private NewMenuButtonFade _newMenuButtonFade;
-        
+
         public override void OnClick()
         {
+            _shop.OpenMenuScreen();
             _newMenuButtonFade.Disable();
         }
     }

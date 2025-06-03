@@ -15,6 +15,7 @@ namespace UI.Screens
         [SerializeField] private AssemblyDrinkTable _assemblyDrinkTable;
         [SerializeField] private AssemblyDrinkTable _assemblySodaTable;
         [SerializeField] private AssemblyCashRegisterOrderScreen _assemblyCashRegisterOrderScreen;
+        [SerializeField] private AssemblyCardRegisterOrderScreen _assemblyCardRegisterOrderScreen;
         [SerializeField] private CashRegister _cashRegister;
         [SerializeField] private AssemblyFryerTable _assemblyFryerTable;
         [SerializeField] private AssemblyFryerScreen _assemblyFryerScreen;
@@ -54,16 +55,19 @@ namespace UI.Screens
             _assemblySodaScreen.OpenScreen();
         }
 
-        private void OpenCashRegisterOrderScreen()
+        private void OpenCashRegisterOrderScreen(bool isCard)
         {
-            _assemblyCashRegisterOrderScreen.OpenScreen();
+            if (!isCard)
+                _assemblyCashRegisterOrderScreen.OpenScreen();
+            else
+                _assemblyCardRegisterOrderScreen.OpenScreen();
         }
 
         private void CloseCashRegisterScreen()
         {
             _assemblyCashRegisterOrderScreen.CloseScreen();
         }
-        
+
         private void OpenAssemblyFryerScreen()
         {
             _assemblyFryerScreen.OpenScreen();

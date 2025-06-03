@@ -34,7 +34,7 @@ namespace RestaurantContent.CashRegisterContent
         private Stack<int> _changeHistory = new Stack<int>();
         private const int MaxHistorySize = 100;
         
-        public event Action CashRegisterAssemblyBeginig;
+        public event Action<bool> CashRegisterAssemblyBeginig;
 
         public event Action CashRegisterOrderCompleted;
 
@@ -81,7 +81,7 @@ namespace RestaurantContent.CashRegisterContent
             
             
 
-            CashRegisterAssemblyBeginig?.Invoke();
+            CashRegisterAssemblyBeginig?.Invoke(_currentClient.IsCard);
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
             _currentGivingValue = new DollarValue(0, 0);
             _cashRegisterViewer.Init(_currentClient, _currentGivingValue);

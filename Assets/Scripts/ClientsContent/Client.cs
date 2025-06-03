@@ -9,6 +9,7 @@ using RestaurantContent.TrayContent;
 using UnityEngine;
 using UnityEngine.AI;
 using WalletContent;
+using Random = System.Random;
 
 namespace ClientsContent
 {
@@ -36,6 +37,8 @@ namespace ClientsContent
 
         public DollarValue Cash { get; private set; }
 
+        public bool IsCard { get; private set; }
+
         public Order Order { get; private set; }
 
         public Table Table { get; private set; }
@@ -56,6 +59,10 @@ namespace ClientsContent
             _clientsCounter = clientsCounter;
             _clientsCounter.AddClient(this);
             // _clientCar = null;
+
+
+            Random random = new Random();
+            IsCard = random.Next(2) == 1;
 
             Cash = new DollarValue(0, 0);
             Cash = priceOrderCounter.GetCash(PriceOrder);

@@ -12,17 +12,17 @@ namespace NewMenuContent
 
         private void OnEnable()
         {
-            _playerLevel.LevelChanged += CheckOpenNewMenu;
+            _playerLevel.LevelAdded += CheckOpenNewMenu;
         }
 
         private void OnDisable()
         {
-            _playerLevel.LevelChanged -= CheckOpenNewMenu;
+            _playerLevel.LevelAdded -= CheckOpenNewMenu;
         }
 
-        private void CheckOpenNewMenu(int level)
+        private void CheckOpenNewMenu()
         {
-            _newMenuButton.SetActive(_levelsToActivateButton.Contains(level));
+            _newMenuButton.SetActive(_levelsToActivateButton.Contains(_playerLevel.CurrentLevel));
         }
     }
 }

@@ -16,7 +16,8 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private GameObject _panelOrder;
         [SerializeField] private GameObject _panelGivingChange;
         [SerializeField] private CashRegister _cashRegister;
-
+        [SerializeField] private GameObject _panelCardPaymentGiving;
+        [SerializeField] private TMP_Text _totalCardPaymentText;
         private DollarValue _currentChangeValue;
 
         private void OnEnable()
@@ -35,10 +36,17 @@ namespace RestaurantContent.CashRegisterContent
             _panelGivingChange.SetActive(value);
         }
 
+        public void SetCardPaymentSetValuePanels(bool value)
+        {
+            _panelOrder.SetActive(!value);
+            _panelCardPaymentGiving.SetActive(value);
+        }
+
         public void Init(Client client, DollarValue givingValue)
         {
             _currentChangeValue = _priceOrderCounter.GetChange(client.PriceOrder, client.Cash);
             _totalText.text = $"Total:{client.PriceOrder}";
+            _totalCardPaymentText.text = $"Total:{client.PriceOrder}";
             _receivedText.text = $"Received:{client.Cash}";
             _changeText.text = $"Change:<color=yellow>{_currentChangeValue + "</color>"}";
             // _givingText.text = "Giving:<color=red> $0.00</color>";
@@ -47,17 +55,6 @@ namespace RestaurantContent.CashRegisterContent
 
         private void ShowGivingValueText(DollarValue dollarValue)
         {
-            Debug.Log("CHANGEEEE " + dollarValue.ToString());
-
-            if (dollarValue.ToTotalCents() == _currentChangeValue.ToTotalCents())
-            {
-                Debug.Log("ОДИНАКОВЫЕ ");
-            }
-            else
-            {
-                Debug.Log("Разные " );
-            } 
-
             string colorHex = (dollarValue.ToTotalCents() == _currentChangeValue.ToTotalCents())
                 ? "#00FF00"
                 : "#FF0000";
