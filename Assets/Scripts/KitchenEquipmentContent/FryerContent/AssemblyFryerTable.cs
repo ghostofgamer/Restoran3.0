@@ -128,7 +128,7 @@ namespace KitchenEquipmentContent.FryerContent
                             _transferItems.TransferJumpListItems(itemsToPlace,fryerTool.WellItems,fryerContainer.Positions,
                                 () =>
                                 {
-                                    Debug.Log("itemsToPlace");
+                                    Debug.Log("itemsToPlace ");
                                     fryerContainer.ActivateItems(itemsToPlace);
                                     fryerTool.ResetPosition();
                                     fryerTool.DeactivateWellItems(itemsToPlace);

@@ -27,6 +27,7 @@ namespace KitchenEquipmentContent
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
         [SerializeField] private AudioSource _audioSource;
         [SerializeField] private Tutorial _tutorial;
+        [SerializeField] private GameObject _fryEffect;
 
         public TMP_Text grillText;
         public Image fillImage;
@@ -422,6 +423,7 @@ namespace KitchenEquipmentContent
             _animator.SetBool("FryCutlet", true);
             _boxCollider.enabled = false;
             yield return new WaitForSeconds(1f);
+            _fryEffect.SetActive(true);
             _audioSource.Play();
             _progressFryUI.SetActive(true);
             grillText.text = "Grill <color=yellow>Raw</color>";
@@ -439,7 +441,8 @@ namespace KitchenEquipmentContent
             {
                 _tutorial.SetCurrentTutorialStage(TutorialType.FryCutletGrill);
             }
-
+            
+            _fryEffect.SetActive(false);
             _audioSource.Stop();
             grillText.text = "Grill <color=green>Medium</color>";
             SoundPlayer.Instance.PlayGrillWell();

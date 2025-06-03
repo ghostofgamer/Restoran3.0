@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -28,6 +29,9 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
 
         private Camera _camera;
+        private bool _isCreated = false;
+        private Coroutine _pauseCoroutine;
+        private WaitForSeconds _waitForSeconds = new WaitForSeconds(1f);
 
         private void Start()
         {
@@ -36,6 +40,9 @@ namespace KitchenEquipmentContent.FryerContent
 
         private void Update()
         {
+            if (_isCreated)
+                return;
+
             if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit hit;
@@ -98,21 +105,19 @@ namespace KitchenEquipmentContent.FryerContent
                 itemInstance.gameObject.SetActive(true);
                 itemInstance.transform.position = _centerPos.position;
                 itemInstance.transform.rotation = Quaternion.identity;
-
+                StartCreatePause();
                 itemContainer.DeactivateItems(1);
                 fryerContainer.DeactivateItems(1);
                 _playerLevel.AddExp(5);
-                Sequence sequence = DOTween.Sequence();
-
-                _deepFryerItemCounter.AddItem(itemInstance);
+                // _deepFryerItemCounter.AddItem(itemInstance);
 
                 if (_restaurant.TryGetTrayExtraOrder(itemType, out Tray tray))
                 {
                     Debug.Log("3");
                     _restaurant.SetExtraOrder(tray, itemInstance);
                     Transform position = tray.GetFirstAvailablePosition();
-                    
-                    _transferItems.TransferToTray(itemInstance.gameObject,position,() =>
+
+                    _transferItems.TransferToTray(itemInstance.gameObject, position, () =>
                     {
                         _assemblyFryerTable.FillTable();
                         tray.TryCompletedOrder();
@@ -121,7 +126,7 @@ namespace KitchenEquipmentContent.FryerContent
                 else
                 {
                     Debug.Log("5");
-                    _transferItems.TransferToTray(itemInstance.gameObject,availablePosition, ()=>
+                    _transferItems.TransferToTray(itemInstance.gameObject, availablePosition, () =>
                     {
                         _assemblyFryerTable.FillTable();
                         _deepFryerItemCounter.AddItem(itemInstance);
@@ -133,23 +138,22 @@ namespace KitchenEquipmentContent.FryerContent
                 Debug.Log("6");
                 if (_restaurant.TryGetTrayExtraOrder(itemType, out Tray tray))
                 {
-                    
                     Debug.Log("10");
                     Item itemInstance = _burgerIngridientSpawner.SpawnItem(itemType);
                     itemInstance.SetParenContainer(_burgerIngridientSpawner.transform);
                     itemInstance.gameObject.SetActive(true);
                     itemInstance.transform.position = _centerPos.position;
                     itemInstance.transform.rotation = Quaternion.identity;
-                    
+                    StartCreatePause();
                     itemContainer.DeactivateItems(1);
                     fryerContainer.DeactivateItems(1);
-                    
+
                     _restaurant.SetExtraOrder(tray, itemInstance);
                     _playerLevel.AddExp(5);
-                    
+
                     Transform position = tray.GetFirstAvailablePosition();
-                    
-                    _transferItems.TransferToTray(itemInstance.gameObject,position,() =>
+
+                    _transferItems.TransferToTray(itemInstance.gameObject, position, () =>
                     {
                         _assemblyFryerTable.FillTable();
                         tray.TryCompletedOrder();
@@ -168,6 +172,21 @@ namespace KitchenEquipmentContent.FryerContent
             itemInstance.transform.localRotation = Quaternion.Euler(0, 0, 0);
             itemInstance.transform.localScale = Vector3.one;
             _deepFryerItemCounter.AddItem(itemInstance);
+        }
+
+        private void StartCreatePause()
+        {
+            if (_pauseCoroutine != null)
+                StopCoroutine(_pauseCoroutine);
+
+            _pauseCoroutine = StartCoroutine(CreatePause());
+        }
+
+        private IEnumerator CreatePause()
+        {
+            _isCreated = true;
+            yield return _waitForSeconds;
+            _isCreated = false;
         }
     }
 }

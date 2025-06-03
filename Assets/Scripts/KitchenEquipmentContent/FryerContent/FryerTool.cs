@@ -14,6 +14,7 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private Transform[] _positions;
         [SerializeField] private int _maxCount;
         [SerializeField] private FryerToolMover _fryerToolMover;
+        [SerializeField] private GameObject _effectFry;
 
         public event Action<int, int> ItemsValueChanged;
 
@@ -139,6 +140,7 @@ namespace KitchenEquipmentContent.FryerContent
         public void MoveFrying()
         {
             _fryerToolMover.MoveFrying();
+            _effectFry.SetActive(true);
         }
 
         private void ItemArraysValueChanged()

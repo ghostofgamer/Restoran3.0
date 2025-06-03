@@ -21,6 +21,7 @@ public class TransferItems : MonoBehaviour
             
             if (index < activeItems.Count && index < targetPositions.Length)
             {
+                Debug.Log("Прыгнул " + activeItems[index].gameObject.name);
                 sequence.Join(activeItems[index].transform.DOJump(
                     targetPositions[index].position, 1.65f, 1, 1f).SetEase(Ease.InOutQuad));
             }

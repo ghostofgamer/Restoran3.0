@@ -21,7 +21,7 @@ namespace KitchenEquipmentContent.FryerContent
                     Debug.Log("лежат готовые фри");
                     return;
                 }
-                
+
                 Debug.Log("Item type is compatible with fryer tool: " + compatibleTool.name);
                 int emptyPosition = compatibleTool.GetCountInactiveItems();
                 int activeItems = itemBasket.GetActiveValueItems();
@@ -57,14 +57,14 @@ namespace KitchenEquipmentContent.FryerContent
 
             return null;
         }
-        
+
         public int GetFullTools()
         {
             int value = 0;
-            
+
             foreach (var fryerTool in _fryerTools)
             {
-                if (fryerTool.GetCountActiveItems()>0)
+                if (fryerTool.GetCountActiveItems() > 0)
                     value++;
             }
 
