@@ -6512,6 +6512,7 @@ MonoBehaviour:
   _burgerIngridientSpawner: {fileID: 0}
   _assemblyBurgerItemConfig: {fileID: 11400000, guid: 45c1bea8ffa55914cb0b857b91c5d042, type: 2}
   _audioSource: {fileID: 0}
+  _tutorial: {fileID: 0}
   grillText: {fileID: 436080527}
   fillImage: {fileID: 2002479502}
   grillTime: 3
@@ -14869,6 +14870,32 @@ MonoBehaviour:
   _lookSpeed: 13
   _sensitivitySettings: {fileID: 0}
   _smoothTime: 0.1
+  _targetLookDuration: 1
+  _lookCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _rotator: {fileID: 0}
 --- !u!4 &509973224 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4086226261538740, guid: 3b097ad700f43c34e8a6c318d5e4849b, type: 3}
@@ -23387,6 +23414,7 @@ MonoBehaviour:
   _currentItemsType: 
   _burgerIngridientSpawner: {fileID: 0}
   _assemblyBurgerItemConfig: {fileID: 11400000, guid: 45c1bea8ffa55914cb0b857b91c5d042, type: 2}
+  _tutorial: {fileID: 0}
 --- !u!114 &783571137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31433,6 +31461,7 @@ MonoBehaviour:
   _draggablePosition: {fileID: 480877563}
   _throwButton: {fileID: 580955451}
   _playerTray: {fileID: 0}
+  _boxesCounter: {fileID: 0}
 --- !u!1 &1085224321
 GameObject:
   m_ObjectHideFlags: 0
@@ -33400,6 +33429,7 @@ MonoBehaviour:
   _burgerIngridientSpawner: {fileID: 0}
   _assemblyBurgerItemConfig: {fileID: 11400000, guid: 45c1bea8ffa55914cb0b857b91c5d042, type: 2}
   _audioSource: {fileID: 0}
+  _tutorial: {fileID: 0}
   grillText: {fileID: 216040879}
   fillImage: {fileID: 867304847}
   grillTime: 3
@@ -36033,6 +36063,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5fbec20b732ead48b00038c8625ca55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tutorial: {fileID: 0}
   _restaurant: {fileID: 0}
   _interactableObject: {fileID: 1257367421}
   _clientPosition: {fileID: 1691069073}
@@ -39750,6 +39781,7 @@ MonoBehaviour:
   _currentItemsType: 
   _burgerIngridientSpawner: {fileID: 0}
   _assemblyBurgerItemConfig: {fileID: 11400000, guid: 45c1bea8ffa55914cb0b857b91c5d042, type: 2}
+  _tutorial: {fileID: 0}
 --- !u!114 &1388915132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47351,7 +47383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6350257078923311232, guid: ff2dd490eb41b634e98caf4d6afcbf40, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25.437508
+      value: 25.438
       objectReference: {fileID: 0}
     - target: {fileID: 6350257078923311232, guid: ff2dd490eb41b634e98caf4d6afcbf40, type: 3}
       propertyPath: m_LocalPosition.y
@@ -47359,7 +47391,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6350257078923311232, guid: ff2dd490eb41b634e98caf4d6afcbf40, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.006232
+      value: -8.998
       objectReference: {fileID: 0}
     - target: {fileID: 6350257078923311232, guid: ff2dd490eb41b634e98caf4d6afcbf40, type: 3}
       propertyPath: m_LocalRotation.w

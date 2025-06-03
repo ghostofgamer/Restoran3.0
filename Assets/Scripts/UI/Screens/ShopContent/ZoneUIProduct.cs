@@ -39,8 +39,8 @@ namespace UI.Screens.ShopContent
             IsOwned = IsBuyed();
             _dollarValue = new DollarValue(_dollars, _cents);
             _requaredText.text = _previousWallZone == null
-                ? $"Requared is {_levelOpened} level"
-                : $"Requared is {_levelOpened} level and prev zone";
+                ? $"Required  is {_levelOpened} level"
+                : $"Required  is {_levelOpened} level and prev zone";
             _priceText.text = $"{_dollarValue.ToString()} ";
             
             if (_previousWallZone == null)

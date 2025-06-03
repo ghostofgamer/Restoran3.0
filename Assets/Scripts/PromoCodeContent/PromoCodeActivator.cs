@@ -1,5 +1,6 @@
 using DeliveryContent;
 using Enums;
+using Io.AppMetrica;
 using PlayerContent.LevelContent;
 using UnityEngine;
 using WalletContent;
@@ -14,11 +15,12 @@ namespace PromoCodeContent
 
         public void ActivatePrizePromo()
         {
-            _wallet.Add(new DollarValue(350, 0));
-            _playerLevel.AddExp(150);
-            _delivery.SpawnPrize(ItemType.Bun, 3);
-            _delivery.SpawnPrize(ItemType.RawCutlet, 3);
-            _delivery.SpawnPrize(ItemType.PackageBurgerPaper, 3);
+            AppMetrica.ReportEvent("ActivatePrizePromo");
+            _wallet.Add(new DollarValue(50, 0));
+            _delivery.SpawnPrize(ItemType.Nuggets, 1);
+            _delivery.SpawnPrize(ItemType.FrenchFries, 1);
+            _delivery.SpawnPrize(ItemType.FrenchFriesPackage, 1);
+            _delivery.SpawnPrize(ItemType.NuggetsPackage, 1);
         }
     }
 }

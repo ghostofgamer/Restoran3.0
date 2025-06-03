@@ -1,4 +1,5 @@
 using PlayerContent.LevelContent;
+using UI.Screens.EquipmentContent;
 using UnityEngine;
 
 namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage

@@ -19,19 +19,29 @@ public static class AppMetricaActivator
         };
 
         AppMetrica.Activate(appMetricaConfig);
-
-         /*int level = 1;
-        AppMetrica.ReportEvent("LevelUp", "{\"" + level.ToString() + "\":null}");*/
     }
 
     private static bool IsFirstLaunch()
     {
         if (PlayerPrefs.HasKey(_playerPrefsKey))
         {
+            return false;
+        }
+        
+        PlayerPrefs.SetInt(_playerPrefsKey, 1);
+        PlayerPrefs.Save(); 
+        return true;
+        
+        
+        
+        
+        
+        /*if (PlayerPrefs.HasKey(_playerPrefsKey))
+        {
             return true;
         }
 
         PlayerPrefs.SetString(_playerPrefsKey, string.Empty);
-        return false;
+        return false;*/
     }
 }

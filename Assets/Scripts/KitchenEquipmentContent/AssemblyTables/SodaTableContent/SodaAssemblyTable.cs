@@ -12,6 +12,7 @@ using SaveContent;
 using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
 using UI.Screens;
+using UI.Screens.EquipmentContent;
 using UnityEngine;
 
 namespace KitchenEquipmentContent

@@ -32,5 +32,9 @@ namespace Enums
     CupSodaEmpty,
     CupCoffeeEmpty,
     SodaPlum,
+    FrenchFries,
+    Nuggets,
+    FrenchFriesPackage,
+    NuggetsPackage,
   }
 }

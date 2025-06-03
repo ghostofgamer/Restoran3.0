@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Io.AppMetrica;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,14 +9,21 @@ namespace ADSContent
     public class ADS : MonoBehaviour
     {
         public string SDKKey = "nR3VEu5EEJlq6OmqwXd1lMKHQhg3sEumJpdTgplZ-csu1yq6zIkU1auq9P1sOOoIVLg9tOWSXDaUfRvC9Uv-Ib";
-        public string InterstitialKey ;
-        public string RewardedKey ;
-        public string BannerKey ;
+        public string InterstitialKey;
+        public string RewardedKey;
+        public string BannerKey;
         private bool isInitialized = false;
+
+        private RewardCallback currentRewardCallback;
+        private Coroutine _reloadInterstitialCoroutine;
+        private bool _isInterstitialLoading = false;
+        private bool _isAdPreloading = false;
+        private int _interstitialRetryAttempt = 0;
         
         public delegate void RewardCallback();
-        private RewardCallback currentRewardCallback;
-        
+
+        public bool IsInterstitialReady => MaxSdk.IsInterstitialReady(InterstitialKey);
+
         public event Action _interHidden;
 
         private void Start()
@@ -29,10 +37,10 @@ namespace ADSContent
             {
                 Debug.Log("AppLovin successfully initialized");
             };
-            
+
             MaxSdk.SetSdkKey(SDKKey);
             MaxSdk.InitializeSdk();
-            
+
             InitializeInterstitialAds();
             InitializeRewardedAds();
         }
@@ -46,45 +54,77 @@ namespace ADSContent
             MaxSdkCallbacks.Interstitial.OnAdClickedEvent += OnInterstitialClickedEvent;
             MaxSdkCallbacks.Interstitial.OnAdHiddenEvent += OnInterstitialHiddenEvent;
             MaxSdkCallbacks.Interstitial.OnAdDisplayFailedEvent += OnInterstitialAdFailedToDisplayEvent;
-            
+
             // Load the first interstitial
             LoadInterstitial();
         }
 
         private void LoadInterstitial()
         {
+            if (_isInterstitialLoading || MaxSdk.IsInterstitialReady(InterstitialKey))
+                return;
+
+            _isInterstitialLoading = true;
+
             MaxSdk.LoadInterstitial(InterstitialKey);
         }
 
         private void OnInterstitialLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            _isInterstitialLoading = false;
+            _interstitialRetryAttempt = 0; 
+            AppMetrica.ReportEvent("OnInterstitialLoadedEvent");
         }
 
         private void OnInterstitialLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo)
         {
-            LoadInterstitial();
+            AppMetrica.ReportEvent("OnInterstitialLoadFailedEvent");
+            _isInterstitialLoading = false;
+
+            _interstitialRetryAttempt++;
+            double retryDelay = Math.Pow(2, Math.Min(6, _interstitialRetryAttempt));
+            
+            if (_reloadInterstitialCoroutine != null)
+                StopCoroutine(_reloadInterstitialCoroutine);
+
+            _reloadInterstitialCoroutine = StartCoroutine(ReloadInterstitialAfterDelay((float)retryDelay));
+            // LoadInterstitial();
         }
 
         private void OnInterstitialDisplayedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            AppMetrica.ReportEvent("OnInterstitialDisplayedEvent");
         }
 
         private void OnInterstitialAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo,
             MaxSdkBase.AdInfo adInfo)
         {
+            AppMetrica.ReportEvent("OnInterstitialAdFailedToDisplayEvent");
             // Interstitial ad failed to display. AppLovin recommends that you load the next ad.
-            LoadInterstitial();
+            
+            if (_reloadInterstitialCoroutine != null)
+                StopCoroutine(_reloadInterstitialCoroutine);
+
+            _reloadInterstitialCoroutine = StartCoroutine(ReloadInterstitialAfterDelay(0.5f));
         }
 
         private void OnInterstitialClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            AppMetrica.ReportEvent("OnInterstitialClickedEvent");
         }
 
         private void OnInterstitialHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             _interHidden?.Invoke();
+            AppMetrica.ReportEvent("OnInterstitialHiddenEvent");
             // Interstitial ad is hidden. Pre-load the next ad.
-            LoadInterstitial();
+            
+            if (_reloadInterstitialCoroutine != null)
+                StopCoroutine(_reloadInterstitialCoroutine);
+
+            _reloadInterstitialCoroutine = StartCoroutine(ReloadInterstitialAfterDelay(0.5f));
+
+            // LoadInterstitial();
         }
 
         public void ShowInterstitial()
@@ -98,6 +138,12 @@ namespace ADSContent
             {
                 LoadInterstitial();
             }
+        }
+
+        private IEnumerator ReloadInterstitialAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            LoadInterstitial();
         }
 
 
@@ -162,7 +208,7 @@ namespace ADSContent
         private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdk.Reward reward, MaxSdkBase.AdInfo adInfo)
         {
             Debug.Log("OnRewardedAdReceivedRewardEvent");
-            
+
             if (currentRewardCallback != null)
             {
                 currentRewardCallback();
@@ -181,7 +227,7 @@ namespace ADSContent
         {
             if (MaxSdk.IsRewardedAdReady(RewardedKey))
             {
-                currentRewardCallback = rewardCallback; 
+                currentRewardCallback = rewardCallback;
                 MaxSdk.ShowRewardedAd(RewardedKey);
             }
         }

@@ -11,6 +11,8 @@ namespace SaveContent
     public class ShelfSaver : MonoBehaviour
     {
         [SerializeField] private Shelf _shelf;
+        [SerializeField] private bool _isBuyed;
+        [SerializeField] private int _index;
 
         private List<ItemType> _itemTypes = new List<ItemType>();
 
@@ -37,13 +39,21 @@ namespace SaveContent
 
             string combinedIndicesString = string.Join(",", combinedIndices);
 
-            PlayerPrefs.SetString("combinedItemIndices", combinedIndicesString);
+            if (!_isBuyed)
+                PlayerPrefs.SetString("combinedItemIndices", combinedIndicesString);
+            else
+                PlayerPrefs.SetString("combinedItemIndices" + _index, combinedIndicesString);
+
             PlayerPrefs.Save();
         }
 
         private void LoadDataFromPlayerPrefs()
         {
-            string combinedIndicesString = PlayerPrefs.GetString("combinedItemIndices", "");
+            string combinedIndicesString;
+
+            combinedIndicesString = !_isBuyed
+                ? PlayerPrefs.GetString("combinedItemIndices", "")
+                : PlayerPrefs.GetString("combinedItemIndices" + _index, "");
 
             if (!string.IsNullOrEmpty(combinedIndicesString))
             {
@@ -53,8 +63,8 @@ namespace SaveContent
                 foreach (var index in indices)
                     _itemTypes.Add((ItemType)index);
             }
-            
-            if(_itemTypes.Count>0)
+
+            if (_itemTypes.Count > 0)
                 _shelf.Initialization(_itemTypes);
         }
     }

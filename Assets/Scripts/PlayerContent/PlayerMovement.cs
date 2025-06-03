@@ -29,6 +29,9 @@ namespace PlayerContent
 
         public void MovePlayer(float horizontal,float vertical)
         {
+            if (_controller.enabled == false)
+                return;
+            
             if ((int)_tutorial.CurrentType < (int)_tutorialType)
             {
                 Debug.Log("(int)_tutorial.CurrentType < (int)_tutorialType");

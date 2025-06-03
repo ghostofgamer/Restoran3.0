@@ -1,4 +1,3 @@
-using System;
 using Enums;
 using TMPro;
 using UI.Screens;
@@ -10,14 +9,16 @@ namespace PromoCodeContent
     {
         [SerializeField] private TMP_InputField _promoCodeInputField;
         [SerializeField] private TMP_Text _messageFailedText;
+        [SerializeField] private TMP_Text _messageWellDoneText;
         [SerializeField] private GameObject _failTextBackground;
+        [SerializeField] private GameObject _WellDoneTextBackground;
         [SerializeField] private PromoCodeScreen _promoCodeScreen;
         [SerializeField] private PromoCodeActivator _promoCodeActivator;
 
         public void AcceptPromoCode()
         {
             string enteredCode = _promoCodeInputField.text.Trim().ToUpper();
-            PromoCodesType currentPromoCode = PromoCodesType.BurgerBoss;
+            PromoCodesType currentPromoCode = PromoCodesType.Nuggets2025;
 
             string activePromoCode = currentPromoCode.ToString().ToUpper();
 
@@ -26,7 +27,7 @@ namespace PromoCodeContent
                 if (PlayerPrefs.GetInt("AcceptedCode" + currentPromoCode, 0) == 1)
                 {
                     Debug.Log("Этот промо-код уже был куплен.");
-                    _messageFailedText.text = "Этот промо-код уже был куплен.";
+                    _messageFailedText.text = "This promo code has already been purchased.";
                     _failTextBackground.SetActive(true);
                 }
                 else
@@ -34,13 +35,16 @@ namespace PromoCodeContent
                     _promoCodeActivator.ActivatePrizePromo();
                     PlayerPrefs.SetInt("AcceptedCode" + currentPromoCode, 1);
                     PlayerPrefs.Save();
-                    _promoCodeScreen.CloseScreen();
+                    _promoCodeInputField.text = "";
+                    _messageWellDoneText.text= "Right! Get prizes in the delivery area!";
+                    _WellDoneTextBackground.SetActive(true);
+                    // _promoCodeScreen.CloseScreen();
                 }
             }
             else
             {
                 Debug.Log("Неверный промо-код.");
-                _messageFailedText.text = "Неверный промо-код.";
+                _messageFailedText.text = "Invalid promo code.";
                 _failTextBackground.SetActive(true);
             }
             

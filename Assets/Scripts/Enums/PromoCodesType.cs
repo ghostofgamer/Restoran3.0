@@ -2,6 +2,6 @@ namespace Enums
 {
     public enum PromoCodesType 
     {
-        BurgerBoss,
+        Nuggets2025,
     }
 }

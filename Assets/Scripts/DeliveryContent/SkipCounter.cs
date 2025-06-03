@@ -12,14 +12,29 @@ namespace DeliveryContent
         private void OnEnable()
         {
             Debug.Log("OnEnableDelivery");
-            _skipFreeButton.SetActive(_isFirstSkip);
-            _skipAdButton.SetActive(!_isFirstSkip);
+            Show();
+        }
+
+        private void Start()
+        {
+            int value = PlayerPrefs.GetInt("SkipFirstActivate", 0);
+            _isFirstSkip = value <= 0;
+            Show();
         }
 
         public void SkipFirstActivate()
         {
             if (_isFirstSkip)
+            {
                 _isFirstSkip = false;
+                PlayerPrefs.SetInt("SkipFirstActivate", 1);
+            }
+        }
+
+        private void Show()
+        {
+            _skipFreeButton.SetActive(_isFirstSkip);
+            _skipAdButton.SetActive(!_isFirstSkip);
         }
     }
 }

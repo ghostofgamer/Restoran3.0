@@ -1,4 +1,5 @@
 using System;
+using TutorialContent;
 using UI;
 using UnityEngine;
 
@@ -7,13 +8,24 @@ namespace WalletContent
     public class Wallet : MonoBehaviour
     {
         [SerializeField] private FlyValue _flyValue;
-        
+        [SerializeField] private TutorDescriptionUI _tutorDescriptionUI;
+
         public DollarValue DollarValue { get; private set; }
 
         public event Action<DollarValue> DollarValueChanged;
 
         public event Action<int> IncomeChanged;
         public event Action<int> ExpensesChanged;
+
+        private void OnEnable()
+        {
+            _tutorDescriptionUI.TutorialCompleted += AddPrizeTutorialMoney;
+        }
+
+        private void OnDisable()
+        {
+            _tutorDescriptionUI.TutorialCompleted -= AddPrizeTutorialMoney;
+        }
 
         private void Start()
         {
@@ -37,7 +49,7 @@ namespace WalletContent
             int totalCents = ToTotalCents(DollarValue) + ToTotalCents(other);
             DollarValue = FromTotalCents(totalCents);
             DollarValueChanged.Invoke(DollarValue);
-            _flyValue.ShowFly(other,true);
+            _flyValue.ShowFly(other, true);
             IncomeChanged?.Invoke(ToTotalCents(other));
             SaveDollarValue();
         }
@@ -47,7 +59,7 @@ namespace WalletContent
             int totalCents = ToTotalCents(DollarValue) - ToTotalCents(other);
             DollarValue = FromTotalCents(totalCents);
             DollarValueChanged.Invoke(DollarValue);
-            _flyValue.ShowFly(other,false);
+            _flyValue.ShowFly(other, false);
             ExpensesChanged?.Invoke(ToTotalCents(other));
             SaveDollarValue();
         }
@@ -63,7 +75,7 @@ namespace WalletContent
             int cents = totalCents % 100;
             return new DollarValue(dollars, cents);
         }
-        
+
         private void SaveDollarValue()
         {
             PlayerPrefs.SetInt("DollarValue_Dollars", DollarValue.Dollars);
@@ -81,8 +93,13 @@ namespace WalletContent
             }
             else
             {
-                DollarValue = new DollarValue(100, 10);
+                DollarValue = new DollarValue(25, 00);
             }
+        }
+
+        private void AddPrizeTutorialMoney()
+        {
+            Add(new DollarValue(100, 00));
         }
     }
 }

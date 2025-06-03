@@ -20,7 +20,7 @@ namespace ClientsContent
         [SerializeField] private CashRegister _cashRegister;
         [SerializeField] private Transform _trayPositionHand;
         [SerializeField] private Collider _clientCollider;
-        
+
         private PriceOrderCounter _priceOrderCounter;
         private Restaurant _restaurant;
         private Action<Client> _reachAction;
@@ -30,8 +30,9 @@ namespace ClientsContent
         private QueueCashRegister _queueCashRegister;
         private ClientCar _clientCar;
         private ClientsCounter _clientsCounter;
-        
-        public DollarValue PriceOrder{ get; private set; }
+        private Coroutine _trayCoroutine;
+
+        public DollarValue PriceOrder { get; private set; }
 
         public DollarValue Cash { get; private set; }
 
@@ -55,7 +56,7 @@ namespace ClientsContent
             _clientsCounter = clientsCounter;
             _clientsCounter.AddClient(this);
             // _clientCar = null;
-            
+
             Cash = new DollarValue(0, 0);
             Cash = priceOrderCounter.GetCash(PriceOrder);
             // InitCash(PriceOrder);
@@ -102,32 +103,12 @@ namespace ClientsContent
 
         public void OrderCompleted(Tray tray)
         {
-            // StartCoroutine(PickUpOrder(tray));
             GoToOrderTray(tray);
         }
-
-        /*private void InitCash(DollarValue dollarValuePriceOrder)
-        {
-            Cash = dollarValuePriceOrder.Dollars switch
-            {
-                < 10 => new DollarValue(10, 0),
-                < 20 => new DollarValue(20, 0),
-                < 30 => new DollarValue(30, 0),
-                < 40 => new DollarValue(40, 0),
-                < 50 => new DollarValue(50, 0),
-                < 60 => new DollarValue(60, 0),
-                < 70 => new DollarValue(70, 0),
-                < 80 => new DollarValue(80, 0),
-                < 90 => new DollarValue(90, 0),
-                < 100 => new DollarValue(100, 0),
-                _ => Cash
-            };
-        }*/
 
         private void GoToOrderTray(Tray tray)
         {
             _currentState = ClientState.PickUpOrder;
-            // Debug.Log("GoToOrderTray");
 
             SetDestination(tray.transform.position, () =>
             {
@@ -138,24 +119,51 @@ namespace ClientsContent
 
         private void GoToTableWithTray(Tray tray)
         {
-            tray.transform.parent = this.transform;
-            tray.transform.position = _trayPositionHand.position;
-            tray.transform.localRotation = _trayPositionHand.localRotation;
+            if (_trayCoroutine != null)
+                StopCoroutine(_trayCoroutine);
 
-            _restaurant.RemoveClientTray(tray);
-            _currentState = ClientState.Eat;
-
-            // _navMeshAgent.SetDestination(Table.ClientPosition.transform.position);
-
-            SetDestination(Table.ClientSitPosition.transform.position, () =>
+            _trayCoroutine = StartCoroutine(SmoothMoveTray(tray, () =>
             {
-                _navMeshAgent.enabled = false;
-                transform.position = Table.ClientSitPosition.transform.position;
-                transform.rotation = Table.ClientSitPosition.transform.rotation;
-                _animator.SetBool("Sit", true);
-                // Debug.Log("Вернулся за стол с едой");
-                Eat(tray);
-            });
+                _restaurant.RemoveClientTray(tray);
+                _currentState = ClientState.Eat;
+
+                SetDestination(Table.ClientSitPosition.transform.position, () =>
+                {
+                    _navMeshAgent.enabled = false;
+                    transform.position = Table.ClientSitPosition.transform.position;
+                    transform.rotation = Table.ClientSitPosition.transform.rotation;
+                    _animator.SetBool("Sit", true);
+                    Eat(tray);
+                });
+            }));
+        }
+
+        private IEnumerator SmoothMoveTray(Tray tray, System.Action onComplete)
+        {
+            float duration = 0.3f;
+            float elapsedTime = 0f;
+
+            Transform initialParent = tray.transform.parent;
+            Vector3 initialPosition = tray.transform.position;
+            Quaternion initialRotation = tray.transform.rotation;
+
+            tray.transform.parent = this.transform;
+
+            while (elapsedTime < duration)
+            {
+                tray.transform.position =
+                    Vector3.Lerp(initialPosition, _trayPositionHand.position, elapsedTime / duration);
+                tray.transform.rotation =
+                    Quaternion.Lerp(initialRotation, _trayPositionHand.rotation, elapsedTime / duration);
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            tray.transform.position = _trayPositionHand.position;
+            tray.transform.rotation = _trayPositionHand.rotation;
+
+            onComplete?.Invoke();
         }
 
         private void Eat(Tray tray)
@@ -191,7 +199,7 @@ namespace ClientsContent
             _animator.SetBool("Sit", false);
             _currentState = ClientState.GoAway;
             _clientsCounter.RemoveClient(this);
-            
+
             if (_clientCar != null)
             {
                 SetDestination(_clientCar.ExitPosition.position, () =>
@@ -266,7 +274,7 @@ namespace ClientsContent
             // _meshObstacle.enabled = false;
             // _clientCollider.enabled = false;
             _meshObstacle.enabled = true;
-            
+
             if (!_navMeshAgent.enabled)
             {
                 _navMeshAgent.enabled = true;
@@ -295,7 +303,7 @@ namespace ClientsContent
             _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", false);
             callback.Invoke();
         }
-        
+
         public bool CanInteractWithCashier()
         {
             return _currentState == ClientState.AtCashier;

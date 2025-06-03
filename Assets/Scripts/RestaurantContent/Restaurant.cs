@@ -38,7 +38,6 @@ namespace RestaurantContent
 
             if (tray != null)
             {
-                // tray.SetBurger(item);
                 return true;
             }
 
@@ -48,6 +47,23 @@ namespace RestaurantContent
         public bool TryGetTrayDrinkOrder(ItemType itemType, out Tray tray)
         {
             Order order = _ordersCounter.GetOrderByDrink(itemType);
+            Debug.Log("Order " + (order?.IndexTable + 1));
+            tray = null;
+
+            if (order != null)
+                tray = _trayCounter.GetTrayByTableIndex(order);
+
+            if (tray != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
+        public bool TryGetTrayExtraOrder(ItemType itemType, out Tray tray)
+        {
+            Order order = _ordersCounter.GetOrderByExtra(itemType);
             Debug.Log("Order " + (order?.IndexTable + 1));
             tray = null;
 
@@ -76,6 +92,11 @@ namespace RestaurantContent
         public void SetSodaOrder(Tray tray, Item item)
         {
             tray.SetSodaDrink(item);
+        }
+
+        public void SetExtraOrder(Tray tray, Item item)
+        {
+            tray.SetExtra(item);
         }
     }
 }

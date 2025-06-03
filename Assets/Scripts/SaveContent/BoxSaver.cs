@@ -1,11 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using Enums;
 using ItemContent;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SaveContent
@@ -14,11 +10,15 @@ namespace SaveContent
     {
         [SerializeField] private BoxesCounter _boxesCounter;
 
-        private List<ItemType> _itemBaskets = new List<ItemType>();
-
         private void Start()
         {
             LoadData();
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+                SaveData();
         }
 
         private void OnApplicationQuit()
@@ -26,7 +26,7 @@ namespace SaveContent
             SaveData();
         }
 
-        private void SaveData()
+        public void SaveData()
         {
             // Преобразуем данные коробок в формат для сохранения
             List<BoxData> boxesToSave = _boxesCounter.ItemBaskets
@@ -43,10 +43,26 @@ namespace SaveContent
             File.WriteAllText(path, jsonData);
         }
 
+
         public List<BoxData> LoadData()
         {
             // Загружаем данные из JSON файла
             string path = Application.persistentDataPath + "/boxData.json";
+
+            string persistentDataPath = Application.persistentDataPath;
+            Debug.Log("Persistent Data Path: " + persistentDataPath);
+
+            if (string.IsNullOrWhiteSpace(persistentDataPath))
+            {
+                Debug.LogError("Persistent Data Path is empty or whitespace.");
+                return new List<BoxData>();
+            }
+
+            if (!Directory.Exists(persistentDataPath))
+            {
+                Directory.CreateDirectory(persistentDataPath);
+            }
+
             if (File.Exists(path))
             {
                 string jsonData = File.ReadAllText(path);
@@ -73,41 +89,6 @@ namespace SaveContent
                 Debug.Log("No saved data found.");
             }
         }
-
-
-        /*private void SaveDate()
-        {
-            int[] combinedIndices = _boxesCounter.ItemBaskets.Select(item => (int)item.ItemType).ToArray();
-
-            string combinedIndicesString = string.Join(",", combinedIndices);
-
-            /*int[] combinedIndices = itemBasketList.Select(item => (int)item.ItemType)
-                .Concat(itemDrinkList.Select(item => (int)item.ItemType))
-                .ToArray();#1#
-
-            // string combinedIndicesString = string.Join(",", combinedIndices);
-
-            PlayerPrefs.SetString("combinedBoxesIndices", combinedIndicesString);
-            PlayerPrefs.Save();
-        }
-
-        public List<ItemType> LoadData()
-        {
-            string combinedIndicesString = PlayerPrefs.GetString("combinedBoxesIndices", "");
-
-            if (!string.IsNullOrEmpty(combinedIndicesString))
-            {
-                string[] indicesArray = combinedIndicesString.Split(',');
-                int[] indices = Array.ConvertAll(indicesArray, int.Parse);
-
-                foreach (var index in indices)
-                    _itemBaskets.Add((ItemType)index);
-
-                return _itemBaskets;
-            }
-
-            return new List<ItemType>();
-        }*/
     }
 
     [System.Serializable]

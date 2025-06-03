@@ -5,6 +5,7 @@ using ClientsContent;
 using Enums;
 using KitchenEquipmentContent.AssemblyTables.CoffeeTableContent;
 using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
+using KitchenEquipmentContent.FryerContent;
 using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
@@ -21,13 +22,14 @@ namespace OrdersContent
         [SerializeField] private CoffeeCounter _coffeeCounter;
         [SerializeField] private SodaCounter _sodaCounter;
         [SerializeField] private PlayerLevel _playerLevel;
-        
+        [SerializeField] private DeepFryerItemCounter _deepFryerItemCounter;
+
         private const int MaxActiveOrders = 4;
 
         private List<Order> _currentOrders;
         private Queue<Order> _orderQueue;
         private Queue<Client> _clientQueue;
-        
+
         public event Action<List<Order>> OrdersChanged;
 
         public event Action<int> UpdateOrders;
@@ -36,7 +38,7 @@ namespace OrdersContent
         public event Action OrderCompleted;
 
         public List<Order> CurrentOrders => _currentOrders;
-        
+
 
         private void Start()
         {
@@ -58,6 +60,7 @@ namespace OrdersContent
                 _burgersCounter.CheckWaitNeedBurgers(order.BurgerItemOrder);
                 _coffeeCounter.CheckWaitNeedCoffee(order.DrinkItemOrder);
                 _sodaCounter.CheckWaitNeedSoda(order.DrinkItemOrder);
+                _deepFryerItemCounter.CheckWaitNeedBurgers(order.ExtraItemOrder);
                 OrderAdded?.Invoke();
             }
             else
@@ -72,31 +75,31 @@ namespace OrdersContent
         public void CompleteOrder(Order order, Tray tray)
         {
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            
+
             if (_currentOrders.Contains(order))
             {
                 Debug.Log(" нашли заказ ");
-                
+
                 _currentOrders.Remove(order);
                 // OrderDeleted?.Invoke(order);
                 Debug.Log(" 1 ");
                 Debug.Log(" 3 ");
                 Client client = _activeOrderWaitClients.FirstOrDefault(c => c.Order == order);
-                
+
                 Debug.Log(" client");
-                
+
                 if (client != null)
                 {
                     Debug.Log(" client иди за заказом " + client);
                     _activeOrderWaitClients.Remove(client);
                     client.OrderCompleted(tray);
-                _playerLevel.AddExp(5);
+                    _playerLevel.AddExp(5);
                 }
                 else
                 {
                     Debug.Log(" Не анходит клиента  которого заказ! ");
                 }
-                
+
                 Debug.Log("_currentOrders " + _currentOrders.Count);
                 UpdateOrders?.Invoke(_currentOrders.Count);
                 OrdersChanged?.Invoke(_currentOrders);
@@ -127,13 +130,14 @@ namespace OrdersContent
                 _currentOrders.Add(nextOrder);
                 _activeOrderWaitClients.Add(nextClient);
                 UpdateTrays(nextOrder);
-                
+
                 // OrdersChanged?.Invoke(nextOrder);
                 OrdersChanged?.Invoke(_currentOrders);
-                
+
                 _burgersCounter.CheckWaitNeedBurgers(nextOrder.BurgerItemOrder);
                 _coffeeCounter.CheckWaitNeedCoffee(nextOrder.DrinkItemOrder);
                 _sodaCounter.CheckWaitNeedSoda(nextOrder.DrinkItemOrder);
+                _deepFryerItemCounter.CheckWaitNeedBurgers(nextOrder.ExtraItemOrder);
                 
                 Debug.Log("Активирован новый заказ: " + nextOrder.IndexTable);
             }
@@ -159,25 +163,31 @@ namespace OrdersContent
                 Debug.Log("Поднос Null у тебя");
             }
         }
-        
+
         /*public bool ContainsBurger(ItemType burgerType)
         {
             Order order = _currentOrders.Any(order => order.BurgerItemOrder == burgerType;
-            
+
             return _currentOrders.Any(order => order.BurgerItemOrder == burgerType);
         }*/
-        
+
         public Order GetOrderByBurger(ItemType burgerType)
         {
             // return _currentOrders.FirstOrDefault(order => order.BurgerItemOrder == burgerType);
-            return _currentOrders.FirstOrDefault(order => order.BurgerItemOrder == burgerType&&!order.IsBurgerCompleted);
+            return _currentOrders.FirstOrDefault(order =>
+                order.BurgerItemOrder == burgerType && !order.IsBurgerCompleted);
         }
-        
+
         public Order GetOrderByDrink(ItemType drinkItem)
         {
             // return _currentOrders.FirstOrDefault(order => order.BurgerItemOrder == burgerType);
-            return _currentOrders.FirstOrDefault(order => order.DrinkItemOrder == drinkItem&&!order.IsDrinkCompleted);
+            return _currentOrders.FirstOrDefault(order => order.DrinkItemOrder == drinkItem && !order.IsDrinkCompleted);
         }
 
+        public Order GetOrderByExtra(ItemType extraItem)
+        {
+            // return _currentOrders.FirstOrDefault(order => order.BurgerItemOrder == burgerType);
+            return _currentOrders.FirstOrDefault(order => order.ExtraItemOrder == extraItem && !order.IsExtraCompleted);
+        }
     }
 }
