@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Enums;
+using SettingsContent.SoundContent;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KitchenEquipmentContent.FryerContent
 {
@@ -12,7 +15,12 @@ namespace KitchenEquipmentContent.FryerContent
         [SerializeField] private FryerContainer[] _fryerContainers;
         [SerializeField] private FryerPacking _fryerPacking;
         [SerializeField] private Collider _collider;
-
+        [SerializeField] private GameObject _progressFryUI;
+        [SerializeField] private TMP_Text _fryText;
+        [SerializeField] private Image _fillImage;
+        [SerializeField] private float _fryTime = 3f;
+        [SerializeField] private AudioSource _audioSource;
+        
         private Coroutine _coroutine;
         private List<FryerTool> _fryerTools = new List<FryerTool>();
         
@@ -63,8 +71,28 @@ namespace KitchenEquipmentContent.FryerContent
                 if (fryerContainer.GetInactiveValue() > 0)
                     SelectFryerTool(fryerContainer.ItemType);
             }
-
-            yield return new WaitForSeconds(4f);
+            
+            yield return new WaitForSeconds(1f);
+            _audioSource.Play();
+            _progressFryUI.SetActive(true);
+            _fryText.text = "Fry <color=yellow>Raw</color>";
+            _fillImage.fillAmount = 0f;
+            
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < _fryTime)
+            {
+                elapsedTime += Time.deltaTime;
+                _fillImage.fillAmount = elapsedTime / _fryTime;
+                yield return null;
+            }
+            
+            _audioSource.Stop();
+            _fryText.text = "Fry <color=green>Well</color>";
+            SoundPlayer.Instance.PlayGrillWell();
+            
+            yield return new WaitForSeconds(0.3f);
+            _progressFryUI.SetActive(false);
             Debug.Log("закончили жарить ");
             FryCompleted?.Invoke();
             _collider.enabled = true;
