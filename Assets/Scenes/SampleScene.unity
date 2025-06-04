@@ -2836,7 +2836,6 @@ GameObject:
   - component: {fileID: 52481253}
   - component: {fileID: 52481252}
   - component: {fileID: 52481251}
-  - component: {fileID: 52481250}
   m_Layer: 5
   m_Name: AcceptedButton
   m_TagString: Untagged
@@ -2864,19 +2863,6 @@ RectTransform:
   m_AnchoredPosition: {x: 125.78967, y: -596.74255}
   m_SizeDelta: {x: 435.5793, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &52481250
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 52481248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a772d90bbc1dca489245f95f4036532, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cashRegister: {fileID: 758493154}
 --- !u!114 &52481251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2920,7 +2906,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 52481252}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1814839634}
+        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
+          Assembly-CSharp
+        m_MethodName: OnAcceptButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &52481252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7854,10 +7853,10 @@ RectTransform:
   - {fileID: 10487164}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 151, y: -430.5178}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &134763384
 MonoBehaviour:
@@ -31427,10 +31426,10 @@ RectTransform:
   - {fileID: 1373414240}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 381, y: -315.5178}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &461756915
 MonoBehaviour:
@@ -31559,7 +31558,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &463462314
 RectTransform:
   m_ObjectHideFlags: 0
@@ -43377,10 +43376,10 @@ RectTransform:
   - {fileID: 1287116912}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 151, y: -315.5178}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &577802191
 MonoBehaviour:
@@ -44680,10 +44679,10 @@ RectTransform:
   - {fileID: 369235592}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 611, y: -200.51779}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &603791337
 MonoBehaviour:
@@ -58550,10 +58549,10 @@ RectTransform:
   - {fileID: 736770135}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 611, y: -430.5178}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &811015937
 MonoBehaviour:
@@ -69340,10 +69339,10 @@ RectTransform:
   - {fileID: 1910745602}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 151, y: -200.51779}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &975868415
 MonoBehaviour:
@@ -84422,10 +84421,10 @@ RectTransform:
   - {fileID: 1264427260}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 151, y: -85.51779}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1266214715
 MonoBehaviour:
@@ -89879,10 +89878,10 @@ RectTransform:
   - {fileID: 1042104090}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 611, y: -315.5178}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1373106117
 MonoBehaviour:
@@ -100373,10 +100372,10 @@ RectTransform:
   - {fileID: 933523743}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 381, y: -85.51779}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1500490608
 MonoBehaviour:
@@ -103380,10 +103379,10 @@ RectTransform:
   - {fileID: 891609241}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 611, y: -85.51779}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1543207876
 MonoBehaviour:
@@ -117696,6 +117695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputText: {fileID: 2008704}
+  _cashRegister: {fileID: 758493154}
 --- !u!1 &1816399087
 GameObject:
   m_ObjectHideFlags: 0
@@ -133062,10 +133062,10 @@ RectTransform:
   - {fileID: 1367068504}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 381, y: -200.51779}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2010332244
 MonoBehaviour:
@@ -135231,10 +135231,10 @@ RectTransform:
   - {fileID: 72769201}
   m_Father: {fileID: 1598047178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 381, y: -430.5178}
+  m_SizeDelta: {x: 230, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2054335213
 MonoBehaviour:
@@ -154722,6 +154722,10 @@ PrefabInstance:
       propertyPath: _totalCardPaymentText
       value: 
       objectReference: {fileID: 1982657863}
+    - target: {fileID: 7310522693886990975, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
+      propertyPath: _cardPaymentAccountant
+      value: 
+      objectReference: {fileID: 1814839634}
     - target: {fileID: 7310522693886990975, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
       propertyPath: _panelCardPaymentGiving
       value: 
