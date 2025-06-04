@@ -40,6 +40,8 @@ namespace RestaurantContent.CashRegisterContent
 
         public void OnDotButtonClick()
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             if (!InputString.Contains(".") && InputString.Length < MaxInputLength)
             {
                 if (string.IsNullOrEmpty(InputString))
@@ -57,6 +59,8 @@ namespace RestaurantContent.CashRegisterContent
 
         public void OnAcceptButtonClick()
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             if (string.IsNullOrEmpty(InputString))
             {
                 Debug.Log("Введите сумму.");
@@ -93,12 +97,15 @@ namespace RestaurantContent.CashRegisterContent
 
         public void ClearAll()
         {
+            SoundPlayer.Instance.PlayButtonClick();
             InputString = string.Empty;
             UpdateInputText();
         }
         
         public void ClearLast()
         {
+            SoundPlayer.Instance.PlayButtonClick();
+            
             if (!string.IsNullOrEmpty(InputString))
             {
                 InputString = InputString.Substring(0, InputString.Length - 1);

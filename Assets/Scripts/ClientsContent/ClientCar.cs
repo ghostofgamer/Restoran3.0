@@ -13,19 +13,19 @@ namespace ClientsContent
         [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private ParkingSpace _parkingSpace;
         [SerializeField] private Transform _exitPosition;
-        
-         private Transform _exitCarPosition;
+
+        private Transform _exitCarPosition;
 
         private int _maxSize = 3;
         private Coroutine _coroutine;
-        
+
         public Transform ExitPosition => _exitPosition;
-        
-        public void AddClient(Client client,ParkingSpace parkingSpace,Transform exitCarPosition)
+
+        public void AddClient(Client client, ParkingSpace parkingSpace, Transform exitCarPosition)
         {
             if (_clients.Count >= _maxSize)
                 return;
-            
+
             _clients.Add(client);
             _parkingSpace = parkingSpace;
             client.gameObject.SetActive(false);
@@ -40,32 +40,29 @@ namespace ClientsContent
                 _clients[i].gameObject.transform.position = _position[i].position;
                 _clients[i].UpdateGotoQueue();
             }
-            
+
             Debug.Log("АКТИВИРУЕМ НАШИХ КЛИЕНТОВ");
         }
 
         public void GoToPosition(Vector3 target)
         {
             // _navMeshAgent.SetDestination(target);
-            
-            
-            SetDestination(target, () =>
-            {
-                ActivateClients();
-            });
+
+
+            SetDestination(target, () => { ActivateClients(); });
         }
-        
+
         public void SetDestination(Vector3 position, System.Action callback)
         {
             /*_navMeshAgent.enabled = true;
             _meshObstacle.enabled = true;*/
-            
+
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
             _coroutine = StartCoroutine(MoveToPosition(position, callback));
         }
-        
+
         private IEnumerator MoveToPosition(Vector3 position, System.Action callback)
         {
             // _meshObstacle.enabled = false;
@@ -76,7 +73,7 @@ namespace ClientsContent
                 transform.position = Table.ClientStandPosition.position;
                 transform.rotation = Table.ClientStandPosition.rotation;
             }*/
-            
+
             _navMeshAgent.SetDestination(position);
 
             while (_navMeshAgent.pathPending)
@@ -88,23 +85,21 @@ namespace ClientsContent
             transform.rotation = _parkingSpace.transform.rotation;
             // _meshObstacle.enabled = true;
             Debug.Log("Завершил ехать ");
-            
+
             callback.Invoke();
         }
 
         public void RemoveClient(Client client)
         {
             _clients.Remove(client);
-            _parkingSpace.ClearPlace();
-            
+
             if (_clients.Count <= 0)
             {
                 SetDestination(_exitCarPosition.position, () =>
                 {
-                    
+                    _parkingSpace.ClearPlace();
                     gameObject.SetActive(false);
                 });
-              
             }
         }
     }

@@ -35054,6 +35054,7 @@ GameObject:
   - component: {fileID: 461756916}
   - component: {fileID: 461756915}
   - component: {fileID: 461756917}
+  - component: {fileID: 461756918}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -35162,20 +35163,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 461756915}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 8
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &461756918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461756913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 8
 --- !u!1 &462491881 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9177482357465183488, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
@@ -47654,6 +47656,7 @@ GameObject:
   - component: {fileID: 577802192}
   - component: {fileID: 577802191}
   - component: {fileID: 577802193}
+  - component: {fileID: 577802194}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -47762,20 +47765,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 577802191}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 7
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &577802194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 577802189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 7
 --- !u!1 &578367992
 GameObject:
   m_ObjectHideFlags: 0
@@ -49468,6 +49472,7 @@ GameObject:
   - component: {fileID: 603791338}
   - component: {fileID: 603791337}
   - component: {fileID: 603791339}
+  - component: {fileID: 603791340}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -49576,20 +49581,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 603791337}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 6
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &603791340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603791335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 6
 --- !u!1 &607764848
 GameObject:
   m_ObjectHideFlags: 0
@@ -68925,7 +68931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1072688524208305529, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2209906575071503484, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: _index
@@ -68949,7 +68955,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25.61
+      value: 24.06
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -68957,11 +68963,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.57
+      value: 6.25
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071075
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalRotation.x
@@ -68969,7 +68975,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071062
+      value: -0.00000092387205
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalRotation.z
@@ -68981,7 +68987,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -74724,6 +74730,7 @@ GameObject:
   - component: {fileID: 975868416}
   - component: {fileID: 975868415}
   - component: {fileID: 975868417}
+  - component: {fileID: 975868418}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -74832,20 +74839,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 975868415}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &975868418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 975868413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 4
 --- !u!1 &976212763
 GameObject:
   m_ObjectHideFlags: 0
@@ -79763,7 +79771,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1072688524208305529, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2209906575071503484, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: _isBuyed
@@ -91588,6 +91596,7 @@ GameObject:
   - component: {fileID: 1266214716}
   - component: {fileID: 1266214715}
   - component: {fileID: 1266214717}
+  - component: {fileID: 1266214718}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -91696,20 +91705,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1266214715}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &1266214718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266214713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 1
 --- !u!114 &1267716578 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3593408838117807752, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
@@ -95722,7 +95732,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1072688524208305529, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2209906575071503484, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: _index
@@ -95746,7 +95756,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.3
+      value: 18.31
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -95754,11 +95764,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.05
+      value: 6.18
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.70710653
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalRotation.x
@@ -95766,7 +95776,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.70710707
+      value: -0.0000008642672
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalRotation.z
@@ -95778,7 +95788,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -97816,6 +97826,7 @@ GameObject:
   - component: {fileID: 1373106118}
   - component: {fileID: 1373106117}
   - component: {fileID: 1373106119}
+  - component: {fileID: 1373106120}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -97924,20 +97935,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1373106117}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 9
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &1373106120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373106115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 9
 --- !u!1 &1373414239
 GameObject:
   m_ObjectHideFlags: 0
@@ -108322,7 +108334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1072688524208305529, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2209906575071503484, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: _index
@@ -108346,7 +108358,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 20.540537
+      value: 21.138
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -108354,7 +108366,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.79
+      value: 6.295
       objectReference: {fileID: 0}
     - target: {fileID: 2759285510475965884, guid: 19e62992f7d60ec4f9bed35048f9c88d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -109479,6 +109491,7 @@ GameObject:
   - component: {fileID: 1500490609}
   - component: {fileID: 1500490608}
   - component: {fileID: 1500490610}
+  - component: {fileID: 1500490611}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -109587,20 +109600,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1500490608}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &1500490611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500490606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 2
 --- !u!1 &1502356072
 GameObject:
   m_ObjectHideFlags: 0
@@ -112849,6 +112863,7 @@ GameObject:
   - component: {fileID: 1543207877}
   - component: {fileID: 1543207876}
   - component: {fileID: 1543207878}
+  - component: {fileID: 1543207879}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -112957,20 +112972,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1543207876}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &1543207879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543207874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 3
 --- !u!1 &1547286569
 GameObject:
   m_ObjectHideFlags: 0
@@ -144445,6 +144461,7 @@ GameObject:
   - component: {fileID: 2010332245}
   - component: {fileID: 2010332244}
   - component: {fileID: 2010332246}
+  - component: {fileID: 2010332247}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -144553,20 +144570,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2010332244}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 5
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &2010332247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010332242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 5
 --- !u!114 &2013456786 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3499896876524592440, guid: 2aeefb5b7baa46b45ba7c7176b7ec200, type: 3}
@@ -146614,6 +146632,7 @@ GameObject:
   - component: {fileID: 2054335214}
   - component: {fileID: 2054335213}
   - component: {fileID: 2054335215}
+  - component: {fileID: 2054335216}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -146722,20 +146741,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2054335213}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814839634}
-        m_TargetAssemblyTypeName: RestaurantContent.CashRegisterContent.CardPaymentAccountant,
-          Assembly-CSharp
-        m_MethodName: OnDigitButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &2054335216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054335211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c1fe59b1afca8418adfb5bc46b4ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPaymentAccountant: {fileID: 1814839634}
+  _value: 0
 --- !u!1 &2055921443
 GameObject:
   m_ObjectHideFlags: 0

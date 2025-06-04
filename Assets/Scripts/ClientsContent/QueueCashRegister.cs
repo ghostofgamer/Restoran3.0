@@ -6,7 +6,8 @@ namespace ClientsContent
     public class QueueCashRegister : MonoBehaviour
     {
         [SerializeField] public Transform[] _queuePositions;
-
+        [SerializeField] private List<Client> _clientListForInspector = new List<Client>();
+        
         private Queue<Client> clientQueue = new Queue<Client>();
         private Client currentClient;
         private int _maxQueueSize = 5;
@@ -18,16 +19,25 @@ namespace ClientsContent
             clientQueue.Enqueue(client);
             UpdateQueuePositions();
             Debug.Log("Колличество людей в очереди " +clientQueue.Count);
+            UpdateClientList();
         }
 
         public void AddClientQueue(Client client)
         {
             clientQueue.Enqueue(client);
             Debug.Log("Колличество людей в очереди " +clientQueue.Count);
+            UpdateClientList();
         }
 
+        [ContextMenu("UpdateQueuePositions")]
         public void UpdateQueuePositions()
         {
+            // UpdateClientList();
+            Debug.Log("Колличество в очередт  " + clientQueue.Count);
+
+            foreach (var client in clientQueue)
+                Debug.Log("Человек в очередт " + client.gameObject.name);
+            
             int index = 0;
 
             foreach (var client in clientQueue)
@@ -65,6 +75,16 @@ namespace ClientsContent
         public int GetFreeQueuePositions()
         {
             return _maxQueueSize - clientQueue.Count;
+        }
+        
+        private void UpdateClientList()
+        {
+            _clientListForInspector.Clear();
+            
+            foreach (var client in clientQueue)
+            {
+                _clientListForInspector.Add(client);
+            }
         }
     }
 }
