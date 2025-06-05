@@ -1,3 +1,4 @@
+using I2.Loc;
 using RestaurantContent.CashRegisterContent;
 using SettingsContent.SoundContent;
 using UnityEngine;
