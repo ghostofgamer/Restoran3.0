@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 5825383953614221149}
   - component: {fileID: 5869642063274120889}
   - component: {fileID: 8341756924741063643}
+  - component: {fileID: 2069194480875419755}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -312,6 +313,47 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2069194480875419755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240286338357821797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344445a89b4f74a0e9a0a766903df87e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTerm: AddToMenu
+  mTermSecondary: Code New Roman SDF
+  PrimaryTermModifier: 1
+  SecondaryTermModifier: 0
+  TermPrefix: 
+  TermSuffix: 
+  LocalizeOnAwake: 1
+  IgnoreRTL: 0
+  MaxCharactersInRTL: 0
+  IgnoreNumbersInRTL: 1
+  CorrectAlignmentForRTL: 1
+  AddSpacesToJoinedLanguages: 0
+  AllowLocalizedParameters: 1
+  AllowParameters: 1
+  TranslatedObjects:
+  - {fileID: 11400000, guid: 02fea1fb776e0ad43a5e684a1ab0ce9e, type: 2}
+  - {fileID: 11400000, guid: d67748ff2d7e9864f8325e444b416cb1, type: 2}
+  LocalizeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AlwaysForceLocalize: 1
+  LocalizeCallBack:
+    Target: {fileID: 0}
+    MethodName: 
+  mGUI_ShowReferences: 1
+  mGUI_ShowTems: 1
+  mGUI_ShowCallback: 0
+  mLocalizeTarget: {fileID: 0}
+  mLocalizeTargetName: I2.Loc.LocalizeTarget_TextMeshPro_UGUI
 --- !u!1 &1387784848341202134
 GameObject:
   m_ObjectHideFlags: 0
@@ -716,6 +758,8 @@ MonoBehaviour:
   _itemType: 11
   _image: {fileID: 1365078987629771472}
   _nameItemText: {fileID: 4380513702417476969}
+  _tutorial: {fileID: 0}
+  _shopTutorialChanger: {fileID: 0}
   _openedContent: {fileID: 534144368404868419}
   _closedContent: {fileID: 1614030596325093271}
   _slider: {fileID: 1778951379529927056}
