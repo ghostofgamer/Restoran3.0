@@ -1,3 +1,5 @@
+using Enums;
+using Io.AppMetrica;
 using SettingsContent.SoundContent;
 using TMPro;
 using UI.Screens.ShopContent;
@@ -27,6 +29,7 @@ namespace UI.Screens.EquipmentContent
         [SerializeField] private Image _buyButtonImage;
         [SerializeField] private bool _dependsOnZone;
         [SerializeField] private ZoneUIProduct _zoneUIProduct;
+        [SerializeField] protected EquipmentType _equipmentType;
 
         protected bool IsOwned;
         protected DollarValue CurrentPrice;
@@ -50,7 +53,9 @@ namespace UI.Screens.EquipmentContent
                 Debug.Log("Не хватает денег ");
                 return;
             }
-
+            
+            
+            AppMetrica.ReportEvent("Equipment", "{\"" + _equipmentType.ToString() + "\":null}");
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(CurrentPrice);
             _shopScreen.MakePurchase();

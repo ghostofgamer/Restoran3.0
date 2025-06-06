@@ -9,7 +9,6 @@ namespace UI.Screens.EquipmentContent
 {
     public class ShelfUIProduct : EquipmentUIProduct
     {
-        [SerializeField] private EquipmentType _equipmentType;
         [SerializeField] private ShelfConfigs _shelfConfigs;
         [SerializeField] private GameObject[] _shelf;
         [SerializeField] private TMP_Text _nameItem;

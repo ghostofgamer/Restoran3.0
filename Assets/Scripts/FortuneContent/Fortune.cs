@@ -107,6 +107,14 @@ namespace FortuneContent
 
         public void OnShow()
         {
+            if (!_isFreeButtonUsed)
+            {
+                AppMetrica.ReportEvent("TaskFortuna");
+                FreeSpinUsed?.Invoke();
+                PlayerPrefs.SetInt("FreeSpinUsed", 1);
+                _isFreeButtonUsed = true;
+            }
+            
             _fortuneScreen.OpenScreen();
             _spinValueButton.SetActive(_currentValueSpin > 0);
             _spinValueText.text = $"BALANCE: {_currentValueSpin.ToString()}";
@@ -119,7 +127,8 @@ namespace FortuneContent
 
             if (_spinWheelController.IsStarted)
                 return;
-
+            
+            _touchTaskFreeSpin.SetActive(false);
             SoundPlayer.Instance.PlayButtonClick();
             _currentValueSpin--;
             SaveSpinData();
@@ -131,12 +140,12 @@ namespace FortuneContent
         {
             SpinWheel();
             
-            if (!_isFreeButtonUsed)
+            /*if (!_isFreeButtonUsed)
             {
                 AppMetrica.ReportEvent("TaskFortuna");
                 FreeSpinUsed?.Invoke();
                 PlayerPrefs.SetInt("FreeSpinUsed", 1);
-            }
+            }*/
             
             _touchTaskFreeSpin.SetActive(false);
             _spinFreeButton.gameObject.SetActive(false);
@@ -148,13 +157,13 @@ namespace FortuneContent
             if (_spinWheelController.IsStarted)
                 return;
             
-            if (!_isFreeButtonUsed)
+            /*if (!_isFreeButtonUsed)
             {
                 AppMetrica.ReportEvent("TaskFortuna");
                 FreeSpinUsed?.Invoke();
                 PlayerPrefs.SetInt("FreeSpinUsed", 1);
-            }
-
+            }*/
+            _touchTaskFreeSpin.SetActive(false);
             SoundPlayer.Instance.PlayButtonClick();
             _dailyTimerADSFortune.StartButtonClick();
             _ads.ShowRewarded(() =>
