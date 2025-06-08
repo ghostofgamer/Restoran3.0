@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using I2.Loc;
 using UnityEngine;
@@ -6,6 +7,8 @@ namespace SettingsContent
 {
     public class LanguageChanger : MonoBehaviour
     {
+        public event Action LanguageChanged;
+        
         private List<string> _languages = new List<string>
         {
             "English", "Spanish", "French", "German", "Italian", "Russian", "Japanese", "Turkish", "Polish",
@@ -27,6 +30,7 @@ namespace SettingsContent
             currentIndex = (currentIndex - 1 + _languages.Count) % _languages.Count;
             UpdateLanguageText();
             SaveIndex();
+            LanguageChanged?.Invoke();
         }
 
         public void NextLanguage()
@@ -34,6 +38,7 @@ namespace SettingsContent
             currentIndex = (currentIndex + 1) % _languages.Count;
             UpdateLanguageText();
             SaveIndex();
+            LanguageChanged?.Invoke();
         }
 
         private void UpdateLanguageText()

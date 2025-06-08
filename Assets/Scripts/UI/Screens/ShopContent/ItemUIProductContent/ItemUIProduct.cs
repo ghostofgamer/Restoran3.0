@@ -1,6 +1,8 @@
 using System;
 using Enums;
+using I2.Loc;
 using ItemContent;
+using SettingsContent;
 using SettingsContent.SoundContent;
 using SoContent;
 using TMPro;
@@ -22,7 +24,10 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
         [SerializeField] private TMP_Text _nameItemUIProduct;
         [SerializeField] private TMP_Text _levelRequiredText;
         [SerializeField] private ProductsScrollContent _productsScrollContent;
+        [SerializeField] private LanguageChanger _languageChanger;
 
+        private Ingredient _ingredient;
+        
         public event Action<int, DollarValue> AmountChanged;
 
         public DollarValue PricePerUnit { get; private set; }
@@ -35,22 +40,42 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
 
         public ItemType ItemType => _itemType;
 
+        private void OnEnable()
+        {
+            _languageChanger.LanguageChanged += ChangeLocalization;
+        }
+
+        private void OnDisable()
+        {
+            _languageChanger.LanguageChanged -= ChangeLocalization;
+        }
+
         private void Start()
         {
-            Ingredient ingredient = _ingredientsConfig.GetIngredient(_itemType);
-            PricePerUnit = new DollarValue(ingredient.dollarsPrice, ingredient.centsPrice);
-            _icon.sprite = ingredient.shopItemSprite;
-            Name = ingredient.name;
-            _nameItemUIProduct.text = Name;
+            _ingredient = _ingredientsConfig.GetIngredient(_itemType);
+            PricePerUnit = new DollarValue(_ingredient.dollarsPrice, _ingredient.centsPrice);
+            _icon.sprite = _ingredient.shopItemSprite;
+            Name = _ingredient.name;
+            Debug.Log("ItemTERM " + _ingredient.term);
+            _nameItemUIProduct.text = LocalizationManager.GetTermTranslation(_ingredient.term);
+            // _nameItemUIProduct.text = Name;
             TotalPrice = PricePerUnit;
             AmountChanged?.Invoke(AmountProduct, PricePerUnit);
-            _levelRequiredText.text = $"Level to unlock {_minLevelToUnlock}";
+            ChangeLocalization();
+        }
+
+        private void ChangeLocalization()
+        {
+            _nameItemUIProduct.text = LocalizationManager.GetTermTranslation(_ingredient.term);
+            Debug.Log("ItemTERM " + _ingredient.term);
+            _levelRequiredText.text =
+                $"{LocalizationManager.GetTermTranslation("Level to unlock")} {_minLevelToUnlock}";
         }
 
         public void IncreaseAmount()
         {
             SoundPlayer.Instance.PlayButtonClick();
-            
+
             if (AmountProduct >= 9)
                 return;
 
@@ -62,7 +87,7 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
         public void DecreaseAmount()
         {
             SoundPlayer.Instance.PlayButtonClick();
-            
+
             if (AmountProduct > 1)
             {
                 AmountProduct--;

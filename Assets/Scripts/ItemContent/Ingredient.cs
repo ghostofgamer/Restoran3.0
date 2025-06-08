@@ -13,5 +13,6 @@ namespace ItemContent
         public int dollarsPrice;
         public int centsPrice;
         public string name;
+        public string term;
     }
 }

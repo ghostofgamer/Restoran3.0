@@ -1,3 +1,4 @@
+using I2.Loc;
 using RestaurantContent;
 using SettingsContent.SoundContent;
 using TMPro;
@@ -35,11 +36,11 @@ namespace UI.Screens.ShopContent
         {
             _dollarValue = new DollarValue(_dollars, _cents);
             IsOwned = IsBuyed();
-            _requaredText.text = _zoneProduct != null
-                ? $"Buy Zone"
-                : $"Buy Zone";
+            /*_requaredText.text = _zoneProduct != null
+                ? LocalizationManager.GetTermTranslation("Buy Zone")
+                : LocalizationManager.GetTermTranslation("Buy Zone");*/
             _priceText.text = $"{_dollarValue.ToString()} ";
-            
+
             if (_zoneProduct == null)
             {
                 SetValue(false, IsOwned, !IsOwned);
@@ -50,7 +51,7 @@ namespace UI.Screens.ShopContent
                     _zoneProduct.IsBuyed() && IsOwned,
                     _zoneProduct.IsBuyed() && !IsOwned);
             }
-            
+
             _buyButtonImage.color = _wallet.DollarValue.ToTotalCents() >= _dollarValue.ToTotalCents()
                 ? _activeButtonColor
                 : _notActiveButtonColor;

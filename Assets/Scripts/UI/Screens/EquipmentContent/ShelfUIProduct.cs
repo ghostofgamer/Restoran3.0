@@ -1,5 +1,7 @@
 using Enums;
+using I2.Loc;
 using Io.AppMetrica;
+using SettingsContent;
 using SettingsContent.SoundContent;
 using SoContent;
 using TMPro;
@@ -15,6 +17,16 @@ namespace UI.Screens.EquipmentContent
         [SerializeField] private GameObject _storage1;
 
         private int _currentBuyShelfIndex = -1;
+
+        private void OnEnable()
+        {
+            _languageChanger.LanguageChanged += ChangeLocalization;
+        }
+
+        private void OnDisable()
+        {
+            _languageChanger.LanguageChanged -= ChangeLocalization;
+        }
 
         public override void Init(int levelPlayer)
         {
@@ -34,7 +46,7 @@ namespace UI.Screens.EquipmentContent
                     Debug.Log("Не хватает денег ");
                     return;
                 }
-                
+
                 AppMetrica.ReportEvent("Equipment", "{\"" + "Shelf" + "\":null}");
                 SoundPlayer.Instance.PlayPayment();
                 _wallet.Subtract(CurrentPrice);
@@ -55,13 +67,17 @@ namespace UI.Screens.EquipmentContent
         {
             if (_currentBuyShelfIndex < 0)
             {
-                _nameItem.text = _shelfConfigs.shelves[0].name;
+                // _nameItem.text = .name;
+                _nameItem.text =
+                    $"{LocalizationManager.GetTermTranslation("Shelf")} {_shelfConfigs.shelves[0].index + 1}";
                 CurrentPrice = _shelfConfigs.shelves[0].price;
                 _priceText.text = $"{CurrentPrice} ";
             }
             else if (_currentBuyShelfIndex + 1 < _shelfConfigs.shelves.Length)
             {
-                _nameItem.text = _shelfConfigs.shelves[_currentBuyShelfIndex + 1].name;
+                // _nameItem.text = _shelfConfigs.shelves[_currentBuyShelfIndex + 1].name;
+                _nameItem.text =
+                    $"{LocalizationManager.GetTermTranslation("Shelf")} {_shelfConfigs.shelves[_currentBuyShelfIndex + 1].index + 1}";
                 CurrentPrice = _shelfConfigs.shelves[_currentBuyShelfIndex + 1].price;
                 _priceText.text = $"{CurrentPrice} ";
 
@@ -77,7 +93,8 @@ namespace UI.Screens.EquipmentContent
                 _ownedObjectInfo.SetActive(true);
                 _buyObjectInfo.SetActive(false);
                 _requaredObjectInfo.SetActive(false);
-                _nameItem.text = "Shelf";
+                // _nameItem.text = "Shelf";
+                _nameItem.text = LocalizationManager.GetTermTranslation("Shelf");
                 _priceText.text = "";
             }
         }
@@ -86,6 +103,18 @@ namespace UI.Screens.EquipmentContent
         {
             _shelf[index].SetActive(true);
             Debug.Log("Activating shelf at index: " + index);
+        }
+
+        private void ChangeLocalization()
+        {
+            if (_currentBuyShelfIndex < 0)
+                _nameItem.text =
+                    $"{LocalizationManager.GetTermTranslation("Shelf")} {_shelfConfigs.shelves[0].index + 1}";
+            else if (_currentBuyShelfIndex + 1 < _shelfConfigs.shelves.Length)
+                _nameItem.text =
+                    $"{LocalizationManager.GetTermTranslation("Shelf")} {_shelfConfigs.shelves[_currentBuyShelfIndex + 1].index + 1}";
+            else
+                _nameItem.text = LocalizationManager.GetTermTranslation("Shelf");
         }
 
         /*public override bool IsBuyed()

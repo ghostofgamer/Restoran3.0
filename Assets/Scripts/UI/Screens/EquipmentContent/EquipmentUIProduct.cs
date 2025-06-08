@@ -1,5 +1,7 @@
 using Enums;
+using I2.Loc;
 using Io.AppMetrica;
+using SettingsContent;
 using SettingsContent.SoundContent;
 using TMPro;
 using UI.Screens.ShopContent;
@@ -30,9 +32,20 @@ namespace UI.Screens.EquipmentContent
         [SerializeField] private bool _dependsOnZone;
         [SerializeField] private ZoneUIProduct _zoneUIProduct;
         [SerializeField] protected EquipmentType _equipmentType;
+        [SerializeField] protected LanguageChanger _languageChanger;
 
         protected bool IsOwned;
         protected DollarValue CurrentPrice;
+
+        private void OnEnable()
+        {
+            _languageChanger.LanguageChanged += ChangeLocalization;
+        }
+
+        private void OnDisable()
+        {
+            _languageChanger.LanguageChanged -= ChangeLocalization;
+        }
 
         public virtual void Init(int levelPlayer)
         {
@@ -53,8 +66,8 @@ namespace UI.Screens.EquipmentContent
                 Debug.Log("Не хватает денег ");
                 return;
             }
-            
-            
+
+
             AppMetrica.ReportEvent("Equipment", "{\"" + _equipmentType.ToString() + "\":null}");
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(CurrentPrice);
@@ -76,7 +89,7 @@ namespace UI.Screens.EquipmentContent
         {
             if (_dependsOnZone)
             {
-                _requaredText.text = $"Required  is kitchen Zone";
+                _requaredText.text = LocalizationManager.GetTermTranslation("Required kitchen zone");
                 _priceText.text = $"{CurrentPrice.ToString()} ";
 
                 if (_zoneUIProduct != null)
@@ -88,12 +101,19 @@ namespace UI.Screens.EquipmentContent
             }
             else
             {
-                _requaredText.text = $"Required  is {_levelOpened} level";
+                _requaredText.text = $"{LocalizationManager.GetTermTranslation("Required")} {_levelOpened}";
                 _priceText.text = $"{CurrentPrice.ToString()} ";
                 _requaredObjectInfo.SetActive(levelPlayer < _levelOpened && !IsOwned);
                 _ownedObjectInfo.SetActive(levelPlayer >= _levelOpened && IsOwned);
                 _buyObjectInfo.SetActive(levelPlayer >= _levelOpened && !IsOwned);
             }
+        }
+
+        private void ChangeLocalization()
+        {
+            _requaredText.text = _dependsOnZone
+                ? LocalizationManager.GetTermTranslation("Required kitchen zone")
+                : _requaredText.text = $"{LocalizationManager.GetTermTranslation("Required")} {_levelOpened}";
         }
     }
 }

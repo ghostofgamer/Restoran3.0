@@ -1,6 +1,8 @@
 using System;
 using Enums;
+using I2.Loc;
 using RestaurantContent;
+using SettingsContent;
 using SettingsContent.SoundContent;
 using TMPro;
 using Unity.AI.Navigation;
@@ -29,20 +31,30 @@ namespace UI.Screens.ShopContent
         [SerializeField] private Color _notActiveButtonColor;
         [SerializeField] private Image _buyButtonImage;
         [SerializeField] private ZoneType _zoneType;
+        [SerializeField] private LanguageChanger _languageChanger;
         
         private DollarValue _dollarValue;
 
         public bool IsOwned { get; private set; }
 
+        private void OnEnable()
+        {
+            _languageChanger.LanguageChanged += ChangeLocalization;
+        }
+
+        private void OnDisable()
+        {
+            _languageChanger.LanguageChanged -= ChangeLocalization;
+        }
+        
         public void Init(int levelPlayer)
         {
             IsOwned = IsBuyed();
             _dollarValue = new DollarValue(_dollars, _cents);
-            _requaredText.text = _previousWallZone == null
-                ? $"Required  is {_levelOpened} level"
-                : $"Required  is {_levelOpened} level and prev zone";
-            _priceText.text = $"{_dollarValue.ToString()} ";
+            ChangeLocalization();
             
+            _priceText.text = $"{_dollarValue.ToString()} ";
+
             if (_previousWallZone == null)
             {
                 SetValue(levelPlayer < _levelOpened && !IsOwned,
@@ -55,7 +67,7 @@ namespace UI.Screens.ShopContent
                     levelPlayer >= _levelOpened && IsOwned && _previousWallZone.IsOwned,
                     levelPlayer >= _levelOpened && !IsOwned && _previousWallZone.IsOwned);
             }
-            
+
             _buyButtonImage.color = _wallet.DollarValue.ToTotalCents() >= _dollarValue.ToTotalCents()
                 ? _activeButtonColor
                 : _notActiveButtonColor;
@@ -74,7 +86,7 @@ namespace UI.Screens.ShopContent
                 Debug.Log("Не хватает денег ");
                 return;
             }
-            
+
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
             _shopScreen.MakePurchase();
@@ -96,6 +108,13 @@ namespace UI.Screens.ShopContent
             _requaredObjectInfo.SetActive(requaredObjectValue);
             _ownedObjectInfo.SetActive(ownedObjectValue);
             _buyObjectInfo.SetActive(buyObjectValue);
+        }
+        
+        private void ChangeLocalization()
+        {
+            _requaredText.text = _previousWallZone == null
+                ?$"{LocalizationManager.GetTermTranslation("Required")} {_levelOpened}"
+                : $"{LocalizationManager.GetTermTranslation("Required")} {_levelOpened} {LocalizationManager.GetTermTranslation("prev zone")}";
         }
     }
 }
