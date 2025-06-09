@@ -1,4 +1,5 @@
 using Enums;
+using I2.Loc;
 using OrdersContent;
 using SoContent;
 using TMPro;
@@ -51,7 +52,7 @@ namespace UI.Screens
                 Debug.Log("Доп empty");
             }
 
-            _tableIndexText.text = $"Table: {(Order.IndexTable + 1)}";
+            _tableIndexText.text = $"{LocalizationManager.GetTermTranslation("Table")}: {(Order.IndexTable + 1)}";
         }
 
         public void Deactivate()
