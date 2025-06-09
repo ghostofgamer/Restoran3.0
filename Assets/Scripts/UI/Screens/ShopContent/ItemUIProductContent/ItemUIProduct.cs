@@ -40,9 +40,15 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
 
         public ItemType ItemType => _itemType;
 
+        private void Awake()
+        {
+            _ingredient = _ingredientsConfig.GetIngredient(_itemType);
+        }
+
         private void OnEnable()
         {
             _languageChanger.LanguageChanged += ChangeLocalization;
+            ChangeLocalization();
         }
 
         private void OnDisable()

@@ -15,4 +15,5 @@ public class ItemConfig
     public DollarValue PurchasePrice;
     public DollarValue MaxPrice;
     public DollarValue RecommendedPrice;
+    public string Term;
 }

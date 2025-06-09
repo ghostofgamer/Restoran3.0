@@ -1,7 +1,10 @@
 using System;
 using Enums;
+using I2.Loc;
+using SettingsContent;
 using SoContent;
 using TutorialContent;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.UI;
 using WalletContent;
@@ -18,6 +21,8 @@ namespace UI.MenuUIContent
         [SerializeField] private GameObject _closedContent;
         [SerializeField] private Slider _slider;
         [SerializeField] private Color _colorRed;
+        [SerializeField] private Color _colorGreen;
+        [SerializeField] private LanguageChanger _languageChanger;
 
         private bool _isFirstCall = true;
         private int _levelOpened;
@@ -32,6 +37,16 @@ namespace UI.MenuUIContent
 
         public event Action<string, DollarValue> InitCompleted;
 
+        private void OnEnable()
+        {
+            _languageChanger.LanguageChanged += InvokeRequiredTranslate;
+        }
+
+        private void OnDisable()
+        {
+            _languageChanger.LanguageChanged -= InvokeRequiredTranslate;
+        }
+
         private void Start()
         {
             int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
@@ -44,7 +59,7 @@ namespace UI.MenuUIContent
                 UpdateProfitText();
 
                 Color color = _currentPrice.ToTotalCents() <= _recommendedPrice.ToTotalCents() * 1.10
-                    ? Color.green
+                    ? _colorGreen
                     : _colorRed;
 
                 ChangeCurrentPrice?.Invoke(_currentPrice, color);
@@ -53,9 +68,16 @@ namespace UI.MenuUIContent
                 {
                     _levelOpened = ItemConfig.LevelOpened;
                     _purchasePrice = ItemConfig.PurchasePrice;
-                    InitCompleted?.Invoke($"Required is {_levelOpened} level", _purchasePrice);
+                    InitCompleted?.Invoke($"{LocalizationManager.GetTermTranslation("Required")} {_levelOpened}",
+                        _purchasePrice);
                 }
             }
+        }
+
+        private void InvokeRequiredTranslate()
+        {
+            InitCompleted?.Invoke($"{LocalizationManager.GetTermTranslation("Required")} {_levelOpened}",
+                _purchasePrice);
         }
 
         public void AddItemToMenu()
@@ -79,7 +101,9 @@ namespace UI.MenuUIContent
                 _purchasePrice = ItemConfig.PurchasePrice;
                 _minPrice = _purchasePrice;
                 _maxPrice = ItemConfig.MaxPrice;
-                InitCompleted?.Invoke($"Required is {_levelOpened} level", _purchasePrice);
+                // InitCompleted?.Invoke($"Required is {_levelOpened} level", _purchasePrice);
+                InitCompleted?.Invoke($"{LocalizationManager.GetTermTranslation("Required")} {_levelOpened}",
+                    _purchasePrice);
                 _recommendedPrice = ItemConfig.RecommendedPrice;
 
                 if (PlayerPrefs.HasKey(CurrentPriceKey + ItemConfig.ItemType))
@@ -143,7 +167,7 @@ namespace UI.MenuUIContent
             UpdateProfitText();
 
             Color color = _currentPrice.ToTotalCents() <= _recommendedPrice.ToTotalCents() * 1.10
-                ? Color.green
+                ? _colorGreen
                 : _colorRed;
 
             ChangeCurrentPrice?.Invoke(_currentPrice, color);

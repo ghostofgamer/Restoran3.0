@@ -1,4 +1,5 @@
 using System;
+using I2.Loc;
 using SoContent;
 using TMPro;
 using UnityEngine;
@@ -15,7 +16,8 @@ namespace UI.MenuUIContent
         private void OnEnable()
         {
             int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
-            _priceText.text = $"PRICE {new DollarValue(0, 0).FromTotalCents(totalCents)}";
+            // _priceText.text = $"PRICE {new DollarValue(0, 0).FromTotalCents(totalCents)}";
+            _priceText.text = $"{LocalizationManager.GetTermTranslation("Price")}:{new DollarValue(0, 0).FromTotalCents(totalCents)}";
         }
 
         public void RemoveItemToMenu()
@@ -27,7 +29,7 @@ namespace UI.MenuUIContent
         {
             base.Init(itemsConfig);
             int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
-            _priceText.text = $"PRICE {new DollarValue(0, 0).FromTotalCents(totalCents)}";
+            _priceText.text = $"{LocalizationManager.GetTermTranslation("Price")}:{new DollarValue(0, 0).FromTotalCents(totalCents)}";
         }
     }
 }
