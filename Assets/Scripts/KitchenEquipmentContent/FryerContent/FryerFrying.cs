@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Enums;
+using I2.Loc;
 using SettingsContent.SoundContent;
 using TMPro;
 using UnityEngine;
@@ -95,7 +96,8 @@ namespace KitchenEquipmentContent.FryerContent
             yield return new WaitForSeconds(1f);
             _audioSource.Play();
             _progressFryUI.SetActive(true);
-            _fryText.text = "Fry <color=yellow>Raw</color>";
+            // _fryText.text = "Fry <color=yellow>Raw</color>";
+            _fryText.text = $"{LocalizationManager.GetTermTranslation("Fry")} <color=yellow>{LocalizationManager.GetTermTranslation("Raw")}</color>";
             _fillImage.fillAmount = 0f;
 
             float elapsedTime = 0f;
@@ -108,7 +110,8 @@ namespace KitchenEquipmentContent.FryerContent
             }
 
             _audioSource.Stop();
-            _fryText.text = "Fry <color=green>Well</color>";
+            // _fryText.text = "Fry <color=green>Well</color>";
+            _fryText.text = $"{LocalizationManager.GetTermTranslation("Fry")} <color=green>{LocalizationManager.GetTermTranslation("Well")}</color>";
             SoundPlayer.Instance.PlayGrillWell();
 
             yield return new WaitForSeconds(0.3f);

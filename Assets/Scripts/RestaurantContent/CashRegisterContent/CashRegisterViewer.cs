@@ -1,4 +1,5 @@
 using ClientsContent;
+using I2.Loc;
 using OrdersContent;
 using TMPro;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private GameObject _panelCardPaymentGiving;
         [SerializeField] private TMP_Text _totalCardPaymentText;
         [SerializeField] private CardPaymentAccountant _cardPaymentAccountant;
-        
+
         private DollarValue _currentChangeValue;
 
         private void OnEnable()
@@ -48,10 +49,11 @@ namespace RestaurantContent.CashRegisterContent
         {
             _cardPaymentAccountant.Init(client.PriceOrder);
             _currentChangeValue = _priceOrderCounter.GetChange(client.PriceOrder, client.Cash);
-            _totalText.text = $"Total:{client.PriceOrder}";
-            _totalCardPaymentText.text = $"Total:{client.PriceOrder}";
-            _receivedText.text = $"Received:{client.Cash}";
-            _changeText.text = $"Change:<color=yellow>{_currentChangeValue + "</color>"}";
+            _totalText.text = $"{LocalizationManager.GetTermTranslation("Total")} {client.PriceOrder}";
+            _totalCardPaymentText.text = $"{LocalizationManager.GetTermTranslation("Total")} {client.PriceOrder}";
+            _receivedText.text = $"{LocalizationManager.GetTermTranslation("Received")}: {client.Cash}";
+            _changeText.text =
+                $"{LocalizationManager.GetTermTranslation("Change")}: <color=yellow>{_currentChangeValue + "</color>"}";
             // _givingText.text = "Giving:<color=red> $0.00</color>";
             ShowGivingValueText(givingValue);
         }
@@ -61,7 +63,8 @@ namespace RestaurantContent.CashRegisterContent
             string colorHex = (dollarValue.ToTotalCents() == _currentChangeValue.ToTotalCents())
                 ? "#00FF00"
                 : "#FF0000";
-            _givingText.text = $"Giving:<color={colorHex}> {dollarValue.ToString()}</color>";
+            _givingText.text =
+                $"{LocalizationManager.GetTermTranslation("Giving")}: <color={colorHex}> {dollarValue.ToString()}</color>";
         }
     }
 }

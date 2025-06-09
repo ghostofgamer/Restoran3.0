@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using DG.Tweening;
 using Enums;
+using I2.Loc;
 using InteractableContent;
 using PlayerContent;
 using SettingsContent.SoundContent;
@@ -426,7 +427,8 @@ namespace KitchenEquipmentContent
             _fryEffect.SetActive(true);
             _audioSource.Play();
             _progressFryUI.SetActive(true);
-            grillText.text = "Grill <color=yellow>Raw</color>";
+            // grillText.text = "Grill <color=yellow>Raw</color>";
+            grillText.text = $"{LocalizationManager.GetTermTranslation("Grill")} <color=yellow>{LocalizationManager.GetTermTranslation("Raw")}</color>";
             fillImage.fillAmount = 0f;
 
             float elapsedTime = 0f;
@@ -444,7 +446,8 @@ namespace KitchenEquipmentContent
             
             _fryEffect.SetActive(false);
             _audioSource.Stop();
-            grillText.text = "Grill <color=green>Medium</color>";
+            // grillText.text = "Grill <color=green>Medium</color>";
+            grillText.text = $"{LocalizationManager.GetTermTranslation("Grill")} <color=green>{LocalizationManager.GetTermTranslation("Well")}</color>";
             SoundPlayer.Instance.PlayGrillWell();
             // _animator.SetBool("FryCutlet",false);
 

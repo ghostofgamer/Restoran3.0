@@ -33,7 +33,7 @@ namespace TutorialContent
         [SerializeField] private GameObject _touchShopImage;
         [SerializeField] private GameObject _touchSkipImage;
         [SerializeField] private BoxesCounter _boxesCounter;
-        [SerializeField] private Button _closeCashRegister;
+        [SerializeField] private Button[] _closeCashRegisters;
         [SerializeField] private AssemblyBurgerScreen _assemblyBurgerScreen;
         [SerializeField] private GameObject _blackScreen;
         [SerializeField] private ActionButtonActivator _actionButtonActivator;
@@ -315,7 +315,11 @@ namespace TutorialContent
         public void TakeFirstOrder()
         {
             SetValueButtonTopUI(false);
-            _closeCashRegister.interactable = false;
+            
+            foreach (var closeCashRegister in _closeCashRegisters)
+                closeCashRegister.interactable = false;
+            
+            // _closeCashRegister.interactable = false;
             _openCloseRest.DeactivateTutorPoint();
             _cashRegister.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_cashRegister.transform);
@@ -327,7 +331,11 @@ namespace TutorialContent
             SetValueButtonTopUI(false);
             _cashRegister.DeactivateTutorPoint();
             _tableFirstClient.ActivateTutorPoint();
-            _closeCashRegister.interactable = true;
+            
+            foreach (var closeCashRegister in _closeCashRegisters)
+                closeCashRegister.interactable = true;
+            
+            // _closeCashRegister.interactable = true;
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _playerRotator.RotateToTarget(_tableFirstClient.transform);
         }
