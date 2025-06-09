@@ -3,6 +3,7 @@ using System.IO;
 using ADSContent;
 using CoppraGames;
 using DailyTimerContent;
+using I2.Loc;
 using Io.AppMetrica;
 using PlayerContent.LevelContent;
 using SettingsContent.SoundContent;
@@ -92,7 +93,7 @@ namespace FortuneContent
             _dailyTimerFortune.UpdateInfo();
             filePath = Path.Combine(Application.persistentDataPath, "spinData.json");
             LoadSpinData();
-            _spinValueText.text = $"BALANCE: {_currentValueSpin.ToString()}";
+            _spinValueText.text=$"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
             AnimateButton();
         }
 
@@ -100,7 +101,8 @@ namespace FortuneContent
         {
             _currentValueSpin += value;
             _dailyTimerFortune.UpdateInfo();
-            _spinValueText.text = $"BALANCE: {_currentValueSpin.ToString()}";
+            // _spinValueText.text = $"BALANCE: {_currentValueSpin.ToString()}";
+            _spinValueText.text=$"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
             _spinValueButton.SetActive(_currentValueSpin > 0);
             SaveSpinData();
         }
@@ -117,7 +119,7 @@ namespace FortuneContent
             
             _fortuneScreen.OpenScreen();
             _spinValueButton.SetActive(_currentValueSpin > 0);
-            _spinValueText.text = $"BALANCE: {_currentValueSpin.ToString()}";
+            _spinValueText.text=$"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
         }
 
         public void SpinWheel()
@@ -133,7 +135,7 @@ namespace FortuneContent
             _currentValueSpin--;
             SaveSpinData();
             Spin();
-            _spinValueText.text = $"BALANCE: {_currentValueSpin.ToString()}";
+            _spinValueText.text=$"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
         }
 
         public void SpinFree()
