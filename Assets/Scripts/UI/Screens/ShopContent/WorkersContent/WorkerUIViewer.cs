@@ -1,3 +1,4 @@
+using I2.Loc;
 using TMPro;
 using UnityEngine;
 using WalletContent;
@@ -22,8 +23,8 @@ namespace UI.Screens.ShopContent.WorkersContent
 
         private void SetValue(DollarValue price, DollarValue salary)
         {
-            _priceText.text = price.ToString();
-            _salaryText.text = $"Salary: {salary.ToString()}";
+            _priceText.text = $"{LocalizationManager.GetTermTranslation("Price")}:{price}";
+            _salaryText.text = $"{LocalizationManager.GetTermTranslation("Salary")}:{salary}";
         }
     }
 }
