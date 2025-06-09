@@ -1,4 +1,5 @@
 using System;
+using I2.Loc;
 using StatisticContent;
 using TMPro;
 using UnityEngine;
@@ -26,15 +27,21 @@ namespace UI.Screens
 
         public void ShowStatistic()
         {
-            _labelText.text = $"Report of the day (Day {_calendar.CurrentDay})";
-            _totalClientsText.text = $"Total clients: {_statisticCounter.TotalClients}";
-            _totalOrdersText.text = $"Total orders: {_statisticCounter.TotalOrders}";
-            _completedOrdersText.text = $"Completed orders: {_statisticCounter.CompletedOrders}";
-            _experienceText.text = $"Experience: {_statisticCounter.Experience}";
-            _levelsText.text = $"Levels: +{_statisticCounter.Levels}";
-            _incomeText.text = $"Income: {new DollarValue(0, 0).FromTotalCents(_statisticCounter.Income)}";
+            _labelText.text =
+                $"{LocalizationManager.GetTermTranslation("Report of the day")} ({LocalizationManager.GetTermTranslation("Day")} {_calendar.CurrentDay})";
+            _totalClientsText.text =
+                $"{LocalizationManager.GetTermTranslation("Total clients")}: {_statisticCounter.TotalClients}";
+            _totalOrdersText.text =
+                $"{LocalizationManager.GetTermTranslation("Total orders")}: {_statisticCounter.TotalOrders}";
+            _completedOrdersText.text =
+                $"{LocalizationManager.GetTermTranslation("Completed orders")}: {_statisticCounter.CompletedOrders}";
+            _experienceText.text =
+                $"{LocalizationManager.GetTermTranslation("Experience")}: {_statisticCounter.Experience}";
+            _levelsText.text = $"{LocalizationManager.GetTermTranslation("Levels")}: +{_statisticCounter.Levels}";
+            _incomeText.text =
+                $"{LocalizationManager.GetTermTranslation("Income")}: {new DollarValue(0, 0).FromTotalCents(_statisticCounter.Income)}";
             _expensesText.text =
-                $"Expenses: <color=#FF0000>-{new DollarValue(0, 0).FromTotalCents(_statisticCounter.Expenses)}</color>";
+                $"{LocalizationManager.GetTermTranslation("Expenses")}: <color=#FF0000>-{new DollarValue(0, 0).FromTotalCents(_statisticCounter.Expenses)}</color>";
 
             int profitCents = _statisticCounter.Income - _statisticCounter.Expenses;
             bool isProfitNegative = profitCents < 0;
@@ -44,8 +51,8 @@ namespace UI.Screens
             string colorTag = isProfitNegative ? "<color=#FF0000>" : "<color=#00FF00>";
             string endColorTag = "</color>";
 
-            _profitText.text = $"Profit: {colorTag}{sign}{profitText}{endColorTag}";
-            _balanceText.text = $"Balance: {_wallet.DollarValue}";
+            _profitText.text = $"{LocalizationManager.GetTermTranslation("PROFIT")}: {colorTag}{sign}{profitText}{endColorTag}";
+            _balanceText.text = $"{LocalizationManager.GetTermTranslation("BALANCE")}: {_wallet.DollarValue}";
         }
     }
 }
