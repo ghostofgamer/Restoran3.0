@@ -1,5 +1,6 @@
 using System.Collections;
 using Enums;
+using I2.Loc;
 using InputContent;
 using ItemContent;
 using SoContent;
@@ -351,7 +352,8 @@ namespace TutorialContent
         {
             TutorialDescription.Description description =
                 System.Array.Find(_tutorialDescription.descriptions, d => d.type == currentType);
-            return description != null ? description.text : string.Empty;
+            // return description != null ? description.text : string.Empty;
+            return description != null ?  description.type.ToString() : string.Empty;
         }
 
         private void SetValueButtonTopUI(bool value)

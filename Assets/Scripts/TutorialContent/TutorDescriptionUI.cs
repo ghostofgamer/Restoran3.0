@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using Enums;
+using I2.Loc;
+using SettingsContent;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,17 +16,32 @@ namespace TutorialContent
         [SerializeField] private Image _completedImage;
         [SerializeField] private Image _fillProgrees;
         [SerializeField] private TMP_Text _progressPrecentValueText;
-
+        [SerializeField] private LanguageChanger _languageChanger;
+        
         private Coroutine _coroutine;
         private bool _isFirstStage = true;
         private bool _isOpen;
         private int _maxTutorialSteps;
-
+        private int _currentPercent;
+        private string _currentTerm;
+        
         public event Action TutorialCompleted;
 
         private void Awake()
         {
             _maxTutorialSteps = System.Enum.GetValues(typeof(TutorialType)).Length - 1;
+        }
+
+        private void OnEnable()
+        {
+            _languageChanger.LanguageChanged += LanguageChange;
+            _languageChanger.LanguageChanged += ChangeLanguage;
+        }
+
+        private void OnDisable()
+        {
+            _languageChanger.LanguageChanged -= LanguageChange;
+            _languageChanger.LanguageChanged -= ChangeLanguage;
         }
 
         public void StartStage(string text, int indexState)
@@ -56,9 +73,15 @@ namespace TutorialContent
         {
             _completedImage.gameObject.SetActive(false);
             _descriptionText.gameObject.SetActive(true);
-            _descriptionText.text = text;
+            _currentTerm = text;
+            // _descriptionText.text = text;
+            _descriptionText.text = LocalizationManager.GetTermTranslation(_currentTerm);
         }
 
+        private void ChangeLanguage()
+        {
+            _descriptionText.text = LocalizationManager.GetTermTranslation(_currentTerm);
+        }
 
         private void CompleteStage()
         {
@@ -115,13 +138,19 @@ namespace TutorialContent
 
             float progress = CalculateFillAmount(currentState);
             int percentage = Mathf.RoundToInt(progress * 100);
-            _progressPrecentValueText.text = $"Tutorial progress:{percentage}%";
+            _currentPercent = percentage;
+            _progressPrecentValueText.text = $"{LocalizationManager.GetTermTranslation("Tutorial progress")}:{percentage}%";
             _fillProgrees.fillAmount = Mathf.Clamp01(progress);
         }
 
         private float CalculateFillAmount(int currentValue)
         {
             return Mathf.Clamp01((float)currentValue / _maxTutorialSteps);
+        }
+
+        private void  LanguageChange()
+        {
+            _progressPrecentValueText.text = $"{LocalizationManager.GetTermTranslation("Tutorial progress")}:{_currentPercent}%";
         }
     }
 }
