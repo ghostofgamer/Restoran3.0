@@ -24724,7 +24724,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &265856337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -128337,13 +128337,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1613447566}
+  - component: {fileID: 1613447567}
   m_Layer: 5
   m_Name: FirstLanguageScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1613447566
 RectTransform:
   m_ObjectHideFlags: 0
@@ -128371,6 +128372,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1613447567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613447565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6927949a784683c4ba81ff98b1620732, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerInput: {fileID: 0}
 --- !u!1 &1614230516
 GameObject:
   m_ObjectHideFlags: 0
@@ -133828,9 +133842,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTarget: {fileID: 2143774459}
-  mAlignment_RTL: 514
-  mAlignment_LTR: 514
+  mTarget: {fileID: 0}
+  mAlignment_RTL: 516
+  mAlignment_LTR: 513
   mAlignmentWasRTL: 0
   mInitializeAlignment: 0
 --- !u!1 &1704625339
@@ -168387,17 +168401,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5752452241199935067, guid: 9390800b676cf25438206d274a7bdbfa, type: 3}
   m_PrefabInstance: {fileID: 4318219948199598123}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2143774459 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7464156907294382345, guid: 2ec2b1f0869d884408818be135504864, type: 3}
-  m_PrefabInstance: {fileID: 1781888492554347993}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2145374439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -174841,6 +174844,10 @@ PrefabInstance:
       propertyPath: _playerLevel
       value: 
       objectReference: {fileID: 1217972363}
+    - target: {fileID: 4244588841802754445, guid: 2ec2b1f0869d884408818be135504864, type: 3}
+      propertyPath: _languageChanger
+      value: 
+      objectReference: {fileID: 591775003}
     - target: {fileID: 4248105434034641515, guid: 2ec2b1f0869d884408818be135504864, type: 3}
       propertyPath: _wallet
       value: 

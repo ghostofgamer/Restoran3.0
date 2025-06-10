@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DeliveryContent;
 using Enums;
 using PlayerContent.LevelContent;
+using SettingsContent;
 using SettingsContent.SoundContent;
 using TMPro;
 using TutorialContent;
@@ -25,6 +26,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private Tutorial _tutorial;
         [SerializeField] private ShopTutorialChanger _shopTutorialChanger;
+        [SerializeField] private LanguageChanger _languageChanger;
 
         private List<ItemCart> _items = new List<ItemCart>();
         private DollarValue _totalPrice;
@@ -50,7 +52,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
             else
             {
                 ItemCart newItem = Instantiate(_prefabItemCart, _container);
-                newItem.Init(itemType, amount, pricePerUnit, totalPrice, name, this);
+                newItem.Init(itemType, amount, pricePerUnit, totalPrice, name, this,_languageChanger);
                 _items.Add(newItem);
                 ShowTotalPrice();
             }

@@ -61,7 +61,8 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
             _ingredient = _ingredientsConfig.GetIngredient(_itemType);
             PricePerUnit = new DollarValue(_ingredient.dollarsPrice, _ingredient.centsPrice);
             _icon.sprite = _ingredient.shopItemSprite;
-            Name = _ingredient.name;
+            // Name = _ingredient.name;
+            Name = _ingredient.term;
             Debug.Log("ItemTERM " + _ingredient.term);
             _nameItemUIProduct.text = LocalizationManager.GetTermTranslation(_ingredient.term);
             // _nameItemUIProduct.text = Name;
