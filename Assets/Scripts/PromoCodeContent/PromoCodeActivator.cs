@@ -17,10 +17,9 @@ namespace PromoCodeContent
         {
             AppMetrica.ReportEvent("ActivatePrizePromo");
             _wallet.Add(new DollarValue(50, 0));
-            _delivery.SpawnPrize(ItemType.Nuggets, 1);
-            _delivery.SpawnPrize(ItemType.FrenchFries, 1);
-            _delivery.SpawnPrize(ItemType.FrenchFriesPackage, 1);
-            _delivery.SpawnPrize(ItemType.NuggetsPackage, 1);
+            _delivery.SpawnPrize(ItemType.Bun, 2);
+            _delivery.SpawnPrize(ItemType.RawCutlet, 2);
+            _delivery.SpawnPrize(ItemType.Cabbage, 2);
         }
     }
 }

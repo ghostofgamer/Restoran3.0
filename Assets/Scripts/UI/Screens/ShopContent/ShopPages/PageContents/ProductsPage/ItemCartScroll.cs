@@ -52,7 +52,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
             else
             {
                 ItemCart newItem = Instantiate(_prefabItemCart, _container);
-                newItem.Init(itemType, amount, pricePerUnit, totalPrice, name, this,_languageChanger);
+                newItem.Init(itemType, amount, pricePerUnit, totalPrice, name, this, _languageChanger);
                 _items.Add(newItem);
                 ShowTotalPrice();
             }
@@ -100,7 +100,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         public void PayItems()
         {
             SoundPlayer.Instance.PlayButtonClick();
-            
+
             if (_items.Count <= 0)
                 return;
 
@@ -123,8 +123,8 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
                 _shopTutorialChanger.ResetProducts();
                 _tutorial.SetCurrentTutorialStage(TutorialType.OrderBurgerPatties);
             }
-            
-            
+
+
             _playerLevel.AddExp(amountItems * 5);
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_totalPrice);
@@ -143,6 +143,16 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 
             _totalPrice = new DollarValue(0, 0);
             _totalPriceText.text = _totalPrice.ToString();
+        }
+
+        public void DeleteItem(ItemCart itemCart)
+        {
+            if (_items.Contains(itemCart))
+            {
+                _items.Remove(itemCart);
+                Destroy(itemCart.gameObject);
+                ShowTotalPrice();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using Enums;
+using I2.Loc;
 using TMPro;
 using UI.Screens;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace PromoCodeContent
         public void AcceptPromoCode()
         {
             string enteredCode = _promoCodeInputField.text.Trim().ToUpper();
-            PromoCodesType currentPromoCode = PromoCodesType.Nuggets2025;
+            PromoCodesType currentPromoCode = PromoCodesType.Lang10;
 
             string activePromoCode = currentPromoCode.ToString().ToUpper();
 
@@ -27,7 +28,9 @@ namespace PromoCodeContent
                 if (PlayerPrefs.GetInt("AcceptedCode" + currentPromoCode, 0) == 1)
                 {
                     Debug.Log("Этот промо-код уже был куплен.");
-                    _messageFailedText.text = "This promo code has already been purchased.";
+                    // _messageFailedText.text = "This promo code has already been purchased.";
+                    _messageFailedText.text =
+                        LocalizationManager.GetTermTranslation("This promo code has already been purchased.");
                     _failTextBackground.SetActive(true);
                 }
                 else
@@ -36,7 +39,8 @@ namespace PromoCodeContent
                     PlayerPrefs.SetInt("AcceptedCode" + currentPromoCode, 1);
                     PlayerPrefs.Save();
                     _promoCodeInputField.text = "";
-                    _messageWellDoneText.text= "Right! Get prizes in the delivery area!";
+                    // _messageWellDoneText.text= "Right! Get prizes in the delivery area!";
+                    _messageWellDoneText.text= LocalizationManager.GetTermTranslation("Right! Get prizes in the delivery area!");
                     _WellDoneTextBackground.SetActive(true);
                     // _promoCodeScreen.CloseScreen();
                 }
@@ -44,7 +48,8 @@ namespace PromoCodeContent
             else
             {
                 Debug.Log("Неверный промо-код.");
-                _messageFailedText.text = "Invalid promo code.";
+                // _messageFailedText.text = "Invalid promo code.";
+                _messageFailedText.text = LocalizationManager.GetTermTranslation("Invalid promo code.");
                 _failTextBackground.SetActive(true);
             }
             

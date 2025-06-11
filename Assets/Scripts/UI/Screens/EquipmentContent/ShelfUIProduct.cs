@@ -103,7 +103,6 @@ namespace UI.Screens.EquipmentContent
         private void ActivateShelf(int index)
         {
             _shelf[index].SetActive(true);
-            Debug.Log("Activating shelf at index: " + index);
         }
 
         private void ChangeLocalization()

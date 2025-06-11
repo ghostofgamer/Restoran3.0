@@ -77,6 +77,16 @@ namespace UI.Screens.ShopContent
                 CurrentAmount--;
                 _itemCartScroll.UpdateItemCartInfo(this);
             }
+            else
+            {
+                CurrentAmount--;
+                
+                if (CurrentAmount <= 0)
+                {
+                    _itemCartScroll.UpdateItemCartInfo(this);
+                    _itemCartScroll.DeleteItem(this);
+                }
+            }
         }
 
         private void ChangeLanguage()
