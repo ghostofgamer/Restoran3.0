@@ -84,7 +84,8 @@ namespace UI.Screens.EquipmentContent
                 if (_shelfConfigs.shelves[_currentBuyShelfIndex + 1].storage1ToUnlock)
                 {
                     _requaredObjectInfo.SetActive(!_storage1.activeSelf);
-                    _requaredText.text = $"Required  is storage 1";
+                    // _requaredText.text = $"Required  is storage 1";
+                    _requaredText.text = $"{LocalizationManager.GetTermTranslation("StorageRequired")} 1";
                     _buyObjectInfo.SetActive(_storage1.activeSelf);
                 }
             }
@@ -108,13 +109,22 @@ namespace UI.Screens.EquipmentContent
         private void ChangeLocalization()
         {
             if (_currentBuyShelfIndex < 0)
+            {
                 _nameItem.text =
                     $"{LocalizationManager.GetTermTranslation("Shelf")} {_shelfConfigs.shelves[0].index + 1}";
+            }
             else if (_currentBuyShelfIndex + 1 < _shelfConfigs.shelves.Length)
+            {
                 _nameItem.text =
                     $"{LocalizationManager.GetTermTranslation("Shelf")} {_shelfConfigs.shelves[_currentBuyShelfIndex + 1].index + 1}";
+
+                if (_shelfConfigs.shelves[_currentBuyShelfIndex + 1].storage1ToUnlock)
+                    _requaredText.text = $"{LocalizationManager.GetTermTranslation("StorageRequired")} 1";
+            }
             else
+            {
                 _nameItem.text = LocalizationManager.GetTermTranslation("Shelf");
+            }
         }
 
         /*public override bool IsBuyed()
