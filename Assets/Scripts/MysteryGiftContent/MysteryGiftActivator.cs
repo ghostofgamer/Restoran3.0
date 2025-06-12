@@ -16,8 +16,8 @@ namespace MysteryGiftContent
         private bool _isPaused = false;
         private Coroutine _coroutine;
         private WaitForSeconds _waitForSeconds = new WaitForSeconds(10f);
-        private float _activationDuration = 10f;
-        private float _deactivationDuration = 6f;
+        private float _activationDuration = 15f;
+        private float _deactivationDuration = 10f;
         
         private void Start()
         {
@@ -45,8 +45,6 @@ namespace MysteryGiftContent
             {
                 if (!_isPaused)
                 {
-                    yield return new WaitForSeconds(_activationDuration);
-
                     if (!_isStopped && !_isPaused)
                     {
                         int posIndex = Random.Range(0, _positions.Count);
@@ -59,6 +57,8 @@ namespace MysteryGiftContent
                             _mysteryGift.gameObject.SetActive(false);
                         }
                     }
+                    
+                    yield return new WaitForSeconds(_activationDuration);
                 }
                 else
                 {

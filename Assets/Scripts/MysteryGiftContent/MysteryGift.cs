@@ -1,4 +1,5 @@
 using System;
+using CameraContent;
 using InteractableContent;
 using PlayerContent;
 using UnityEngine;
@@ -8,7 +9,9 @@ namespace MysteryGiftContent
     public class MysteryGift : MonoBehaviour
     {
         [SerializeField] private InteractableObject _interactableObject;
-
+        [SerializeField] private Transform _cameraPosition;
+        [SerializeField] private CameraPositionChanger _cameraPositionChanger;
+        
         public event Action BoxActivation;
         public event Action BoxDeactivation;
         
@@ -24,12 +27,14 @@ namespace MysteryGiftContent
 
         public void DeactivateBox()
         {
+            _cameraPositionChanger.ReturnDefaultPosition();
             BoxDeactivation?.Invoke();
             gameObject.SetActive(false); 
         }
 
         private void Action(PlayerInteraction playerInteraction)
         {
+            _cameraPositionChanger.ChangePosition(_cameraPosition);
             Debug.Log("Активирую мистический бокс");
             BoxActivation?.Invoke();
         }
