@@ -1,4 +1,5 @@
 using System;
+using Io.AppMetrica;
 using SettingsContent.SoundContent;
 using UnityEngine;
 using UnityEngine.UI;
@@ -185,6 +186,7 @@ namespace DailyRewardContent
                 if (_currentDayIndex < _dayButtons.Length)
                 {
                     Debug.Log("Награда за день " + (_currentDayIndex + 1) + " получена!");
+                    AppMetrica.ReportEvent("DailyReward", "{\"" + (_currentDayIndex + 1).ToString() + "\":null}");
                     SoundPlayer.Instance.PlayDailyReward();
                     PlayerPrefs.SetString(LastClaimDateKey, DateTime.Now.ToString());
                     PlayerPrefs.SetInt(CurrentDayIndexKey, _currentDayIndex);

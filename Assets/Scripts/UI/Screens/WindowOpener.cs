@@ -1,5 +1,6 @@
 using KitchenEquipmentContent;
 using KitchenEquipmentContent.FryerContent;
+using MysteryGiftContent;
 using RestaurantContent.CashRegisterContent;
 using UI.Screens.AssemblyScreens;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace UI.Screens
         [SerializeField] private CashRegister _cashRegister;
         [SerializeField] private AssemblyFryerTable _assemblyFryerTable;
         [SerializeField] private AssemblyFryerScreen _assemblyFryerScreen;
+        [SerializeField] private MysteryGift _mysteryGift;
+        [SerializeField] private MysteryBoxScreen _mysteryBoxScreen;
 
         private void OnEnable()
         {
@@ -28,6 +31,7 @@ namespace UI.Screens
             _cashRegister.CashRegisterAssemblyBeginig += OpenCashRegisterOrderScreen;
             _cashRegister.CashRegisterOrderCompleted += CloseCashRegisterScreen;
             _assemblyFryerTable.FriersAssemblyBeginig += OpenAssemblyFryerScreen;
+            _mysteryGift.BoxActivation += OpenMysteryBoxScreen;
         }
 
         private void OnDisable()
@@ -38,6 +42,7 @@ namespace UI.Screens
             _cashRegister.CashRegisterAssemblyBeginig -= OpenCashRegisterOrderScreen;
             _cashRegister.CashRegisterOrderCompleted -= CloseCashRegisterScreen;
             _assemblyFryerTable.FriersAssemblyBeginig -= OpenAssemblyFryerScreen;
+            _mysteryGift.BoxActivation -= OpenMysteryBoxScreen;
         }
 
         private void OpenAssemblyBurgerScreen()
@@ -72,6 +77,11 @@ namespace UI.Screens
         private void OpenAssemblyFryerScreen()
         {
             _assemblyFryerScreen.OpenScreen();
+        }
+
+        private void OpenMysteryBoxScreen()
+        {
+            _mysteryBoxScreen.OpenScreen();
         }
     }
 }
