@@ -1,10 +1,12 @@
 using ADSContent;
 using DeliveryContent;
+using EnergyContent;
 using Enums;
 using UI.Screens.AdsScreens;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Purchasing;
 using WalletContent;
+using Product = UnityEngine.Purchasing.Product;
 
 namespace IAP
 {
@@ -17,6 +19,7 @@ namespace IAP
         [SerializeField] private RemoveAdScreen _removeAdScreen;
         [SerializeField] private StarterPackScreen _starterPackScreen;
         [SerializeField] private GameObject _starterPackButton;
+        [SerializeField] private Energy _energy;
 
         public void OnPurchaseCompleted(Product product)
         {
@@ -53,6 +56,26 @@ namespace IAP
                 case "com.serbull.iaptutorial.starterpack":
                     StarterPack();
                     break;
+
+                case "com.serbull.iaptutorial.energy30":
+                    AddEnergy(30);
+                    break;
+                
+                case "com.serbull.iaptutorial.energy150":
+                    AddEnergy(150);
+                    break;
+                
+                case "com.serbull.iaptutorial.energy450":
+                    AddEnergy(450);
+                    break;
+                
+                case "com.serbull.iaptutorial.energy1850":
+                    AddEnergy(1850);
+                    break;
+                
+                case "com.serbull.iaptutorial.energy5000":
+                    AddEnergy(5000);
+                    break;
             }
         }
 
@@ -83,7 +106,7 @@ namespace IAP
 
             if (_starterPackScreen != null)
                 _starterPackScreen.CloseScreen();
-            
+
             if (_starterPackButton != null)
                 _starterPackButton.SetActive(false);
         }
@@ -92,6 +115,12 @@ namespace IAP
         {
             _wallet.Add(new DollarValue(value, 0));
             Debug.Log("On Purchase AddMoney Completed");
+        }
+
+        private void AddEnergy(int value)
+        {
+            _energy.IncreaseEnergy(value);
+            Debug.Log("On Purchase AddEnergy Completed");
         }
     }
 }

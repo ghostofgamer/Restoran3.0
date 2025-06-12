@@ -26,7 +26,7 @@ namespace UI
             gameObject.SetActive(true);
             
             _text.color = value >= 0 ? Color.green : Color.red;
-            _text.text = value >= 0 ? $"+{value.ToString()}" : $"-{value.ToString()}";
+            _text.text = value >= 0 ? $"+{value.ToString()}" : $"{value.ToString()}";
         }
     }
 }
