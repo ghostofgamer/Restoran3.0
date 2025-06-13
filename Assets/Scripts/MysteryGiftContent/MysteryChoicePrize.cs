@@ -19,6 +19,7 @@ namespace MysteryGiftContent
         [SerializeField] private Wallet _wallet;
         [SerializeField] private Delivery _delivery;
         [SerializeField] private MysteryBoxScreen _mysteryBoxScreen;
+        [SerializeField] private CongratulationMysteryBoxScreen _congratulationMysteryBoxScreen;
 
         private MysteryPrize _randomPrize;
 
@@ -39,6 +40,8 @@ namespace MysteryGiftContent
                 {
                     GetPrize(_randomPrize);
                     _mysteryBoxScreen.CloseScreen();
+                    _congratulationMysteryBoxScreen.OpenScreen();
+                    _congratulationMysteryBoxScreen.Init(_randomPrize.SpriteIcon, _randomPrize.Value);
                 });
         }
 
@@ -77,7 +80,7 @@ namespace MysteryGiftContent
 
                 case MysteryPrizeType.Cutlet:
                     _delivery.SpawnPrize(ItemType.RawCutlet, mysteryPrize.Value);
-                    break;  
+                    break;
 
                 case MysteryPrizeType.PackageBurgers:
                     _delivery.SpawnPrize(ItemType.PackageBurgerPaper, mysteryPrize.Value);
@@ -124,5 +127,6 @@ namespace MysteryGiftContent
         public MysteryPrizeType MysteryPrizeType;
         public int Level;
         public int Value;
+        public Sprite SpriteIcon;
     }
 }
