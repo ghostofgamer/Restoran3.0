@@ -3,6 +3,7 @@ using Enums;
 using I2.Loc;
 using SettingsContent;
 using SoContent;
+using TMPro;
 using TutorialContent;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,8 @@ namespace UI.MenuUIContent
         [SerializeField] private Color _colorRed;
         [SerializeField] private Color _colorGreen;
         [SerializeField] private LanguageChanger _languageChanger;
-
+        [SerializeField] private TMP_Text _priceDifferenceText;
+        
         private bool _isFirstCall = true;
         private int _levelOpened;
         private DollarValue _purchasePrice;
@@ -57,11 +59,11 @@ namespace UI.MenuUIContent
                 _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
                 UpdateProfitText();
 
-                Color color = _currentPrice.ToTotalCents() <= _recommendedPrice.ToTotalCents() * 1.10
+                /*Color color = _currentPrice.ToTotalCents() <= _recommendedPrice.ToTotalCents()
                     ? _colorGreen
-                    : _colorRed;
+                    : _colorRed;*/
 
-                ChangeCurrentPrice?.Invoke(_currentPrice, color);
+                ChangeCurrentPrice?.Invoke(_currentPrice, _colorGreen);
 
                 if (ItemConfig != null)
                 {
@@ -158,10 +160,138 @@ namespace UI.MenuUIContent
                 if (_tutorial.CurrentType == TutorialType.LetsSetPrice)
                     _shopTutorialChanger.SetValueAddBurgerToMenuButton(true);
             }
-
+            
             _isFirstCall = false;
 
+            
+            
+            
+            
+            
+            
+            
+            
+            
             int totalCents = _minPrice.ToTotalCents() + (int)value;
+            _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
+            UpdateProfitText();
+
+            int recommendedCents = _recommendedPrice.ToTotalCents();
+            int maxCents = _maxPrice.ToTotalCents();
+            int currentCents = _currentPrice.ToTotalCents();
+
+            int difference = maxCents - recommendedCents;
+            int step = difference / 9;
+
+            int points = 0;
+
+            if (currentCents > recommendedCents)
+            {
+                for (int i = 1; i <= 9; i++)
+                {
+                    int point = recommendedCents + step * i;
+                    if (currentCents >= point)
+                    {
+                        points = i;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            _priceDifferenceText.text = points.ToString();
+
+            // Color color = currentCents <= recommendedCents ? _colorGreen : _colorRed;
+
+            ChangeCurrentPrice?.Invoke(_currentPrice, _colorGreen);
+            PlayerPrefs.SetInt(CurrentPriceKey + ItemConfig.ItemType, totalCents);
+            PlayerPrefs.Save();
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            /*int totalCents = _minPrice.ToTotalCents() + (int)value;
+            _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
+            UpdateProfitText();
+
+            int recommendedCents = _recommendedPrice.ToTotalCents();
+            int maxCents = _maxPrice.ToTotalCents();
+            int currentCents = _currentPrice.ToTotalCents();
+
+            int tenPercentAboveRecommended = (int)(recommendedCents * 1.10f);
+            int difference = maxCents - tenPercentAboveRecommended;
+            int step = difference / 5;
+
+            int points = 0;
+
+            if (currentCents > tenPercentAboveRecommended)
+            {
+                for (int i = 1; i <= 5; i++)
+                {
+                    int point = tenPercentAboveRecommended + step * i;
+                    
+                    if (currentCents >= point)
+                    {
+                        points = i;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            _priceDifferenceText.text = points.ToString(); // Обновляем текст в TMP_Text
+
+            Color color = currentCents <= tenPercentAboveRecommended ? _colorGreen : _colorRed;
+
+            ChangeCurrentPrice?.Invoke(_currentPrice, color);
+            PlayerPrefs.SetInt(CurrentPriceKey + ItemConfig.ItemType, totalCents);
+            PlayerPrefs.Save();*/
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            /*int totalCents = _minPrice.ToTotalCents() + (int)value;
             _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
             UpdateProfitText();
 
@@ -171,7 +301,7 @@ namespace UI.MenuUIContent
 
             ChangeCurrentPrice?.Invoke(_currentPrice, color);
             PlayerPrefs.SetInt(CurrentPriceKey + ItemConfig.ItemType, totalCents);
-            PlayerPrefs.Save();
+            PlayerPrefs.Save();*/
         }
     }
 }

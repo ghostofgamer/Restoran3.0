@@ -9,6 +9,7 @@ namespace DeliveryContent
         [SerializeField] private GameObject _deliveryScreen;
         [SerializeField] private TMP_Text _timerDeliveryText;
         [SerializeField] private TMP_Text _amountDelivers;
+        [SerializeField] private TMP_Text _amountEnergyPriceDelivers;
         [SerializeField] private Delivery _delivery;
 
         private void OnEnable()
@@ -27,12 +28,12 @@ namespace DeliveryContent
         {
             _deliveryScreen.SetActive(amount > 0);
             _amountDelivers.text = amount.ToString();
+            _amountEnergyPriceDelivers.text = amount.ToString();
         }
 
         private void ShowTimer(float currentTime)
         {
             int seconds = Mathf.CeilToInt(currentTime);
-            // _timerDeliveryText.text = $"Delivery in: {seconds / 60}:{seconds % 60:00}";
             _timerDeliveryText.text = $" {LocalizationManager.GetTermTranslation("Delivery in")}: {seconds / 60}:{seconds % 60:00}";
         }
     }

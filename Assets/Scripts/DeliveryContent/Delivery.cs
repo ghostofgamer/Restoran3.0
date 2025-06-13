@@ -23,17 +23,18 @@ namespace DeliveryContent
         private List<ItemDeliveryInfo> _items = new List<ItemDeliveryInfo>();
         private bool _isSpawning = false;
         private Coroutine _coroutine;
-        private int _amountDeliveries;
         private float _remainingTimeForNextSpawn;
         private DateTime _exitTime;
-
-        public float RemainingTime { get; private set; }
-
+        
         public event Action<int> AmountItemsDeliveriesChanged;
 
         public event Action<float> TimeChanged;
 
         public event Action<GameObject> SpawnCompleted;
+        
+        public float RemainingTime { get; private set; }
+        
+        public int AmountDeliveries { get; private set; }
 
         public List<ItemDeliveryInfo> CurrentItems => _items;
 
@@ -230,12 +231,12 @@ namespace DeliveryContent
 
         private void UpdateAmountDeliveries()
         {
-            _amountDeliveries = 0;
+            AmountDeliveries = 0;
 
             foreach (var item in _items)
-                _amountDeliveries += item.Amount;
+                AmountDeliveries += item.Amount;
 
-            AmountItemsDeliveriesChanged?.Invoke(_amountDeliveries);
+            AmountItemsDeliveriesChanged?.Invoke(AmountDeliveries);
         }
 
         private Transform GetPosition()

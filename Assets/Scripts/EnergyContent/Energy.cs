@@ -7,14 +7,15 @@ namespace EnergyContent
     public class Energy : MonoBehaviour
     {
         [SerializeField] private FlyValue _flyValue;
-        private int _energyValue;
+        
+        public int EnergyValue { get; private set; }
 
         public event Action<int> EnergyValueChanged;
 
         private void Start()
         {
-            _energyValue = PlayerPrefs.GetInt("EnergyValue", 0);
-            EnergyValueChanged?.Invoke(_energyValue);
+            EnergyValue = PlayerPrefs.GetInt("EnergyValue", 0);
+            EnergyValueChanged?.Invoke(EnergyValue);
         }
 
         public void IncreaseEnergy(int value)
@@ -23,22 +24,22 @@ namespace EnergyContent
                 return;
             
             _flyValue.ShowFly(value);
-            _energyValue += value;
+            EnergyValue += value;
             SaveEnergy();
-            EnergyValueChanged?.Invoke(_energyValue);
+            EnergyValueChanged?.Invoke(EnergyValue);
         }
 
         public void DecreaseEnergy(int value)
         {
             _flyValue.ShowFly(-value);
-            _energyValue -= value;
+            EnergyValue -= value;
             SaveEnergy();
-            EnergyValueChanged?.Invoke(_energyValue);
+            EnergyValueChanged?.Invoke(EnergyValue);
         }
 
         private void SaveEnergy()
         {
-            PlayerPrefs.SetInt("EnergyValue", _energyValue);
+            PlayerPrefs.SetInt("EnergyValue", EnergyValue);
         }
     }
 }
