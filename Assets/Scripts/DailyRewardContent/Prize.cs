@@ -1,4 +1,5 @@
 using DeliveryContent;
+using EnergyContent;
 using Enums;
 using FortuneContent;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace DailyRewardContent
         [SerializeField] private Wallet _wallet;
         [SerializeField] private Delivery _delivery;
         [SerializeField] private Fortune _fortune;
+        [SerializeField] private Energy _energy;
 
         public void Claim(int index)
         {
@@ -37,7 +39,7 @@ namespace DailyRewardContent
                     break;
 
                 case 5:
-                    _fortune.AddSpins(10);
+                    _energy.IncreaseEnergy(25);
                     break;
 
                 case 6:

@@ -4,5 +4,6 @@ public enum PrizesFortune
 {
     Money,
     XP,
-    Spin
+    Spin,
+    Energy,
 }

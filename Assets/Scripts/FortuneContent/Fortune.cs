@@ -3,6 +3,7 @@ using System.IO;
 using ADSContent;
 using CoppraGames;
 using DailyTimerContent;
+using EnergyContent;
 using I2.Loc;
 using Io.AppMetrica;
 using PlayerContent.LevelContent;
@@ -38,6 +39,7 @@ namespace FortuneContent
         [SerializeField] private SoundPlayer _soundPlayer;
         [SerializeField] private Button _openFortuneButton;
         [SerializeField] private GameObject _touchTaskFreeSpin;
+        [SerializeField] private Energy _energy;
 
         private int _currentValueSpin = 1;
         private string filePath;
@@ -46,14 +48,14 @@ namespace FortuneContent
         private Prize[] prizeMap = new Prize[]
         {
             new Prize { Type = PrizesFortune.Money, Value = 10 },
-            new Prize { Type = PrizesFortune.Spin, Value = 10 },
+            new Prize { Type = PrizesFortune.Spin, Value = 3 },
             new Prize { Type = PrizesFortune.Money, Value = 50 },
             new Prize { Type = PrizesFortune.XP, Value = 20 },
-            new Prize { Type = PrizesFortune.Spin, Value = 3 },
+            new Prize { Type = PrizesFortune.Energy, Value = 10 },
             new Prize { Type = PrizesFortune.XP, Value = 600 },
             new Prize { Type = PrizesFortune.Money, Value = 1000 },
             new Prize { Type = PrizesFortune.XP, Value = 75 },
-            new Prize { Type = PrizesFortune.Spin, Value = 2 },
+            new Prize { Type = PrizesFortune.Energy, Value = 3 },
             new Prize { Type = PrizesFortune.XP, Value = 1500 },
         };
 
@@ -260,6 +262,10 @@ namespace FortuneContent
 
                 case PrizesFortune.Spin:
                     AddSpins(prize.Value);
+                    break;
+                
+                case PrizesFortune.Energy:
+                    _energy.IncreaseEnergy(prize.Value);
                     break;
             }
         }

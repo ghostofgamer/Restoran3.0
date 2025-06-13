@@ -1,6 +1,7 @@
 using System;
 using CalendarContent;
 using ClientsContent;
+using EnergyContent;
 using Io.AppMetrica;
 using PlayerContent.LevelContent;
 using RestaurantContent;
@@ -31,8 +32,8 @@ namespace DayNightContent
         [SerializeField] private Color _dayLightColor;
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private Calendar _calendar;
-
         [SerializeField] private Color _nightLightColor;
+        [SerializeField] private Energy _energy;
 
         // [SerializeField] private BuyersCounter _buyersCounter;
         [SerializeField] private Light sceneLight;
@@ -135,6 +136,7 @@ namespace DayNightContent
 
         public void ResetDay()
         {
+            _energy.IncreaseEnergy(5);
             AppMetrica.ReportEvent("NewDaY");
             _playerLevel.AddExp(50);
             timeOfDay = 0f;
