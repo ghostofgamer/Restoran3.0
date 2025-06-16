@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using EnergyContent;
 using Enums;
 using I2.Loc;
 using SettingsContent;
@@ -14,6 +16,7 @@ namespace UI.MenuUIContent
     public class DishesUIItem : AbstractUIMenuItem
     {
         private const string CurrentPriceKey = "CurrentPrice";
+        private const string PurchasedPointsKey = "PurchasedPoints";
 
         [SerializeField] private Tutorial _tutorial;
         [SerializeField] private ShopTutorialChanger _shopTutorialChanger;
@@ -24,7 +27,8 @@ namespace UI.MenuUIContent
         [SerializeField] private Color _colorGreen;
         [SerializeField] private LanguageChanger _languageChanger;
         [SerializeField] private TMP_Text _priceDifferenceText;
-        
+        [SerializeField] private Energy _energy;
+
         private bool _isFirstCall = true;
         private int _levelOpened;
         private DollarValue _purchasePrice;
@@ -32,6 +36,11 @@ namespace UI.MenuUIContent
         private DollarValue _maxPrice;
         private DollarValue _currentPrice;
         private DollarValue _recommendedPrice;
+        private int _valuePriceState = 0;
+
+        private int _purchasedValuePriceState = 0;
+        //
+        // private List<bool> _purchasedPoints = new List<bool>();
 
         public event Action<DollarValue, Color> ChangeCurrentPrice;
         public event Action<DollarValue> ChangeProfitPrice;
@@ -41,6 +50,7 @@ namespace UI.MenuUIContent
         private void OnEnable()
         {
             _languageChanger.LanguageChanged += InvokeRequiredTranslate;
+            InitVisual();
         }
 
         private void OnDisable()
@@ -50,8 +60,19 @@ namespace UI.MenuUIContent
 
         private void Start()
         {
-            int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
+            InitVisual();
+        }
 
+        private void InitVisual()
+        {
+            int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
+            _purchasedValuePriceState = PlayerPrefs.GetInt("PurchasedValuePriceStateDishes" + ItemType, 0);
+            
+            if (_valuePriceState <= _purchasedValuePriceState)
+                _valuePriceState = 0;
+            
+            _priceDifferenceText.text = _valuePriceState.ToString();
+            
             if (totalCents > 0)
             {
                 Debug.Log("INIT " + totalCents);
@@ -83,10 +104,24 @@ namespace UI.MenuUIContent
 
         public void AddItemToMenu()
         {
+            if (_energy.EnergyValue < _valuePriceState)
+            {
+                Debug.Log("У тебя енергии не хвататет дружок");
+                return;
+            }
+
             if (_tutorial != null && _shopTutorialChanger != null &&
                 _tutorial.CurrentType == TutorialType.LetsSetPrice)
             {
                 _shopTutorialChanger.SetValueShopButton(true);
+            }
+
+            if (_valuePriceState > 0)
+            {
+                _energy.DecreaseEnergy(_valuePriceState);
+                Debug.Log("СОХРАНЯЕМ " + _valuePriceState);
+                _purchasedValuePriceState = _valuePriceState;
+                PlayerPrefs.SetInt("PurchasedValuePriceStateDishes" + ItemType, _purchasedValuePriceState);
             }
 
             _menuScrollContent.AddItem(ItemType);
@@ -95,6 +130,7 @@ namespace UI.MenuUIContent
         public override void Init(ItemsConfig itemsConfig)
         {
             base.Init(itemsConfig);
+            _purchasedValuePriceState = PlayerPrefs.GetInt("PurchasedValuePriceStateDishes" + ItemType, 0);
 
             if (ItemConfig != null)
             {
@@ -160,29 +196,18 @@ namespace UI.MenuUIContent
                 if (_tutorial.CurrentType == TutorialType.LetsSetPrice)
                     _shopTutorialChanger.SetValueAddBurgerToMenuButton(true);
             }
-            
+
             _isFirstCall = false;
 
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             int totalCents = _minPrice.ToTotalCents() + (int)value;
             _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
             UpdateProfitText();
-
             int recommendedCents = _recommendedPrice.ToTotalCents();
             int maxCents = _maxPrice.ToTotalCents();
             int currentCents = _currentPrice.ToTotalCents();
-
             int difference = maxCents - recommendedCents;
             int step = difference / 9;
-
             int points = 0;
 
             if (currentCents > recommendedCents)
@@ -190,107 +215,29 @@ namespace UI.MenuUIContent
                 for (int i = 1; i <= 9; i++)
                 {
                     int point = recommendedCents + step * i;
+
                     if (currentCents >= point)
-                    {
                         points = i;
-                    }
                     else
-                    {
                         break;
-                    }
                 }
             }
 
-            _priceDifferenceText.text = points.ToString();
+            _valuePriceState = points;
 
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!_purchasedValuePriceState" + _purchasedValuePriceState);
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!_valuePriceState" + _valuePriceState);
+            if (_valuePriceState <= _purchasedValuePriceState)
+                _valuePriceState = 0;
+
+            _priceDifferenceText.text = _valuePriceState.ToString();
             // Color color = currentCents <= recommendedCents ? _colorGreen : _colorRed;
 
             ChangeCurrentPrice?.Invoke(_currentPrice, _colorGreen);
             PlayerPrefs.SetInt(CurrentPriceKey + ItemConfig.ItemType, totalCents);
             PlayerPrefs.Save();
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            /*int totalCents = _minPrice.ToTotalCents() + (int)value;
-            _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
-            UpdateProfitText();
 
-            int recommendedCents = _recommendedPrice.ToTotalCents();
-            int maxCents = _maxPrice.ToTotalCents();
-            int currentCents = _currentPrice.ToTotalCents();
 
-            int tenPercentAboveRecommended = (int)(recommendedCents * 1.10f);
-            int difference = maxCents - tenPercentAboveRecommended;
-            int step = difference / 5;
-
-            int points = 0;
-
-            if (currentCents > tenPercentAboveRecommended)
-            {
-                for (int i = 1; i <= 5; i++)
-                {
-                    int point = tenPercentAboveRecommended + step * i;
-                    
-                    if (currentCents >= point)
-                    {
-                        points = i;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-
-            _priceDifferenceText.text = points.ToString(); // Обновляем текст в TMP_Text
-
-            Color color = currentCents <= tenPercentAboveRecommended ? _colorGreen : _colorRed;
-
-            ChangeCurrentPrice?.Invoke(_currentPrice, color);
-            PlayerPrefs.SetInt(CurrentPriceKey + ItemConfig.ItemType, totalCents);
-            PlayerPrefs.Save();*/
-
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             /*int totalCents = _minPrice.ToTotalCents() + (int)value;
             _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
             UpdateProfitText();
@@ -303,5 +250,23 @@ namespace UI.MenuUIContent
             PlayerPrefs.SetInt(CurrentPriceKey + ItemConfig.ItemType, totalCents);
             PlayerPrefs.Save();*/
         }
+
+        /*private void LoadPurchasedPoints()
+        {
+            _purchasedPoints.Clear();
+
+            for (int i = 0; i < 9; i++)
+                _purchasedPoints.Add(PlayerPrefs.GetInt(PurchasedPointsKey + ItemConfig.ItemType + i, 0) == 1);
+        }
+
+        private void SavePurchasedPoints()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                PlayerPrefs.SetInt(PurchasedPointsKey + ItemConfig.ItemType + i, _purchasedPoints[i] ? 1 : 0);
+            }
+
+            PlayerPrefs.Save();
+        }*/
     }
 }
