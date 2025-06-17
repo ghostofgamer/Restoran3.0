@@ -6,6 +6,7 @@ using Io.AppMetrica;
 using PlayerContent.LevelContent;
 using RestaurantContent;
 using TMPro;
+using UI.Screens;
 using UnityEngine;
 
 namespace DayNightContent
@@ -34,6 +35,7 @@ namespace DayNightContent
         [SerializeField] private Calendar _calendar;
         [SerializeField] private Color _nightLightColor;
         [SerializeField] private Energy _energy;
+        [SerializeField] private EnergyNewDayScreen _energyNewDayScreen;
 
         // [SerializeField] private BuyersCounter _buyersCounter;
         [SerializeField] private Light sceneLight;
@@ -145,6 +147,7 @@ namespace DayNightContent
             _isNight = false;
             SetDayTime();
             _calendar.NextDay();
+            _energyNewDayScreen.OpenScreen();
         }
 
         public void SetOpenValue(bool value)

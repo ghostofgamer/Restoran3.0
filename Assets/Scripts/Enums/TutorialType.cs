@@ -25,7 +25,6 @@ namespace Enums
         LetsSetPrice,
         OpenRestaurant,
         TakeFirstOrder,
-        CleanTable,
         TutorCompleted,
     }
 }

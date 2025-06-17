@@ -67,11 +67,11 @@ namespace RestaurantContent.TableContent
         {
             if (PollutionLevel <= 0) return;
 
-            if (_tutorial != null)
+            /*if (_tutorial != null)
             {
                 if (_tutorial.CurrentType == TutorialType.CleanTable)
                     _tutorial.SetCurrentTutorialStage(TutorialType.CleanTable);
-            }
+            }*/
 
             PollutionLevel--;
             _playerLevel.AddExp(5);

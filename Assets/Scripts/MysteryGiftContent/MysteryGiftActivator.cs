@@ -16,8 +16,8 @@ namespace MysteryGiftContent
         private bool _isPaused = false;
         private Coroutine _coroutine;
         private WaitForSeconds _waitForSeconds = new WaitForSeconds(10f);
-        private float _activationDuration = 15f;
-        private float _deactivationDuration = 10f;
+        private float _activationDuration = 180f;
+        private float _deactivationDuration = 60f;
         
         private void Start()
         {

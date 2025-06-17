@@ -343,8 +343,13 @@ namespace TutorialContent
 
         public void TutorCompleted()
         {
+            _cashRegister.DeactivateTutorPoint();
+            
+            foreach (var closeCashRegister in _closeCashRegisters)
+                closeCashRegister.interactable = true;
+            
             SetValueButtonTopUI(true);
-            _tableFirstClient.DeactivateTutorPoint();
+            // _tableFirstClient.DeactivateTutorPoint();
             _tutorDescriptionUI.StartCompleted(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
         }
 

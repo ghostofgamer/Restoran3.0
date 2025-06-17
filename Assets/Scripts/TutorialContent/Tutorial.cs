@@ -236,10 +236,10 @@ Debug.Log("currentIndex " +currentIndex);
                     _tutorialActivator.TakeFirstOrder();
                     break;
 
-                case TutorialType.CleanTable:
+                /*case TutorialType.CleanTable:
                     Debug.Log("Current Tutorial Stage: CleanTable");
                     _tutorialActivator.CleanTable();
-                    break;
+                    break;*/
 
                 case TutorialType.TutorCompleted:
                     Debug.Log("Current Tutorial Stage: TutorCompleted");

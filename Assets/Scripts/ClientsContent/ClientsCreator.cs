@@ -105,8 +105,8 @@ namespace ClientsContent
             {
                 float randomValue = 1;
 
-                if ((int)_tutorial.CurrentType > (int)TutorialType.CleanTable)
-                    randomValue = Random.Range(0f, 1f);
+                /*if ((int)_tutorial.CurrentType > (int)TutorialType.CleanTable)
+                    randomValue = Random.Range(0f, 1f);*/
 
                 if (randomValue < 0.5f)
                 {
