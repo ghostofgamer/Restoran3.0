@@ -27,7 +27,10 @@ namespace UI.Buttons
             }
             else if (_isEnergyButton)
             {
-                if (_energy.EnergyValue <= _delivery.AmountDeliveries)
+                Debug.Log("_energy.EnergyValue" + _energy.EnergyValue);
+                Debug.Log("_delivery.AmountDeliveries" + _delivery.AmountDeliveries);
+                
+                if (_energy.EnergyValue < _delivery.AmountDeliveries)
                     return;
 
                 _energy.DecreaseEnergy(_delivery.AmountDeliveries);

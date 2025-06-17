@@ -45,6 +45,8 @@ namespace MysteryGiftContent
             {
                 if (!_isPaused)
                 {
+                    yield return new WaitForSeconds(_activationDuration);
+                    
                     if (!_isStopped && !_isPaused)
                     {
                         int posIndex = Random.Range(0, _positions.Count);
@@ -58,7 +60,6 @@ namespace MysteryGiftContent
                         }
                     }
                     
-                    yield return new WaitForSeconds(_activationDuration);
                 }
                 else
                 {
