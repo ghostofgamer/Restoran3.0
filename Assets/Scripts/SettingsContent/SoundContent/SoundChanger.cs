@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SettingsContent
+namespace SettingsContent.SoundContent
 {
     public class SoundChanger : MonoBehaviour
     {
@@ -8,6 +8,15 @@ namespace SettingsContent
         [SerializeField] private ToggleSwitch _sfxToggleSwitch;
 
         private void Start()
+        {
+#if UNITY_WEBGL
+
+#elif UNITY_ANDROID
+Init();
+#endif
+        }
+
+        private void Init()
         {
             if (_soundToggleSwitch != null)
             {

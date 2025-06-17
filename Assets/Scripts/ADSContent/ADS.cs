@@ -19,7 +19,7 @@ namespace ADSContent
         private bool _isInterstitialLoading = false;
         private bool _isAdPreloading = false;
         private int _interstitialRetryAttempt = 0;
-        
+
         public delegate void RewardCallback();
 
         public bool IsInterstitialReady => MaxSdk.IsInterstitialReady(InterstitialKey);
@@ -28,7 +28,23 @@ namespace ADSContent
 
         private void Start()
         {
+#if UNITY_ANDROID
             Init();
+#elif UNITY_WEBGL
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+#endif
         }
 
         private void Init()
@@ -72,7 +88,7 @@ namespace ADSContent
         private void OnInterstitialLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             _isInterstitialLoading = false;
-            _interstitialRetryAttempt = 0; 
+            _interstitialRetryAttempt = 0;
             AppMetrica.ReportEvent("OnInterstitialLoadedEvent");
         }
 
@@ -83,7 +99,7 @@ namespace ADSContent
 
             _interstitialRetryAttempt++;
             double retryDelay = Math.Pow(2, Math.Min(6, _interstitialRetryAttempt));
-            
+
             if (_reloadInterstitialCoroutine != null)
                 StopCoroutine(_reloadInterstitialCoroutine);
 
@@ -101,7 +117,7 @@ namespace ADSContent
         {
             AppMetrica.ReportEvent("OnInterstitialAdFailedToDisplayEvent");
             // Interstitial ad failed to display. AppLovin recommends that you load the next ad.
-            
+
             if (_reloadInterstitialCoroutine != null)
                 StopCoroutine(_reloadInterstitialCoroutine);
 
@@ -118,7 +134,7 @@ namespace ADSContent
             _interHidden?.Invoke();
             AppMetrica.ReportEvent("OnInterstitialHiddenEvent");
             // Interstitial ad is hidden. Pre-load the next ad.
-            
+
             if (_reloadInterstitialCoroutine != null)
                 StopCoroutine(_reloadInterstitialCoroutine);
 
