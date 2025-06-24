@@ -25,15 +25,15 @@ namespace DeliveryContent
         private Coroutine _coroutine;
         private float _remainingTimeForNextSpawn;
         private DateTime _exitTime;
-        
+
         public event Action<int> AmountItemsDeliveriesChanged;
 
         public event Action<float> TimeChanged;
 
         public event Action<GameObject> SpawnCompleted;
-        
+
         public float RemainingTime { get; private set; }
-        
+
         public int AmountDeliveries { get; private set; }
 
         public List<ItemDeliveryInfo> CurrentItems => _items;
@@ -197,7 +197,7 @@ namespace DeliveryContent
 
                 if (prefab != null)
                 {
-                    GameObject newBox= Instantiate(prefab, GetPosition().position, Quaternion.identity);
+                    GameObject newBox = Instantiate(prefab, GetPosition().position, Quaternion.identity);
                     SpawnCompleted?.Invoke(newBox);
                 }
 
@@ -225,7 +225,10 @@ namespace DeliveryContent
                 SoundPlayer.Instance.PlayDostavka();
 
                 if (prefab != null)
-                    Instantiate(prefab, GetPosition().position, Quaternion.identity);
+                {
+                    GameObject box = Instantiate(prefab, GetPosition().position, Quaternion.identity);
+                    SpawnCompleted?.Invoke(box);
+                }
             }
         }
 

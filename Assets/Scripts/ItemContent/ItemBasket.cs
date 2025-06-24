@@ -321,7 +321,7 @@ public class ItemBasket : MonoBehaviour
                 }
             }
             
-            
+            DeactivateItems();
             
             
             
