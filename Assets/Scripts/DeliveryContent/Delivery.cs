@@ -208,9 +208,7 @@ namespace DeliveryContent
                 UpdateAmountDeliveries();
 
                 if (_tutorial.CurrentType == TutorialType.SkipDelivery)
-                {
                     _tutorial.SetCurrentTutorialStage(TutorialType.SkipDelivery);
-                }
 
                 if (item.Amount <= 0)
                     _items.RemoveAt(0);
