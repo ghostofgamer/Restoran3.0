@@ -4,5 +4,6 @@ namespace Enums
     {
         Nuggets2025,
         Lang10,
+        CHEESE2025,
     }
 }

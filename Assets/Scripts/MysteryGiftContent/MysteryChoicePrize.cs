@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ADSContent;
 using DeliveryContent;
 using Enums;
+using Io.AppMetrica;
 using PlayerContent.LevelContent;
 using UI.Screens;
 using UnityEngine;
@@ -38,6 +39,7 @@ namespace MysteryGiftContent
             if (_randomPrize != null)
                 _ads.ShowRewarded(() =>
                 {
+                    AppMetrica.ReportEvent("RewardAD", "{\"" + "MysteryPrize" + "\":null}");
                     GetPrize(_randomPrize);
                     _mysteryBoxScreen.CloseScreen();
                     _congratulationMysteryBoxScreen.OpenScreen();

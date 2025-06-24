@@ -28,6 +28,7 @@ namespace UI.MenuUIContent
         [SerializeField] private LanguageChanger _languageChanger;
         [SerializeField] private TMP_Text _priceDifferenceText;
         [SerializeField] private Energy _energy;
+        [SerializeField] private Button _addMenuButton;
 
         private bool _isFirstCall = true;
         private int _levelOpened;
@@ -67,12 +68,23 @@ namespace UI.MenuUIContent
         {
             int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
             _purchasedValuePriceState = PlayerPrefs.GetInt("PurchasedValuePriceStateDishes" + ItemType, 0);
-            
+
             if (_valuePriceState <= _purchasedValuePriceState)
                 _valuePriceState = 0;
-            
+
             _priceDifferenceText.text = _valuePriceState.ToString();
-            
+
+            /*if (_valuePriceState > _energy.EnergyValue)
+            {
+                Debug.Log("тут должно стать красным");
+                _priceDifferenceText.color = Color.red;
+            }
+            else
+            {
+                Debug.Log("тут должно стать белым");
+                _priceDifferenceText.color = Color.white;
+            }*/
+
             if (totalCents > 0)
             {
                 Debug.Log("INIT " + totalCents);
@@ -225,12 +237,25 @@ namespace UI.MenuUIContent
 
             _valuePriceState = points;
 
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!_purchasedValuePriceState" + _purchasedValuePriceState);
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!_valuePriceState" + _valuePriceState);
+            /*Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!_purchasedValuePriceState" + _purchasedValuePriceState);
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!_valuePriceState" + _valuePriceState);*/
             if (_valuePriceState <= _purchasedValuePriceState)
                 _valuePriceState = 0;
 
             _priceDifferenceText.text = _valuePriceState.ToString();
+            
+            if (_valuePriceState > _energy.EnergyValue)
+            {
+                Debug.Log("тут должно стать красным");
+                _priceDifferenceText.color = Color.red;
+                _addMenuButton.interactable = false;
+            }
+            else
+            {
+                Debug.Log("тут должно стать белым");
+                _priceDifferenceText.color = Color.white;
+                _addMenuButton.interactable = true;
+            }
             // Color color = currentCents <= recommendedCents ? _colorGreen : _colorRed;
 
             ChangeCurrentPrice?.Invoke(_currentPrice, _colorGreen);

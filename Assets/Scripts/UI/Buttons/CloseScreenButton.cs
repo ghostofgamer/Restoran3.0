@@ -1,3 +1,4 @@
+using ADSContent;
 using SettingsContent.SoundContent;
 using UI.Screens;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace UI.Buttons
         {
             SoundPlayer.Instance.PlayButtonClick();
             _screen.CloseScreen();
+            InterstitialActivator.Instance.ShowAd();
         }
     }
 }

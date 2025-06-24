@@ -59,7 +59,6 @@ namespace MysteryGiftContent
                             _mysteryGift.gameObject.SetActive(false);
                         }
                     }
-                    
                 }
                 else
                 {
