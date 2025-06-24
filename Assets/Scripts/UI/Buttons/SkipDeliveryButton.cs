@@ -22,11 +22,13 @@ namespace UI.Buttons
 
             if (_isAdButton)
             {
+                Debug.Log("РЕВАРД КНОПКА");
                 _ads.ShowRewarded(() => _delivery.SpawnAllItems());
                 AppMetrica.ReportEvent("RewardAD", "{\"" + "SkipDeliveryADS" + "\":null}");
             }
             else if (_isEnergyButton)
             {
+                Debug.Log("ЕНЕРГИЯ КНОПКА КНОПКА КНОПКА");
                 Debug.Log("_energy.EnergyValue" + _energy.EnergyValue);
                 Debug.Log("_delivery.AmountDeliveries" + _delivery.AmountDeliveries);
                 
@@ -39,6 +41,8 @@ namespace UI.Buttons
             }
             else
             {
+                Debug.Log("КНОПКА КНОПКА КНОПКА КНОПКА");
+                AppMetrica.ReportEvent("RewardAD", "{\"" + "SkipDeliveryFreeButton" + "\":null}");
                 _delivery.SpawnAllItems();
                 _skipCounter.SkipFirstActivate();
             }
