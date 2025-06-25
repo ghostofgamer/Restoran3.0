@@ -64,8 +64,6 @@ namespace CityTrafficContent
         private void SetPosition(T objectNpc, SpawnPoint spawnPoint)
         {
             objectNpc.transform.position = spawnPoint.spawnPosition.position;
-            // objectNpc.Init(spawnPoint.pathGroups[Random.Range(0, spawnPoint.pathGroups.Count)], this);
-
             Init(objectNpc, spawnPoint.pathGroups[Random.Range(0, spawnPoint.pathGroups.Count)], this);
         }
 
@@ -76,14 +74,7 @@ namespace CityTrafficContent
         {
             _activeNPC++;
         }
-
-        /*public void DecreaseActiveNPC()
-        {
-            _activeNPC--;
-
-            if (_activeNPC <= 0)
-                _activeNPC = 0;
-        }*/
+        
         public void DecreaseActiveNPC()
         {
             _activeNPC--;
