@@ -1,26 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using Interfaces;
 using UnityEngine;
 
 namespace CityTrafficContent
 {
-    public abstract class CityTraffic<T> : MonoBehaviour where T : MonoBehaviour
+    public abstract class CityTraffic<T> : MonoBehaviour,ICityTraffic where T : MonoBehaviour
     {
         [SerializeField] private List<SpawnPoint> _spawnPoints = new List<SpawnPoint>();
         [SerializeField] private T[] _prefabs;
         [SerializeField] private Transform _container;
         [SerializeField] private int _spawnAmount;
         [SerializeField] protected int MaxActiveObject;
-
-        private int _activeNPC = 0;
+        [SerializeField] private float _otherSpawnValue;
 
         protected List<ObjectPool<T>> _objectPools = new List<ObjectPool<T>>();
 
+        private int _activeNPC = 0;
         private WaitForSeconds _waitOneSecond = new WaitForSeconds(1f);
-        private WaitForSeconds _waitOtherSecondsSeconds = new WaitForSeconds(3f);
+        private WaitForSeconds _waitOtherSecondsSeconds;
 
         private void Start()
         {
+            _waitOtherSecondsSeconds = new WaitForSeconds(_otherSpawnValue);
+
             foreach (var labubuNpcPrefab in _prefabs)
             {
                 var clientPool = new ObjectPool<T>(labubuNpcPrefab, _spawnAmount, _container);
@@ -54,7 +57,6 @@ namespace CityTrafficContent
                 return;
 
             SetPosition(objectNpc, spawnPoint);
-            Init(objectNpc);
             objectNpc.gameObject.SetActive(true);
             IncreaseActiveNPC();
         }
@@ -62,11 +64,12 @@ namespace CityTrafficContent
         private void SetPosition(T objectNpc, SpawnPoint spawnPoint)
         {
             objectNpc.transform.position = spawnPoint.spawnPosition.position;
-            /*objectNpc.Init(spawnPoint.pathGroups[Random.Range(0, spawnPoint.pathGroups.Count)], this,
-                _textures[Random.Range(0, _textures.Length)]);*/
+            // objectNpc.Init(spawnPoint.pathGroups[Random.Range(0, spawnPoint.pathGroups.Count)], this);
+
+            Init(objectNpc, spawnPoint.pathGroups[Random.Range(0, spawnPoint.pathGroups.Count)], this);
         }
 
-        public abstract void Init(T g);
+        public abstract void Init(T gameNPC, GameObject path, CityTraffic<T> cityTraffic);
 
 
         public void IncreaseActiveNPC()
@@ -74,6 +77,13 @@ namespace CityTrafficContent
             _activeNPC++;
         }
 
+        /*public void DecreaseActiveNPC()
+        {
+            _activeNPC--;
+
+            if (_activeNPC <= 0)
+                _activeNPC = 0;
+        }*/
         public void DecreaseActiveNPC()
         {
             _activeNPC--;

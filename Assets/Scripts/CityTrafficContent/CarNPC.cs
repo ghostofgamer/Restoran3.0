@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace CityTrafficContent
 {
-    public class CarNPC : CityTraffic<CarNPC>
+    public class CarNPC : AbstractNPC
     {
-        public override void Init(CarNPC g)
+        public override void InitUniqueData()
         {
             
         }

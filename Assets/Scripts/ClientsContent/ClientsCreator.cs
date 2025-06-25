@@ -101,12 +101,12 @@ namespace ClientsContent
 
         private IEnumerator Create()
         {
-            if (_parking.GetCountFreeParkingPositions() > 0)
+            /*if (_parking.GetCountFreeParkingPositions() > 0)
             {
                 float randomValue = 1;
 
                 /*if ((int)_tutorial.CurrentType > (int)TutorialType.CleanTable)
-                    randomValue = Random.Range(0f, 1f);*/
+                    randomValue = Random.Range(0f, 1f);#1#
 
                 if (randomValue < 0.5f)
                 {
@@ -130,8 +130,9 @@ namespace ClientsContent
             else
             {
                 InitClientWalking();
-            }
+            }*/
 
+            InitClientWalking();
             yield return null;
         }
 
