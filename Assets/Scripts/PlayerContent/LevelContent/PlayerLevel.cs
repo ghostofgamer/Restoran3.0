@@ -65,7 +65,6 @@ namespace PlayerContent.LevelContent
         {
            SoundPlayer.Instance.PlayLevelUp();
             CurrentLevel++;
-            
             AppMetrica.ReportEvent("LevelUp", "{\"" + CurrentLevel.ToString() + "\":null}");
             
             PlayerPrefs.SetInt("Level", CurrentLevel);
