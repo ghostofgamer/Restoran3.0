@@ -36,6 +36,8 @@ namespace CityTrafficContent
 
         protected IEnumerator SpawnNPC()
         {
+            int previousIndex = -1;
+            
             while (true)
             {
                 if (_activeNPC > MaxActiveObject)
@@ -43,7 +45,15 @@ namespace CityTrafficContent
                 else
                     yield return _waitOneSecond;
 
-                int index = Random.Range(0, _spawnPoints.Count);
+                int index;
+                do
+                {
+                    index = Random.Range(0, _spawnPoints.Count);
+                } while (index == previousIndex && _spawnPoints.Count > 1);
+                
+                
+                // int index = Random.Range(0, _spawnPoints.Count);
+                previousIndex = index;
                 SpawnRandomClient(_spawnPoints[index]);
             }
         }
