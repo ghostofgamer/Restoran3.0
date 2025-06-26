@@ -4,6 +4,7 @@ using MysteryGiftContent;
 using PlayerContent.LevelContent;
 using RestaurantContent.CashRegisterContent;
 using UI.Screens.AssemblyScreens;
+using UI.Screens.NewLevelContent;
 using UnityEngine;
 
 namespace UI.Screens
