@@ -7,6 +7,7 @@ using Enums;
 using InteractableContent;
 using OrdersContent;
 using PlayerContent;
+using PlayerContent.LevelContent;
 using SettingsContent.SoundContent;
 using TutorialContent;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private CashRegisterViewer _cashRegisterViewer;
         [SerializeField] private Wallet _wallet;
         [SerializeField] private PriceOrderCounter _priceOrderCounter;
+        [SerializeField] private PlayerLevel _playerLevel;
         
         private Client _currentClient;
         private Coroutine _coroutine;
@@ -69,17 +71,6 @@ namespace RestaurantContent.CashRegisterContent
 
             if (_currentClient == null)
                 return;
-            
-            
-            /*CashRegisterOrderCompleted?.Invoke();
-            _currentClient.Paid();
-            _wallet.Add(_currentClient.PriceOrder);
-            Client client = _currentClient;
-            _currentClient = null;
-            SetCanvasActive(_currentClient != null);
-            _restaurant.AcceptOrder(client.Order, client);*/
-            
-            
 
             CashRegisterAssemblyBeginig?.Invoke(_currentClient.IsCard);
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
@@ -110,6 +101,8 @@ namespace RestaurantContent.CashRegisterContent
                 _tutorial.SetCurrentTutorialStage(TutorialType.TakeFirstOrder);
             }
             
+            
+            _playerLevel.AddExp(5);
             /*if (_coroutine != null)
                 StopCoroutine(_coroutine);
 
@@ -133,6 +126,7 @@ namespace RestaurantContent.CashRegisterContent
             if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
                 _tutorial.SetCurrentTutorialStage(TutorialType.TakeFirstOrder);
             
+            _playerLevel.AddExp(5);
             SoundPlayer.Instance.PlayCashRegister();
             CashRegisterOrderCompleted?.Invoke();
             _currentClient.Paid();

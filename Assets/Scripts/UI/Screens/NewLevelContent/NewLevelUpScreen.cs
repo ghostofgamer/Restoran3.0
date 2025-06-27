@@ -51,6 +51,7 @@ namespace UI.Screens.NewLevelContent
         {
             _firstScreen.SetActive(false);
             _secondScreen.SetActive(true);
+            _newLevelUpViewer.ShowRewardLeveling();
         }
 
         private void DeactivateScreens()
