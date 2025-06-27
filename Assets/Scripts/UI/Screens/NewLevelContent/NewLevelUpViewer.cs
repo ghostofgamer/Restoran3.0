@@ -1,6 +1,7 @@
 using System.Linq;
 using I2.Loc;
 using PlayerContent.LevelContent;
+using SoContent;
 using TMPro;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace UI.Screens.NewLevelContent
                 rewardLeveling.recipes.Select(product => LocalizationManager.GetTermTranslation(product.ToString())));
             
             string machineList = string.Join(", ",
-                rewardLeveling.machines.Select(product => LocalizationManager.GetTermTranslation(product.ToString())));
+                rewardLeveling.equipment.Select(product => LocalizationManager.GetTermTranslation(product.ToString())));
 
             if (rewardLeveling != null)
             {

@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using Enums;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewRewardsLevelingUpConfig", menuName = "Configs/RewardsLevelingUp")]
-public class RewardsLevelingUpConfig : ScriptableObject
+namespace SoContent
 {
-    public List<RewardLeveling> levels;
-
-    public RewardLeveling GetLevelData(int level)
+    [CreateAssetMenu(fileName = "NewRewardsLevelingUpConfig", menuName = "Configs/RewardsLevelingUp")]
+    public class RewardsLevelingUpConfig : ScriptableObject
     {
-        return levels.Find(data => data.playerLevel == level);
-    }
-}
+        public List<RewardLeveling> levels;
 
-[Serializable]
-public class RewardLeveling
-{
-    public int playerLevel;
-    public List<ItemType> products;
-    public List<ItemType> recipes;
-    public List<EquipmentType> machines;
+        public RewardLeveling GetLevelData(int level)
+        {
+            return levels.Find(data => data.playerLevel == level);
+        }
+    }
+
+    [Serializable]
+    public class RewardLeveling
+    {
+        public int playerLevel;
+        public List<RewardLevelingType> products;
+        public List<RewardLevelingType> recipes;
+        public List<RewardLevelingType> equipment;
+    }
 }
