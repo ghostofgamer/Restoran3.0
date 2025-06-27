@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using AppodealStack.Monetization.Api;
+using AppodealStack.Monetization.Common;
 using Io.AppMetrica;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +10,10 @@ namespace ADSContent
 {
     public class ADS : MonoBehaviour
     {
+        [Header("Appodeal")] [SerializeField] private string _keyAppodeal;
+        [Space] [SerializeField] private bool _isAppodeal;
+
+
         public string SDKKey = "nR3VEu5EEJlq6OmqwXd1lMKHQhg3sEumJpdTgplZ-csu1yq6zIkU1auq9P1sOOoIVLg9tOWSXDaUfRvC9Uv-Ib";
         public string InterstitialKey;
         public string RewardedKey;
@@ -19,7 +25,7 @@ namespace ADSContent
         private bool _isInterstitialLoading = false;
         private bool _isAdPreloading = false;
         private int _interstitialRetryAttempt = 0;
-        
+
         public delegate void RewardCallback();
 
         public bool IsInterstitialReady => MaxSdk.IsInterstitialReady(InterstitialKey);
@@ -28,7 +34,10 @@ namespace ADSContent
 
         private void Start()
         {
-            Init();
+            if (_isAppodeal)
+                Initialize(_keyAppodeal);
+            else
+                Init();
         }
 
         private void Init()
@@ -72,7 +81,7 @@ namespace ADSContent
         private void OnInterstitialLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             _isInterstitialLoading = false;
-            _interstitialRetryAttempt = 0; 
+            _interstitialRetryAttempt = 0;
             AppMetrica.ReportEvent("OnInterstitialLoadedEvent");
         }
 
@@ -83,7 +92,7 @@ namespace ADSContent
 
             _interstitialRetryAttempt++;
             double retryDelay = Math.Pow(2, Math.Min(6, _interstitialRetryAttempt));
-            
+
             if (_reloadInterstitialCoroutine != null)
                 StopCoroutine(_reloadInterstitialCoroutine);
 
@@ -101,7 +110,7 @@ namespace ADSContent
         {
             AppMetrica.ReportEvent("OnInterstitialAdFailedToDisplayEvent");
             // Interstitial ad failed to display. AppLovin recommends that you load the next ad.
-            
+
             if (_reloadInterstitialCoroutine != null)
                 StopCoroutine(_reloadInterstitialCoroutine);
 
@@ -118,7 +127,7 @@ namespace ADSContent
             _interHidden?.Invoke();
             AppMetrica.ReportEvent("OnInterstitialHiddenEvent");
             // Interstitial ad is hidden. Pre-load the next ad.
-            
+
             if (_reloadInterstitialCoroutine != null)
                 StopCoroutine(_reloadInterstitialCoroutine);
 
@@ -129,14 +138,22 @@ namespace ADSContent
 
         public void ShowInterstitial()
         {
-            if (MaxSdk.IsInterstitialReady(InterstitialKey))
+            if (_isAppodeal)
             {
-                AppMetrica.ReportEvent("ShowInterstitial");
-                MaxSdk.ShowInterstitial(InterstitialKey);
+                if (Appodeal.IsLoaded(AppodealAdType.Interstitial))
+                    Appodeal.Show(AppodealShowStyle.Interstitial);
             }
             else
             {
-                LoadInterstitial();
+                /*if (MaxSdk.IsInterstitialReady(InterstitialKey))
+                {
+                    AppMetrica.ReportEvent("ShowInterstitial");
+                    MaxSdk.ShowInterstitial(InterstitialKey);
+                }
+                else
+                {
+                    LoadInterstitial();
+                }*/
             }
         }
 
@@ -225,63 +242,148 @@ namespace ADSContent
 
         public void ShowRewarded(RewardCallback rewardCallback)
         {
-            if (MaxSdk.IsRewardedAdReady(RewardedKey))
+            if (_isAppodeal)
             {
-                currentRewardCallback = rewardCallback;
-                MaxSdk.ShowRewardedAd(RewardedKey);
+                if (Appodeal.IsLoaded(AppodealAdType.RewardedVideo))
+                {
+                    currentRewardCallback = rewardCallback;
+                    Appodeal.Show(AppodealShowStyle.RewardedVideo);
+                }
+                else
+                {
+                    /*if (MaxSdk.IsRewardedAdReady(RewardedKey))
+                                {
+                                    currentRewardCallback = rewardCallback;
+                                    MaxSdk.ShowRewardedAd(RewardedKey);
+                                }*/
+                }
             }
         }
 
 
-        public void InitializeBannerAds()
+        //ТУТ НАЧАЛО APPODEAL
+        //ТУТ НАЧАЛО APPODEAL
+        //ТУТ НАЧАЛО APPODEAL
+        //ТУТ НАЧАЛО APPODEAL
+        //ТУТ НАЧАЛО APPODEAL
+
+
+        private void Initialize(string key)
         {
-            // Banners are automatically sized to 320×50 on phones and 728×90 on tablets
-            // You may call the utility method MaxSdkUtils.isTablet() to help with view sizing adjustments
-            MaxSdk.CreateBanner(BannerKey, MaxSdkBase.BannerPosition.BottomCenter);
-
-            // Set background color for banners to be fully functional
-            MaxSdk.SetBannerBackgroundColor(BannerKey, Color.clear);
-
-            MaxSdkCallbacks.Banner.OnAdLoadedEvent += OnBannerAdLoadedEvent;
-            MaxSdkCallbacks.Banner.OnAdLoadFailedEvent += OnBannerAdLoadFailedEvent;
-            MaxSdkCallbacks.Banner.OnAdClickedEvent += OnBannerAdClickedEvent;
-            MaxSdkCallbacks.Banner.OnAdRevenuePaidEvent += OnBannerAdRevenuePaidEvent;
-            MaxSdkCallbacks.Banner.OnAdExpandedEvent += OnBannerAdExpandedEvent;
-            MaxSdkCallbacks.Banner.OnAdCollapsedEvent += OnBannerAdCollapsedEvent;
+            Debug.Log("Appodeal Initialize");
+            //Через символ | пропишите все типы рекламы которые вы хотите использовать.
+            Appodeal.Initialize(key, AppodealAdType.Interstitial | AppodealAdType.RewardedVideo);
+            AppodealCallbacks.Sdk.OnInitialized += OnInitializedAppodeal;
+            SomeMethod();
         }
 
-        private void OnBannerAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        public void SomeMethod()
         {
+            AppodealCallbacks.Interstitial.OnLoaded += OnInterstitialLoaded;
+            AppodealCallbacks.Interstitial.OnFailedToLoad += OnInterstitialFailedToLoad;
+            AppodealCallbacks.Interstitial.OnShown += OnInterstitialShown;
+            AppodealCallbacks.Interstitial.OnShowFailed += OnInterstitialShowFailed;
+            AppodealCallbacks.Interstitial.OnClosed += OnInterstitialClosed;
+            AppodealCallbacks.Interstitial.OnClicked += OnInterstitialClicked;
+            AppodealCallbacks.Interstitial.OnExpired += OnInterstitialExpired;
+
+            AppodealCallbacks.RewardedVideo.OnLoaded += OnRewardedVideoLoaded;
+            AppodealCallbacks.RewardedVideo.OnFailedToLoad += OnRewardedVideoFailedToLoad;
+            AppodealCallbacks.RewardedVideo.OnShown += OnRewardedVideoShown;
+            AppodealCallbacks.RewardedVideo.OnShowFailed += OnRewardedVideoShowFailed;
+            AppodealCallbacks.RewardedVideo.OnClosed += OnRewardedVideoClosed;
+            AppodealCallbacks.RewardedVideo.OnFinished += OnRewardedVideoFinished;
+            AppodealCallbacks.RewardedVideo.OnClicked += OnRewardedVideoClicked;
+            AppodealCallbacks.RewardedVideo.OnExpired += OnRewardedVideoExpired;
         }
 
-        private void OnBannerAdLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo)
+        private void OnInitializedAppodeal(object sender, SdkInitializedEventArgs e)
         {
+            Debug.Log("Appodeal Initialized!");
         }
 
-        private void OnBannerAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        private void OnInterstitialLoaded(object sender, AdLoadedEventArgs e)
         {
+            Debug.Log("Interstitial loaded");
         }
 
-        private void OnBannerAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        private void OnInterstitialFailedToLoad(object sender, EventArgs e)
         {
+            Debug.Log("Interstitial failed to load");
         }
 
-        private void OnBannerAdExpandedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        private void OnInterstitialShowFailed(object sender, EventArgs e)
         {
+            Debug.Log("Interstitial show failed");
         }
 
-        private void OnBannerAdCollapsedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        private void OnInterstitialShown(object sender, EventArgs e)
         {
+            Debug.Log("Interstitial shown");
         }
 
-        public void ShowBanner()
+        private void OnInterstitialClosed(object sender, EventArgs e)
         {
-            MaxSdk.ShowBanner(BannerKey);
+            Debug.Log("Interstitial closed");
         }
 
-        public void HideBanner()
+        private void OnInterstitialClicked(object sender, EventArgs e)
         {
-            MaxSdk.HideBanner(BannerKey);
+            Debug.Log("Interstitial clicked");
+        }
+
+        private void OnInterstitialExpired(object sender, EventArgs e)
+        {
+            Debug.Log("Interstitial expired");
+        }
+
+        private void OnRewardedVideoLoaded(object sender, AdLoadedEventArgs e)
+        {
+            Debug.Log($"[APDUnity] [Callback] OnRewardedVideoLoaded(bool isPrecache:{e.IsPrecache})");
+        }
+
+// Called when rewarded video failed to load
+        private void OnRewardedVideoFailedToLoad(object sender, EventArgs e)
+        {
+            Debug.Log("[APDUnity] [Callback] OnRewardedVideoFailedToLoad()");
+        }
+
+        private void OnRewardedVideoShowFailed(object sender, EventArgs e)
+        {
+            Debug.Log("[APDUnity] [Callback] OnRewardedVideoShowFailed()");
+        }
+
+        private void OnRewardedVideoShown(object sender, EventArgs e)
+        {
+            Debug.Log("[APDUnity] [Callback] OnRewardedVideoShown()");
+        }
+
+        private void OnRewardedVideoClosed(object sender, RewardedVideoClosedEventArgs e)
+        {
+            Debug.Log($"[APDUnity] [Callback] OnRewardedVideoClosed(bool finished:{e.Finished})");
+        }
+
+// Called when rewarded video is viewed until the end
+        private void OnRewardedVideoFinished(object sender, RewardedVideoFinishedEventArgs e)
+        {
+            if (currentRewardCallback != null)
+            {
+                currentRewardCallback();
+                currentRewardCallback = null; //// Вызываем делегат
+            }
+
+            Debug.Log(
+                $"[APDUnity] [Callback] OnRewardedVideoFinished(double amount:{e.Amount}, string name:{e.Currency})");
+        }
+
+        private void OnRewardedVideoClicked(object sender, EventArgs e)
+        {
+            Debug.Log("[APDUnity] [Callback] OnRewardedVideoClicked()");
+        }
+
+        private void OnRewardedVideoExpired(object sender, EventArgs e)
+        {
+            Debug.Log("[APDUnity] [Callback] OnRewardedVideoExpired()");
         }
     }
 }
