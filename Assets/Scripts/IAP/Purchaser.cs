@@ -20,6 +20,7 @@ namespace IAP
         [SerializeField] private StarterPackScreen _starterPackScreen;
         [SerializeField] private GameObject _starterPackButton;
         [SerializeField] private Energy _energy;
+        [SerializeField] private ADS _ads;
 
         public void OnPurchaseCompleted(Product product)
         {
@@ -85,7 +86,8 @@ namespace IAP
             Debug.Log("On Purchase RemoveAds Completed");
 
             if (_interstitialTimer != null)
-                _interstitialTimer.SetValue(false);
+                _ads.SetValue(false);
+                // _interstitialTimer.SetValue(false);
 
             if (_uiInfo != null)
                 _uiInfo.UpdateRemoveAdsButton();

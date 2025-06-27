@@ -20,6 +20,9 @@ namespace ADSContent
         private bool _isAdPreloading = false;
         private int _interstitialRetryAttempt = 0;
         
+        private bool _showInter = true;
+        private bool _temporaryStopInters = false;
+        
         public delegate void RewardCallback();
 
         public bool IsInterstitialReady => MaxSdk.IsInterstitialReady(InterstitialKey);
@@ -28,7 +31,20 @@ namespace ADSContent
 
         private void Start()
         {
+            bool removeAds = PlayerPrefs.GetInt("removeADS") == 1;
+            SetValue(!removeAds);
+            
             Init();
+        }
+        
+        public void SetValue(bool value)
+        {
+            _showInter = value;
+        }
+        
+        public void SetTemporaryIntersValue(bool value)
+        {
+            _temporaryStopInters = value;
         }
 
         private void Init()
@@ -129,6 +145,12 @@ namespace ADSContent
 
         public void ShowInterstitial()
         {
+            if (!_showInter)
+                return;
+            
+            if (_temporaryStopInters)
+                return;
+            
             if (MaxSdk.IsInterstitialReady(InterstitialKey))
             {
                 AppMetrica.ReportEvent("ShowInterstitial");
