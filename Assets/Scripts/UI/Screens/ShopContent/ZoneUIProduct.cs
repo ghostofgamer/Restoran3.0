@@ -34,7 +34,7 @@ namespace UI.Screens.ShopContent
         [SerializeField] private LanguageChanger _languageChanger;
         
         private DollarValue _dollarValue;
-
+        
         public bool IsOwned { get; private set; }
 
         private void OnEnable()
@@ -86,7 +86,7 @@ namespace UI.Screens.ShopContent
                 Debug.Log("Не хватает денег ");
                 return;
             }
-
+            
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
             _shopScreen.MakePurchase();

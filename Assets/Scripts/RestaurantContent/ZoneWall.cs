@@ -1,3 +1,4 @@
+using System;
 using UI.Screens.ShopContent;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace RestaurantContent
         [SerializeField] private GameObject _zoneEnvironment;
         [SerializeField] private bool _isDoor;
 
+        public event Action<bool> ActivityDoorChanged;
+
         private void Start()
         {
             Activate();
@@ -20,8 +23,14 @@ namespace RestaurantContent
         {
             if (_isDoor)
             {
-                _closeDoor.SetActive(!_zoneUIProduct.IsBuyed());
-                _openDoor.SetActive(_zoneUIProduct.IsBuyed());
+                ActivityDoorChanged?.Invoke(_zoneUIProduct.IsBuyed());
+
+                if (_closeDoor != null)
+                    _closeDoor.SetActive(!_zoneUIProduct.IsBuyed());
+
+                if (_openDoor != null)
+                    _openDoor.SetActive(_zoneUIProduct.IsBuyed());
+
                 _zoneEnvironment.SetActive(_zoneUIProduct.IsBuyed());
             }
             else

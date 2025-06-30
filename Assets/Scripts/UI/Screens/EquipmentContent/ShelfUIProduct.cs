@@ -4,6 +4,7 @@ using Io.AppMetrica;
 using SettingsContent;
 using SettingsContent.SoundContent;
 using SoContent;
+using StorageContent;
 using TMPro;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace UI.Screens.EquipmentContent
         [SerializeField] private GameObject[] _shelf;
         [SerializeField] private TMP_Text _nameItem;
         [SerializeField] private GameObject _storage1;
+        [SerializeField] private Storage _storage;
 
         private int _currentBuyShelfIndex = -1;
 
@@ -83,10 +85,13 @@ namespace UI.Screens.EquipmentContent
 
                 if (_shelfConfigs.shelves[_currentBuyShelfIndex + 1].storage1ToUnlock)
                 {
-                    _requaredObjectInfo.SetActive(!_storage1.activeSelf);
+                    // _requaredObjectInfo.SetActive(!_storage1.activeSelf);
+                    _requaredObjectInfo.SetActive(!_storage.IsOpened);
                     // _requaredText.text = $"Required  is storage 1";
                     _requaredText.text = $"{LocalizationManager.GetTermTranslation("StorageRequired")} 1";
-                    _buyObjectInfo.SetActive(_storage1.activeSelf);
+                    // _buyObjectInfo.SetActive(_storage1.activeSelf);
+                    _buyObjectInfo.SetActive(_storage.IsOpened);
+                    Debug.Log("_storage1.activeSelf " + _storage.IsOpened);
                 }
             }
             else
