@@ -246,7 +246,6 @@ namespace FortuneContent
                 FreeSpinUsed?.Invoke();
                 PlayerPrefs.SetInt("FreeSpinUsed", 1);
             }*/
-
             _fortuneScreen.OpenPopupPrize(_fortuneSpriteConfig.GetSpriteByType(prize.Type), prize.Value);
             _soundPlayer.PlayFortunePrize();
 

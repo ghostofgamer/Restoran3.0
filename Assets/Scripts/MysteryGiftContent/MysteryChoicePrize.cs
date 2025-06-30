@@ -4,6 +4,7 @@ using DeliveryContent;
 using Enums;
 using Io.AppMetrica;
 using PlayerContent.LevelContent;
+using SettingsContent.SoundContent;
 using UI.Screens;
 using UnityEngine;
 using WalletContent;
@@ -39,6 +40,7 @@ namespace MysteryGiftContent
             if (_randomPrize != null)
                 _ads.ShowRewarded(() =>
                 {
+                    SoundPlayer.Instance.PlayMysteryBoxPrize();
                     AppMetrica.ReportEvent("RewardAD", "{\"" + "MysteryPrize" + "\":null}");
                     GetPrize(_randomPrize);
                     _mysteryBoxScreen.CloseScreen();
