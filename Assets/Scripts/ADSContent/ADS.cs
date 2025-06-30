@@ -4,7 +4,6 @@ using AppodealStack.Monetization.Api;
 using AppodealStack.Monetization.Common;
 using Io.AppMetrica;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ADSContent
 {
