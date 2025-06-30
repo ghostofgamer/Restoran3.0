@@ -13,7 +13,6 @@ namespace ADSContent
         [Header("Appodeal")] [SerializeField] private string _keyAppodeal;
         [Space] [SerializeField] private bool _isAppodeal;
 
-
         public string SDKKey = "nR3VEu5EEJlq6OmqwXd1lMKHQhg3sEumJpdTgplZ-csu1yq6zIkU1auq9P1sOOoIVLg9tOWSXDaUfRvC9Uv-Ib";
         public string InterstitialKey;
         public string RewardedKey;
@@ -25,6 +24,8 @@ namespace ADSContent
         private bool _isInterstitialLoading = false;
         private bool _isAdPreloading = false;
         private int _interstitialRetryAttempt = 0;
+        private bool _showInter = true;
+        private bool _temporaryStopInters = false;
 
         public delegate void RewardCallback();
 
@@ -34,6 +35,9 @@ namespace ADSContent
 
         private void Start()
         {
+            bool removeAds = PlayerPrefs.GetInt("removeADS") == 1;
+            SetValue(!removeAds);
+
             if (_isAppodeal)
                 Initialize(_keyAppodeal);
             else
@@ -52,6 +56,16 @@ namespace ADSContent
 
             InitializeInterstitialAds();
             InitializeRewardedAds();
+        }
+
+        public void SetValue(bool value)
+        {
+            _showInter = value;
+        }
+
+        public void SetTemporaryIntersValue(bool value)
+        {
+            _temporaryStopInters = value;
         }
 
         public void InitializeInterstitialAds()
@@ -138,6 +152,12 @@ namespace ADSContent
 
         public void ShowInterstitial()
         {
+            if (_temporaryStopInters)
+                return;
+
+            if (!_showInter)
+                return;
+
             if (_isAppodeal)
             {
                 if (Appodeal.IsLoaded(AppodealAdType.Interstitial))
@@ -145,7 +165,7 @@ namespace ADSContent
             }
             else
             {
-                /*if (MaxSdk.IsInterstitialReady(InterstitialKey))
+                if (MaxSdk.IsInterstitialReady(InterstitialKey))
                 {
                     AppMetrica.ReportEvent("ShowInterstitial");
                     MaxSdk.ShowInterstitial(InterstitialKey);
@@ -153,7 +173,7 @@ namespace ADSContent
                 else
                 {
                     LoadInterstitial();
-                }*/
+                }
             }
         }
 
@@ -249,13 +269,13 @@ namespace ADSContent
                     currentRewardCallback = rewardCallback;
                     Appodeal.Show(AppodealShowStyle.RewardedVideo);
                 }
-                else
+            }
+            else
+            {
+                if (MaxSdk.IsRewardedAdReady(RewardedKey))
                 {
-                    /*if (MaxSdk.IsRewardedAdReady(RewardedKey))
-                                {
-                                    currentRewardCallback = rewardCallback;
-                                    MaxSdk.ShowRewardedAd(RewardedKey);
-                                }*/
+                    currentRewardCallback = rewardCallback;
+                    MaxSdk.ShowRewardedAd(RewardedKey);
                 }
             }
         }
