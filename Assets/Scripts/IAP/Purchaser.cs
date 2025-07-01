@@ -2,6 +2,8 @@ using ADSContent;
 using DeliveryContent;
 using EnergyContent;
 using Enums;
+using RestaurantContent;
+using SoContent;
 using UI.Screens.AdsScreens;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,9 +20,14 @@ namespace IAP
         [SerializeField] private Delivery _delivery;
         [SerializeField] private RemoveAdScreen _removeAdScreen;
         [SerializeField] private StarterPackScreen _starterPackScreen;
+        [SerializeField] private StoragePackScreen _storagePackScreen;
         [SerializeField] private GameObject _starterPackButton;
+        [SerializeField] private GameObject _storagePackButton;
         [SerializeField] private Energy _energy;
         [SerializeField] private ADS _ads;
+        [SerializeField] private ZoneWall _storageZoneWall;
+        [SerializeField] private ShelfConfigs _shelfConfigs;
+        [SerializeField] private GameObject[] _shelfes;
 
         public void OnPurchaseCompleted(Product product)
         {
@@ -61,21 +68,25 @@ namespace IAP
                 case "com.serbull.iaptutorial.energy30":
                     AddEnergy(30);
                     break;
-                
+
                 case "com.serbull.iaptutorial.energy150":
                     AddEnergy(150);
                     break;
-                
+
                 case "com.serbull.iaptutorial.energy450":
                     AddEnergy(450);
                     break;
-                
+
                 case "com.serbull.iaptutorial.energy1850":
                     AddEnergy(1850);
                     break;
-                
+
                 case "com.serbull.iaptutorial.energy5000":
                     AddEnergy(5000);
+                    break;
+
+                case "com.serbull.iaptutorial.storagepack":
+                    PayStoragePack();
                     break;
             }
         }
@@ -87,8 +98,8 @@ namespace IAP
 
             if (_interstitialTimer != null)
                 _interstitialTimer.SetValue(false);
-            
-            if(_ads!=null)
+
+            if (_ads != null)
                 _ads.SetValue(false);
 
             if (_uiInfo != null)
@@ -125,6 +136,62 @@ namespace IAP
         {
             _energy.IncreaseEnergy(value);
             Debug.Log("On Purchase AddEnergy Completed");
+        }
+
+        private void PayStoragePack()
+        {
+            PlayerPrefs.SetInt("StoragePack", 1);
+
+            AddMoney(300);
+
+            _delivery.SpawnPrize(ItemType.Bun, 4);
+            _delivery.SpawnPrize(ItemType.RawCutlet, 4);
+            _delivery.SpawnPrize(ItemType.PackageBurgerPaper, 4);
+            _delivery.SpawnPrize(ItemType.Cheese, 4);
+            _delivery.SpawnPrize(ItemType.Coffee, 2);
+            _delivery.SpawnPrize(ItemType.CupCoffeeEmpty, 2);
+            _delivery.SpawnPrize(ItemType.Tomato, 4);
+
+            int activeShelfs = 0;
+
+            foreach (var shelf in _shelfes)
+            {
+                if (shelf.activeSelf)
+                    activeShelfs++;
+            }
+
+            DollarValue amountPrice = new DollarValue(0, 0);
+
+            for (int i = 0; i < activeShelfs; i++)
+            {
+                amountPrice += _shelfConfigs.shelves[i].price;
+                Debug.Log("@ PlusPrice " + _shelfConfigs.shelves[i].price);
+            }
+
+            foreach (var shelf in _shelfes)
+                shelf.SetActive(true);
+
+            PlayerPrefs.SetInt("ShelfBuyed" + EquipmentType.Shelf, _shelfConfigs.shelves.Length - 1);
+
+            if (PlayerPrefs.GetInt("Zona" + ZoneType.Storage, 0) > 0)
+            {
+                amountPrice += new DollarValue(100, 0);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("Zona" + ZoneType.Storage, 1);
+                _storageZoneWall.Activate();
+            }
+
+            Debug.Log("@ amountPrice " + amountPrice);
+
+            AddMoney(amountPrice.Dollars);
+
+            if (_storagePackScreen != null)
+                _storagePackScreen.CloseScreen();
+
+            if (_storagePackButton != null)
+                _storagePackButton.SetActive(false);
         }
     }
 }

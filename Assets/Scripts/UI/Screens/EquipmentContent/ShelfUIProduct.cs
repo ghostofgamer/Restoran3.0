@@ -39,6 +39,7 @@ namespace UI.Screens.EquipmentContent
         public override void Buy()
         {
             int nextShelfIndex = _currentBuyShelfIndex + 1;
+            Debug.Log("nextShelfIndex " + nextShelfIndex);
 
             if (nextShelfIndex < _shelfConfigs.shelves.Length)
             {

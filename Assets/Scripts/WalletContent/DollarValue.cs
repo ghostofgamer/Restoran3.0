@@ -42,5 +42,11 @@ namespace WalletContent
         {
             return $"${Dollars}.{Cents:D2}";
         }
+        
+        public static DollarValue operator +(DollarValue a, DollarValue b)
+        {
+            int totalCents = a.ToTotalCents() + b.ToTotalCents();
+            return a.FromTotalCents(totalCents);
+        }
     }
 }
