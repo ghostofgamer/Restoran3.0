@@ -32,6 +32,7 @@ namespace ClientsContent
         private ClientCar _clientCar;
         private ClientsCounter _clientsCounter;
         private Coroutine _trayCoroutine;
+        private int _indexQueue = -1;
 
         public DollarValue PriceOrder { get; private set; }
 
@@ -47,6 +48,7 @@ namespace ClientsContent
             CashRegister cashRegister, QueueCashRegister queueCashRegister, PriceOrderCounter priceOrderCounter,
             ClientsCounter clientsCounter)
         {
+            _indexQueue = -1;
             Order = order;
             PriceOrder = priceOrderCounter.GetPriceOrder(Order);
             _restaurant = restaurant;
@@ -83,6 +85,10 @@ namespace ClientsContent
         {
             _navMeshAgent.enabled = true;
             // _meshObstacle.enabled = true;
+            if (_indexQueue == index)
+                return;
+
+            _indexQueue = index;
 
             if (index == 0)
             {
@@ -133,6 +139,7 @@ namespace ClientsContent
             {
                 _restaurant.RemoveClientTray(tray);
                 _currentState = ClientState.Eat;
+                _navMeshAgent.enabled = true;
 
                 SetDestination(Table.ClientSitPosition.transform.position, () =>
                 {
@@ -206,6 +213,7 @@ namespace ClientsContent
             _animator.SetBool("Sit", false);
             _currentState = ClientState.GoAway;
             _clientsCounter.RemoveClient(this);
+            // _navMeshAgent.enabled = true;
 
             if (_clientCar != null)
             {
@@ -230,15 +238,12 @@ namespace ClientsContent
             _navMeshAgent.enabled = true;
             // _meshObstacle.enabled = true;
 
-            /*if (_coroutine != null)
-                StopCoroutine(_coroutine);
-
-            _coroutine = StartCoroutine(StartPaid());*/
-
-
-            SetDestination(Table.ClientSitPosition.transform.position, () =>
+            /*_navMeshAgent.SetDestination(_exitPosition.position);
+            _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", true);*/
+            
+            SetDestination(Table.ClientStandPosition.transform.position, () =>
             {
-                _navMeshAgent.enabled = false;
+                // _navMeshAgent.enabled = false;
                 _animator.SetBool("Sit", true);
                 transform.position = Table.ClientSitPosition.transform.position;
                 transform.rotation = Table.ClientSitPosition.transform.rotation;
@@ -257,7 +262,7 @@ namespace ClientsContent
 
             SetDestination(Table.ClientSitPosition.transform.position, () =>
             {
-                _navMeshAgent.enabled = false;
+                // _navMeshAgent.enabled = false;
                 _animator.SetBool("Sit", true);
                 transform.position = Table.ClientSitPosition.transform.position;
                 transform.rotation = Table.ClientSitPosition.transform.rotation;
@@ -278,9 +283,9 @@ namespace ClientsContent
 
         private IEnumerator MoveToPosition(Vector3 position, System.Action callback)
         {
-            // _meshObstacle.enabled = false;
-            // _clientCollider.enabled = false;
-            _meshObstacle.enabled = true;
+            // _meshObstacle.enabled = true;
+            _meshObstacle.enabled = false;
+            yield return null;
 
             if (!_navMeshAgent.enabled)
             {
@@ -292,19 +297,22 @@ namespace ClientsContent
             if (_animator.GetBool("Sit"))
                 _animator.SetBool("Sit", false);
 
+            _navMeshAgent.ResetPath();
             _navMeshAgent.SetDestination(position);
-
-            _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", true);
 
             while (_navMeshAgent.pathPending)
                 yield return null;
 
+            Debug.Log("!!!!!!!!!!!!!!!!!!_navMeshAgent.remainingDistance " + _navMeshAgent.remainingDistance);
+            _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", true);
+
             while (_navMeshAgent.remainingDistance > 0.1f)
                 yield return null;
 
-            _meshObstacle.enabled = false;
-            // _meshObstacle.enabled = true;
-            // _clientCollider.enabled = true;
+            // _meshObstacle.enabled = false;
+            _meshObstacle.enabled = true;
+            _navMeshAgent.enabled = false;
+
             Debug.Log("Завершил идти ");
 
             _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", false);

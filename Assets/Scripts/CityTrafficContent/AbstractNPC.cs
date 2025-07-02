@@ -12,9 +12,11 @@ namespace CityTrafficContent
         private ICityTraffic _npcTraffic;
         private Transform[] _points;
         private int _index = 0;
-
+        private bool _destinationSet = false;
+        
         private void Update()
         {
+            SetNextDestination();
             Roam();
         }
 
@@ -32,6 +34,11 @@ namespace CityTrafficContent
 
         private void Roam()
         {
+            if (!_destinationSet)
+            {
+                return;
+            }
+            
             if (Vector3.Distance(transform.position, _points[_index].position) < _minDistance)
             {
                 _index = (_index + 1) % _points.Length;
@@ -42,12 +49,20 @@ namespace CityTrafficContent
                     gameObject.SetActive(false);
                     return;
                 }
+                
+                SetNextDestination();
             }
 
-            _navMeshAgent.SetDestination(_points[_index].position);
+            // _navMeshAgent.SetDestination(_points[_index].position);
             
             if (_animator != null)
                 _animator.SetFloat("Vertical", !_navMeshAgent.isStopped ? 1 : 0);
+        }
+        
+        private void SetNextDestination()
+        {
+            _navMeshAgent.SetDestination(_points[_index].position);
+            _destinationSet = true;
         }
     }
 }
