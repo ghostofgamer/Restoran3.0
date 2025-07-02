@@ -361,21 +361,14 @@ namespace ADSContent
         //ТУТ НАЧАЛО APPODEAL
         //ТУТ НАЧАЛО APPODEAL
 
-        public void OnInitializationFinished(object sender, SdkInitializedEventArgs e)
-        {
-            Debug.Log("Appodeal Initialized!");
-            _button2.color = Color.green;
-            _button2Text.text = "Appodeal Initialized!";
-        }
-
 
         private void Initialize(string key)
         {
             Appodeal.SetAutoCache(AppodealAdType.RewardedVideo, true);
             Appodeal.SetAutoCache(AppodealAdType.Interstitial, true);
 
-            Appodeal.SetTesting(true); // Включить тестовые объявления
-            Appodeal.SetLogLevel(AppodealLogLevel.Verbose);
+            // Appodeal.SetTesting(true); // Включить тестовые объявления
+            // Appodeal.SetLogLevel(AppodealLogLevel.Verbose);
 
 
             int adTypes = AppodealAdType.Interstitial | AppodealAdType.RewardedVideo;
@@ -383,16 +376,6 @@ namespace ADSContent
             AppodealCallbacks.Sdk.OnInitialized += OnInitializationFinished;
             Appodeal.Initialize(appKey, adTypes);
             SomeMethod();
-            
-            
-            
-
-
-            /*Debug.Log("Appodeal Initialize");
-            //Через символ | пропишите все типы рекламы которые вы хотите использовать.
-            Appodeal.Initialize(key, AppodealAdType.Interstitial | AppodealAdType.RewardedVideo);
-            AppodealCallbacks.Sdk.OnInitialized += OnInitializedAppodeal;
-            SomeMethod();*/
         }
 
         public void SomeMethod()
@@ -415,7 +398,7 @@ namespace ADSContent
             AppodealCallbacks.RewardedVideo.OnExpired += OnRewardedVideoExpired;
         }
 
-        private void OnInitializedAppodeal(object sender, SdkInitializedEventArgs e)
+        public void OnInitializationFinished(object sender, SdkInitializedEventArgs e)
         {
             Debug.Log("Appodeal Initialized!");
             _button2.color = Color.green;

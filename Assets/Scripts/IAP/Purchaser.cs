@@ -2,6 +2,7 @@ using ADSContent;
 using DeliveryContent;
 using EnergyContent;
 using Enums;
+using Io.AppMetrica;
 using RestaurantContent;
 using SoContent;
 using UI.Screens.AdsScreens;
@@ -95,7 +96,8 @@ namespace IAP
         {
             PlayerPrefs.SetInt("removeADS", 1);
             Debug.Log("On Purchase RemoveAds Completed");
-
+            AppMetrica.ReportEvent("In_App", "{\"" + "RemoveADS" + "\":null}");
+            
             if (_interstitialTimer != null)
                 _interstitialTimer.SetValue(false);
 
@@ -113,7 +115,7 @@ namespace IAP
         {
             PlayerPrefs.SetInt("StarterPack", 1);
             AddMoney(150);
-
+            AppMetrica.ReportEvent("In_App", "{\"" + "StarterPack" + "\":null}");
             _delivery.SpawnPrize(ItemType.Bun, 3);
             _delivery.SpawnPrize(ItemType.RawCutlet, 3);
 
@@ -141,7 +143,7 @@ namespace IAP
         public void PayStoragePack()
         {
             PlayerPrefs.SetInt("StoragePack", 1);
-
+            AppMetrica.ReportEvent("In_App", "{\"" + "StoragePack" + "\":null}");
             AddMoney(300);
 
             _delivery.SpawnPrize(ItemType.Bun, 4);
