@@ -138,7 +138,7 @@ namespace IAP
             Debug.Log("On Purchase AddEnergy Completed");
         }
 
-        private void PayStoragePack()
+        public void PayStoragePack()
         {
             PlayerPrefs.SetInt("StoragePack", 1);
 
@@ -148,8 +148,8 @@ namespace IAP
             _delivery.SpawnPrize(ItemType.RawCutlet, 4);
             _delivery.SpawnPrize(ItemType.PackageBurgerPaper, 4);
             _delivery.SpawnPrize(ItemType.Cheese, 4);
-            _delivery.SpawnPrize(ItemType.Coffee, 2);
-            _delivery.SpawnPrize(ItemType.CupCoffeeEmpty, 2);
+            _delivery.SpawnPrize(ItemType.Coffee, 4);
+            _delivery.SpawnPrize(ItemType.CupCoffeeEmpty, 4);
             _delivery.SpawnPrize(ItemType.Tomato, 4);
 
             int activeShelfs = 0;
