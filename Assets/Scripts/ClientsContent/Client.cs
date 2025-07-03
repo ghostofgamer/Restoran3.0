@@ -141,7 +141,7 @@ namespace ClientsContent
                 _currentState = ClientState.Eat;
                 _navMeshAgent.enabled = true;
 
-                SetDestination(Table.ClientSitPosition.transform.position, () =>
+                SetDestination(Table.ClientStandPosition.transform.position, () =>
                 {
                     _navMeshAgent.enabled = false;
                     transform.position = Table.ClientSitPosition.transform.position;

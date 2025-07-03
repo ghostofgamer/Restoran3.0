@@ -6,5 +6,6 @@ namespace Enums
         Lang10,
         CHEESE2025,
         NewTown2025,
+        Coffee2025, 
     }
 }

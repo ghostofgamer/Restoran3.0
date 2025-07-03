@@ -34,7 +34,7 @@ namespace UI.Screens.NewLevelContent
         public void ChooseDontX2()
         {
             OpenSecondScreen();
-            AddPrize(2, 50);
+            AddPrize(2, 25);
         }
 
         public void ChooseRewardX2()
@@ -43,7 +43,7 @@ namespace UI.Screens.NewLevelContent
             {
                 OpenSecondScreen();
                 AppMetrica.ReportEvent("RewardAD", "{\"" + "ChooseRewardX2UpLevel" + "\":null}");
-                AddPrize(4, 100);
+                AddPrize(4, 50);
             });
         }
 
