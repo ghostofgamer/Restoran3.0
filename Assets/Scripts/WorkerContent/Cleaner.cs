@@ -4,13 +4,15 @@ using Enums;
 using RestaurantContent;
 using RestaurantContent.TableContent;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace WorkerContent
 {
     public class Cleaner : Worker
     {
         [SerializeField] private DirtyCounter _dirtyCounter;
-
+        [SerializeField] private NavMeshObstacle _navMeshObstacle;
+        
         private TableCleanliness _currentDirtyTable;
         private Coroutine _coroutine;
         private Coroutine _cleanCoroutine;
@@ -37,11 +39,13 @@ namespace WorkerContent
             }
             else if (WorkerState == WorkerState.Relax && _currentDirtyTable == null && _isRelaxing)
             {
+                Debug.Log("relax 1");
                 ElapsedTime -= Time.deltaTime;
                 WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerState.Relax,DelayRelax);
 
                 if (ElapsedTime <= 0)
                 {
+                    Debug.Log("relax 3");
                     _isRelaxing = false;
                     WorkerState = WorkerState.Work;
                     ElapsedTime = DelayWork;
@@ -96,19 +100,23 @@ namespace WorkerContent
         private IEnumerator GoToDestination(Transform destination, Transform lookPosition,
             Action onReachDestination)
         {
+            Agent.ResetPath();
             Agent.SetDestination(destination.position);
             Animator.SetBool("Walk", true);
+            _navMeshObstacle.enabled = true;
             yield return null;
 
+            Debug.Log("Agent.pathPending");
             while (Agent.pathPending)
                 yield return null;
-
+            Debug.Log("Agent.remainingDistance " + Agent.remainingDistance);
             while (Agent.remainingDistance > 0.1f)
                 yield return null;
 
-            transform.LookAt(lookPosition);
+            transform.rotation = destination.rotation;
+            // transform.LookAt(lookPosition);
             Animator.SetBool("Walk", false);
-            
+            _navMeshObstacle.enabled = false;
             yield return null;
 
             if (onReachDestination != null)

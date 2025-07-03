@@ -12,14 +12,8 @@ namespace WorkerContent
         [SerializeField] protected WorkerTimerViewer WorkerTimerViewer;
         [SerializeField] protected Animator Animator;
         [SerializeField] private NavMeshAgent _agent;
-        [SerializeField] private float _stoppingDistance = 1f;
         [SerializeField] private float _delayWork;
         [SerializeField] private float _delayRelax;
-        [SerializeField] private TMP_Text _timerViewText;
-        [SerializeField] private Sprite _workSprite;
-        [SerializeField] private Sprite _relaxSprite;
-        [SerializeField] private Image _workStateImage;
-        [SerializeField] private Image _radialFillImage;
         [SerializeField] private WorkerType _workerType;
 
         [SerializeField] protected Transform RelaxPosition;
