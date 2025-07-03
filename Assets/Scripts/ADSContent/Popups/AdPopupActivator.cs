@@ -75,6 +75,9 @@ namespace ADSContent.Popups
 
         private void ChangeValue(int level)
         {
+            if ((int)_tutorial.CurrentType < (int)TutorialType.TutorCompleted)
+                return;
+
             _starterPackButton.SetActive(level < 4 && PlayerPrefs.GetInt("StarterPack", 0) <= 0);
             _storagePackButton.SetActive(level >= 4 && PlayerPrefs.GetInt("StoragePack", 0) <= 0);
         }
