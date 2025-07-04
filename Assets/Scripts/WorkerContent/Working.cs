@@ -32,7 +32,7 @@ namespace WorkerContent
                 if (dirtyTable != null)
                 {
                     Debug.Log("уборщик иди к столу ");
-                    cleaner.Work();
+                    cleaner.StartWorking();
                 }
             }
             else

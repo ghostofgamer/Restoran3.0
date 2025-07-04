@@ -5,5 +5,6 @@ namespace Enums
     {
         Work,
         Relax,
+        Empty,
     }
 }

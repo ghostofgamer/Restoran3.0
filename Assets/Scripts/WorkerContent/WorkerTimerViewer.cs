@@ -12,39 +12,21 @@ namespace WorkerContent
         [SerializeField] private Sprite _relaxSprite;
         [SerializeField] private Image _icon;
         [SerializeField] private Image _timeFillImage;
-        
-        public void UpdateTimerView(float elapsedTime,WorkerStateType stateType,float duration)
+
+        private WorkerStateType _currentStateType = WorkerStateType.Empty;
+
+        public void UpdateTimerView(float elapsedTime, WorkerStateType stateType, float duration)
         {
-            Debug.Log("UpdateTimerView");
             _timerText.text = Mathf.CeilToInt(elapsedTime).ToString("00") + "s";
 
-            if (stateType == WorkerStateType.Work)
+            if (stateType != _currentStateType)
             {
-                _icon.sprite = _workSprite;
-                Debug.Log("Work");
+                _currentStateType = stateType;
+                _icon.sprite = stateType == WorkerStateType.Work ? _workSprite : _relaxSprite;
             }
-            else
-            {
-                _icon.sprite = _relaxSprite;
-                Debug.Log("relax");
-            }
-            
+
             float fillAmount = elapsedTime / duration;
             _timeFillImage.fillAmount = fillAmount;
-            
-            /*if (_isRelax)
-        {
-            _timerViewText.text = Mathf.CeilToInt(_elapsedTime).ToString("00") + "s";
-            _workStateImage.sprite = _relaxSprite;
-        }
-        else
-        {
-            _timerViewText.text = Mathf.CeilToInt(_elapsedTime).ToString("00") + "s";
-            _workStateImage.sprite = _workSprite;
-        }
-            
-        float fillAmount = _elapsedTime / (_isRelax ? _delayRelax : _delayWork);
-        _radialFillImage.fillAmount = fillAmount;*/
         }
     }
 }

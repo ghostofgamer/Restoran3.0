@@ -1,72 +1,81 @@
+using System;
+using System.Collections;
 using Enums;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
-using Image = UnityEngine.UI.Image;
+using WorkerContent.FSM;
 
 namespace WorkerContent
 {
     public abstract class Worker : MonoBehaviour
     {
-        [SerializeField] protected WorkerTimerViewer WorkerTimerViewer;
         [SerializeField] protected Animator Animator;
-        [SerializeField] private NavMeshAgent _agent;
-        [SerializeField] private float _delayWork;
-        [SerializeField] private float _delayRelax;
+        [SerializeField] protected NavMeshAgent Agent;
         [SerializeField] private WorkerType _workerType;
-        protected bool IsRelaxing;
         [SerializeField] protected Transform RelaxPosition;
+        [SerializeField] private WorkerTimer _workerTimer;
 
-        protected WorkerStateType WorkerStateType;
-        protected float ElapsedTime;
+        protected WorkerState CurrentState;
 
-        public float DelayRelax => _delayRelax;
-        public float DelayWork => _delayWork;
+        public WorkerTimer WorkerTimer => _workerTimer;
+
         public WorkerType WorkerType => _workerType;
-        public NavMeshAgent Agent => _agent;
+
+        public WorkerStateType CurrentWorkerStateType { get; private set; }
+
+        public bool IsTired { get; private set; } = false;
 
         public virtual void Activate()
         {
-            ElapsedTime = _delayWork;
+            _workerTimer.SetTimeWork();
             transform.position = RelaxPosition.position;
             gameObject.SetActive(true);
+            IsTired = false;
         }
 
-        public void Deactivate()
+        public void Deactivate() => gameObject.SetActive(false);
+
+        public void SetState(WorkerState newState)
         {
-            gameObject.SetActive(false);
+            CurrentState?.Exit(this);
+            CurrentState = newState;
+            CurrentState.Enter(this);
         }
-        
-        public void Working()
+
+        public void SetValueTired(bool value)
         {
-            ElapsedTime -= Time.deltaTime;
-            WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerStateType.Work,DelayWork);
-
-            if (ElapsedTime <= 0)
-            {
-                WorkerStateType = WorkerStateType.Relax;
-                ElapsedTime = DelayRelax;
-                WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerStateType.Relax,DelayRelax);
-            }
+            IsTired = value;
         }
 
-        public void Relaxing()
+        public void SetWorkerStateType(WorkerStateType workerStateType)
         {
-            ElapsedTime -= Time.deltaTime;
-            WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerStateType.Relax,DelayRelax);
-
-            if (ElapsedTime <= 0)
-            {
-                Debug.Log("relax 3");
-                IsRelaxing = false;
-                WorkerStateType = WorkerStateType.Work;
-                ElapsedTime = DelayWork;
-                Work();
-                WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerStateType.Work,DelayWork);
-            }
+            CurrentWorkerStateType = workerStateType;
         }
 
-        public abstract void Work();
+        private void Update()
+        {
+            CurrentState?.Update(this);
+        }
+
+        public virtual void StartWorking()
+        {
+        }
+
+        public virtual void StartRelaxing(Action action)
+        {
+        }
+
+        protected IEnumerator MoveToTarget(Transform target, Action onArrived)
+        {
+            Agent.SetDestination(target.position);
+            Animator.SetBool("Walk", true);
+
+            while (Agent.pathPending || Agent.remainingDistance > 0.1f)
+                yield return null;
+
+            transform.rotation = target.rotation;
+            Animator.SetBool("Walk", false);
+            onArrived?.Invoke();
+        }
     }
 }
