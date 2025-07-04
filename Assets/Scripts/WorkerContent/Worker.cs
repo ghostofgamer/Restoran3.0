@@ -15,10 +15,10 @@ namespace WorkerContent
         [SerializeField] private float _delayWork;
         [SerializeField] private float _delayRelax;
         [SerializeField] private WorkerType _workerType;
-
+        protected bool IsRelaxing;
         [SerializeField] protected Transform RelaxPosition;
 
-        protected WorkerState WorkerState;
+        protected WorkerStateType WorkerStateType;
         protected float ElapsedTime;
 
         public float DelayRelax => _delayRelax;
@@ -36,6 +36,35 @@ namespace WorkerContent
         public void Deactivate()
         {
             gameObject.SetActive(false);
+        }
+        
+        public void Working()
+        {
+            ElapsedTime -= Time.deltaTime;
+            WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerStateType.Work,DelayWork);
+
+            if (ElapsedTime <= 0)
+            {
+                WorkerStateType = WorkerStateType.Relax;
+                ElapsedTime = DelayRelax;
+                WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerStateType.Relax,DelayRelax);
+            }
+        }
+
+        public void Relaxing()
+        {
+            ElapsedTime -= Time.deltaTime;
+            WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerStateType.Relax,DelayRelax);
+
+            if (ElapsedTime <= 0)
+            {
+                Debug.Log("relax 3");
+                IsRelaxing = false;
+                WorkerStateType = WorkerStateType.Work;
+                ElapsedTime = DelayWork;
+                Work();
+                WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerStateType.Work,DelayWork);
+            }
         }
 
         public abstract void Work();

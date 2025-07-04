@@ -16,7 +16,6 @@ namespace WorkerContent
         private TableCleanliness _currentDirtyTable;
         private Coroutine _coroutine;
         private Coroutine _cleanCoroutine;
-        private bool _isRelaxing;
 
         private void Start()
         {
@@ -25,40 +24,15 @@ namespace WorkerContent
 
         private void Update()
         {
-            if (WorkerState == WorkerState.Work && _currentDirtyTable != null)
-            {
-                ElapsedTime -= Time.deltaTime;
-                WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerState.Work,DelayWork);
-
-                if (ElapsedTime <= 0)
-                {
-                    WorkerState = WorkerState.Relax;
-                    ElapsedTime = DelayRelax;
-                    WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerState.Relax,DelayRelax);
-                }
-            }
-            else if (WorkerState == WorkerState.Relax && _currentDirtyTable == null && _isRelaxing)
-            {
-                Debug.Log("relax 1");
-                ElapsedTime -= Time.deltaTime;
-                WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerState.Relax,DelayRelax);
-
-                if (ElapsedTime <= 0)
-                {
-                    Debug.Log("relax 3");
-                    _isRelaxing = false;
-                    WorkerState = WorkerState.Work;
-                    ElapsedTime = DelayWork;
-                    Work();
-                    WorkerTimerViewer.UpdateTimerView(ElapsedTime,WorkerState.Work,DelayWork);
-                }
-
-            }
+            if (WorkerStateType == WorkerStateType.Work && _currentDirtyTable != null)
+                Working();
+            else if (WorkerStateType == WorkerStateType.Relax && _currentDirtyTable == null && IsRelaxing)
+                Relaxing();
         }
 
         public override void Work()
         {
-            if (WorkerState == WorkerState.Relax)
+            if (WorkerStateType == WorkerStateType.Relax)
                 return;
 
             if (_currentDirtyTable != null)
@@ -69,8 +43,8 @@ namespace WorkerContent
             if (DirtyTable != null)
             {
                 _currentDirtyTable = DirtyTable;
-                WorkerState = WorkerState.Work;
-                Debug.Log("WorkerState " + WorkerState);
+                WorkerStateType = WorkerStateType.Work;
+                Debug.Log("WorkerState " + WorkerStateType);
                 SetDestination(_currentDirtyTable.CleanerPosition, _currentDirtyTable.LookDirtyPosition, StartClean);
             }
             else
@@ -83,9 +57,9 @@ namespace WorkerContent
         {
             base.Activate();
 
-            WorkerState = WorkerState.Work;
+            WorkerStateType = WorkerStateType.Work;
             Work();
-            WorkerTimerViewer.UpdateTimerView(DelayWork, WorkerState.Work,DelayWork);
+            WorkerTimerViewer.UpdateTimerView(DelayWork, WorkerStateType.Work,DelayWork);
         }
 
         private void SetDestination(Transform destination, Transform lookPositionDirty,
@@ -155,7 +129,7 @@ namespace WorkerContent
 
             Animator.SetBool("Cleaning", false);
 
-            if (WorkerState == WorkerState.Relax)
+            if (WorkerStateType == WorkerStateType.Relax)
             {
                 SetDestination(RelaxPosition, RelaxPosition, Relax);
             }
@@ -171,8 +145,8 @@ namespace WorkerContent
 
         private void Relax()
         {
-            WorkerState = WorkerState.Relax;
-            _isRelaxing = true;
+            WorkerStateType = WorkerStateType.Relax;
+            IsRelaxing = true;
         }
     }
 }

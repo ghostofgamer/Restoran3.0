@@ -1,7 +1,7 @@
 
 namespace Enums
 {
-    public enum WorkerState
+    public enum WorkerStateType
     {
         Work,
         Relax,

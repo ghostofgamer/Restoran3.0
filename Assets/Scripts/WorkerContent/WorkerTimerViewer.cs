@@ -13,12 +13,12 @@ namespace WorkerContent
         [SerializeField] private Image _icon;
         [SerializeField] private Image _timeFillImage;
         
-        public void UpdateTimerView(float elapsedTime,WorkerState state,float duration)
+        public void UpdateTimerView(float elapsedTime,WorkerStateType stateType,float duration)
         {
             Debug.Log("UpdateTimerView");
             _timerText.text = Mathf.CeilToInt(elapsedTime).ToString("00") + "s";
 
-            if (state == WorkerState.Work)
+            if (stateType == WorkerStateType.Work)
             {
                 _icon.sprite = _workSprite;
                 Debug.Log("Work");
