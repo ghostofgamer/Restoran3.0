@@ -14,8 +14,12 @@ namespace WorkerContent
         [SerializeField] private DirtyCounter _dirtyCounter;
         [SerializeField] private NavMeshObstacle _navMeshObstacle;
 
-        public TableCleanliness CurrentDirtyTable { get; private set; }
         private Coroutine _cleaningCoroutine;
+        private WaitForSeconds _waitForSeconds;
+        private float _baseValueClean = 5f;
+        private float _baseEfficiecy = 100;
+
+        public TableCleanliness CurrentDirtyTable { get; private set; }
 
         private void Start()
         {
@@ -75,8 +79,12 @@ namespace WorkerContent
 
         private IEnumerator CleanTable()
         {
+            float newTime = _baseValueClean * (_baseEfficiecy / Efficiecy);
+            _waitForSeconds = new WaitForSeconds(newTime);
+            Debug.Log("убираюсь " + newTime);
+
             WorkerAnimation.SetCleaningAnimValue(true);
-            yield return new WaitForSeconds(5f);
+            yield return _waitForSeconds;
 
             if (CurrentDirtyTable != null && CurrentDirtyTable.PollutionLevel > 0)
                 CurrentDirtyTable.ClearTable();

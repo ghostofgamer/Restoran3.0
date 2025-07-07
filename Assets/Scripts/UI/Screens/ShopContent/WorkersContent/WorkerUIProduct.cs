@@ -1,9 +1,11 @@
 using System;
 using Enums;
+using SettingsContent.SoundContent;
 using SoContent;
 using UnityEngine;
 using UnityEngine.UI;
 using WalletContent;
+using WorkerContent.Upgrade;
 
 namespace UI.Screens.ShopContent.WorkersContent
 {
@@ -19,12 +21,21 @@ namespace UI.Screens.ShopContent.WorkersContent
         [SerializeField] private GameObject _hireButton;
         [SerializeField] private GameObject _dismissButton;
         [SerializeField] private GameObject _requiredContent;
-        
+        [SerializeField] private GameObject _upgradeContent;
+        [SerializeField] private GameObject _maxLevelContent;
+        [SerializeField] private WorkerUpgrade _workerUpgrade;
+        [SerializeField] private WorkerParametersConfig _workerParametersConfig;
+
+        private int _level;
+        public WorkerParameterConfig CurrentConfig { get; private set; }
+
         public event Action<DollarValue, DollarValue> ValueChanged;
         public event Action<WorkerType> WorkerBuyed;
         public event Action<WorkerType> WorkerFired;
 
-        public bool IsOwned { get;private set; }
+        public event Action<WorkerParameterConfig> ParametersValueChanged;
+
+        public bool IsOwned { get; private set; }
         public DollarValue Price { get; private set; }
         public DollarValue Salary { get; private set; }
         public WorkerType WorkerType => _workerType;
@@ -45,6 +56,8 @@ namespace UI.Screens.ShopContent.WorkersContent
         {
             Debug.Log("InitWorkersG");
 
+            InitUpgradeInfo();
+            
             Price = workerConfig.Price;
             Salary = workerConfig.Salary;
             _icon.sprite = workerConfig.SpriteIcon;
@@ -63,13 +76,20 @@ namespace UI.Screens.ShopContent.WorkersContent
             }
         }
 
+        public void InitUpgradeInfo()
+        {
+            _level = PlayerPrefs.GetInt(_workerType + "LevelWorker", 1);
+            CurrentConfig = _workerParametersConfig.GetConfig(_level);
+            ParametersValueChanged?.Invoke(CurrentConfig);
+            SetValue();
+        }
+
         public void BuyWorker()
         {
             if (_wallet.DollarValue.ToTotalCents() < Price.ToTotalCents())
-            {
                 Debug.Log("недостаточно денег");
-            }
-            
+
+            SoundPlayer.Instance.PlayPayment();
             WorkerBuyed?.Invoke(_workerType);
             _wallet.Subtract(Price);
             IsOwned = true;
@@ -84,6 +104,8 @@ namespace UI.Screens.ShopContent.WorkersContent
             UpdateContent.SetActive(IsOwned);
             _hireButton.SetActive(!IsOwned);
             _dismissButton.SetActive(IsOwned);
+            _upgradeContent.SetActive(IsOwned && CurrentConfig.Level < CurrentConfig.MaxLevel);
+            _maxLevelContent.SetActive(IsOwned && CurrentConfig.Level >= CurrentConfig.MaxLevel);
         }
 
         public void DismissWorker()

@@ -27,14 +27,18 @@ namespace SoContent
     {
         [SerializeField] private int _level;
         [SerializeField] private float _delayWork;
+        [SerializeField] private float _delayWorkNext;
         [SerializeField] private float _delayRelax;
         [SerializeField] private float _speed;
         [SerializeField] private float _efficiency;
         [SerializeField] private DollarValue _priceUpgrade;
 
+        public int MaxLevel { get; private set; } = 6;
+
         public int Level => _level;
 
         public float DelayWork => _delayWork;
+        public float DelayWorkNext => _delayWorkNext;
 
         public float DelayRelax => _delayRelax;
 

@@ -1,5 +1,6 @@
 using System;
 using Enums;
+using SoContent;
 using UnityEngine;
 using WorkerContent.FSM;
 
@@ -12,8 +13,16 @@ namespace WorkerContent
         [SerializeField] protected Transform RelaxPosition;
         [SerializeField] private WorkerTimer _workerTimer;
         [SerializeField] private WorkerAnimation _workerAnimation;
-        
+        [SerializeField] private WorkerParametersConfig _workerParametersConfig;
+
         protected WorkerState CurrentState;
+        protected float Efficiecy; 
+
+        private int _maxLevel = 6;
+
+        public WorkerParametersConfig WorkerParametersConfig => _workerParametersConfig;
+
+        public int Level { get; private set; } = 1;
 
         public WorkerTimer WorkerTimer => _workerTimer;
 
@@ -26,6 +35,11 @@ namespace WorkerContent
         public WorkerStateType CurrentWorkerStateType { get; private set; }
 
         public bool IsTired { get; private set; } = false;
+
+        private void Start()
+        {
+            Level = PlayerPrefs.GetInt(_workerType + "LevelWorker", 1);
+        }
 
         private void Update()
         {
@@ -40,18 +54,21 @@ namespace WorkerContent
 
         public virtual void Activate()
         {
+            Level = PlayerPrefs.GetInt(_workerType + "LevelWorker", 1);
+            _workerMover.SetSpeed(Level);
             _workerTimer.SetTimeWork();
             transform.position = RelaxPosition.position;
             gameObject.SetActive(true);
             IsTired = false;
             SetState(new WorkState());
+            Efficiecy = _workerParametersConfig.GetConfig(Level).Efficiency;
         }
 
         public virtual void SetState(WorkerState newState)
         {
             CurrentState?.Exit(this);
             CurrentState = newState;
-            CurrentState.Enter(this,null);
+            CurrentState.Enter(this, null);
         }
 
         public void SetValueTired(bool value)
@@ -70,6 +87,25 @@ namespace WorkerContent
 
         public virtual void StartRelaxing(Action action)
         {
+        }
+
+        public void NextLevel()
+        {
+            if (Level >= _maxLevel)
+                return;
+
+            Level++;
+            PlayerPrefs.SetInt(_workerType + "LevelWorker", Level);
+            _workerMover.SetSpeed(Level);
+            Efficiecy = _workerParametersConfig.GetConfig(Level).Efficiency;
+            
+            if (CurrentWorkerStateType == WorkerStateType.Work)
+                _workerTimer.SetTimeWork();
+            if (CurrentWorkerStateType == WorkerStateType.Relax)
+                _workerTimer.SetStateRelax();
+
+            Debug.Log("CurrentWorkerStateType " + CurrentWorkerStateType);
+            _workerTimer.UpdateViewInfo(CurrentWorkerStateType);
         }
     }
 }

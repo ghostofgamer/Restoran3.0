@@ -9,9 +9,10 @@ namespace WorkerContent
     {
         [SerializeField] private NavMeshAgent _agent;
         [SerializeField] private WorkerAnimation _workerAnimation;
+        [SerializeField] private Worker _worker;
 
         public NavMeshAgent Agent => _agent;
-        
+
         public IEnumerator MoveToTarget(Transform target, Action onArrived)
         {
             _agent.SetDestination(target.position);
@@ -23,6 +24,12 @@ namespace WorkerContent
             transform.rotation = target.rotation;
             _workerAnimation.SetWalkAnimValue(false);
             onArrived?.Invoke();
+        }
+
+        public void SetSpeed(int level)
+        {
+            _agent.speed *= _worker.WorkerParametersConfig.GetConfig(level).Speed;
+            Debug.Log("_agent.speed  " + _agent.speed);
         }
     }
 }

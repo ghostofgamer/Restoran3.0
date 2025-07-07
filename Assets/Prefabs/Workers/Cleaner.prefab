@@ -399,6 +399,7 @@ MonoBehaviour:
   RelaxPosition: {fileID: 0}
   _workerTimer: {fileID: 2544704710256634914}
   _workerAnimation: {fileID: 9022470399326932331}
+  _workerParametersConfig: {fileID: 11400000, guid: 97fc0a6ebb7c9f941afff881c1569831, type: 2}
   _dirtyCounter: {fileID: 0}
   _navMeshObstacle: {fileID: 5241979745665163740}
 --- !u!114 &1438634398931934837
@@ -430,8 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99f2f8765ecf79845a819c2db9962e23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _delayWork: 30
-  _delayRelax: 10
+  _worker: {fileID: 3977962655544469527}
   _workerTimerViewer: {fileID: 1438634398931934837}
 --- !u!114 &9022470399326932331
 MonoBehaviour:
@@ -460,6 +460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _agent: {fileID: 1039664350153654844}
   _workerAnimation: {fileID: 9022470399326932331}
+  _worker: {fileID: 3977962655544469527}
 --- !u!1 &4729248385749519783
 GameObject:
   m_ObjectHideFlags: 0
