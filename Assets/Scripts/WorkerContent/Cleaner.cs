@@ -6,7 +6,6 @@ using RestaurantContent.TableContent;
 using UnityEngine;
 using UnityEngine.AI;
 using WorkerContent.FSM;
-using WorkerContent.FSM.CleanerFSM;
 
 namespace WorkerContent
 {
@@ -23,10 +22,14 @@ namespace WorkerContent
             Activate();
         }
 
-        public override void Activate()
+        public override bool GetConditionsWorkUpdate()
         {
-            base.Activate();
-            SetState(new CleanerWorkState());
+            return CurrentDirtyTable != null;
+        }
+
+        public override bool GetConditionsRelaxUpdate()
+        {
+            return CurrentDirtyTable == null && IsTired;
         }
 
         public override void StartWorking()
@@ -43,9 +46,9 @@ namespace WorkerContent
 
         public override void StartRelaxing(Action action)
         {
-            if (Agent.destination != RelaxPosition.position)
+            if (WorkerMover.Agent.destination != RelaxPosition.position)
             {
-                StartCoroutine(MoveToTarget(RelaxPosition, () =>
+                StartCoroutine(WorkerMover.MoveToTarget(RelaxPosition, () =>
                 {
                     if (action != null)
                         action?.Invoke();
@@ -64,7 +67,7 @@ namespace WorkerContent
             }
 
             CurrentDirtyTable = dirtyTable;
-            StartCoroutine(MoveToTarget(
+            StartCoroutine(WorkerMover.MoveToTarget(
                 CurrentDirtyTable.CleanerPosition,
                 () => StartCoroutine(CleanTable())
             ));
@@ -72,23 +75,19 @@ namespace WorkerContent
 
         private IEnumerator CleanTable()
         {
-            Animator.SetBool("Cleaning", true);
+            WorkerAnimation.SetCleaningAnimValue(true);
             yield return new WaitForSeconds(5f);
 
             if (CurrentDirtyTable != null && CurrentDirtyTable.PollutionLevel > 0)
                 CurrentDirtyTable.ClearTable();
 
-            Animator.SetBool("Cleaning", false);
+            WorkerAnimation.SetCleaningAnimValue(false);
             CurrentDirtyTable = null;
 
             if (CurrentState is WorkState)
-            {
                 FindDirtyTable();
-            }
             else
-            {
                 StartRelaxing(() => SetValueTired(true));
-            }
         }
     }
 }

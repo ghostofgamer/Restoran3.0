@@ -13,27 +13,6 @@ namespace ADSContent
 {
     public class ADS : MonoBehaviour
     {
-        [SerializeField] private Image _button1;
-        [SerializeField] private TMP_Text _button1Text;
-        [SerializeField] private Image _button2;
-        [SerializeField] private TMP_Text _button2Text;
-        [SerializeField] private Image _button3;
-        [SerializeField] private TMP_Text _button3Text;
-        [SerializeField] private Image _button4;
-        [SerializeField] private TMP_Text _button4Text;
-        [SerializeField] private Image _button10;
-        [SerializeField] private TMP_Text _button10Text;
-
-        [SerializeField] private Image _button5;
-        [SerializeField] private TMP_Text _button5Text;
-        [SerializeField] private Image _button6;
-        [SerializeField] private TMP_Text _button6Text;
-        [SerializeField] private Image _button7;
-        [SerializeField] private TMP_Text _button7Text;
-        [SerializeField] private Image _button8;
-        [SerializeField] private TMP_Text _button8Text;
-
-
         [Header("Appodeal")] [SerializeField] private string _keyAppodeal;
         [SerializeField] private bool _isAppodeal;
 
@@ -59,7 +38,7 @@ namespace ADSContent
 
         public event Action _interHidden;
 
-        private void Start()
+        private void Awake()
         {
             bool removeAds = PlayerPrefs.GetInt("removeADS") == 1;
             SetValue(!removeAds);
@@ -69,6 +48,18 @@ namespace ADSContent
             else
                 Init();
         }
+
+
+        /*private void Start()
+        {
+            bool removeAds = PlayerPrefs.GetInt("removeADS") == 1;
+            SetValue(!removeAds);
+
+            if (_isAppodeal)
+                Initialize(_keyAppodeal);
+            else
+                Init();
+        }*/
 
         private void Init()
         {
@@ -180,13 +171,11 @@ namespace ADSContent
         {
             if (_temporaryStopInters)
             {
-                _button1Text.text = "_temporaryStopInters";
                 return;
             }
 
             if (!_showInter)
             {
-                _button1Text.text = "!_showInter";
                 return;
             }
 
@@ -194,43 +183,17 @@ namespace ADSContent
             {
                 if (Appodeal.IsLoaded(AppodealAdType.Interstitial))
                 {
-                    _button1.color = Color.green;
-                    _button1Text.text = "Appodeal.IsLoaded";
                     Appodeal.Show(AppodealShowStyle.Interstitial);
                 }
-                else if (!Appodeal.IsAutoCacheEnabled(AppodealAdType.Interstitial))
+                /*else if (!Appodeal.IsAutoCacheEnabled(AppodealAdType.Interstitial))
                 {
                     Appodeal.Cache(AppodealAdType.Interstitial);
-                    _button10.color = Color.blue;
-                    _button10Text.text = "Appodeal.IsCach";
                 }
                 else
                 {
-                    if (_button1.color == Color.red)
-                        _button1.color = Color.black;
-                    else
-                        _button1.color = Color.red;
-
                     Appodeal.Cache(AppodealAdType.Interstitial);
-                    _button1Text.text = "!!!Inters.Is NOT Loaded";
-                }
-
-
-                /*if (Appodeal.IsLoaded(AppodealAdType.Interstitial))
-                {
-                    _button1.color = Color.green;
-                    _button1Text.text = "Appodeal.IsLoaded";
-                    Appodeal.Show(AppodealShowStyle.Interstitial);
-                }
-                else
-                {
-                    if (_button1.color == Color.red)
-                        _button1.color = Color.black;
-                    else
-                        _button1.color = Color.red;
-
-                    _button1Text.text = "!!!Appodeal.Is NOT Loaded";
                 }*/
+                
             }
             else
             {
@@ -337,11 +300,6 @@ namespace ADSContent
                 {
                     currentRewardCallback = rewardCallback;
                     Appodeal.Show(AppodealShowStyle.RewardedVideo);
-                    _button5.color = Color.green;
-                }
-                else
-                {
-                    _button5.color = Color.red;
                 }
             }
             else
@@ -364,8 +322,8 @@ namespace ADSContent
 
         private void Initialize(string key)
         {
-            Appodeal.SetAutoCache(AppodealAdType.RewardedVideo, true);
-            Appodeal.SetAutoCache(AppodealAdType.Interstitial, true);
+            /*Appodeal.SetAutoCache(AppodealAdType.RewardedVideo, true);
+            Appodeal.SetAutoCache(AppodealAdType.Interstitial, true);*/
 
             // Appodeal.SetTesting(true); // Включить тестовые объявления
             // Appodeal.SetLogLevel(AppodealLogLevel.Verbose);
@@ -401,15 +359,11 @@ namespace ADSContent
         public void OnInitializationFinished(object sender, SdkInitializedEventArgs e)
         {
             Debug.Log("Appodeal Initialized!");
-            _button2.color = Color.green;
-            _button2Text.text = "Appodeal Initialized!";
         }
 
         private void OnInterstitialLoaded(object sender, AdLoadedEventArgs e)
         {
             Debug.Log("Interstitial loaded");
-            _button3.color = Color.green;
-            _button3Text.text = "Interstitial loaded";
         }
 
         private int _interstitialRetryCount = 0;
@@ -418,27 +372,16 @@ namespace ADSContent
         {
             Debug.Log("Interstitial failed to load");
 
-            if (_button4.color == Color.red)
-                _button4.color = Color.yellow;
-            else
-                _button4.color = Color.red;
-            // _button4Text.text = "Interstitial failed to load!";
-
-
-            Debug.LogError($"Interstitial failed: {e}");
-            _button4Text.text = $"Error: {e}";
-
-
-            _interstitialRetryCount++;
+            /*_interstitialRetryCount++;
             float delay = Mathf.Pow(2, Mathf.Min(5, _interstitialRetryCount));
-            StartCoroutine(RetryLoadInterstitial(delay));
+            StartCoroutine(RetryLoadInterstitial(delay));*/
         }
 
-        private IEnumerator RetryLoadInterstitial(float delay)
+        /*private IEnumerator RetryLoadInterstitial(float delay)
         {
             yield return new WaitForSeconds(delay);
             Appodeal.Cache(AppodealAdType.Interstitial);
-        }
+        }*/
 
         private void OnInterstitialShowFailed(object sender, EventArgs e)
         {
@@ -468,15 +411,12 @@ namespace ADSContent
         private void OnRewardedVideoLoaded(object sender, AdLoadedEventArgs e)
         {
             Debug.Log($"[APDUnity] [Callback] OnRewardedVideoLoaded(bool isPrecache:{e.IsPrecache})");
-
-            _button6.color = Color.green;
         }
 
 // Called when rewarded video failed to load
         private void OnRewardedVideoFailedToLoad(object sender, EventArgs e)
         {
             Debug.Log("[APDUnity] [Callback] OnRewardedVideoFailedToLoad()");
-            _button7.color = Color.green;
         }
 
         private void OnRewardedVideoShowFailed(object sender, EventArgs e)

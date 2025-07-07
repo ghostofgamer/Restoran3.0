@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 165, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.64}
+  m_AnchoredPosition: {x: 0, y: 3.27}
   m_SizeDelta: {x: 3, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &94980447202006587
@@ -267,13 +267,16 @@ GameObject:
   - component: {fileID: 8049756441549439550}
   - component: {fileID: 3977962655544469527}
   - component: {fileID: 1438634398931934837}
+  - component: {fileID: 2544704710256634914}
+  - component: {fileID: 9022470399326932331}
+  - component: {fileID: 5437894861396250848}
   m_Layer: 0
   m_Name: Cleaner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7885284888333627668
 Transform:
   m_ObjectHideFlags: 0
@@ -301,7 +304,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2.3
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -320,7 +323,7 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4330331312054902424}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Shape: 0
   m_Extents: {x: 0.5, y: 2.5, z: 0.5}
@@ -391,20 +394,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2949ed970bc034590190d2a348f933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WorkerTimerViewer: {fileID: 1438634398931934837}
-  Animator: {fileID: 3690826762836347842}
-  _agent: {fileID: 1039664350153654844}
-  _stoppingDistance: 1
-  _delayWork: 30
-  _delayRelax: 10
-  _timerViewText: {fileID: 0}
-  _workSprite: {fileID: 0}
-  _relaxSprite: {fileID: 0}
-  _workStateImage: {fileID: 0}
-  _radialFillImage: {fileID: 0}
+  _workerMover: {fileID: 5437894861396250848}
   _workerType: 1
   RelaxPosition: {fileID: 0}
+  _workerTimer: {fileID: 2544704710256634914}
+  _workerAnimation: {fileID: 9022470399326932331}
   _dirtyCounter: {fileID: 0}
+  _navMeshObstacle: {fileID: 5241979745665163740}
 --- !u!114 &1438634398931934837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,6 +418,48 @@ MonoBehaviour:
   _relaxSprite: {fileID: 21300000, guid: 8154da9f6da56e044be06fab7bdf12b4, type: 3}
   _icon: {fileID: 8367461920729382636}
   _timeFillImage: {fileID: 3057007967052313655}
+--- !u!114 &2544704710256634914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4330331312054902424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99f2f8765ecf79845a819c2db9962e23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delayWork: 30
+  _delayRelax: 10
+  _workerTimerViewer: {fileID: 1438634398931934837}
+--- !u!114 &9022470399326932331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4330331312054902424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5b6aed6f9f744d84d74572f673a9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 3690826762836347842}
+--- !u!114 &5437894861396250848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4330331312054902424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7047d7184c0a970438153997a49355f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _agent: {fileID: 1039664350153654844}
+  _workerAnimation: {fileID: 9022470399326932331}
 --- !u!1 &4729248385749519783
 GameObject:
   m_ObjectHideFlags: 0

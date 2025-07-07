@@ -1,3 +1,4 @@
+using System;
 using Enums;
 
 namespace WorkerContent.FSM
@@ -6,18 +7,27 @@ namespace WorkerContent.FSM
     {
         private Cleaner _cleaner;
 
-        public override void Enter(Worker worker)
+        public override void Enter(Worker worker, Action action)
         {
             worker.WorkerTimer.Init(WorkerStateType.Relax);
-            worker.StartRelaxing(null);
+
+            if (action != null)
+                action?.Invoke();
         }
 
         public override void Update(Worker worker)
         {
-            worker.WorkerTimer.UpdateViewInfo(WorkerStateType.Relax);
-            
-            if (worker.WorkerTimer.StateTimer <= 0)
-                worker.SetState(new WorkState());
+            if (worker.GetConditionsRelaxUpdate() && worker.CurrentWorkerStateType == WorkerStateType.Relax)
+            {
+                worker.WorkerTimer.UpdateViewInfo(WorkerStateType.Relax);
+
+                if (worker.WorkerTimer.StateTimer <= 0)
+                {
+                    worker.SetValueTired(false);
+                    worker.SetWorkerStateType(WorkerStateType.Work);
+                    worker.SetState(new WorkState());
+                }
+            }
         }
 
         public override void Exit(Worker worker)

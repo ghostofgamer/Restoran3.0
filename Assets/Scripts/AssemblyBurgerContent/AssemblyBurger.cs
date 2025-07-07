@@ -80,6 +80,11 @@ namespace AssemblyBurgerContent
 
                                 if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
                                 {
+                                    if (_isAnimationInProgress)
+                                    {
+                                        return;
+                                    }
+                                    
                                     _tutorialAssemblyBurger.NextItemPackages();
                                 }
 
@@ -98,6 +103,11 @@ namespace AssemblyBurgerContent
 
                                 if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
                                 {
+                                    if (_isAnimationInProgress)
+                                    {
+                                        return;
+                                    }
+                                    
                                     _tutorialAssemblyBurger.NextItemCutlet();
                                 }
 
@@ -118,6 +128,11 @@ namespace AssemblyBurgerContent
                             {
                                 if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
                                 {
+                                    if (_isAnimationInProgress)
+                                    {
+                                        return;
+                                    }
+                                    
                                     if (selectedContainer.CurrentItemContainer == ItemType.Cutlet)
                                         _tutorialAssemblyBurger.NextItemKetchup();
                                 }
@@ -167,6 +182,11 @@ namespace AssemblyBurgerContent
                     {
                         if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
                         {
+                            if (_isAnimationInProgress)
+                            {
+                                return;
+                            }
+                            
                             if (sauce.ItemType == ItemType.Ketchup)
                                 _tutorialAssemblyBurger.NextItemBunTop();
                         }
@@ -389,6 +409,11 @@ namespace AssemblyBurgerContent
 
                     if(_tutorial.CurrentType==TutorialType.LetsMakeFirstBurger)
                     {
+                        if (_isAnimationInProgress)
+                        {
+                            return;
+                        }
+                        
                         _tutorialAssemblyBurger.CompletedAssemblyBurger();
                         _tutorial.SetCurrentTutorialStage(TutorialType.LetsMakeFirstBurger);
                     }

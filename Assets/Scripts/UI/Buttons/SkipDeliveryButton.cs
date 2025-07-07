@@ -31,18 +31,18 @@ namespace UI.Buttons
                 Debug.Log("ЕНЕРГИЯ КНОПКА КНОПКА КНОПКА");
                 Debug.Log("_energy.EnergyValue" + _energy.EnergyValue);
                 Debug.Log("_delivery.AmountDeliveries" + _delivery.AmountDeliveries);
-                
+
                 if (_energy.EnergyValue < _delivery.AmountDeliveries)
                     return;
 
                 _energy.DecreaseEnergy(_delivery.AmountDeliveries);
-                AppMetrica.ReportEvent("RewardAD", "{\"" + "SkipDeliveryEnergy" + "\":null}");
+                AppMetrica.ReportEvent("SkipDeliveryEnergy");
                 _delivery.SpawnAllItems();
             }
             else
             {
                 Debug.Log("КНОПКА КНОПКА КНОПКА КНОПКА");
-                AppMetrica.ReportEvent("RewardAD", "{\"" + "SkipDeliveryFreeButton" + "\":null}");
+                AppMetrica.ReportEvent("SkipDeliveryFreeButton");
                 _delivery.SpawnAllItems();
                 _skipCounter.SkipFirstActivate();
             }
