@@ -25,6 +25,7 @@ namespace UI.Screens.AssemblyScreens
             base.CloseScreen();
             _input.SetActive(true);
             _cashRegisterViewer.SetValuePanels(false);
+            _cashRegister.SetPlayerValue(false);
         }
     }
 }

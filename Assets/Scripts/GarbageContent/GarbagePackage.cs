@@ -9,9 +9,9 @@ namespace GarbageContent
     {
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private TableCleanliness _tableCleanliness;
-        
+
         public bool IsActive { get; private set; }
-        
+
         private void OnEnable()
         {
             _interactableObject.OnAction += Action;
@@ -32,10 +32,11 @@ namespace GarbageContent
             IsActive = isActive;
             gameObject.SetActive(isActive);
         }
-        
+
         public void Clean()
         {
-            gameObject.SetActive(false);
+            SetValue(false);
+            // gameObject.SetActive(false);
             _tableCleanliness.DecreasePollutionLevel();
         }
     }

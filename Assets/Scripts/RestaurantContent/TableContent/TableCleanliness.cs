@@ -94,7 +94,7 @@ namespace RestaurantContent.TableContent
         private void DeactivateGarbages()
         {
             foreach (var garbage in _garbagePackages)
-                garbage.gameObject.SetActive(false);
+                garbage.SetValue(false);
         }
     }
 }

@@ -28,28 +28,14 @@ namespace WorkerContent
 
             if (cleaner != null)
             {
-                Debug.Log("уборщик найден ");
                 if (dirtyTable != null)
-                {
-                    Debug.Log("уборщик иди к столу ");
                     cleaner.StartWorking();
-                }
             }
             else
             {
                 Debug.Log("туту Null уборщик");
                 return;
             }
-
-            /*if (dirtyTable != null)
-            {
-
-            }
-            else
-            {
-                Debug.Log("туту Null стол");
-                return;
-            }*/
         }
     }
 }

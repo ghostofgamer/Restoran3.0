@@ -89,6 +89,8 @@ namespace WorkerContent
         {
         }
 
+        public abstract void StartRelax();
+
         public void NextLevel()
         {
             if (Level >= _maxLevel)

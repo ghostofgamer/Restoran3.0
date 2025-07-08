@@ -60,6 +60,10 @@ namespace WorkerContent
             }
         }
 
+        public override void StartRelax()
+        {
+        }
+
         private void FindDirtyTable()
         {
             TableCleanliness dirtyTable = _dirtyCounter.GetDirtyTable();
