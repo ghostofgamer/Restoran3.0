@@ -4,6 +4,7 @@ using System.Linq;
 using AttentionHintContent;
 using DG.Tweening;
 using Enums;
+using I2.Loc;
 using InteractableContent;
 using PlayerContent.LevelContent;
 using RestaurantContent;
@@ -85,7 +86,7 @@ namespace AssemblyBurgerContent
                                     {
                                         return;
                                     }
-                                    
+
                                     _tutorialAssemblyBurger.NextItemPackages();
                                 }
 
@@ -108,7 +109,7 @@ namespace AssemblyBurgerContent
                                     {
                                         return;
                                     }
-                                    
+
                                     _tutorialAssemblyBurger.NextItemCutlet();
                                 }
 
@@ -133,7 +134,7 @@ namespace AssemblyBurgerContent
                                     {
                                         return;
                                     }
-                                    
+
                                     if (selectedContainer.CurrentItemContainer == ItemType.Cutlet)
                                         _tutorialAssemblyBurger.NextItemKetchup();
                                 }
@@ -142,7 +143,8 @@ namespace AssemblyBurgerContent
                             }
                             else
                             {
-                                AttentionHintActivator.Instance.ShowHint("Нету ингридиентов этого типа");
+                                AttentionHintActivator.Instance.ShowHint(
+                                    LocalizationManager.GetTermTranslation("No ingredients of this type"));
                                 Debug.Log("Нету ингридиентов этого типа " + selectedContainer.CurrentItemContainer);
                             }
                         }
@@ -156,7 +158,8 @@ namespace AssemblyBurgerContent
 
                         if (activePackageBurgerPaper <= 0)
                         {
-                            AttentionHintActivator.Instance.ShowHint("Нету упаковок");
+                            AttentionHintActivator.Instance.ShowHint(
+                                LocalizationManager.GetTermTranslation("No packaging"));
                             Debug.Log("упаковок нету уже");
                         }
                         else
@@ -173,7 +176,8 @@ namespace AssemblyBurgerContent
                             }
                             else
                             {
-                                AttentionHintActivator.Instance.ShowHint("Не правильная сборка");
+                                AttentionHintActivator.Instance.ShowHint(
+                                    LocalizationManager.GetTermTranslation("Incorrect assembly"));
                                 Debug.Log("Не правильная сборка Бургер ");
                             }
                         }
@@ -190,7 +194,7 @@ namespace AssemblyBurgerContent
                             {
                                 return;
                             }
-                            
+
                             if (sauce.ItemType == ItemType.Ketchup)
                                 _tutorialAssemblyBurger.NextItemBunTop();
                         }
@@ -411,17 +415,17 @@ namespace AssemblyBurgerContent
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                     burgerInstance.transform.rotation = Quaternion.identity;
 
-                    if(_tutorial.CurrentType==TutorialType.LetsMakeFirstBurger)
+                    if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
                     {
                         if (_isAnimationInProgress)
                         {
                             return;
                         }
-                        
+
                         _tutorialAssemblyBurger.CompletedAssemblyBurger();
                         _tutorial.SetCurrentTutorialStage(TutorialType.LetsMakeFirstBurger);
                     }
-                    
+
                     containerPackageBurger.DeactivateItems(1);
 
                     _playerLevel.AddExp(5);

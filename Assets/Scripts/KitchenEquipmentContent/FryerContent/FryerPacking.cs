@@ -1,5 +1,6 @@
 using AttentionHintContent;
 using Enums;
+using I2.Loc;
 using UnityEngine;
 
 namespace KitchenEquipmentContent.FryerContent
@@ -19,7 +20,8 @@ namespace KitchenEquipmentContent.FryerContent
             {
                 if (!compatibleTool.IsRaw)
                 {
-                    AttentionHintActivator.Instance.ShowHint("Нельзя положить сырые пока лежат готовые");
+                    AttentionHintActivator.Instance.ShowHint(
+                        LocalizationManager.GetTermTranslation("You can't put in raw ones: take away cooked ones"));
                     Debug.Log("лежат готовые фри");
                     return;
                 }
@@ -28,11 +30,13 @@ namespace KitchenEquipmentContent.FryerContent
                 int emptyPosition = compatibleTool.GetCountInactiveItems();
                 int activeItems = itemBasket.GetActiveValueItems();
                 Debug.Log("emptyPosition " + emptyPosition + " activeItems " + activeItems);
-                
+
                 if (emptyPosition <= 0)
-                    AttentionHintActivator.Instance.ShowHint("Нет места");
+                    AttentionHintActivator.Instance.ShowHint(
+                        LocalizationManager.GetTermTranslation("No place"));
                 else if (activeItems <= 0)
-                    AttentionHintActivator.Instance.ShowHint("Коробка пустая");
+                    AttentionHintActivator.Instance.ShowHint(
+                        LocalizationManager.GetTermTranslation("The box is empty"));
 
                 if (emptyPosition > 0 && activeItems > 0)
                 {
@@ -49,7 +53,8 @@ namespace KitchenEquipmentContent.FryerContent
             else
             {
                 Debug.Log("Item type is not compatible with any of the fryer tools.");
-                AttentionHintActivator.Instance.ShowHint("Не подходящий вид продукта");
+                AttentionHintActivator.Instance.ShowHint(
+                    LocalizationManager.GetTermTranslation("Unsuitable product type"));
             }
         }
 

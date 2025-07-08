@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AttentionHintContent;
 using CameraContent;
 using Enums;
+using I2.Loc;
 using InteractableContent;
 using PlayerContent;
 using SettingsContent.SoundContent;
@@ -85,11 +86,13 @@ namespace KitchenEquipmentContent.FryerContent
 
                             int emptyPosContainer = itemContainer.GetEmptyPosition();
                             int activeItemBasket = itemBasket.GetActiveValueItems();
-
+                            
                             if (emptyPosContainer <= 0)
-                                AttentionHintActivator.Instance.ShowHint("Нет места");
+                                AttentionHintActivator.Instance.ShowHint(
+                                    LocalizationManager.GetTermTranslation("No place"));
                             else if (activeItemBasket <= 0)
-                                AttentionHintActivator.Instance.ShowHint("Коробка пустая");
+                                AttentionHintActivator.Instance.ShowHint(
+                                    LocalizationManager.GetTermTranslation("The box is empty"));
 
                             if (emptyPosContainer > 0 && activeItemBasket > 0)
                             {
@@ -128,6 +131,11 @@ namespace KitchenEquipmentContent.FryerContent
                         {
                             int emptyContainerPosition = fryerContainer.GetInactiveValue();
                             Debug.Log("Пустых мест в контейнере " + emptyContainerPosition);
+                            
+                            /*if (emptyContainerPosition <= 0)
+                                AttentionHintActivator.Instance.ShowHint(
+                                    LocalizationManager.GetTermTranslation("No place"));*/
+                            
                             int itemsToPlace = Mathf.Min(emptyContainerPosition, valueFryerTool);
                             Debug.Log("Меньшее число  " + itemsToPlace);
 

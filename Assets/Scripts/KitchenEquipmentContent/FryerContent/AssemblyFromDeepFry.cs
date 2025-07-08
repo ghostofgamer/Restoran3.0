@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AttentionHintContent;
 using DG.Tweening;
 using Enums;
+using I2.Loc;
 using InteractableContent;
 using PlayerContent.LevelContent;
 using RestaurantContent;
@@ -65,6 +67,10 @@ namespace KitchenEquipmentContent.FryerContent
                         if (valuePackage <= 0)
                         {
                             Debug.Log("не хватате упаковок : ");
+                            
+                            AttentionHintActivator.Instance.ShowHint(
+                                LocalizationManager.GetTermTranslation("No packaging"));
+                            
                             return;
                         }
 

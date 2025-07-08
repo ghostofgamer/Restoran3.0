@@ -38,7 +38,7 @@ namespace KitchenEquipmentContent.FryerContent
 
             if (_fryerPacking.GetFullTools() <= 0)
             {
-                AttentionHintActivator.Instance.ShowHint("Нечего жарить");
+                AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("Nothing to cook"));
                 Debug.Log("нечего жарить ");
                 return;
             }

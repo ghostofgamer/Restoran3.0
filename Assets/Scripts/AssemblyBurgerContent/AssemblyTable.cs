@@ -6,6 +6,7 @@ using AssemblyBurgerContent;
 using AttentionHintContent;
 using CameraContent;
 using Enums;
+using I2.Loc;
 using InteractableContent;
 using PlayerContent;
 using SaveContent;
@@ -81,10 +82,11 @@ public class AssemblyTable : MonoBehaviour
                         bool hasActiveItems = activeItems != null && activeItems.Any(item => item > 0);
 
                         if (!hasEmptyPosition)
-                            AttentionHintActivator.Instance.ShowHint("Нет места");
+                            AttentionHintActivator.Instance.ShowHint(
+                                LocalizationManager.GetTermTranslation("No place"));
                         else if (!hasActiveItems)
-                            AttentionHintActivator.Instance.ShowHint("В коробке пусто");
-                        
+                            AttentionHintActivator.Instance.ShowHint(
+                                LocalizationManager.GetTermTranslation("The box is empty"));
 
                         if (emptyPositions.Length == activeItems.Length)
                         {
@@ -121,9 +123,12 @@ public class AssemblyTable : MonoBehaviour
                         int activeItems = basket.GetActiveValueItems();
 
                         if (emptyPosition <= 0)
-                            AttentionHintActivator.Instance.ShowHint("Нет места");
+                            AttentionHintActivator.Instance.ShowHint(
+                                LocalizationManager.GetTermTranslation("No place"));
                         else if (activeItems <= 0)
-                            AttentionHintActivator.Instance.ShowHint("В коробке пусто");
+                            AttentionHintActivator.Instance.ShowHint(
+                                LocalizationManager.GetTermTranslation("The box is empty"));
+
 
                         if (emptyPosition > 0 && activeItems > 0)
                         {

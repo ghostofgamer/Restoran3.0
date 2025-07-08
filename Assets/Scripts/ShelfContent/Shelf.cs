@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AttentionHintContent;
 using DG.Tweening;
 using Enums;
+using I2.Loc;
 using InteractableContent;
 using ItemContent;
 using PlayerContent;
@@ -42,7 +43,7 @@ namespace ShelfContent
 
                 if (freePosCount <= 0)
                 {
-                    AttentionHintActivator.Instance.ShowHint("Нет места");
+                    AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("No place"));
                     return;
                 }
 

@@ -1,6 +1,7 @@
 using AttentionHintContent;
 using DG.Tweening;
 using Enums;
+using I2.Loc;
 using InteractableContent;
 using PlayerContent;
 using SoContent.AssemblyBurger;
@@ -27,11 +28,12 @@ namespace ItemContent
                 {
                     int emptyPosition = GetEmptyPosition();
                     int activeItems = basket.GetActiveValueItems();
-
+                    
                     if (emptyPosition <= 0)
-                        AttentionHintActivator.Instance.ShowHint("Нет места");
+                        AttentionHintActivator.Instance.ShowHint(
+                            LocalizationManager.GetTermTranslation("No place"));
                     else if (activeItems <= 0)
-                        AttentionHintActivator.Instance.ShowHint("В коробке пусто");
+                        AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("The box is empty"));
                     
                     if (emptyPosition > 0 && activeItems > 0)
                     {

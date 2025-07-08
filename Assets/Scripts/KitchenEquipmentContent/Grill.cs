@@ -98,12 +98,15 @@ namespace KitchenEquipmentContent
                     int activePos = playerInteraction.PlayerTray.GetActivePositionValue(ItemType.Cutlet);
                     int activeCount = CountNotActiveItems(_readyCutletItems);
                     int itemsToPlace = Mathf.Min(activeCount, activePos);
-
-                    if (activePos <= 0)
-                        AttentionHintActivator.Instance.ShowHint("На подносе пусто");
-                    else if (activeCount <= 0)
-                        AttentionHintActivator.Instance.ShowHint("Нет места на гриле");
                     
+                    if (activePos <= 0)
+                        AttentionHintActivator.Instance.ShowHint(
+                            LocalizationManager.GetTermTranslation("The tray is empty"));
+                    else if (activeCount <= 0)
+                        AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("No place"));
+                    
+                    
+
                     if (itemsToPlace > 0)
                     {
                         playerInteraction.PlayerTray.PutAway(ItemType.Cutlet, itemsToPlace);
@@ -189,7 +192,9 @@ namespace KitchenEquipmentContent
                 }
                 else if (playerInteraction.PlayerTray.CurrentType == ItemType.RawCutlet)
                 {
-                    AttentionHintActivator.Instance.ShowHint("Нельзя положить сырые котлеты: заберите приготовленные котлеты ");
+                    AttentionHintActivator.Instance.ShowHint(
+                        LocalizationManager.GetTermTranslation(
+                            "You can't put raw cutlets in: take away cooked cutlets"));
                 }
             }
             else if (_currentType == ItemType.RawCutlet)
@@ -202,10 +207,11 @@ namespace KitchenEquipmentContent
                     int itemsToPlace = Mathf.Min(inactiveCount, emptyPositions);
 
                     if (emptyPositions <= 0)
-                        AttentionHintActivator.Instance.ShowHint("На подносе пусто");
+                        AttentionHintActivator.Instance.ShowHint(
+                            LocalizationManager.GetTermTranslation("The tray is empty"));
                     else if (inactiveCount <= 0)
-                        AttentionHintActivator.Instance.ShowHint("Нет места на гриле");
-                    
+                        AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("No place"));
+
                     Debug.Log("СТОЛ " + itemsToPlace);
                     Debug.Log("emptyPositions " + emptyPositions);
                     Debug.Log("activeCount " + inactiveCount);
@@ -292,7 +298,7 @@ namespace KitchenEquipmentContent
                             if (_tutorial.CurrentType == TutorialType.PutCutletsOnGrill)
                             {
                                 Debug.Log("МАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯК");
-                                    _tutorial.SetCurrentTutorialStage(TutorialType.PutCutletsOnGrill);
+                                _tutorial.SetCurrentTutorialStage(TutorialType.PutCutletsOnGrill);
                             }
 
                             Item newItem = _burgerIngridientSpawner.SpawnItem(_currentType);
@@ -326,7 +332,7 @@ namespace KitchenEquipmentContent
                 }
                 else
                 {
-                    AttentionHintActivator.Instance.ShowHint("Нельзя положить готовые котлеты на пустой гриль");
+                    AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("Nothing to cook"));
                     Debug.Log("Нельзя положить готовые котлеты на пустой гриль.");
                 }
             }
@@ -443,7 +449,8 @@ namespace KitchenEquipmentContent
             _audioSource.Play();
             _progressFryUI.SetActive(true);
             // grillText.text = "Grill <color=yellow>Raw</color>";
-            grillText.text = $"{LocalizationManager.GetTermTranslation("Grill")} <color=yellow>{LocalizationManager.GetTermTranslation("Raw")}</color>";
+            grillText.text =
+                $"{LocalizationManager.GetTermTranslation("Grill")} <color=yellow>{LocalizationManager.GetTermTranslation("Raw")}</color>";
             fillImage.fillAmount = 0f;
 
             float elapsedTime = 0f;
@@ -458,11 +465,12 @@ namespace KitchenEquipmentContent
             {
                 _tutorial.SetCurrentTutorialStage(TutorialType.FryCutletGrill);
             }
-            
+
             _fryEffect.SetActive(false);
             _audioSource.Stop();
             // grillText.text = "Grill <color=green>Medium</color>";
-            grillText.text = $"{LocalizationManager.GetTermTranslation("Grill")} <color=green>{LocalizationManager.GetTermTranslation("Well")}</color>";
+            grillText.text =
+                $"{LocalizationManager.GetTermTranslation("Grill")} <color=green>{LocalizationManager.GetTermTranslation("Well")}</color>";
             SoundPlayer.Instance.PlayGrillWell();
             // _animator.SetBool("FryCutlet",false);
 

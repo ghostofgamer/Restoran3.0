@@ -1,5 +1,6 @@
 using AttentionHintContent;
 using Enums;
+using I2.Loc;
 using InteractableContent;
 using ItemContent;
 using PlayerContent;
@@ -30,16 +31,19 @@ namespace RestaurantContent
             {
                 if (!GetCheckEmpty(playerInteraction.CurrentDraggable.gameObject))
                 {
-                    AttentionHintActivator.Instance.ShowHint("Нельзя выкинуть коробку, если там продукты");
+                    AttentionHintActivator.Instance.ShowHint(
+                        LocalizationManager.GetTermTranslation(
+                            "You can't throw away a box if there are products in it"));
                     Debug.Log("Нельзя это выкинуть ");
                     return;
                 }
-                
+
                 playerInteraction.ThrowItem();
             }
             else
             {
-                AttentionHintActivator.Instance.ShowHint("В руках пусто");
+                AttentionHintActivator.Instance.ShowHint(
+                    LocalizationManager.GetTermTranslation("Throw away nothing"));
                 Debug.Log("Не то в руках или вообще пусто ");
             }
         }
@@ -53,7 +57,7 @@ namespace RestaurantContent
                 Debug.Log("Draggable component not found on the collided object.");
                 return;
             }
-            
+
             if (!GetCheckEmpty(draggable.gameObject))
             {
                 Debug.Log("Нельзя это выкинуть ");
@@ -65,13 +69,13 @@ namespace RestaurantContent
             {
                 _boxesCounter.RemoveBox(draggable.gameObject);
                 draggable.gameObject.SetActive(false);
-                
+
                 if (_tutorial.CurrentType == TutorialType.ThrowEmptyBoxInTrash)
                     _tutorial.SetCurrentTutorialStage(TutorialType.ThrowEmptyBoxInTrash);
-                
+
                 if (_tutorial.CurrentType == TutorialType.ThrowEmptyBoxInTrashSecond)
                     _tutorial.SetCurrentTutorialStage(TutorialType.ThrowEmptyBoxInTrashSecond);
-                
+
                 if (_tutorial.CurrentType == TutorialType.ThrowEmptyBoxInTrashThird)
                     _tutorial.SetCurrentTutorialStage(TutorialType.ThrowEmptyBoxInTrashThird);
             }

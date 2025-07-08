@@ -5,6 +5,7 @@ using AttentionHintContent;
 using CameraContent;
 using ClientsContent;
 using Enums;
+using I2.Loc;
 using InteractableContent;
 using OrdersContent;
 using PlayerContent;
@@ -69,13 +70,17 @@ namespace RestaurantContent.CashRegisterContent
 
             if (playerInteraction.CurrentDraggable != null || playerInteraction.PlayerTray.IsActive)
             {
-                AttentionHintActivator.Instance.ShowHint("Освободи свои руки");
+                AttentionHintActivator.Instance.ShowHint(
+                    LocalizationManager.GetTermTranslation("Free your hands"));
+                
                 return;
             }
 
             if (_currentClient == null)
             {
-                AttentionHintActivator.Instance.ShowHint("В очереди никого нет");
+                AttentionHintActivator.Instance.ShowHint(
+                    LocalizationManager.GetTermTranslation("There's no one in line"));
+                
                 return;
             }
 
