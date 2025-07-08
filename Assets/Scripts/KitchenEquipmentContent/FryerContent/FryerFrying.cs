@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AttentionHintContent;
 using Enums;
 using I2.Loc;
 using SettingsContent.SoundContent;
@@ -37,6 +38,7 @@ namespace KitchenEquipmentContent.FryerContent
 
             if (_fryerPacking.GetFullTools() <= 0)
             {
+                AttentionHintActivator.Instance.ShowHint("Нечего жарить");
                 Debug.Log("нечего жарить ");
                 return;
             }

@@ -1,3 +1,4 @@
+using AttentionHintContent;
 using Enums;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace KitchenEquipmentContent.FryerContent
             {
                 if (!compatibleTool.IsRaw)
                 {
+                    AttentionHintActivator.Instance.ShowHint("Нельзя положить сырые пока лежат готовые");
                     Debug.Log("лежат готовые фри");
                     return;
                 }
@@ -26,6 +28,11 @@ namespace KitchenEquipmentContent.FryerContent
                 int emptyPosition = compatibleTool.GetCountInactiveItems();
                 int activeItems = itemBasket.GetActiveValueItems();
                 Debug.Log("emptyPosition " + emptyPosition + " activeItems " + activeItems);
+                
+                if (emptyPosition <= 0)
+                    AttentionHintActivator.Instance.ShowHint("Нет места");
+                else if (activeItems <= 0)
+                    AttentionHintActivator.Instance.ShowHint("Коробка пустая");
 
                 if (emptyPosition > 0 && activeItems > 0)
                 {
@@ -42,6 +49,7 @@ namespace KitchenEquipmentContent.FryerContent
             else
             {
                 Debug.Log("Item type is not compatible with any of the fryer tools.");
+                AttentionHintActivator.Instance.ShowHint("Не подходящий вид продукта");
             }
         }
 

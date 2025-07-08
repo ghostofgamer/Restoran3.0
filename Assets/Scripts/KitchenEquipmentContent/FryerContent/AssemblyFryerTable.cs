@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AttentionHintContent;
 using CameraContent;
 using Enums;
 using InteractableContent;
@@ -85,6 +86,11 @@ namespace KitchenEquipmentContent.FryerContent
                             int emptyPosContainer = itemContainer.GetEmptyPosition();
                             int activeItemBasket = itemBasket.GetActiveValueItems();
 
+                            if (emptyPosContainer <= 0)
+                                AttentionHintActivator.Instance.ShowHint("Нет места");
+                            else if (activeItemBasket <= 0)
+                                AttentionHintActivator.Instance.ShowHint("Коробка пустая");
+
                             if (emptyPosContainer > 0 && activeItemBasket > 0)
                             {
                                 int itemsToPlace = Mathf.Min(emptyPosContainer, activeItemBasket);
@@ -124,8 +130,9 @@ namespace KitchenEquipmentContent.FryerContent
                             Debug.Log("Пустых мест в контейнере " + emptyContainerPosition);
                             int itemsToPlace = Mathf.Min(emptyContainerPosition, valueFryerTool);
                             Debug.Log("Меньшее число  " + itemsToPlace);
-                            
-                            _transferItems.TransferJumpListItems(itemsToPlace,fryerTool.WellItems,fryerContainer.Positions,
+
+                            _transferItems.TransferJumpListItems(itemsToPlace, fryerTool.WellItems,
+                                fryerContainer.Positions,
                                 () =>
                                 {
                                     Debug.Log("itemsToPlace ");
@@ -133,7 +140,7 @@ namespace KitchenEquipmentContent.FryerContent
                                     fryerTool.ResetPosition();
                                     fryerTool.DeactivateWellItems(itemsToPlace);
                                 });
-                            
+
                             // fryerContainer.ActivateItems(itemsToPlace);
                             // fryerTool.DeactivateWellItems(itemsToPlace);
                         }

@@ -1,3 +1,4 @@
+using AttentionHintContent;
 using Enums;
 using InteractableContent;
 using ItemContent;
@@ -29,6 +30,7 @@ namespace RestaurantContent
             {
                 if (!GetCheckEmpty(playerInteraction.CurrentDraggable.gameObject))
                 {
+                    AttentionHintActivator.Instance.ShowHint("Нельзя выкинуть коробку, если там продукты");
                     Debug.Log("Нельзя это выкинуть ");
                     return;
                 }
@@ -36,7 +38,10 @@ namespace RestaurantContent
                 playerInteraction.ThrowItem();
             }
             else
+            {
+                AttentionHintActivator.Instance.ShowHint("В руках пусто");
                 Debug.Log("Не то в руках или вообще пусто ");
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -52,6 +57,7 @@ namespace RestaurantContent
             if (!GetCheckEmpty(draggable.gameObject))
             {
                 Debug.Log("Нельзя это выкинуть ");
+                // AttentionHintActivator.Instance.ShowHint("Нельзя выкинуть коробку, если там продукты");
                 return;
             }
 

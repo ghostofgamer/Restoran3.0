@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AttentionHintContent;
 using DG.Tweening;
 using Enums;
 using InteractableContent;
@@ -40,7 +41,10 @@ namespace ShelfContent
                 Debug.Log(freePosCount);
 
                 if (freePosCount <= 0)
+                {
+                    AttentionHintActivator.Instance.ShowHint("Нет места");
                     return;
+                }
 
                 ItemBasket basket = playerInteraction.CurrentDraggable.GetComponent<ItemBasket>();
                 Draggable draggable = playerInteraction.CurrentDraggable.GetComponent<Draggable>();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using AttentionHintContent;
 using DG.Tweening;
 using Enums;
 using I2.Loc;
@@ -98,6 +99,11 @@ namespace KitchenEquipmentContent
                     int activeCount = CountNotActiveItems(_readyCutletItems);
                     int itemsToPlace = Mathf.Min(activeCount, activePos);
 
+                    if (activePos <= 0)
+                        AttentionHintActivator.Instance.ShowHint("На подносе пусто");
+                    else if (activeCount <= 0)
+                        AttentionHintActivator.Instance.ShowHint("Нет места на гриле");
+                    
                     if (itemsToPlace > 0)
                     {
                         playerInteraction.PlayerTray.PutAway(ItemType.Cutlet, itemsToPlace);
@@ -139,6 +145,7 @@ namespace KitchenEquipmentContent
                 }
                 else if (playerInteraction.PlayerTray.CurrentType == ItemType.Empty)
                 {
+                    Debug.Log("3");
                     int emptyPos = playerInteraction.PlayerTray.GetEmptyPositionValue(ItemType.Cutlet);
                     int activeCount = CountActiveItems(_readyCutletItems);
                     int itemsToPlace = Mathf.Min(activeCount, emptyPos);
@@ -180,6 +187,10 @@ namespace KitchenEquipmentContent
                         // playerInteraction.PlayerTray.Put(ItemType.Cutlet, itemsToPlace);
                     }
                 }
+                else if (playerInteraction.PlayerTray.CurrentType == ItemType.RawCutlet)
+                {
+                    AttentionHintActivator.Instance.ShowHint("Нельзя положить сырые котлеты: заберите приготовленные котлеты ");
+                }
             }
             else if (_currentType == ItemType.RawCutlet)
             {
@@ -190,6 +201,11 @@ namespace KitchenEquipmentContent
                     int inactiveCount = CountNotActiveItems(item);
                     int itemsToPlace = Mathf.Min(inactiveCount, emptyPositions);
 
+                    if (emptyPositions <= 0)
+                        AttentionHintActivator.Instance.ShowHint("На подносе пусто");
+                    else if (inactiveCount <= 0)
+                        AttentionHintActivator.Instance.ShowHint("Нет места на гриле");
+                    
                     Debug.Log("СТОЛ " + itemsToPlace);
                     Debug.Log("emptyPositions " + emptyPositions);
                     Debug.Log("activeCount " + inactiveCount);
@@ -198,9 +214,6 @@ namespace KitchenEquipmentContent
                     {
                         if (_tutorial.CurrentType == TutorialType.PutCutletsOnGrill)
                         {
-                            Debug.Log("МАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯК");
-                            Debug.Log("МАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯК");
-                            Debug.Log("МАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯК");
                             _tutorial.SetCurrentTutorialStage(TutorialType.PutCutletsOnGrill);
                         }
 
@@ -247,6 +260,7 @@ namespace KitchenEquipmentContent
                 }
                 else
                 {
+                    AttentionHintActivator.Instance.ShowHint("Нельзя положить готовые котлеты, когда на гриле сырые");
                     Debug.Log("Нельзя положить готовые котлеты, когда на гриле сырые.");
                 }
             }
@@ -312,6 +326,7 @@ namespace KitchenEquipmentContent
                 }
                 else
                 {
+                    AttentionHintActivator.Instance.ShowHint("Нельзя положить готовые котлеты на пустой гриль");
                     Debug.Log("Нельзя положить готовые котлеты на пустой гриль.");
                 }
             }

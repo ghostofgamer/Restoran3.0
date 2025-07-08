@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AssemblyBurgerContent;
+using AttentionHintContent;
 using CameraContent;
 using Enums;
 using InteractableContent;
@@ -75,15 +77,14 @@ public class AssemblyTable : MonoBehaviour
                         int[] emptyPositions = targetContainer.GetEmptyPositions();
                         int[] activeItems = basket.GetActiveValueArrayItems();
 
-                        for (int i = 0; i < emptyPositions.Length; i++)
-                        {
-                            Debug.Log("emptyPositions " + emptyPositions[i]);
-                        }
+                        bool hasEmptyPosition = emptyPositions != null && emptyPositions.Any(pos => pos > 0);
+                        bool hasActiveItems = activeItems != null && activeItems.Any(item => item > 0);
 
-                        for (int i = 0; i < activeItems.Length; i++)
-                        {
-                            Debug.Log("activeItems " + activeItems[i]);
-                        }
+                        if (!hasEmptyPosition)
+                            AttentionHintActivator.Instance.ShowHint("Нет места");
+                        else if (!hasActiveItems)
+                            AttentionHintActivator.Instance.ShowHint("В коробке пусто");
+                        
 
                         if (emptyPositions.Length == activeItems.Length)
                         {
@@ -119,6 +120,11 @@ public class AssemblyTable : MonoBehaviour
                         int emptyPosition = targetContainer.GetEmptyPosition();
                         int activeItems = basket.GetActiveValueItems();
 
+                        if (emptyPosition <= 0)
+                            AttentionHintActivator.Instance.ShowHint("Нет места");
+                        else if (activeItems <= 0)
+                            AttentionHintActivator.Instance.ShowHint("В коробке пусто");
+
                         if (emptyPosition > 0 && activeItems > 0)
                         {
                             SoundPlayer.Instance.PlayPutTray();
@@ -137,7 +143,7 @@ public class AssemblyTable : MonoBehaviour
 
                                 if (basket.ItemType == ItemType.Cutlet)
                                 {
-                                    Debug.Log("!!!!!!ItemType.CutletItemType.CutletItemType.Cutlet" );
+                                    Debug.Log("!!!!!!ItemType.CutletItemType.CutletItemType.Cutlet");
                                     _tutorial.SetCurrentTutorialStage(TutorialType.PutWellCutletToContainer);
                                 }
                             }
@@ -178,13 +184,12 @@ public class AssemblyTable : MonoBehaviour
                         if (playerInteraction.PlayerTray.CurrentType == ItemType.Cutlet)
                             _tutorial.SetCurrentTutorialStage(TutorialType.PutWellCutletToContainer);
                     }
-                    
+
                     int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
                     SoundPlayer.Instance.PlayPutTray();
                     // basket.TransferProduct(itemsToPlace, targetContainer.Positions);
                     playerInteraction.PlayerTray.PutAway(playerInteraction.PlayerTray.CurrentType, itemsToPlace);
                     targetContainer.ActivateItems(itemsToPlace);
-                    
                 }
                 else
                 {
@@ -205,7 +210,7 @@ public class AssemblyTable : MonoBehaviour
             {
                 _tutorialAssemblyBurger.StartTutorAssemblyBurger();
             }
-            
+
             SoundPlayer.Instance.PlayButtonClick();
             BurgerAssemblyBeginig?.Invoke();
             SetValueCollider(false);

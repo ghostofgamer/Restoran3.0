@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AttentionHintContent;
 using CameraContent;
 using ClientsContent;
 using Enums;
@@ -65,12 +66,18 @@ namespace RestaurantContent.CashRegisterContent
         private void ShowAssemblyCashRegisterOrder(PlayerInteraction playerInteraction)
         {
             SoundPlayer.Instance.PlayButtonClick();
-            
+
             if (playerInteraction.CurrentDraggable != null || playerInteraction.PlayerTray.IsActive)
+            {
+                AttentionHintActivator.Instance.ShowHint("Освободи свои руки");
                 return;
+            }
 
             if (_currentClient == null)
+            {
+                AttentionHintActivator.Instance.ShowHint("В очереди никого нет");
                 return;
+            }
 
             CashRegisterAssemblyBeginig?.Invoke(_currentClient.IsCard);
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);

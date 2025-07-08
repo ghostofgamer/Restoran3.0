@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AttentionHintContent;
 using DG.Tweening;
 using Enums;
 using InteractableContent;
@@ -141,6 +142,7 @@ namespace AssemblyBurgerContent
                             }
                             else
                             {
+                                AttentionHintActivator.Instance.ShowHint("Нету ингридиентов этого типа");
                                 Debug.Log("Нету ингридиентов этого типа " + selectedContainer.CurrentItemContainer);
                             }
                         }
@@ -154,6 +156,7 @@ namespace AssemblyBurgerContent
 
                         if (activePackageBurgerPaper <= 0)
                         {
+                            AttentionHintActivator.Instance.ShowHint("Нету упаковок");
                             Debug.Log("упаковок нету уже");
                         }
                         else
@@ -170,6 +173,7 @@ namespace AssemblyBurgerContent
                             }
                             else
                             {
+                                AttentionHintActivator.Instance.ShowHint("Не правильная сборка");
                                 Debug.Log("Не правильная сборка Бургер ");
                             }
                         }

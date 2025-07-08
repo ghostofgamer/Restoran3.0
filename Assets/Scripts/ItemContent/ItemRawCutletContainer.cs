@@ -1,3 +1,4 @@
+using AttentionHintContent;
 using DG.Tweening;
 using Enums;
 using InteractableContent;
@@ -27,6 +28,11 @@ namespace ItemContent
                     int emptyPosition = GetEmptyPosition();
                     int activeItems = basket.GetActiveValueItems();
 
+                    if (emptyPosition <= 0)
+                        AttentionHintActivator.Instance.ShowHint("Нет места");
+                    else if (activeItems <= 0)
+                        AttentionHintActivator.Instance.ShowHint("В коробке пусто");
+                    
                     if (emptyPosition > 0 && activeItems > 0)
                     {
                         if (_tutorial.CurrentType == TutorialType.PutRawCutletInContainer)
