@@ -27,7 +27,7 @@ namespace WorkerContent
 
         public override bool GetConditionsWorkUpdate()
         {
-            return _cashRegister.CashierOnSite && _isCalculate;
+            return _cashRegister.CashierOnSite && _tookPosition;
         }
 
         public override bool GetConditionsRelaxUpdate()
