@@ -102,7 +102,9 @@ namespace WorkerContent
 
             _isCalculate = true;
             Debug.Log("начал расчет клиента");
+            WorkerAnimation.SetCalculateAnimValue(true);
             yield return _waitForSeconds;
+            WorkerAnimation.SetCalculateAnimValue(false);
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!завершил расчет клиента " + newTime);
 
             _cashRegister.AcceptCashierOrder();

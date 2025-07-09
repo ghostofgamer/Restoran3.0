@@ -15,5 +15,10 @@ namespace WorkerContent
         {
             Animator.SetBool("Cleaning", value);
         }
+        
+        public void SetCalculateAnimValue(bool value)
+        {
+            Animator.SetBool("Calculate", value);
+        }
     }
 }
