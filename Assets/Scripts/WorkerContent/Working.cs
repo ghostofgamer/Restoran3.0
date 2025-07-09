@@ -1,5 +1,6 @@
 using Enums;
 using RestaurantContent;
+using RestaurantContent.CashRegisterContent;
 using RestaurantContent.TableContent;
 using UnityEngine;
 
@@ -9,22 +10,24 @@ namespace WorkerContent
     {
         [SerializeField] private DirtyCounter _dirtyCounter;
         [SerializeField] private Workers _workers;
+        [SerializeField] private CashRegister _cashRegister;
 
         private void OnEnable()
         {
             _dirtyCounter.DirtyTableAdded += CallCleaner;
+            _cashRegister.PlayerOnSiteDisabled += CallCashier;
         }
 
         private void OnDisable()
         {
             _dirtyCounter.DirtyTableAdded -= CallCleaner;
+            _cashRegister.PlayerOnSiteDisabled -= CallCashier;
         }
 
         private void CallCleaner()
         {
             TableCleanliness dirtyTable = _dirtyCounter.GetDirtyTable();
-
-            Worker cleaner = _workers.GetCleaner(WorkerType.Cleaner);
+            Worker cleaner = _workers.GetWorker(WorkerType.Cleaner);
 
             if (cleaner != null)
             {
@@ -36,6 +39,16 @@ namespace WorkerContent
                 Debug.Log("туту Null уборщик");
                 return;
             }
+        }
+        
+        private void CallCashier()
+        {
+            Worker cashier = _workers.GetWorker(WorkerType.Cashier);
+
+            if (cashier != null)
+                cashier.StartWorking();
+            else
+                Debug.Log("THIS Null cashier");
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using Enums;
 using Io.AppMetrica;
+using PlayerContent.LevelContent;
 using SettingsContent.SoundContent;
 using SoContent;
 using UnityEngine;
@@ -26,6 +27,8 @@ namespace UI.Screens.ShopContent.WorkersContent
         [SerializeField] private GameObject _maxLevelContent;
         [SerializeField] private WorkerUpgrade _workerUpgrade;
         [SerializeField] private WorkerParametersConfig _workerParametersConfig;
+        [SerializeField] private int _levelOpened;
+        [SerializeField] private PlayerLevel _playerLevel;
 
         private int _level;
         public WorkerParameterConfig CurrentConfig { get; private set; }
@@ -40,14 +43,20 @@ namespace UI.Screens.ShopContent.WorkersContent
         public DollarValue Price { get; private set; }
         public DollarValue Salary { get; private set; }
         public WorkerType WorkerType => _workerType;
+        public int LevelOpened => _levelOpened;
 
         private void Start()
         {
-            if (PlayerPrefs.GetInt("Zona" + ZoneType.StaffRoom, 0) <= 0)
+            if (PlayerPrefs.GetInt("Zona" + ZoneType.StaffRoom, 0) <= 0 || _playerLevel.CurrentLevel < _levelOpened)
             {
                 ClosePurchased();
                 return;
             }
+            /*else if (PlayerPrefs.GetInt("Zona" + ZoneType.StaffRoom, 0) <= 0 ||
+                     _playerLevel.CurrentLevel >= _levelOpened)
+            {
+                return;
+            }*/
 
             IsOwned = PlayerPrefs.GetInt(Worker + _workerType, 0) > 0;
             SetValue();
@@ -58,18 +67,23 @@ namespace UI.Screens.ShopContent.WorkersContent
             Debug.Log("InitWorkersG");
 
             InitUpgradeInfo();
-            
+
             Price = workerConfig.Price;
             Salary = workerConfig.Salary;
             _icon.sprite = workerConfig.SpriteIcon;
 
             ValueChanged?.Invoke(Price, Salary);
 
-            if (PlayerPrefs.GetInt("Zona" + ZoneType.StaffRoom, 0) <= 0)
+            if (PlayerPrefs.GetInt("Zona" + ZoneType.StaffRoom, 0) <= 0 || _playerLevel.CurrentLevel < _levelOpened)
             {
                 ClosePurchased();
                 return;
             }
+            /*else if (PlayerPrefs.GetInt("Zona" + ZoneType.StaffRoom, 0) <= ||
+                     _playerLevel.CurrentLevel >= _levelOpened)
+            {
+                return;
+            }*/
             else
             {
                 IsOwned = PlayerPrefs.GetInt(Worker + _workerType, 0) > 0;
@@ -80,7 +94,7 @@ namespace UI.Screens.ShopContent.WorkersContent
         public void InitUpgradeInfo()
         {
             _level = PlayerPrefs.GetInt(_workerType + "LevelWorker", 1);
-            CurrentConfig = _workerParametersConfig.GetConfig(_workerType,_level);
+            CurrentConfig = _workerParametersConfig.GetConfig(_workerType, _level);
             ParametersValueChanged?.Invoke(CurrentConfig);
             SetValue();
         }
@@ -89,7 +103,7 @@ namespace UI.Screens.ShopContent.WorkersContent
         {
             if (_wallet.DollarValue.ToTotalCents() < Price.ToTotalCents())
                 Debug.Log("недостаточно денег");
-            
+
             AppMetrica.ReportEvent("WorkerBuyed", "{\"" + _workerType.ToString() + "\":null}");
             SoundPlayer.Instance.PlayPayment();
             WorkerBuyed?.Invoke(_workerType);

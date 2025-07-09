@@ -41,7 +41,7 @@ namespace WorkerContent
                 worker.gameObject.SetActive(PlayerPrefs.GetInt(Worker + worker.WorkerType, 0) > 0);
         }
 
-        public Worker GetCleaner(WorkerType type)
+        public Worker GetWorker(WorkerType type)
         {
             var worker = System.Array.Find(_workers, w => w.WorkerType == type);
 

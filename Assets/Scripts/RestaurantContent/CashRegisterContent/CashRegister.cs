@@ -45,11 +45,13 @@ namespace RestaurantContent.CashRegisterContent
         public event Action CashRegisterOrderCompleted;
 
         public event Action<DollarValue> GivingValueChanged;
-        
+
+        public event Action PlayerOnSiteDisabled;
+
         public Client CurrentClient { get; private set; }
 
         public bool CashierOnSite { get; private set; } = false;
-        
+
         public bool PlayerOnSite { get; private set; } = false;
 
         public Transform ClientPosition => _clientPosition;
@@ -103,7 +105,7 @@ namespace RestaurantContent.CashRegisterContent
                     LocalizationManager.GetTermTranslation("CashierOnSite"));
                 return;
             }
-            
+
             SetPlayerValue(true);
 
             CashRegisterAssemblyBeginig?.Invoke(CurrentClient.IsCard);
@@ -121,7 +123,7 @@ namespace RestaurantContent.CashRegisterContent
         {
             CashierOnSite = value;
         }
-        
+
         public void SetCashier(Cashier cashier)
         {
             _cashier = cashier;
@@ -135,6 +137,9 @@ namespace RestaurantContent.CashRegisterContent
         public void SetPlayerValue(bool value)
         {
             PlayerOnSite = value;
+
+            if (value == false)
+                PlayerOnSiteDisabled?.Invoke();
         }
 
         [ContextMenu("AcceptOrder")]
@@ -155,9 +160,9 @@ namespace RestaurantContent.CashRegisterContent
 
             _playerLevel.AddExp(5);
             SoundPlayer.Instance.PlayCashRegister();
-            
+
             SetPlayerValue(false);
-            
+
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();
             _wallet.Add(CurrentClient.PriceOrder);
@@ -178,9 +183,9 @@ namespace RestaurantContent.CashRegisterContent
 
             _playerLevel.AddExp(5);
             SoundPlayer.Instance.PlayCashRegister();
-            
+
             SetPlayerValue(false);
-            
+
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();
             _wallet.Add(CurrentClient.PriceOrder);
@@ -200,7 +205,7 @@ namespace RestaurantContent.CashRegisterContent
             SetCanvasActive(CurrentClient != null);
             _restaurant.AcceptOrder(client.Order, client);
             /*ClearGivingValue();*/
-            
+
             _currentGivingValue = new DollarValue(0, 0);
             _changeHistory.Clear();
         }

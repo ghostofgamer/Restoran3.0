@@ -775,6 +775,8 @@ MonoBehaviour:
   _maxLevelContent: {fileID: 4389187126333662775}
   _workerUpgrade: {fileID: 4548316835327957993}
   _workerParametersConfig: {fileID: 11400000, guid: 97fc0a6ebb7c9f941afff881c1569831, type: 2}
+  _levelOpened: 0
+  _playerLevel: {fileID: 0}
 --- !u!114 &4158338021202623862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -797,6 +799,7 @@ MonoBehaviour:
   _tempUpgradeText: {fileID: 1574845089835795564}
   _levelText: {fileID: 4878428866910419330}
   _priceUpgradeText: {fileID: 6272061087930737897}
+  _requiredText: {fileID: 944578444932196436}
 --- !u!114 &4548316835327957993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2215,7 +2218,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041D\u0410\u041D\u042F\u0422\u042C"
+  m_text: HIRE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02fea1fb776e0ad43a5e684a1ab0ce9e, type: 2}
   m_sharedMaterial: {fileID: 942589445191879500, guid: 02fea1fb776e0ad43a5e684a1ab0ce9e, type: 2}

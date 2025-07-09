@@ -19,6 +19,7 @@ namespace UI.Screens.ShopContent.WorkersContent
         [SerializeField] private TMP_Text _tempUpgradeText;
         [SerializeField] private TMP_Text _levelText;
         [SerializeField] private TMP_Text _priceUpgradeText;
+        [SerializeField] private TMP_Text _requiredText;
 
         private void OnEnable()
         {
@@ -34,6 +35,8 @@ namespace UI.Screens.ShopContent.WorkersContent
 
         private void SetValue(DollarValue price, DollarValue salary)
         {
+            _requiredText.text =
+                $"  {LocalizationManager.GetTermTranslation("Need to buy a staff room and reach level")} {_workerUIProduct.LevelOpened}";
             _priceText.text = $"{LocalizationManager.GetTermTranslation("Price")}:{price}";
             _salaryText.text = $"{LocalizationManager.GetTermTranslation("Salary")}:{salary}";
         }
