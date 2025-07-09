@@ -19,8 +19,10 @@ namespace PromoCodeContent
         {
             AppMetrica.ReportEvent("ActivatePrizePromo");
             _wallet.Add(new DollarValue(50, 0));
-            _delivery.SpawnPrize(ItemType.Coffee, 2);
-            _delivery.SpawnPrize(ItemType.CupCoffeeEmpty, 2);
+            _delivery.SpawnPrize(ItemType.SodaBarberry, 1);
+            _delivery.SpawnPrize(ItemType.SodaLemon, 1);
+            _delivery.SpawnPrize(ItemType.SodaOrange, 1);
+            _delivery.SpawnPrize(ItemType.SodaPlum, 1);
         }
     }
 }

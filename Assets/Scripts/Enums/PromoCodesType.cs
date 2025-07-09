@@ -7,5 +7,6 @@ namespace Enums
         CHEESE2025,
         NewTown2025,
         Coffee2025, 
+        Cashier2025,
     }
 }
