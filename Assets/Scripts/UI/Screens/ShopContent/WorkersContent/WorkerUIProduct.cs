@@ -1,5 +1,6 @@
 using System;
 using Enums;
+using Io.AppMetrica;
 using SettingsContent.SoundContent;
 using SoContent;
 using UnityEngine;
@@ -79,7 +80,7 @@ namespace UI.Screens.ShopContent.WorkersContent
         public void InitUpgradeInfo()
         {
             _level = PlayerPrefs.GetInt(_workerType + "LevelWorker", 1);
-            CurrentConfig = _workerParametersConfig.GetConfig(_level);
+            CurrentConfig = _workerParametersConfig.GetConfig(_workerType,_level);
             ParametersValueChanged?.Invoke(CurrentConfig);
             SetValue();
         }
@@ -88,7 +89,8 @@ namespace UI.Screens.ShopContent.WorkersContent
         {
             if (_wallet.DollarValue.ToTotalCents() < Price.ToTotalCents())
                 Debug.Log("недостаточно денег");
-
+            
+            AppMetrica.ReportEvent("WorkerBuyed", "{\"" + _workerType.ToString() + "\":null}");
             SoundPlayer.Instance.PlayPayment();
             WorkerBuyed?.Invoke(_workerType);
             _wallet.Subtract(Price);

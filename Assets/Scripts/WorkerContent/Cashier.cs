@@ -97,10 +97,13 @@ namespace WorkerContent
 
         private IEnumerator CalculateClient()
         {
+            float newTime = StartEfficiencySecValue * (_baseEfficiecy / Efficiecy);
+            _waitForSeconds = new WaitForSeconds(newTime);
+
             _isCalculate = true;
             Debug.Log("начал расчет клиента");
-            yield return new WaitForSeconds(3f);
-            Debug.Log("завершил расчет клиента");
+            yield return _waitForSeconds;
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!завершил расчет клиента " + newTime);
 
             _cashRegister.AcceptCashierOrder();
             _isCalculate = false;

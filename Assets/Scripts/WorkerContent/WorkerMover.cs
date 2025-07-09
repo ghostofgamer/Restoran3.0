@@ -28,7 +28,7 @@ namespace WorkerContent
 
         public void SetSpeed(int level)
         {
-            _agent.speed *= _worker.WorkerParametersConfig.GetConfig(level).Speed;
+            _agent.speed *= _worker.WorkerParametersConfig.GetConfig(_worker.WorkerType, level).Speed;
             Debug.Log("_agent.speed  " + _agent.speed);
         }
     }

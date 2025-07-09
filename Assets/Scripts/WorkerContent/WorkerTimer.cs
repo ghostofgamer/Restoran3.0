@@ -17,13 +17,13 @@ namespace WorkerContent
 
         public void SetTimeWork()
         {
-            _delayWork = _worker.WorkerParametersConfig.GetConfig(_worker.Level).DelayWork;
+            _delayWork = _worker.WorkerParametersConfig.GetConfig(_worker.WorkerType,_worker.Level).DelayWork;
             StateTimer = _delayWork;
         }
 
         public void SetStateRelax()
         {
-            _delayRelax = _worker.WorkerParametersConfig.GetConfig(_worker.Level).DelayRelax;
+            _delayRelax = _worker.WorkerParametersConfig.GetConfig(_worker.WorkerType,_worker.Level).DelayRelax;
             StateTimer = _delayRelax;
         }
 

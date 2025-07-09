@@ -16,7 +16,7 @@ namespace WorkerContent
 
         private Coroutine _cleaningCoroutine;
         private WaitForSeconds _waitForSeconds;
-        private float _baseValueClean = 5f;
+        // private float _baseValueClean = 5f;
         private float _baseEfficiecy = 100;
 
         public TableCleanliness CurrentDirtyTable { get; private set; }
@@ -83,7 +83,7 @@ namespace WorkerContent
 
         private IEnumerator CleanTable()
         {
-            float newTime = _baseValueClean * (_baseEfficiecy / Efficiecy);
+            float newTime = StartEfficiencySecValue * (_baseEfficiecy / Efficiecy);
             _waitForSeconds = new WaitForSeconds(newTime);
             Debug.Log("убираюсь " + newTime);
 

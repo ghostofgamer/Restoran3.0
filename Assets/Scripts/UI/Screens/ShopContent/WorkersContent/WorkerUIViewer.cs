@@ -14,6 +14,9 @@ namespace UI.Screens.ShopContent.WorkersContent
         [SerializeField] private TMP_Text _priceText;
         [SerializeField] private TMP_Text _salaryText;
         [SerializeField] private TMP_Text _workUpgradeText;
+        [SerializeField] private TMP_Text _speedUpgradeText;
+        [SerializeField] private TMP_Text _restUpgradeText;
+        [SerializeField] private TMP_Text _tempUpgradeText;
         [SerializeField] private TMP_Text _levelText;
         [SerializeField] private TMP_Text _priceUpgradeText;
 
@@ -39,6 +42,13 @@ namespace UI.Screens.ShopContent.WorkersContent
         {
             _workUpgradeText.text =
                 $"{LocalizationManager.GetTermTranslation("Work")} {config.DelayWork.ToString()}s -> <color=green>{config.DelayWorkNext.ToString()}s</color>";
+            _speedUpgradeText.text =
+                $"{LocalizationManager.GetTermTranslation("Speed")} {config.Speed.ToString()}m/s -> <color=green>{config.SpeedNext.ToString()}m/s</color>";
+            _restUpgradeText.text =
+                $"{LocalizationManager.GetTermTranslation("Rest")} {config.DelayRelax.ToString()}s -> <color=green>{config.DelayRelaxNext.ToString()}s</color>";
+            _tempUpgradeText.text =
+                $"{LocalizationManager.GetTermTranslation("Efficiency")} {config.Efficiency.ToString()}% -> <color=green>{config.EfficiencyNext.ToString()}%</color>";
+
             _levelText.text = $"{LocalizationManager.GetTermTranslation("Level")} {config.Level.ToString()}";
             _priceUpgradeText.text = $"{config.PriceUpgrade.ToString()}";
         }

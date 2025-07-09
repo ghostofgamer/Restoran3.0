@@ -16,13 +16,14 @@ namespace WorkerContent
         [SerializeField] private WorkerParametersConfig _workerParametersConfig;
 
         protected WorkerState CurrentState;
-        protected float Efficiecy; 
+        protected float Efficiecy;
 
         private int _maxLevel = 6;
 
         public WorkerParametersConfig WorkerParametersConfig => _workerParametersConfig;
 
         public int Level { get; private set; } = 1;
+        public float StartEfficiencySecValue { get; private set; }
 
         public WorkerTimer WorkerTimer => _workerTimer;
 
@@ -61,7 +62,8 @@ namespace WorkerContent
             gameObject.SetActive(true);
             IsTired = false;
             SetState(new WorkState());
-            Efficiecy = _workerParametersConfig.GetConfig(Level).Efficiency;
+            Efficiecy = _workerParametersConfig.GetConfig(_workerType, Level).Efficiency;
+            StartEfficiencySecValue = _workerParametersConfig.GetConfig(_workerType, Level).StartSecondsEfficiency;
         }
 
         public virtual void SetState(WorkerState newState)
@@ -99,8 +101,8 @@ namespace WorkerContent
             Level++;
             PlayerPrefs.SetInt(_workerType + "LevelWorker", Level);
             _workerMover.SetSpeed(Level);
-            Efficiecy = _workerParametersConfig.GetConfig(Level).Efficiency;
-            
+            Efficiecy = _workerParametersConfig.GetConfig(_workerType, Level).Efficiency;
+
             if (CurrentWorkerStateType == WorkerStateType.Work)
                 _workerTimer.SetTimeWork();
             if (CurrentWorkerStateType == WorkerStateType.Relax)
