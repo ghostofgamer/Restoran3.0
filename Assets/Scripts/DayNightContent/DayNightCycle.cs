@@ -8,6 +8,7 @@ using RestaurantContent;
 using TMPro;
 using UI.Screens;
 using UnityEngine;
+using WorkerContent;
 
 namespace DayNightContent
 {

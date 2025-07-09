@@ -32,7 +32,7 @@ namespace WalletContent
         {
             var localis = LocalizationManager.CurrentLanguage;
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!localis " + localis);
-            
+
             LoadDollarValue();
             // DollarValue = new DollarValue(100, 10);
             DollarValueChanged.Invoke(DollarValue);
@@ -61,6 +61,10 @@ namespace WalletContent
         public void Subtract(DollarValue other)
         {
             int totalCents = ToTotalCents(DollarValue) - ToTotalCents(other);
+
+            if (totalCents <= 0)
+                totalCents = 0;
+
             DollarValue = FromTotalCents(totalCents);
             DollarValueChanged.Invoke(DollarValue);
             _flyValue.ShowFly(other, false);
@@ -93,6 +97,13 @@ namespace WalletContent
             {
                 int dollars = PlayerPrefs.GetInt("DollarValue_Dollars");
                 int cents = PlayerPrefs.GetInt("DollarValue_Cents");
+
+                if (dollars <= 0)
+                    dollars = 0;
+
+                if (cents <= 0)
+                    cents = 0;
+
                 DollarValue = new DollarValue(dollars, cents);
             }
             else

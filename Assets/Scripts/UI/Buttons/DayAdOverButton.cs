@@ -6,6 +6,7 @@ using StatisticContent;
 using UI.Screens;
 using UnityEngine;
 using WalletContent;
+using WorkerContent;
 
 namespace UI.Buttons
 {
@@ -16,7 +17,8 @@ namespace UI.Buttons
         [SerializeField] private DayNightCycle _dayNightCycle;
         [SerializeField] private StatisticsScreen _statisticsScreen;
         [SerializeField] private StatisticCounter _statisticCounter;
-
+        [SerializeField] private Workers _workers;
+        
         public override void OnClick()
         {
             SoundPlayer.Instance.PlayButtonClick();
@@ -27,6 +29,7 @@ namespace UI.Buttons
                 _wallet.Add(new DollarValue(25, 0));
                 _dayNightCycle.ResetDay();
                 _statisticCounter.ClearData();
+                _workers.PaySalary();
                 _statisticsScreen.CloseScreen();
             });
         }

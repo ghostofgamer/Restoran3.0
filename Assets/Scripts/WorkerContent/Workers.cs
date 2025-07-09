@@ -1,6 +1,8 @@
 using Enums;
+using SoContent;
 using UI.Screens.ShopContent.WorkersContent;
 using UnityEngine;
+using WalletContent;
 
 namespace WorkerContent
 {
@@ -10,6 +12,8 @@ namespace WorkerContent
 
         [SerializeField] private Worker[] _workers;
         [SerializeField] private WorkerUIProduct[] _workerUIProducts;
+        [SerializeField] private Wallet _wallet;
+        [SerializeField] private WorkersConfig _workersConfig;
 
         private void OnEnable()
         {
@@ -61,6 +65,15 @@ namespace WorkerContent
 
             if (worker != null)
                 worker.Deactivate();
+        }
+
+        public void PaySalary()
+        {
+            foreach (var worker in _workers)
+            {
+                if (worker.gameObject.activeSelf)
+                    _wallet.Subtract(_workersConfig.GetWorkerConfig(worker.WorkerType).Salary);
+            }
         }
     }
 }
