@@ -158,6 +158,7 @@ namespace PlayerContent
 
         public void SetCurrentItemType(ItemType itemType)
         {
+            Debug.Log("CurrentType " + itemType);
             CurrentType = itemType;
         }
 

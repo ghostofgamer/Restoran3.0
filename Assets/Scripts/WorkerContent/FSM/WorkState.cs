@@ -1,5 +1,6 @@
 using System;
 using Enums;
+using UnityEngine;
 
 namespace WorkerContent.FSM
 {
@@ -7,6 +8,7 @@ namespace WorkerContent.FSM
     {
         public override void Enter(Worker worker, Action action)
         {
+            Debug.Log("WorkEnter");
             worker.WorkerTimer.Init(WorkerStateType.Work);
             worker.StartWorking();
 

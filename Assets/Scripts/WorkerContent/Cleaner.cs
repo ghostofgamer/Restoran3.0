@@ -52,11 +52,18 @@ namespace WorkerContent
         {
             if (WorkerMover.Agent.destination != RelaxPosition.position)
             {
-                StartCoroutine(WorkerMover.MoveToTarget(RelaxPosition, () =>
+                WorkerMover.MoveTarget(RelaxPosition, () =>
                 {
                     if (action != null)
                         action?.Invoke();
-                }));
+                });
+                
+                
+                /*StartCoroutine(WorkerMover.MoveToTarget(RelaxPosition, () =>
+                {
+                    if (action != null)
+                        action?.Invoke();
+                }));*/
             }
         }
 
@@ -75,10 +82,14 @@ namespace WorkerContent
             }
 
             CurrentDirtyTable = dirtyTable;
-            StartCoroutine(WorkerMover.MoveToTarget(
+            
+            WorkerMover.MoveTarget(CurrentDirtyTable.CleanerPosition,
+                () => StartCoroutine(CleanTable()));
+            
+            /*StartCoroutine(WorkerMover.MoveToTarget(
                 CurrentDirtyTable.CleanerPosition,
                 () => StartCoroutine(CleanTable())
-            ));
+            ));*/
         }
 
         private IEnumerator CleanTable()

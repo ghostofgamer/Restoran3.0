@@ -47,7 +47,18 @@ namespace WorkerContent
 
             _cashRegister.SetCashierValue(true);
 
-            StartCoroutine(WorkerMover.MoveToTarget(
+            WorkerMover.MoveTarget(_cashRegister.CashierPosition,
+                () =>
+                {
+                    Debug.Log("дошел");
+                    SetValueTookPosition(true);
+                    _cashRegister.SetCashier(this);
+                    FindClient();
+                });
+            
+            
+            
+            /*StartCoroutine(WorkerMover.MoveToTarget(
                 _cashRegister.CashierPosition,
                 () =>
                 {
@@ -55,18 +66,25 @@ namespace WorkerContent
                     SetValueTookPosition(true);
                     _cashRegister.SetCashier(this);
                     FindClient();
-                }));
+                }));*/
         }
 
         public override void StartRelaxing(Action action)
         {
             if (WorkerMover.Agent.destination != RelaxPosition.position)
             {
-                StartCoroutine(WorkerMover.MoveToTarget(RelaxPosition, () =>
+                WorkerMover.MoveTarget(RelaxPosition, () =>
                 {
                     if (action != null)
                         action?.Invoke();
-                }));
+                });
+                
+                
+                /*StartCoroutine(WorkerMover.MoveToTarget(RelaxPosition, () =>
+                {
+                    if (action != null)
+                        action?.Invoke();
+                }));*/
             }
         }
 

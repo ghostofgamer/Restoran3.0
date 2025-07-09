@@ -111,5 +111,20 @@ namespace WorkerContent
             Debug.Log("CurrentWorkerStateType " + CurrentWorkerStateType);
             _workerTimer.UpdateViewInfo(CurrentWorkerStateType);
         }
+
+        public void WakeUp()
+        {
+            Debug.Log("Разбудить");
+            
+            if (CurrentWorkerStateType == WorkerStateType.Relax)
+            {
+                SetWorkerStateType(WorkerStateType.Work);
+                SetState(new WorkState());
+                // _workerTimer.SetTimeWork();
+                Debug.Log("DCNFFQ");
+                // _workerTimer.WakeUpWorker(); 
+                
+            }
+        }
     }
 }

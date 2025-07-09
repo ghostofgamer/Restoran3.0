@@ -27,6 +27,11 @@ namespace WorkerContent
             StateTimer = _delayRelax;
         }
 
+        public void WakeUpWorker()
+        {
+            StateTimer = 0;
+        }
+
         public void Init(WorkerStateType workerStateType)
         {
             switch (workerStateType)

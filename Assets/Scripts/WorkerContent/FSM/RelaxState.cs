@@ -1,5 +1,6 @@
 using System;
 using Enums;
+using UnityEngine;
 
 namespace WorkerContent.FSM
 {
@@ -33,6 +34,7 @@ namespace WorkerContent.FSM
 
         public override void Exit(Worker worker)
         {
+            Debug.Log("RelaxExit");
         }
     }
 }

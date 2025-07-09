@@ -22,6 +22,8 @@ namespace ItemContent
         {
             if (playerInteraction.CurrentDraggable != null)
             {
+                Debug.Log($"ELSE ELSE ELSE CurrentDraggable!=null");
+                
                 ItemBasket basket = playerInteraction.CurrentDraggable.GetComponent<ItemBasket>();
 
                 if (basket != null && basket.ItemType == ItemType.RawCutlet)
@@ -65,9 +67,17 @@ namespace ItemContent
                     if (!playerInteraction.PlayerTray.IsActive)
                     {
                         int activeItems = GetActiveItemsValue();
+                        
+                        if (activeItems <= 0)
+                            return;
+                        
+                        Debug.Log("GetActiveItemsValue " + activeItems);
                         int emptyPos = playerInteraction.PlayerTray.GetEmptyPositionValue(CurrentItemContainer);
                         int itemsToPlace = Mathf.Min(activeItems, emptyPos);
 
+                        Debug.Log("GetEmptyPositionValue " + emptyPos);
+                        Debug.Log("itemsToPlace " + itemsToPlace);
+                        
                         if (itemsToPlace > 0)
                         {
                             DeactivateItems(itemsToPlace);
@@ -111,6 +121,8 @@ namespace ItemContent
                     }
                     else
                     {
+                        Debug.Log($"ELSE ELSE ELSE ");
+                        
                         int emptyPosition = GetEmptyPosition();
                         int activeItems = playerInteraction.PlayerTray.GetActivePositionValue(CurrentItemContainer);
                         int itemsToPlace = Mathf.Min(emptyPosition, activeItems);
