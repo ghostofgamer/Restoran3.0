@@ -1,5 +1,6 @@
 using Enums;
 using SoContent;
+using UI.Screens;
 using UI.Screens.ShopContent.WorkersContent;
 using UnityEngine;
 using WalletContent;
@@ -14,6 +15,7 @@ namespace WorkerContent
         [SerializeField] private WorkerUIProduct[] _workerUIProducts;
         [SerializeField] private Wallet _wallet;
         [SerializeField] private WorkersConfig _workersConfig;
+        [SerializeField] private WorkersScreen _workersScreen;
 
         private void OnEnable()
         {
@@ -64,7 +66,10 @@ namespace WorkerContent
             var worker = System.Array.Find(_workers, w => w.WorkerType == type);
 
             if (worker != null)
+            {
+                _workersScreen.DeactivateSubscribe(worker);
                 worker.Deactivate();
+            }
         }
 
         public void PaySalary()

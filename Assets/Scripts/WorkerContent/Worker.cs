@@ -1,5 +1,6 @@
 using System;
 using Enums;
+using Io.AppMetrica;
 using SoContent;
 using UnityEngine;
 using WorkerContent.FSM;
@@ -19,6 +20,8 @@ namespace WorkerContent
         protected float Efficiecy;
 
         private int _maxLevel = 6;
+
+        public event Action StateChanged;
 
         public WorkerParametersConfig WorkerParametersConfig => _workerParametersConfig;
 
@@ -51,7 +54,7 @@ namespace WorkerContent
 
         public abstract bool GetConditionsRelaxUpdate();
 
-        public void Deactivate() => gameObject.SetActive(false);
+        public virtual void Deactivate() => gameObject.SetActive(false);
 
         public virtual void Activate()
         {
@@ -61,6 +64,7 @@ namespace WorkerContent
             transform.position = RelaxPosition.position;
             gameObject.SetActive(true);
             IsTired = false;
+            SetWorkerStateType(WorkerStateType.Work);
             SetState(new WorkState());
             Efficiecy = _workerParametersConfig.GetConfig(_workerType, Level).Efficiency;
             StartEfficiencySecValue = _workerParametersConfig.GetConfig(_workerType, Level).StartSecondsEfficiency;
@@ -81,6 +85,7 @@ namespace WorkerContent
         public void SetWorkerStateType(WorkerStateType workerStateType)
         {
             CurrentWorkerStateType = workerStateType;
+            StateChanged?.Invoke();
         }
 
         public virtual void StartWorking()
@@ -99,6 +104,7 @@ namespace WorkerContent
                 return;
 
             Level++;
+            AppMetrica.ReportEvent(_workerType.ToString() + " Levels", "{\"" + Level.ToString() + "\":null}");
             PlayerPrefs.SetInt(_workerType + "LevelWorker", Level);
             _workerMover.SetSpeed(Level);
             Efficiecy = _workerParametersConfig.GetConfig(_workerType, Level).Efficiency;
@@ -115,7 +121,7 @@ namespace WorkerContent
         public void WakeUp()
         {
             Debug.Log("Разбудить");
-            
+
             if (CurrentWorkerStateType == WorkerStateType.Relax)
             {
                 SetWorkerStateType(WorkerStateType.Work);
@@ -123,7 +129,6 @@ namespace WorkerContent
                 // _workerTimer.SetTimeWork();
                 Debug.Log("DCNFFQ");
                 // _workerTimer.WakeUpWorker(); 
-                
             }
         }
     }

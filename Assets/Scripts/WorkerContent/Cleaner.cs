@@ -16,7 +16,6 @@ namespace WorkerContent
 
         private Coroutine _cleaningCoroutine;
         private WaitForSeconds _waitForSeconds;
-        // private float _baseValueClean = 5f;
         private float _baseEfficiecy = 100;
 
         public TableCleanliness CurrentDirtyTable { get; private set; }
@@ -34,6 +33,12 @@ namespace WorkerContent
         public override bool GetConditionsRelaxUpdate()
         {
             return CurrentDirtyTable == null && IsTired;
+        }
+
+        public override void Deactivate()
+        {
+            CurrentDirtyTable = null;
+            base.Deactivate();
         }
 
         public override void StartWorking()
@@ -57,13 +62,6 @@ namespace WorkerContent
                     if (action != null)
                         action?.Invoke();
                 });
-                
-                
-                /*StartCoroutine(WorkerMover.MoveToTarget(RelaxPosition, () =>
-                {
-                    if (action != null)
-                        action?.Invoke();
-                }));*/
             }
         }
 
@@ -85,11 +83,6 @@ namespace WorkerContent
             
             WorkerMover.MoveTarget(CurrentDirtyTable.CleanerPosition,
                 () => StartCoroutine(CleanTable()));
-            
-            /*StartCoroutine(WorkerMover.MoveToTarget(
-                CurrentDirtyTable.CleanerPosition,
-                () => StartCoroutine(CleanTable())
-            ));*/
         }
 
         private IEnumerator CleanTable()

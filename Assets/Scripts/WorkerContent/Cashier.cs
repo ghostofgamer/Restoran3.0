@@ -19,7 +19,7 @@ namespace WorkerContent
         private float _baseEfficiecy = 100;
         private bool _tookPosition = false;
         private bool _isCalculate = false;
-
+        
         private void Start()
         {
             Activate();
@@ -33,6 +33,12 @@ namespace WorkerContent
         public override bool GetConditionsRelaxUpdate()
         {
             return IsTired;
+        }
+
+        public override void Deactivate()
+        {
+            SetValueTookPosition(false);
+            base.Deactivate();
         }
 
         public override void StartWorking()
@@ -55,18 +61,6 @@ namespace WorkerContent
                     _cashRegister.SetCashier(this);
                     FindClient();
                 });
-            
-            
-            
-            /*StartCoroutine(WorkerMover.MoveToTarget(
-                _cashRegister.CashierPosition,
-                () =>
-                {
-                    Debug.Log("дошел");
-                    SetValueTookPosition(true);
-                    _cashRegister.SetCashier(this);
-                    FindClient();
-                }));*/
         }
 
         public override void StartRelaxing(Action action)
@@ -78,13 +72,6 @@ namespace WorkerContent
                     if (action != null)
                         action?.Invoke();
                 });
-                
-                
-                /*StartCoroutine(WorkerMover.MoveToTarget(RelaxPosition, () =>
-                {
-                    if (action != null)
-                        action?.Invoke();
-                }));*/
             }
         }
 

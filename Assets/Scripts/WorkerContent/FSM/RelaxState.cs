@@ -6,13 +6,12 @@ namespace WorkerContent.FSM
 {
     public class RelaxState : WorkerState
     {
-        private Cleaner _cleaner;
-
+        
         public override void Enter(Worker worker, Action action)
         {
             worker.WorkerTimer.Init(WorkerStateType.Relax);
             worker.StartRelax();
-
+            
             if (action != null)
                 action?.Invoke();
         }

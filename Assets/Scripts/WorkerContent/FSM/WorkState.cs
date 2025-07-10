@@ -11,7 +11,7 @@ namespace WorkerContent.FSM
             Debug.Log("WorkEnter");
             worker.WorkerTimer.Init(WorkerStateType.Work);
             worker.StartWorking();
-
+            
             if (action != null)
                 action?.Invoke();
         }

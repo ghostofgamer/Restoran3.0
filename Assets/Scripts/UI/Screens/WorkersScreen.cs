@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using WorkerContent;
 using WorkerContent.WorkerWakeUpContent;
 
 namespace UI.Screens
@@ -26,6 +27,23 @@ namespace UI.Screens
 
 
             _notActiveWorkerText.gameObject.SetActive(_activeWorkerValue <= 0);
+        }
+
+        public override void CloseScreen()
+        {
+            base.CloseScreen();
+
+            foreach (var workerAwakening in _workerAwakenings)
+                workerAwakening.Unsubscribe();
+        }
+
+        public void DeactivateSubscribe(Worker worker)
+        {
+            foreach (var workerAwakening in _workerAwakenings)
+            {
+                if (workerAwakening.Worker == worker)
+                    workerAwakening.Unsubscribe();
+            }
         }
     }
 }

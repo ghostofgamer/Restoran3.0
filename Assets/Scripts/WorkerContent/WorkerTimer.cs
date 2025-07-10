@@ -13,18 +13,22 @@ namespace WorkerContent
         private float _delayRelax;
         private float _delayWork;
 
+        public event Action<WorkerStateType,float> ValueChanged;
+        
         public float StateTimer { get; private set; }
 
         public void SetTimeWork()
         {
             _delayWork = _worker.WorkerParametersConfig.GetConfig(_worker.WorkerType,_worker.Level).DelayWork;
             StateTimer = _delayWork;
+            ValueChanged?.Invoke(WorkerStateType.Work,StateTimer);
         }
 
         public void SetStateRelax()
         {
             _delayRelax = _worker.WorkerParametersConfig.GetConfig(_worker.WorkerType,_worker.Level).DelayRelax;
             StateTimer = _delayRelax;
+            ValueChanged?.Invoke(WorkerStateType.Relax,StateTimer);
         }
 
         public void WakeUpWorker()
@@ -54,11 +58,13 @@ namespace WorkerContent
                 case WorkerStateType.Work:
                     StateTimer -= Time.deltaTime;
                     _workerTimerViewer.UpdateTimerView(StateTimer, WorkerStateType.Work, _delayWork);
+                    ValueChanged?.Invoke(WorkerStateType.Work,StateTimer);
                     Debug.Log("WorkerStateType.Work:");
                     break;
                 case WorkerStateType.Relax:
                     StateTimer -= Time.deltaTime;
                     _workerTimerViewer.UpdateTimerView(StateTimer, WorkerStateType.Relax, _delayRelax);
+                    ValueChanged?.Invoke(WorkerStateType.Relax,StateTimer);
                     Debug.Log("WorkerStateType.Relax:");
                     break;
             }
