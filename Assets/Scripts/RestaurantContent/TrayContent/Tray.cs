@@ -50,6 +50,8 @@ namespace RestaurantContent.TrayContent
             Order = order;
             _check.SetActive(true);
             _indexTable.text = (order.IndexTable + 1).ToString();
+            
+            Debug.Log("SetOrder" + order.IndexTable + 1);
         }
 
         [ContextMenu("Completed")]

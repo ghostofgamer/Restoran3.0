@@ -22,29 +22,25 @@ namespace OrdersContent
             _cachedDrinks = _menuCounter.GetDrinks();
             _cachedExtras = _menuCounter.GetExtras();
 
-            Debug.Log($"CreateOrder Burgers {_cachedBurgers.Count} ," +
-                      $" drinks {_cachedDrinks.Count} ," +
-                      $" extras {_cachedExtras.Count}");
-
             ItemType burgerType = GetRandomItemType(_cachedBurgers, "бургеров");
 
             if (burgerType != ItemType.Empty)
             {
-                Debug.Log($"а закажука я {burgerType}");
+                // Debug.Log($"а закажука я {burgerType}");
             }
 
             ItemType drinkType = GetRandomItemType(_cachedDrinks, "попить");
 
             if (drinkType != ItemType.Empty)
             {
-                Debug.Log($"а закажука я {drinkType}");
+                // Debug.Log($"а закажука я {drinkType}");
             }
 
             ItemType extraType = GetRandomItemType(_cachedExtras, "допов");
 
             if (extraType != ItemType.Empty)
             {
-                Debug.Log($"а закажука я {extraType}");
+                // Debug.Log($"а закажука я {extraType}");
             }
 
             Order order = new Order(burgerType, drinkType, extraType);
@@ -61,7 +57,7 @@ namespace OrdersContent
             }
             else
             {
-                Debug.Log($"!В меню нету {itemName}");
+                // Debug.Log($"!В меню нету {itemName}");
                 return ItemType.Empty;
             }
         }

@@ -77,7 +77,6 @@ namespace OrdersContent.OrderPromptContent
 
         private void ShowAmountOrders(bool value)
         {
-            Debug.Log("_ordersCounter.CurrentOrders.Count " + _ordersCounter.CurrentOrders.Count);
             _arrowText.text = value ? ">" : "<";
             _amountOrdersContatainer.SetActive(value);
             _amountOrdersValueText.text = _ordersCounter.CurrentOrders.Count.ToString();

@@ -7,8 +7,6 @@ namespace SoContent
     {
         public float GetSpacing(int ingredientCount)
         {
-            Debug.Log("ingredientCount " + ingredientCount);
-
             return ingredientCount switch
             {
                 <= 4 => -165f,

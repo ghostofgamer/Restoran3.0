@@ -77,7 +77,6 @@ namespace DayNightContent
             _isNight = !_isDay;
 
             _isDay = PlayerPrefs.GetInt(IS_DAY_KEY, 1) == 1;
-            Debug.Log("_isDay" + _isDay);
             // _isNight = PlayerPrefs.GetInt(IS_NIGHT_KEY, 0) == 1;
             _isNight = !_isDay;
 
@@ -92,7 +91,6 @@ namespace DayNightContent
             {
                 DayOverCompleted?.Invoke();
                 SetNightTime();
-                Debug.Log("НОЧЬ");
                 UpdateTimeText(START_HOUR, END_HOUR, timeOfDay);
             }
             else
@@ -143,7 +141,6 @@ namespace DayNightContent
             AppMetrica.ReportEvent("NewDaY");
             _playerLevel.AddExp(50);
             timeOfDay = 0f;
-            Debug.Log("новый день");
             _isDay = true;
             _isNight = false;
             SetDayTime();
@@ -164,13 +161,11 @@ namespace DayNightContent
             {
                 if (isNight)
                 {
-                    Debug.Log("DayOverCompleted ");
                     _isDay = isDay;
                     DayOverCompleted?.Invoke();
                 }
                 else
                 {
-                    Debug.Log(" _isDay = isDay; ");
                     timeOfDay = 0;
                     _isDay = isDay;
                     _isNight = isNight;
@@ -240,20 +235,10 @@ namespace DayNightContent
                     SetNightLighting?.Invoke(false);
             }
         }
-        /*public void StartNewDay()
-        {
-            timeOfDay = 0f;
-            _isDay = false;
-            _isNight = true;
-            _isStatisticDayOpened = true;
-            NewDayStarted?.Invoke();
-        }*/
 
         private void OnApplicationQuit()
         {
-            Debug.Log("_isDay OnApplicationQuit " + _isDay);
             PlayerPrefs.SetInt(IS_DAY_KEY, _isDay ? 1 : 0);
-            // PlayerPrefs.SetInt(IS_NIGHT_KEY, _isNight ? 1 : 0);
             PlayerPrefs.SetFloat(TIME_OF_DAY_KEY, timeOfDay);
             PlayerPrefs.Save();
         }

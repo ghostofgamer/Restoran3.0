@@ -37,19 +37,17 @@ namespace RestaurantContent
         {
             if (!_dirtyTables.Contains(tableCleanliness))
             {
-                Debug.Log("Добавили грязный стол");
                 _dirtyTables.Add(tableCleanliness);
                 DirtyTableAdded?.Invoke();
             }
             else
             {
-                Debug.Log("Стол уже в списке");
+                // Debug.Log("Стол уже в списке");
             }
         }
 
         public void RemoveDirtyTable(TableCleanliness tableCleanliness)
         {
-            Debug.Log("удалили из списка грязных столов");
             _dirtyTables.Remove(tableCleanliness);
         }
 
@@ -57,12 +55,10 @@ namespace RestaurantContent
         {
             if (_dirtyTables.Count > 0)
             {
-                Debug.Log("получи грязный стол");
                 return _dirtyTables[0];
             }
             else
             {
-                Debug.Log("нету грязных столов");
                 return null;
             }
         }

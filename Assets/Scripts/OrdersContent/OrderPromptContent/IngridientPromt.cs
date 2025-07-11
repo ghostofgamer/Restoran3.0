@@ -34,8 +34,6 @@ public class IngridientPromt : MonoBehaviour
 
     public void SetIngredients(Order order)
     {
-        Debug.Log("SetIngredients!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        
         _order = order;
 
         foreach (var ingredient in _ingredientsViewers)
@@ -56,11 +54,6 @@ public class IngridientPromt : MonoBehaviour
             }
 
             CheckIngredientsProgress();
-            /*_elementSelector.SetSpacing(_recipes.ItemTypes.Count);
-            _ingredientsViewers[0]
-                .SetOutlineBackground(true, _ingredientsConfig.GetOutlineSprite(_ingredientsViewers[0].ItemType));
-
-            _elementSelector.UpdateSpacing(0, _recipes.ItemTypes.Count, 1);*/
         }
         else if (order.IsBurgerCompleted && order.DrinkItemOrder != ItemType.Empty && !order.IsDrinkCompleted)
         {
@@ -75,7 +68,6 @@ public class IngridientPromt : MonoBehaviour
                  order.ExtraItemOrder != ItemType.Empty)
         {
             _elementSelector.ReturnDefaultSpacing();
-            Debug.Log("Включаем екстра ингридиент");
         }
     }
 
@@ -90,8 +82,6 @@ public class IngridientPromt : MonoBehaviour
 
                 if (!_order.IsDrinkCompleted)
                 {
-                    Debug.Log("_order.DrinkItemOrder " + _order.DrinkItemOrder);
-                    Debug.Log("Sprite  " + _ingredientsConfig.GetSprite(_order.DrinkItemOrder));
                     _elementSelector.ReturnDefaultSpacing();
                     
                     _ingredientsViewers[0].SetDefault(_ingredientsConfig.GetSprite(_order.DrinkItemOrder));
@@ -111,8 +101,7 @@ public class IngridientPromt : MonoBehaviour
 
             _elementSelector.ReturnDefaultSpacing();
         }
-
-        Debug.Log("Стек меняется");
+        
         if (_assemblyBurger.IngredientStack.Count == 0)
         {
             _elementSelector.SetSpacing(_recipes.ItemTypes.Count);
@@ -133,10 +122,7 @@ public class IngridientPromt : MonoBehaviour
 
         var stackItems = _assemblyBurger.IngredientStack.Select(x => x.item.ItemType).ToList();
         stackItems.Reverse();
-
         int lastCorrectIndex = -1;
-
-        Debug.Log($"{stackItems.Count}). stackItems.Count");
 
         for (int i = 0; i < _ingredientsViewers.Length; i++)
         {
@@ -144,13 +130,12 @@ public class IngridientPromt : MonoBehaviour
 
             if (i >= stackItems.Count)
             {
-                Debug.Log($"{i}). Индекс выходит за пределы стека");
+                Debug.LogError($"{i}). Индекс выходит за пределы стека");
                 continue;
             }
 
             if (stackItems[i] == _recipes.ItemTypes[recipeIndex])
             {
-                Debug.Log("Правильно ");
                 _ingredientsViewers[i].SetDefaultColor(Color.gray);
                 _elementSelector.UpdateSpacing(i, _recipes.ItemTypes.Count);
                 lastCorrectIndex = i;

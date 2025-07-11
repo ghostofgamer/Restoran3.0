@@ -83,10 +83,8 @@ public class ItemBasket : MonoBehaviour
 
     public int[] GetActiveValueArrayItems()
     {
-        Debug.Log("GAME OBJECT " + gameObject.name);
-        
         int[] activeCounts = new int[_itemsActivityAdditionalArray.Length];
-        Debug.Log("GAME OBJECT  1" );
+   
         for (int i = 0; i < _itemsActivityAdditionalArray.Length; i++)
         {
             int rowActiveCount = 0;
@@ -101,7 +99,7 @@ public class ItemBasket : MonoBehaviour
             activeCounts[i] = rowActiveCount;
             // Debug.Log("ActiveCount in row " + i + ": " + rowActiveCount);
         }
-        Debug.Log("GAME OBJECT  3" );
+     
         // Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
         return activeCounts;
 

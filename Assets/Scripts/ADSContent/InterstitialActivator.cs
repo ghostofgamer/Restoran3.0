@@ -93,13 +93,13 @@ namespace ADSContent
             if (CanShowAd())
             {
                 _ads.ShowInterstitial();
-                Debug.Log("$$$Showing Ad");
+                // Debug.Log("$$$Showing Ad");
                 PlayerPrefs.SetString(LastADKey, DateTime.UtcNow.Ticks.ToString());
                 PlayerPrefs.Save();
             }
             else
             {
-                Debug.Log("$$$Ad cooldown active");
+                // Debug.Log("$$$Ad cooldown active");
             }
         }
 

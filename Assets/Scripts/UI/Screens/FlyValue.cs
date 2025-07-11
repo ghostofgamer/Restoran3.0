@@ -12,8 +12,6 @@ namespace UI
 
         public void ShowFly(DollarValue dollarValue, bool profitValue)
         {
-            Debug.Log("profitValue " + profitValue);
-
             gameObject.SetActive(false);
             gameObject.SetActive(true);
             _text.color = profitValue ? Color.green : Color.red;

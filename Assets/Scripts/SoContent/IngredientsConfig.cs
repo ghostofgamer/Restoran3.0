@@ -23,8 +23,6 @@ namespace SoContent
         
         public Sprite GetOutlineSprite(ItemType itemType)
         {
-            Debug.Log("SPRITE" + itemType );
-            
             foreach (var ingredient in _ingredients)
             {
                 if (ingredient.itemType == itemType)

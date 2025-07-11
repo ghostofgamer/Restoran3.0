@@ -46,7 +46,6 @@ namespace RestaurantContent.TableContent
                 int randomIndex = random.Next(garbagesTable.Count);
 
                 garbagesTable[randomIndex].SetValue(true);
-                Debug.Log("Рандомный индекс " + randomIndex);
             }
         }
 
@@ -78,8 +77,6 @@ namespace RestaurantContent.TableContent
 
             if (PollutionLevel == 0)
                 TableCleaned?.Invoke(this);
-
-            Debug.Log("Decreased pollution level: " + PollutionLevel);
         }
 
         public void ClearTable()

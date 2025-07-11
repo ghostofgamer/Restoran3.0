@@ -186,7 +186,6 @@ namespace ClientsContent
             client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
                 _queueCashRegister, _priceOrderCounter, _clientsCounter);
             ClientCreated?.Invoke();
-            Debug.Log("Пешком");
             _queueCashRegister.AddClientToQueue(client);
         }
     }

@@ -18,26 +18,18 @@ namespace ClientsContent
         {
             clientQueue.Enqueue(client);
             UpdateQueuePositions();
-            Debug.Log("Колличество людей в очереди " +clientQueue.Count);
             UpdateClientList();
         }
 
         public void AddClientQueue(Client client)
         {
             clientQueue.Enqueue(client);
-            Debug.Log("Колличество людей в очереди " +clientQueue.Count);
             UpdateClientList();
         }
 
         [ContextMenu("UpdateQueuePositions")]
         public void UpdateQueuePositions()
         {
-            // UpdateClientList();
-            Debug.Log("Колличество в очередт  " + clientQueue.Count);
-
-            foreach (var client in clientQueue)
-                Debug.Log("Человек в очередт " + client.gameObject.name);
-            
             int index = 0;
 
             foreach (var client in clientQueue)
@@ -66,9 +58,6 @@ namespace ClientsContent
 
         public bool IsQueueFull()
         {
-            Debug.Log("IsQueueFull " + (clientQueue.Count >= _maxQueueSize));
-            Debug.Log("clientQueue.Count " + clientQueue.Count );
-      
             return clientQueue.Count >= _maxQueueSize;
         }
 

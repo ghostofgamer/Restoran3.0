@@ -59,13 +59,11 @@ namespace WorkerContent
                     StateTimer -= Time.deltaTime;
                     _workerTimerViewer.UpdateTimerView(StateTimer, WorkerStateType.Work, _delayWork);
                     ValueChanged?.Invoke(WorkerStateType.Work,StateTimer);
-                    Debug.Log("WorkerStateType.Work:");
                     break;
                 case WorkerStateType.Relax:
                     StateTimer -= Time.deltaTime;
                     _workerTimerViewer.UpdateTimerView(StateTimer, WorkerStateType.Relax, _delayRelax);
                     ValueChanged?.Invoke(WorkerStateType.Relax,StateTimer);
-                    Debug.Log("WorkerStateType.Relax:");
                     break;
             }
         }

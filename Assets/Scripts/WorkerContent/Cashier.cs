@@ -46,8 +46,6 @@ namespace WorkerContent
             if (CurrentWorkerStateType == WorkerStateType.Relax)
                 return;
 
-            Debug.Log("Working Cashier Start ");
-
             if (_cashRegister.PlayerOnSite)
                 return;
 
@@ -56,7 +54,6 @@ namespace WorkerContent
             WorkerMover.MoveTarget(_cashRegister.CashierPosition,
                 () =>
                 {
-                    Debug.Log("дошел");
                     SetValueTookPosition(true);
                     _cashRegister.SetCashier(this);
                     FindClient();
@@ -106,12 +103,9 @@ namespace WorkerContent
             _waitForSeconds = new WaitForSeconds(newTime);
 
             _isCalculate = true;
-            Debug.Log("начал расчет клиента");
             WorkerAnimation.SetCalculateAnimValue(true);
             yield return _waitForSeconds;
             WorkerAnimation.SetCalculateAnimValue(false);
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!завершил расчет клиента " + newTime);
-
             _cashRegister.AcceptCashierOrder();
             _isCalculate = false;
 

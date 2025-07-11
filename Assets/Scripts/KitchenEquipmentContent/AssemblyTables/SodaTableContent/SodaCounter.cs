@@ -38,8 +38,7 @@ namespace KitchenEquipmentContent.AssemblyTables.SodaTableContent
                 if (_restaurant.TryGetTrayDrinkOrder(itemType, out Tray tray))
                 {
                     _restaurant.SetSodaOrder(tray, burger);
-
-                    Debug.Log("TRUE Автоматическое " + itemType);
+                    
                     Transform position = tray.GetFirstAvailablePosition();
 
                     sequence.Append(burger.transform.DOMove(position.position, 1f)
@@ -55,7 +54,7 @@ namespace KitchenEquipmentContent.AssemblyTables.SodaTableContent
             }
             else
             {
-                Debug.Log("FALSE Автоматическое " + itemType);
+                // Debug.Log("FALSE Автоматическое " + itemType);
             }
         }
 

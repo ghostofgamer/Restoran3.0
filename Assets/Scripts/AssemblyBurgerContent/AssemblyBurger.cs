@@ -58,8 +58,6 @@ namespace AssemblyBurgerContent
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Debug.Log("HIT " + hit.collider.name);
-
                     ItemContainer selectedContainer = hit.collider.GetComponent<ItemContainer>();
 
                     if (selectedContainer != null &&
@@ -76,7 +74,6 @@ namespace AssemblyBurgerContent
                             {
                                 if (activeItems[0] <= 0)
                                 {
-                                    Debug.Log("булочек не хватает");
                                     return;
                                 }
 
@@ -99,7 +96,6 @@ namespace AssemblyBurgerContent
                             {
                                 if (activeItems[1] <= 0)
                                 {
-                                    Debug.Log("булочек не хватает");
                                     return;
                                 }
 
@@ -122,9 +118,6 @@ namespace AssemblyBurgerContent
                         else
                         {
                             int activeItems = selectedContainer.GetActiveItemsValue();
-                            Debug.Log("activeItems: " + activeItems);
-                            Debug.Log("selectedContainer: " + selectedContainer.name);
-                            Debug.Log("ItemType: " + selectedContainer.CurrentItemContainer);
 
                             if (activeItems > 0)
                             {
@@ -152,33 +145,26 @@ namespace AssemblyBurgerContent
                     else if (selectedContainer != null &&
                              selectedContainer.CurrentItemContainer == ItemType.PackageBurgerPaper)
                     {
-                        Debug.Log("пробуем собрать бургер по рецепту");
-
                         int activePackageBurgerPaper = selectedContainer.GetActiveItemsValue();
 
                         if (activePackageBurgerPaper <= 0)
                         {
                             AttentionHintActivator.Instance.ShowHint(
                                 LocalizationManager.GetTermTranslation("No packaging"));
-                            Debug.Log("упаковок нету уже");
                         }
                         else
                         {
-                            Debug.Log("упаковок осталось " + activePackageBurgerPaper);
-
                             ItemType burgerType = GetMatchingRecipe();
 
                             if (burgerType != ItemType.Empty)
                             {
                                 CreateBurger(burgerType, selectedContainer);
-                                Debug.Log("Бургер " + burgerType);
                                 // selectedContainer.DeactivateItems(1);
                             }
                             else
                             {
                                 AttentionHintActivator.Instance.ShowHint(
                                     LocalizationManager.GetTermTranslation("Incorrect assembly"));
-                                Debug.Log("Не правильная сборка Бургер ");
                             }
                         }
                     }
@@ -258,8 +244,6 @@ namespace AssemblyBurgerContent
                     _lastIndexBun = index;
                 }
 
-                Debug.Log("НУУУ");
-
                 Vector3 initialPosition = itemContainer.transform.position;
                 initialPosition.y += 0.3f;
 
@@ -286,7 +270,6 @@ namespace AssemblyBurgerContent
             }
 
             _ingredientStack.Push((item, itemContainer));
-            Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
             StackChanged?.Invoke();
         }
 
@@ -303,7 +286,6 @@ namespace AssemblyBurgerContent
             if (_ingredientStack.Count > 0)
             {
                 var (lastItem, container) = _ingredientStack.Pop();
-                Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
                 StackChanged?.Invoke();
 
                 if (container != null)
@@ -430,16 +412,11 @@ namespace AssemblyBurgerContent
 
                     _playerLevel.AddExp(5);
 
-                    /*GameObject burgerInstance =
-                        Instantiate(burgerPrefab, _burgerBoard.CenterPosition.position, Quaternion.identity);*/
-
                     Sequence sequence = DOTween.Sequence();
 
                     if (_restaurant.TryGetTrayOrder(burgerType, out Tray tray))
                     {
                         _restaurant.SetBurgerOrder(tray, burgerInstance);
-
-                        Debug.Log("TRUE");
                         Transform position = tray.GetFirstAvailablePosition();
 
                         sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
@@ -456,8 +433,6 @@ namespace AssemblyBurgerContent
                     }
                     else
                     {
-                        Debug.Log("FALSE");
-
                         sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
                         sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
                         sequence.Append(burgerInstance.transform.DOMove(availablePosition.position, 0.5f)
@@ -471,12 +446,9 @@ namespace AssemblyBurgerContent
                             .OnComplete(() => _burgersCounter.AddBurger(burgerInstance));
                     }
 
-                    Debug.Log("Бургер создан: " + burgerType);
-
                     while (_ingredientStack.Count > 0)
                     {
                         var (lastItem, container) = _ingredientStack.Pop();
-                        Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
                         lastItem.gameObject.SetActive(false);
                     }
 
@@ -498,7 +470,6 @@ namespace AssemblyBurgerContent
                         _playerLevel.AddExp(5);
 
                         Sequence sequence = DOTween.Sequence();
-                        Debug.Log("TRUE");
                         Transform position = tray.GetFirstAvailablePosition();
 
                         sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
@@ -516,7 +487,6 @@ namespace AssemblyBurgerContent
                         while (_ingredientStack.Count > 0)
                         {
                             var (lastItem, container) = _ingredientStack.Pop();
-                            Debug.Log("_ingredient Stack Count " + _ingredientStack.Count);
                             lastItem.gameObject.SetActive(false);
 
                             // Destroy(lastItem.gameObject);
@@ -548,6 +518,63 @@ namespace AssemblyBurgerContent
             burgerInstance.transform.localRotation = Quaternion.Euler(0, 0, 0);
             burgerInstance.transform.localScale = Vector3.one;
             _burgersCounter.AddBurger(burgerInstance);
+        }
+
+
+[ContextMenu("Create")]
+        public void CreateFreeBurgerTestCheat()
+        {
+            GameObject burgerPrefab =
+                _burgerPrefabPairs.FirstOrDefault(pair => pair.BurgerType == ItemType.FinishSmallBurger)?.BurgerPrefab;
+
+            if (burgerPrefab!=null)
+            {
+                Transform availablePosition = _burgerPositions.FirstOrDefault(position => position.childCount == 0);
+
+                if (availablePosition != null)
+                {
+                    Item burgerInstance = _burgerIngridientSpawner.SpawnItem(ItemType.FinishSmallBurger);
+                    burgerInstance.SetParenContainer(_burgerIngridientSpawner.transform);
+                    burgerInstance.gameObject.SetActive(true);
+                    burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
+                    burgerInstance.transform.rotation = Quaternion.identity;
+                    
+                    
+                    Sequence sequence = DOTween.Sequence();
+
+                    if (_restaurant.TryGetTrayOrder(ItemType.FinishSmallBurger, out Tray tray))
+                    {
+                        _restaurant.SetBurgerOrder(tray, burgerInstance);
+                        Transform position = tray.GetFirstAvailablePosition();
+
+                        sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOMove(position.position, 1f)
+                            .SetEase(Ease.InOutQuad));
+
+                        burgerInstance.transform.SetParent(position);
+
+                        sequence.Join(burgerInstance.transform
+                                .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
+                                .SetEase(Ease.Linear))
+                            .OnComplete(() => tray.TryCompletedOrder());
+                    }
+                    else
+                    {
+                        sequence.Append(burgerInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
+                        sequence.Append(burgerInstance.transform.DOMove(availablePosition.position, 0.5f)
+                            .SetEase(Ease.InOutQuad));
+
+                        burgerInstance.transform.SetParent(availablePosition);
+
+                        sequence.Join(burgerInstance.transform
+                                .DOLocalRotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360)
+                                .SetEase(Ease.Linear))
+                            .OnComplete(() => _burgersCounter.AddBurger(burgerInstance));
+                    }
+                }
+            }
         }
     }
 }

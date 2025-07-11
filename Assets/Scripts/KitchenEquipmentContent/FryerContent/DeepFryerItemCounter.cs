@@ -38,8 +38,6 @@ namespace KitchenEquipmentContent.FryerContent
                 if (_restaurant.TryGetTrayExtraOrder(itemType, out Tray tray))
                 {
                     _restaurant.SetExtraOrder(tray, extraItem);
-
-                    Debug.Log("TRUE Автоматическое");
                     Transform position = tray.GetFirstAvailablePosition();
 
                     sequence.Append(extraItem.transform.DOMove(position.position, 1f)
@@ -55,7 +53,6 @@ namespace KitchenEquipmentContent.FryerContent
             }
             else
             {
-                Debug.Log("FALSE Автоматическое");
             }
         }
 

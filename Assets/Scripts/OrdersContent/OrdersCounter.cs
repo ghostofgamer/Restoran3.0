@@ -49,7 +49,7 @@ namespace OrdersContent
 
         public void AddOrder(Order order, Client client)
         {
-            if (_currentOrders.Count < MaxActiveOrders)
+            if (_currentOrders.Count < MaxActiveOrders && GetValueFreeTrays())
             {
                 _currentOrders.Add(order);
                 _activeOrderWaitClients.Add(client);
@@ -74,19 +74,13 @@ namespace OrdersContent
 
         public void CompleteOrder(Order order, Tray tray)
         {
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
             if (_currentOrders.Contains(order))
             {
-                Debug.Log(" нашли заказ ");
+                Debug.LogWarning(" нашли заказ ");
 
                 _currentOrders.Remove(order);
                 // OrderDeleted?.Invoke(order);
-                Debug.Log(" 1 ");
-                Debug.Log(" 3 ");
                 Client client = _activeOrderWaitClients.FirstOrDefault(c => c.Order == order);
-
-                Debug.Log(" client");
 
                 if (client != null)
                 {
@@ -97,10 +91,16 @@ namespace OrdersContent
                 }
                 else
                 {
-                    Debug.Log(" Не анходит клиента  которого заказ! ");
+                    Debug.LogError(" Не анходит клиента  которого заказ! ");
                 }
 
                 Debug.Log("_currentOrders " + _currentOrders.Count);
+
+                foreach (var currentOrder in _currentOrders)
+                {
+                    Debug.Log("CURRENT ORDER INDEX " + currentOrder.IndexTable + 1);
+                }
+
                 UpdateOrders?.Invoke(_currentOrders.Count);
                 OrdersChanged?.Invoke(_currentOrders);
                 OrderCompleted?.Invoke();
@@ -109,16 +109,13 @@ namespace OrdersContent
             }
             else
             {
-                Debug.Log("не находит нужный выполненный заказ");
+                Debug.LogError("не находит нужный выполненный заказ");
             }
         }
 
         public void TryActivateOrder()
         {
             Debug.Log("_currentOrders.Count < MaxActiveOrders " + (_currentOrders.Count < MaxActiveOrders));
-            Debug.Log("_currentOrders.Count " + (_currentOrders.Count));
-            Debug.Log("_orderQueue.Count > 0 " + (_orderQueue.Count > 0));
-            Debug.Log("_orderQueue.Count " + (_orderQueue.Count));
 
             while (_currentOrders.Count < MaxActiveOrders && _orderQueue.Count > 0)
             {
@@ -138,11 +135,16 @@ namespace OrdersContent
                 _coffeeCounter.CheckWaitNeedCoffee(nextOrder.DrinkItemOrder);
                 _sodaCounter.CheckWaitNeedSoda(nextOrder.DrinkItemOrder);
                 _deepFryerItemCounter.CheckWaitNeedBurgers(nextOrder.ExtraItemOrder);
-                
+
                 Debug.Log("Активирован новый заказ: " + nextOrder.IndexTable);
             }
         }
 
+        public bool GetValueFreeTrays()
+        {
+            return _trayCounter.GetFreeTrayCount() > 0;
+        }
+        
         private void UpdateTrays(Order order)
         {
             int freeTraysCount = _trayCounter.GetFreeTrayCount();
@@ -155,21 +157,51 @@ namespace OrdersContent
 
             if (freeTray != null)
             {
+                Debug.Log("Поднос нашли ");
                 freeTray.SetBusy(true);
                 freeTray.SetOrder(order);
             }
             else
             {
-                Debug.Log("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
+                Debug.LogError("Поднос Null у тебя");
             }
         }
-
-        /*public bool ContainsBurger(ItemType burgerType)
-        {
-            Order order = _currentOrders.Any(order => order.BurgerItemOrder == burgerType;
-
-            return _currentOrders.Any(order => order.BurgerItemOrder == burgerType);
-        }*/
 
         public Order GetOrderByBurger(ItemType burgerType)
         {

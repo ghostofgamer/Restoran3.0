@@ -38,8 +38,6 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
                 if (_restaurant.TryGetTrayDrinkOrder(itemType, out Tray tray))
                 {
                     _restaurant.SetDrinkOrder(tray, coffee);
-
-                    Debug.Log("TRUE Автоматическое Коффе");
                     Transform position = tray.GetFirstAvailablePosition();
 
                     sequence.Append(coffee.transform.DOMove(position.position, 1f)
@@ -55,7 +53,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
             }
             else
             {
-                Debug.Log("FALSE Автоматическое Коффе");
+                // Debug.Log("FALSE Автоматическое Коффе");
             }
         }
 

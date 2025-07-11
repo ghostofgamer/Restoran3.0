@@ -92,13 +92,10 @@ namespace ClientsContent
 
             if (index == 0)
             {
-                Debug.Log("1");
-
                 _currentState = ClientState.AtCashier;
 
                 SetDestination(_cashRegister.ClientPosition.position, () =>
                 {
-                    Debug.Log("Дошел до кассы");
                     _cashRegister.SetClient(this);
                     _navMeshAgent.enabled = false;
                     // _meshObstacle.enabled = false;
@@ -182,9 +179,7 @@ namespace ClientsContent
 
         private void Eat(Tray tray)
         {
-            Debug.Log("ЕМ");
             _currentState = ClientState.Eat;
-            Debug.Log("Клиент " + gameObject.name + " вернулся за стол.");
             tray.transform.parent = Table.transform;
             tray.transform.position = Table.TrayPosition.position;
             tray.transform.rotation = Table.TrayPosition.rotation;
@@ -233,7 +228,6 @@ namespace ClientsContent
         [ContextMenu("Completed")]
         public void Paid()
         {
-            Debug.Log("Paid");
             _currentState = ClientState.WaitingForOrder;
             _navMeshAgent.enabled = true;
             // _meshObstacle.enabled = true;
@@ -247,7 +241,6 @@ namespace ClientsContent
                 _animator.SetBool("Sit", true);
                 transform.position = Table.ClientSitPosition.transform.position;
                 transform.rotation = Table.ClientSitPosition.transform.rotation;
-                Debug.Log("Жду за столом ");
             });
         }
 
@@ -266,7 +259,6 @@ namespace ClientsContent
                 _animator.SetBool("Sit", true);
                 transform.position = Table.ClientSitPosition.transform.position;
                 transform.rotation = Table.ClientSitPosition.transform.rotation;
-                Debug.Log("Жду за столом ");
             });
         }
 
@@ -302,18 +294,15 @@ namespace ClientsContent
 
             while (_navMeshAgent.pathPending)
                 yield return null;
-
-            Debug.Log("!!!!!!!!!!!!!!!!!!_navMeshAgent.remainingDistance " + _navMeshAgent.remainingDistance);
+            
             _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", true);
 
-            while (_navMeshAgent.remainingDistance > 0.1f)
+            while (_navMeshAgent.remainingDistance > 1f)
                 yield return null;
 
             // _meshObstacle.enabled = false;
             _meshObstacle.enabled = true;
             _navMeshAgent.enabled = false;
-
-            Debug.Log("Завершил идти ");
 
             _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", false);
             callback.Invoke();

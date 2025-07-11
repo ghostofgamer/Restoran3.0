@@ -29,7 +29,7 @@ namespace UI.Screens
             }
             else
             {
-                Debug.Log("Бургер empty");
+                // Debug.Log("Бургер empty");
             }
 
             if (Order.DrinkItemOrder != ItemType.Empty)
@@ -39,7 +39,7 @@ namespace UI.Screens
             }
             else
             {
-                Debug.Log("напиток empty");
+                // Debug.Log("напиток empty");
             }
 
             if (Order.ExtraItemOrder != ItemType.Empty)
@@ -49,7 +49,7 @@ namespace UI.Screens
             }
             else
             {
-                Debug.Log("Доп empty");
+                // Debug.Log("Доп empty");
             }
 
             _tableIndexText.text = $"{LocalizationManager.GetTermTranslation("Table")}: {(Order.IndexTable + 1)}";

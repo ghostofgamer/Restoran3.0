@@ -70,8 +70,7 @@ namespace OrdersContent
                 Debug.LogError("Spacer is not assigned.");
                 return;
             }
-
-            Debug.Log("Вода 111");
+            
             _defaultSpacing = _spacingIngredientsConfig.GetSpacing(ingredientsAmount);
             _layoutGroup.spacing = _defaultSpacing;
             _spacer.SetActive(true);

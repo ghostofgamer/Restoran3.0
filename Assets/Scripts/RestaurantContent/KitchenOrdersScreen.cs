@@ -24,17 +24,15 @@ namespace RestaurantContent
 
         private void UpdateScreenOrders(List<Order> orders)
         {
-            Debug.Log("orders " + orders.Count);
-            
             foreach (var orderScreen in _orderUiScreens)
             {
                 orderScreen.Deactivate();
                 orderScreen.gameObject.SetActive(false);
             }
-            Debug.Log("1 " + orders.Count);
+         
             if (orders.Count <= 0)
                 return;
-            Debug.Log("3 " + orders.Count);
+          
             for (int i = 0; i < orders.Count; i++)
             {
                 if (i < _orderUiScreens.Length)
@@ -43,7 +41,6 @@ namespace RestaurantContent
                     _orderUiScreens[i].Init(orders[i]);
                 }
             }
-            Debug.Log("5 " + orders.Count);
         }
 
         private void UpdateOrders(int value )
@@ -56,7 +53,6 @@ namespace RestaurantContent
                     orderScreen.gameObject.SetActive(false);
                 }
             }
-            Debug.Log("value " + value);
         } 
     }
 }

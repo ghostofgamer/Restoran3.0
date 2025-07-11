@@ -36,8 +36,6 @@ namespace RestaurantContent
                 if (_restaurant.TryGetTrayOrder(itemType, out Tray tray))
                 {
                     _restaurant.SetBurgerOrder(tray, burger);
-
-                    Debug.Log("TRUE Автоматическое");
                     Transform position = tray.GetFirstAvailablePosition();
 
                     sequence.Append(burger.transform.DOMove(position.position, 1f)
