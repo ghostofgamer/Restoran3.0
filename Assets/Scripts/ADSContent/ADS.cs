@@ -31,12 +31,15 @@ namespace ADSContent
         private int _interstitialRetryAttempt = 0;
         private bool _showInter = true;
         private bool _temporaryStopInters = false;
+        private int _adShowCount = 0;
 
         public delegate void RewardCallback();
 
-        public bool IsInterstitialReady => MaxSdk.IsInterstitialReady(InterstitialKey);
-
         public event Action _interHidden;
+
+        public event Action RemoveAdsScreenOpening;
+
+        public bool IsInterstitialReady => MaxSdk.IsInterstitialReady(InterstitialKey);
 
         private void Awake()
         {
@@ -184,16 +187,15 @@ namespace ADSContent
                 if (Appodeal.IsLoaded(AppodealAdType.Interstitial))
                 {
                     Appodeal.Show(AppodealShowStyle.Interstitial);
+
+                    _adShowCount++;
+
+                    if (_adShowCount >= 2)
+                    {
+                        RemoveAdsScreenOpening?.Invoke();
+                        _adShowCount = 0;
+                    }
                 }
-                /*else if (!Appodeal.IsAutoCacheEnabled(AppodealAdType.Interstitial))
-                {
-                    Appodeal.Cache(AppodealAdType.Interstitial);
-                }
-                else
-                {
-                    Appodeal.Cache(AppodealAdType.Interstitial);
-                }*/
-                
             }
             else
             {
@@ -201,6 +203,14 @@ namespace ADSContent
                 {
                     AppMetrica.ReportEvent("ShowInterstitial");
                     MaxSdk.ShowInterstitial(InterstitialKey);
+
+                    _adShowCount++;
+
+                    if (_adShowCount >= 2)
+                    {
+                        RemoveAdsScreenOpening?.Invoke();
+                        _adShowCount = 0;
+                    }
                 }
                 else
                 {
