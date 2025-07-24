@@ -1,8 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AttentionHintContent;
-using DG.Tweening;
 using Enums;
 using I2.Loc;
 using InteractableContent;
@@ -27,13 +27,14 @@ namespace KitchenEquipmentContent.FryerContent
 
         [FormerlySerializedAs("_burgerPrefabPairs")] [SerializeField]
         private List<ItemPrefabPair> _itemPrefabPairs = new List<ItemPrefabPair>();
-
         [SerializeField] private BurgerIngridientSpawner _burgerIngridientSpawner;
 
         private Camera _camera;
         private bool _isCreated = false;
         private Coroutine _pauseCoroutine;
         private WaitForSeconds _waitForSeconds = new WaitForSeconds(1f);
+
+        public event Action<Item> ItemCreated;
 
         private void Start()
         {
@@ -115,6 +116,8 @@ namespace KitchenEquipmentContent.FryerContent
                 itemContainer.DeactivateItems(1);
                 fryerContainer.DeactivateItems(1);
                 _playerLevel.AddExp(5);
+                
+                ItemCreated?.Invoke(itemInstance);
                 // _deepFryerItemCounter.AddItem(itemInstance);
 
                 if (_restaurant.TryGetTrayExtraOrder(itemType, out Tray tray))
@@ -153,6 +156,7 @@ namespace KitchenEquipmentContent.FryerContent
                     StartCreatePause();
                     itemContainer.DeactivateItems(1);
                     fryerContainer.DeactivateItems(1);
+                    ItemCreated?.Invoke(itemInstance);
 
                     _restaurant.SetExtraOrder(tray, itemInstance);
                     _playerLevel.AddExp(5);

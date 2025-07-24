@@ -87,8 +87,6 @@ namespace UI.MenuUIContent
 
             if (totalCents > 0)
             {
-                Debug.Log("INIT " + totalCents);
-
                 _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
                 UpdateProfitText();
 
@@ -199,10 +197,6 @@ namespace UI.MenuUIContent
 
         private void OnSliderValueChanged(float value)
         {
-            Debug.Log(
-                "OnSliderValueChangedOnSliderValueChangedOnSliderValueChangedOnSliderValueChangedOnSliderValueChanged");
-
-
             if (_tutorial != null && _shopTutorialChanger != null && !_isFirstCall)
             {
                 if (_tutorial.CurrentType == TutorialType.LetsSetPrice)

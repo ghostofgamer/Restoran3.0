@@ -1,40 +1,55 @@
-using QuestsContent;
+using UI;
 using UnityEngine;
 
-public abstract class Task : ScriptableObject
+namespace QuestsContent
 {
-    [SerializeField] private int _index;
-    [SerializeField] private string _taskName;
-    [TextArea] [SerializeField] private string _description;
-    
-    public bool IsCompleted { get; protected set; }
-
-    public abstract bool CheckCompletion();
-
-    public virtual void StartTask()
+    public abstract class Task : ScriptableObject
     {
-        Debug.Log("StartTask =>" + _index);
-        
-        IsCompleted = CheckCompletion();
+        [SerializeField] private string _taskName;
+        [TextArea] [SerializeField] protected string Description;
+        [SerializeField] private PrizeTask _prizeTask;
 
-        if (!IsCompleted)
+        private int _index;
+        protected TaskUI ChainTasksUI;
+        protected int CurrentValue;
+
+        public bool IsCompleted { get; protected set; }
+        public PrizeTask PrizeTask => _prizeTask;
+
+        public abstract bool CheckCompletion();
+
+        public virtual void StartTask()
         {
+            Debug.Log("StartTask =>" + _index);
             Initialization();
-            SubscribeToEvents();
+
+            IsCompleted = CheckCompletion();
+
+            if (IsCompleted)
+                CompleteTask();
         }
+
+        public virtual void CompleteTask()
+        {
+            Debug.Log("CompleteTask");
+            IsCompleted = true;
+        }
+
+        public void CloseTask()
+        {
+            UnsubscribeFromEvents();
+            Debug.Log("ReceivePrize");
+            TasksActivator.Instance.NextTask();
+        }
+
+        public void SetIndex(int index)
+        {
+            _index = index;
+            Debug.Log("Value Index " + _index + " " + _taskName);
+        }
+
+        protected abstract void Initialization();
+        protected abstract void SubscribeToEvents();
+        protected abstract void UnsubscribeFromEvents();
     }
-
-    public abstract void UpdateTask();
-
-    public virtual void CompleteTask()
-    {
-        Debug.Log("CompleteTaskTask");
-        IsCompleted = true;
-        UnsubscribeFromEvents();
-        TasksActivator.Instance.NextTask();
-    }
-
-    protected abstract void Initialization();
-    protected abstract void SubscribeToEvents();
-    protected abstract void UnsubscribeFromEvents();
 }

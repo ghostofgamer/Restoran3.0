@@ -42,6 +42,8 @@ namespace AssemblyBurgerContent
 
         public event Action StackChanged;
 
+        public event Action<Item> BurgerCreated;
+
         public Stack<(Item item, ItemContainer container)> IngredientStack => _ingredientStack;
 
         private void Start()
@@ -397,6 +399,8 @@ namespace AssemblyBurgerContent
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                     burgerInstance.transform.rotation = Quaternion.identity;
 
+                    BurgerCreated?.Invoke(burgerInstance);
+                    
                     if (_tutorial.CurrentType == TutorialType.LetsMakeFirstBurger)
                     {
                         if (_isAnimationInProgress)
@@ -465,7 +469,8 @@ namespace AssemblyBurgerContent
                         burgerInstance.transform.rotation = Quaternion.identity;
 
                         containerPackageBurger.DeactivateItems(1);
-
+                        BurgerCreated?.Invoke(burgerInstance);
+                        
                         _restaurant.SetBurgerOrder(tray, burgerInstance);
                         _playerLevel.AddExp(5);
 
@@ -539,6 +544,7 @@ namespace AssemblyBurgerContent
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
                     burgerInstance.transform.rotation = Quaternion.identity;
                     
+                    BurgerCreated?.Invoke(burgerInstance);
                     
                     Sequence sequence = DOTween.Sequence();
 

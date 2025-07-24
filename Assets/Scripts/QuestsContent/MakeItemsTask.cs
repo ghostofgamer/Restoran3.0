@@ -1,0 +1,72 @@
+using AssemblyBurgerContent;
+using Enums;
+using KitchenEquipmentContent.FryerContent;
+using UnityEngine;
+
+namespace QuestsContent
+{
+    [CreateAssetMenu(fileName = "MakeItems", menuName = "QuestChainConfigs/MakeItemsConfig", order = 1)]
+    public class MakeItemsTask : Task
+    {
+        [SerializeField] private ItemType _itemType;
+        [SerializeField] private int _targetAmount;
+
+        private AssemblyBurger _assemblyBurger;
+        private AssemblyFromDeepFry _assemblyFromDeepFry;
+
+        public override bool CheckCompletion()
+        {
+            Debug.Log("CheckCompletionTask " + (CurrentValue >= _targetAmount));
+            return CurrentValue >= _targetAmount;
+        }
+
+        protected override void Initialization()
+        {
+            CurrentValue = 0;
+            _assemblyBurger = TaskInitializer.Instance.AssemblyBurger;
+            _assemblyFromDeepFry = TaskInitializer.Instance.AssemblyFromDeepFry;
+            ChainTasksUI = TaskInitializer.Instance.ChainTaskUI;
+            SubscribeToEvents();
+            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, CheckCompletion());
+        }
+
+        protected override void SubscribeToEvents()
+        {
+            _assemblyBurger.BurgerCreated += ChangeValue;
+            _assemblyFromDeepFry.ItemCreated += ChangeValue;
+            ChainTasksUI.TaskCompleted += CloseTask;
+        }
+
+        protected override void UnsubscribeFromEvents()
+        {
+            _assemblyBurger.BurgerCreated -= ChangeValue;
+            _assemblyFromDeepFry.ItemCreated -= ChangeValue;
+            ChainTasksUI.TaskCompleted -= CloseTask;
+        }
+
+        private void ChangeValue(Item item)
+        {
+            if (item.ItemType == _itemType)
+            {
+                if (CurrentValue >= _targetAmount)
+                    return;
+
+                CurrentValue++;
+                ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, CheckCompletion());
+
+                if (CurrentValue >= _targetAmount)
+                    CompleteTask();
+            }
+            else
+            {
+                Debug.Log("Не верный тип Item ");
+            }
+        }
+
+        public override void CompleteTask()
+        {
+            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, CheckCompletion());
+            base.CompleteTask();
+        }
+    }
+}
