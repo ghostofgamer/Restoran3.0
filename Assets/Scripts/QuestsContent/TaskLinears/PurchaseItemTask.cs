@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace QuestsContent.TaskLinears
 {
-    [CreateAssetMenu(fileName = "PurchaseItemTask", menuName = "QuestChainConfigs/PurchaseItemTaskConfig", order = 1)]
+    [CreateAssetMenu(fileName = "PurchaseItemTask", menuName = "QuestConfigs/PurchaseItemTaskConfig", order = 1)]
     public class PurchaseItemTask : Task
     {
         [SerializeField] private ItemType _itemType;

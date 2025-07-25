@@ -27,6 +27,7 @@ namespace QuestsContent
 
         public virtual void StartTask()
         {
+            IsCompleted = false;
             Debug.Log("StartTask =>" + _index);
             Initialization();
 
@@ -40,6 +41,9 @@ namespace QuestsContent
         {
             Debug.Log("CompleteTask");
             IsCompleted = true;
+
+            if (!_isChainTask)
+                TasksActivator.Instance.ChangeValue();
         }
 
         public void CloseTask()

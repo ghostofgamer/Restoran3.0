@@ -3,7 +3,7 @@ using WalletContent;
 
 namespace QuestsContent.TaskLinears
 {
-    [CreateAssetMenu(fileName = "MakingMoneyTask", menuName = "QuestChainConfigs/MakingMoneyTaskConfig", order = 1)]
+    [CreateAssetMenu(fileName = "MakingMoneyTask", menuName = "QuestConfigs/MakingMoneyTaskConfig", order = 1)]
     public class MakingMoneyTask : Task
     {
         [SerializeField] private int _targetValue;

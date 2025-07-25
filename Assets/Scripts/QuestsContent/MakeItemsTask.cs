@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace QuestsContent
 {
-    [CreateAssetMenu(fileName = "MakeItems", menuName = "QuestChainConfigs/MakeItemsConfig", order = 1)]
+    [CreateAssetMenu(fileName = "MakeItems", menuName = "QuestConfigs/MakeItemsConfig", order = 1)]
     public class MakeItemsTask : Task
     {
         [SerializeField] private ItemType _itemType;
@@ -19,7 +19,7 @@ namespace QuestsContent
             Debug.Log("CheckCompletionTask " + (CurrentValue >= _targetAmount));
             return CurrentValue >= _targetAmount;
         }
-        
+
         protected override void Initialization()
         {
             CurrentValue = 0;
@@ -27,7 +27,8 @@ namespace QuestsContent
             _assemblyFromDeepFry = TaskInitializer.Instance.AssemblyFromDeepFry;
             // ChainTasksUI = TaskInitializer.Instance.ChainTaskUI;
             SubscribeToEvents();
-            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, CheckCompletion());
+            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
+                CheckCompletion());
         }
 
         protected override void SubscribeToEvents()
@@ -52,7 +53,8 @@ namespace QuestsContent
                     return;
 
                 CurrentValue++;
-                ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, CheckCompletion());
+                ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon,
+                    PrizeTask.Amount, CheckCompletion());
 
                 if (CurrentValue >= _targetAmount)
                     CompleteTask();
@@ -65,7 +67,8 @@ namespace QuestsContent
 
         public override void CompleteTask()
         {
-            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, CheckCompletion());
+            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
+                CheckCompletion());
             base.CompleteTask();
         }
     }

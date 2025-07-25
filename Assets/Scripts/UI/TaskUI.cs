@@ -10,6 +10,8 @@ namespace UI
     {
         [SerializeField] private TMP_Text _taskDescription;
         [SerializeField] private TMP_Text _taskProgress;
+        [SerializeField] private Image _taskPrizeIcon;
+        [SerializeField] private TMP_Text _taskPrizeAmount;
         [SerializeField] private Image _taskProgressImage;
         [SerializeField] private GameObject _activeImage;
         [SerializeField] private GameObject _completeButton;
@@ -17,12 +19,15 @@ namespace UI
         [SerializeField] private TaskPrizeRecipient _taskPrizeRecipient;
 
         public event Action TaskCompleted;
-        
+
         private Task _task;
 
-        public void ChangeValue(Task task,string taskDescription, float currentValue, float maxValue, bool completed)
+        public void ChangeValue(Task task, string taskDescription, float currentValue, float maxValue,
+            Sprite taskPrizeIcon, int taskPrizeAmount, bool completed)
         {
             _task = task;
+            _taskPrizeIcon.sprite = taskPrizeIcon;
+            _taskPrizeAmount.text = taskPrizeAmount.ToString();
             _taskDescription.text = taskDescription;
             _taskProgress.text = $"{currentValue}/{maxValue}";
             _taskProgressImage.fillAmount = currentValue / maxValue;
