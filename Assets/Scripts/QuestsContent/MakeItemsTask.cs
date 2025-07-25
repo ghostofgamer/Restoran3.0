@@ -19,13 +19,13 @@ namespace QuestsContent
             Debug.Log("CheckCompletionTask " + (CurrentValue >= _targetAmount));
             return CurrentValue >= _targetAmount;
         }
-
+        
         protected override void Initialization()
         {
             CurrentValue = 0;
             _assemblyBurger = TaskInitializer.Instance.AssemblyBurger;
             _assemblyFromDeepFry = TaskInitializer.Instance.AssemblyFromDeepFry;
-            ChainTasksUI = TaskInitializer.Instance.ChainTaskUI;
+            // ChainTasksUI = TaskInitializer.Instance.ChainTaskUI;
             SubscribeToEvents();
             ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, CheckCompletion());
         }

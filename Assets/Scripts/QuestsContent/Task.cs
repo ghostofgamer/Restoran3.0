@@ -1,3 +1,4 @@
+using NUnit.Framework.Interfaces;
 using UI;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace QuestsContent
         [SerializeField] private string _taskName;
         [TextArea] [SerializeField] protected string Description;
         [SerializeField] private PrizeTask _prizeTask;
+        [SerializeField] private bool _isChainTask;
 
         private int _index;
         protected TaskUI ChainTasksUI;
@@ -17,6 +19,11 @@ namespace QuestsContent
         public PrizeTask PrizeTask => _prizeTask;
 
         public abstract bool CheckCompletion();
+
+        public virtual void InitTaskUI(TaskUI taskUI)
+        {
+            ChainTasksUI = taskUI;
+        }
 
         public virtual void StartTask()
         {
@@ -39,7 +46,8 @@ namespace QuestsContent
         {
             UnsubscribeFromEvents();
             Debug.Log("ReceivePrize");
-            TasksActivator.Instance.NextTask();
+            if (_isChainTask)
+                TasksActivator.Instance.NextTask();
         }
 
         public void SetIndex(int index)
