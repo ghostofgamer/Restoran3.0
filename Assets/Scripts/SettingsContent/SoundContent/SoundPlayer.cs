@@ -23,6 +23,9 @@ namespace SettingsContent.SoundContent
         [SerializeField] private AudioClip _dostavka;
         [SerializeField] private AudioClip _fortunaReward;
         [SerializeField] private AudioClip _mysteryBox;
+        [SerializeField] private AudioClip _jumpPrizeTaskImage;
+        [SerializeField] private AudioClip _taskPrizeShow;
+        [SerializeField] private AudioClip _taskGlobalDailyPrizeShow;
 
         public static SoundPlayer Instance { get; private set; }
 
@@ -127,6 +130,21 @@ namespace SettingsContent.SoundContent
         public void PlayMysteryBoxPrize()
         {
             _audioSource.PlayOneShot(_mysteryBox);
+        }
+
+        public void PlayJumpPrizeTaskImage()
+        {
+            _audioSource.PlayOneShot(_jumpPrizeTaskImage);
+        }
+
+        public void PlayTaskPrizeShow()
+        {
+            _audioSource.PlayOneShot(_taskPrizeShow);
+        }
+
+        public void PlayTaskGlobalDailyPrizeShow()
+        {
+            _audioSource.PlayOneShot(_taskGlobalDailyPrizeShow);
         }
     }
 }

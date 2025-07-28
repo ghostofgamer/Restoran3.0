@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using MysteryGiftContent;
 using PlayerContent.LevelContent;
+using SettingsContent.SoundContent;
 using UI.Screens;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -46,6 +47,7 @@ namespace QuestsContent.ProgressDailyTasksContent
                 return;
             }
 
+            SoundPlayer.Instance.PlayTaskGlobalDailyPrizeShow();
             Debug.Log("GetPrize");
             SetReceivedValue(true);
             _tasksActivator.ChangeValue();

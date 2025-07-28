@@ -11,14 +11,18 @@ namespace UI
         [SerializeField] private float _minScale = 0.5f;
         [SerializeField] private float _scaleSpeed = 1f;
 
+        private float _direction;
+        private float _t;
+        private float _scale;
+
         private void Update()
         {
             {
-                float direction = _isRight ? 1f : -1f;
-                _targetImage.rectTransform.Rotate(0, 0, direction * _rotationSpeed * Time.deltaTime);
-                float t = (Mathf.Sin(Time.time * _scaleSpeed) + 1f) * 0.5f; // Нормализация синусоиды от 0 до 1
-                float scale = Mathf.Lerp(_minScale, 1f, t); // Интерполяция от _minScale до 1
-                _targetImage.rectTransform.localScale = new Vector3(scale, scale, 1f);
+                _direction = _isRight ? 1f : -1f;
+                _targetImage.rectTransform.Rotate(0, 0, _direction * _rotationSpeed * Time.deltaTime);
+                _t = (Mathf.Sin(Time.time * _scaleSpeed) + 1f) * 0.5f;
+                _scale = Mathf.Lerp(_minScale, 1f, _t);
+                _targetImage.rectTransform.localScale = new Vector3(_scale, _scale, 1f);
             }
         }
     }

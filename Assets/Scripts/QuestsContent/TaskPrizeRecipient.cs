@@ -19,6 +19,7 @@ namespace QuestsContent
         [SerializeField] private Fortune _fortune;
         [SerializeField] private DailyGlobalTaskPrizeScreen _dailyGlobalTaskPrizeScreen;
         [SerializeField] private Delivery _delivery;
+        [SerializeField] private TaskPrizeScreen _taskPrizeScreen;
 
         public void ClaimPrize(PrizeTask prizeTask)
         {
@@ -26,18 +27,22 @@ namespace QuestsContent
             {
                 case TaskPrizeType.Money:
                     _wallet.Add(new DollarValue(prizeTask.Amount, 0));
+                    ShowTaskPrize(prizeTask.Icon);
                     break;
 
                 case TaskPrizeType.XP:
                     _playerLevel.AddExp(prizeTask.Amount);
+                    ShowTaskPrize(prizeTask.Icon);
                     break;
 
                 case TaskPrizeType.Spin:
                     _fortune.AddSpins(prizeTask.Amount);
+                    ShowTaskPrize(prizeTask.Icon);
                     break;
 
                 case TaskPrizeType.Energy:
                     _energy.IncreaseEnergy(prizeTask.Amount);
+                    ShowTaskPrize(prizeTask.Icon);
                     break;
             }
         }
@@ -45,7 +50,7 @@ namespace QuestsContent
         public void ClaimGlobalDailyPrize(List<MysteryPrize> prizes, bool isAdsShowed)
         {
             int value = 0;
-            
+
             foreach (var prize in prizes)
             {
                 switch (prize.MysteryPrizeType)
@@ -99,6 +104,12 @@ namespace QuestsContent
                         break;
                 }
             }
+        }
+
+        private void ShowTaskPrize(Sprite sprite)
+        {
+            _taskPrizeScreen.OpenScreen();
+            _taskPrizeScreen.ShowReward(sprite);
         }
     }
 }
