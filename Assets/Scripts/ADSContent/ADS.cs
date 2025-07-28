@@ -13,6 +13,8 @@ namespace ADSContent
 {
     public class ADS : MonoBehaviour
     {
+        [SerializeField] private bool _isTest;
+
         [Header("Appodeal")] [SerializeField] private string _keyAppodeal;
         [SerializeField] private bool _isAppodeal;
 
@@ -172,15 +174,14 @@ namespace ADSContent
 
         public void ShowInterstitial()
         {
-            if (_temporaryStopInters)
-            {
+            if (_isTest)
                 return;
-            }
+
+            if (_temporaryStopInters)
+                return;
 
             if (!_showInter)
-            {
                 return;
-            }
 
             if (_isAppodeal)
             {

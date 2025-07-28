@@ -123,6 +123,19 @@ namespace QuestsContent
             Debug.Log("Value " + value);
         }
 
+        public bool CheckCompletion()
+        {
+            int value = 0;
+
+            foreach (Task task in _currentTasks)
+            {
+                if (task.IsCompleted)
+                    value++;
+            }
+            
+            return value>= _currentTasks.Count;
+        }
+
         private void AssignRandomTasksToUI()
         {
             _currentTasks.Clear();
