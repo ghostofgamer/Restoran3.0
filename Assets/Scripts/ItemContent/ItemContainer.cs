@@ -62,7 +62,6 @@ namespace InteractableContent
             {
                 int value = PlayerPrefs.GetInt("ItemContainer" + CurrentItemContainer, 0);
                 DeactivateAllItem();
-                Debug.Log("Value "+ value);
                 ActivateItems(value);
             }
             else

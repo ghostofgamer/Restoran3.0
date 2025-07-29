@@ -84,14 +84,9 @@ namespace FortuneContent
         private void Start()
         {
             ActivateOpenFortuneButton(_playerLevel.CurrentLevel);
-            
             _isFreeButtonUsed = PlayerPrefs.GetInt("FreeSpinUsed", 0) > 0;
-            
             _touchTaskFreeSpin.SetActive(!_isFreeButtonUsed);
             _spinFreeButton.gameObject.SetActive(!_isFreeButtonUsed);
-            
-            Debug.Log("_isFreeButtonUsed " + _isFreeButtonUsed);
-
             _dailyTimerFortune.UpdateInfo();
             filePath = Path.Combine(Application.persistentDataPath, "spinData.json");
             LoadSpinData();

@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using QuestsContent;
+using QuestsContent.ProgressDailyTasksContent;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -9,14 +12,17 @@ namespace QuestsContent
 {
     public class DailyTasksCounter : MonoBehaviour
     {
+        private const string CurrentTasksKey = "CurrentTasks";
+        private const string LastGlobalUpdateTimeKey = "LastGlobalUpdateTime";
+
         [SerializeField] private List<Task> _dailyTasks = new List<Task>();
         [SerializeField] private List<TaskUI> _taskUIList = new List<TaskUI>();
         [SerializeField] private TMP_Text _timeText;
         [SerializeField] private bool _isTestMode = false;
+        [SerializeField] private ProgressDailyTasks _progressDailyTasks;
 
         private DateTime _lastGlobalUpdateTime;
         private DateTime _startTime;
-        private const string LastGlobalUpdateTimeKey = "LastGlobalUpdateTime";
         private const int UpdateIntervalHours = 24;
         private const int UpdateIntervalSeconds = 24;
         private List<Task> _currentTasks = new List<Task>();
@@ -26,7 +32,10 @@ namespace QuestsContent
 
         public void StartTasks()
         {
-            AssignRandomTasksToUI();
+            if (!LoadSavedTasks())
+            {
+                AssignRandomTasksToUI();
+            }
 
             if (_isTestMode)
                 _startTime = DateTime.UtcNow;
@@ -35,6 +44,13 @@ namespace QuestsContent
 
             UpdateTimeText();
         }
+
+        /*
+        private void OnApplicationQuit()
+        {
+            SaveCurrentTasks();
+        }
+        */
 
         private void Update()
         {
@@ -50,7 +66,6 @@ namespace QuestsContent
             }
             else
             {
-                // Устанавливаем последнее глобальное время обновления на полночь по UTC
                 _lastGlobalUpdateTime = DateTime.UtcNow.Date;
                 SaveLastGlobalUpdateTime();
             }
@@ -103,10 +118,10 @@ namespace QuestsContent
         [ContextMenu("Update Daily Tasks")]
         private void UpdateDailyTasks()
         {
-            // Здесь вы можете добавить логику для обновления ежедневных задач
             Debug.Log("Daily tasks updated!");
             DailyTasksUpdated?.Invoke();
             AssignRandomTasksToUI();
+            SaveCurrentTasks();
         }
 
         public void ChangeValue()
@@ -119,8 +134,8 @@ namespace QuestsContent
                     value++;
             }
 
+            Debug.Log("---------------------------ChangeValueTask " + value);
             DailyTasksProgressChanged?.Invoke(value, _currentTasks.Count);
-            Debug.Log("Value " + value);
         }
 
         public bool CheckCompletion()
@@ -132,12 +147,13 @@ namespace QuestsContent
                 if (task.IsCompleted)
                     value++;
             }
-            
-            return value>= _currentTasks.Count;
+
+            return value >= _currentTasks.Count;
         }
 
         private void AssignRandomTasksToUI()
         {
+            ClearAllDatas();
             _currentTasks.Clear();
             List<Task> tasksCopy = new List<Task>(_dailyTasks);
 
@@ -158,7 +174,109 @@ namespace QuestsContent
                 tasksCopy.RemoveAt(randomIndex);
             }
 
+            SaveCurrentTasks();
             ChangeValue();
         }
+
+        [ContextMenu("Save Current Tasks")]
+        public void SaveCurrentTasks()
+        {
+            TaskDataWrapper wrapper = new TaskDataWrapper
+            {
+                tasks = _currentTasks.Select(task => new TaskData
+                {
+                    taskId = task.TaskId,
+                    isCompleted = task.IsCompleted,
+                    isReceived = task.IsReceived,
+                    currentValue = task.CurrentValue
+                }).ToArray()
+            };
+
+            string tasksJson = JsonUtility.ToJson(wrapper);
+            PlayerPrefs.SetString(CurrentTasksKey, tasksJson);
+            PlayerPrefs.Save();
+            Debug.Log("Tasks saved: " + tasksJson);
+        }
+
+        private bool LoadSavedTasks()
+        {
+            if (!PlayerPrefs.HasKey(CurrentTasksKey))
+            {
+                Debug.Log("No saved tasks found.");
+                return false;
+            }
+
+            string tasksJson = PlayerPrefs.GetString(CurrentTasksKey);
+            Debug.Log("tasksJson " + tasksJson);
+            TaskDataWrapper wrapper = JsonUtility.FromJson<TaskDataWrapper>(tasksJson);
+
+            if (wrapper == null || wrapper.tasks == null || wrapper.tasks.Length == 0)
+            {
+                Debug.LogWarning("Invalid or empty saved tasks data.");
+                return false;
+            }
+
+            _currentTasks.Clear();
+            int uiIndex = 0;
+
+            foreach (TaskData taskData in wrapper.tasks)
+            {
+                Task task = _dailyTasks.Find(t => t.TaskId == taskData.taskId);
+
+                if (task != null && uiIndex < _taskUIList.Count)
+                {
+                    // Debug.Log("-----------------TaskDataLoadInfo " + taskData.currentValue + " " + taskData.taskId);
+                    
+                    task.InitTaskUI(_taskUIList[uiIndex]);
+                    _currentTasks.Add(task);
+                    task.LoadProgress(JsonUtility.ToJson(taskData));
+                    task.VirtualShowProgress();
+                    Debug.Log("============================TaskComplited " + task.IsCompleted );
+
+                    /*task.InitTaskUI(_taskUIList[uiIndex]);
+                    task.LoadProgress(JsonUtility.ToJson(taskData));
+                    task.VirtualShowProgress();
+                    task.StartTask();
+                    _currentTasks.Add(task);
+                    task.LoadGameProgress(task.CurrentValue);*/
+
+                    uiIndex++;
+                }
+                else
+                {
+                    Debug.LogWarning($"Task with ID {taskData.taskId} not found or not enough TaskUI elements.");
+                }
+            }
+
+            if (_currentTasks.Count > 0)
+            {
+                _progressDailyTasks.LoadData();
+                
+                ChangeValue();
+                return true;
+            }
+
+            Debug.Log("No valid tasks loaded.");
+            return false;
+        }
+
+        [ContextMenu("Clear All Datas")]
+        public void ClearAllDatas()
+        {
+            foreach (var dailyTask in _dailyTasks)
+                dailyTask.ClearProgress();
+        }
     }
+}
+
+[System.Serializable]
+public class TaskIdsWrapper
+{
+    public string[] taskIds;
+}
+
+[System.Serializable]
+public class TaskDataWrapper
+{
+    public TaskData[] tasks;
 }

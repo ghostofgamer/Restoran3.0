@@ -34,8 +34,6 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         {
             int value = PlayerPrefs.GetInt("CoffeeWellCups", 0);
 
-            Debug.Log("CoffeeWellCups " + value);
-
             if (value > 0)
                 LoadWellCups(value);
             
@@ -46,8 +44,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         {
             if (_isWorking || ItemContainer.GetActiveItemsValue() <= 0 || _fullnessCoffeeCounter.CurrentFullness < 10)
                 return;
-
-            Debug.Log("КОФЕ");
+            
             _isWorking = true;
 
             if (_coroutine != null)

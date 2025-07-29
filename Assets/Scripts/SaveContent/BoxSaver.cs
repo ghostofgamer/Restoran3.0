@@ -50,11 +50,9 @@ namespace SaveContent
             string path = Application.persistentDataPath + "/boxData.json";
 
             string persistentDataPath = Application.persistentDataPath;
-            Debug.Log("Persistent Data Path: " + persistentDataPath);
 
             if (string.IsNullOrWhiteSpace(persistentDataPath))
             {
-                Debug.LogError("Persistent Data Path is empty or whitespace.");
                 return new List<BoxData>();
             }
 

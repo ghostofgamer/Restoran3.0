@@ -65,7 +65,6 @@ namespace ItemContent
         private void Load()
         {
             List<BoxData> loadedBoxes = _boxSaver.LoadData();
-            Debug.Log("loadedBoxes " + loadedBoxes.Count);
 
             foreach (BoxData boxData in loadedBoxes)
             {
@@ -87,9 +86,7 @@ namespace ItemContent
 
                 if (boxData.additional)
                 {
-                    Debug.Log("Additional BOX " + boxData.itemType);
                     itemBasket.LoadItems(true,boxData.amount,boxData.additionalAmountItems);
-                    Debug.Log("16" );
                 }
                 else
                 {

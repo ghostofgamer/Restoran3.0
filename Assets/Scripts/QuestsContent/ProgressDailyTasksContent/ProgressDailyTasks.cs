@@ -38,18 +38,14 @@ namespace QuestsContent.ProgressDailyTasksContent
 
         public void GetPrize()
         {
-            Debug.Log("_isReceived " + _isReceived);
-            Debug.Log("!_dailyTasksCounter.CheckCompletion() " + !_dailyTasksCounter.CheckCompletion());
-            
             if (_isReceived || !_dailyTasksCounter.CheckCompletion())
             {
                 Debug.Log("MNOTNOT BOTBPBOTGetPrize");
                 return;
             }
 
-            SoundPlayer.Instance.PlayTaskGlobalDailyPrizeShow();
             Debug.Log("GetPrize");
-            SetReceivedValue(true);
+            SoundPlayer.Instance.PlayTaskGlobalDailyPrizeShow();
             _tasksActivator.ChangeValue();
             SelectRandomPrize();
         }
@@ -75,9 +71,7 @@ namespace QuestsContent.ProgressDailyTasksContent
                 }
 
                 foreach (MysteryPrize prize in selectedPrizes)
-                {
                     Debug.Log("Вы выиграли: " + prize.MysteryPrizeType);
-                }
             }
             else
             {
@@ -100,11 +94,18 @@ namespace QuestsContent.ProgressDailyTasksContent
         private void ClearValue()
         {
             SetReceivedValue(false);
+            PlayerPrefs.SetInt("DailyGlobalTaskPrizeReceived", 0);
         }
 
-        private void SetReceivedValue(bool value)
+        public void SetReceivedValue(bool value)
         {
             _isReceived = value;
+            PlayerPrefs.SetInt("DailyGlobalTaskPrizeReceived", value ? 1 : 0);
+        }
+
+        public void LoadData()
+        {
+            SetReceivedValue(PlayerPrefs.GetInt("DailyGlobalTaskPrizeReceived", 0) == 1);
         }
     }
 }

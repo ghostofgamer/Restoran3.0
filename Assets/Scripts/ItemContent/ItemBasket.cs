@@ -278,12 +278,8 @@ public class ItemBasket : MonoBehaviour
 
     public void LoadItems(bool additional , int amountItems, List<int> additionalAmountItems)
     {
-        Debug.Log("17" );
-        
-        
         if (!additional)
         {
-            Debug.Log("18" );
             foreach (var item in _itemsActivity)
                 item.SetValue(false);
 
@@ -296,14 +292,12 @@ public class ItemBasket : MonoBehaviour
             _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
             _itemsActivityAdditionalArray = new ActivityItem[][] { _itemsActivity, _additionalItemsActivity };
             DeactivateItems();
-            Debug.Log("19" );
             // Сбрасываем все элементы в _itemsActivityAdditionalArray в false
             foreach (var row in _itemsActivityAdditionalArray)
             {
                 foreach (var item in row)
                     item.SetValue(false);
             }
-            Debug.Log("20" );
             // Устанавливаем элементы в true в соответствии с additionalAmountItems
             
             for (int i = 0; i < additionalAmountItems.Count; i++)

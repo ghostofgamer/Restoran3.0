@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using DeliveryContent;
 using EnergyContent;
 using Enums;
 using FortuneContent;
 using MysteryGiftContent;
 using PlayerContent.LevelContent;
+using QuestsContent.ProgressDailyTasksContent;
 using UI.Screens;
 using UnityEngine;
 using WalletContent;
@@ -20,9 +22,13 @@ namespace QuestsContent
         [SerializeField] private DailyGlobalTaskPrizeScreen _dailyGlobalTaskPrizeScreen;
         [SerializeField] private Delivery _delivery;
         [SerializeField] private TaskPrizeScreen _taskPrizeScreen;
+        [SerializeField] private ProgressDailyTasks _progressDailyTasks;
+        [SerializeField]private DailyTasksCounter   _dailyTasksCounter;
 
         public void ClaimPrize(PrizeTask prizeTask)
         {
+            Debug.Log("ClaimPrize" + prizeTask);
+            
             switch (prizeTask.TaskPrizeType)
             {
                 case TaskPrizeType.Money:
@@ -50,7 +56,9 @@ namespace QuestsContent
         public void ClaimGlobalDailyPrize(List<MysteryPrize> prizes, bool isAdsShowed)
         {
             int value = 0;
-
+            _progressDailyTasks.SetReceivedValue(true);
+            _dailyTasksCounter.ChangeValue();
+            
             foreach (var prize in prizes)
             {
                 switch (prize.MysteryPrizeType)

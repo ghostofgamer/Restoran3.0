@@ -1,4 +1,5 @@
 using System;
+using ADSContent;
 using QuestsContent;
 using TMPro;
 using UnityEngine;
@@ -17,13 +18,12 @@ namespace UI
         [SerializeField] private GameObject _completeButton;
         [SerializeField] private GameObject _receiveImage;
         [SerializeField] private TaskPrizeRecipient _taskPrizeRecipient;
-
-        public event Action TaskCompleted;
+        [SerializeField] private ADS _ads;
 
         private Task _task;
 
         public void ChangeValue(Task task, string taskDescription, float currentValue, float maxValue,
-            Sprite taskPrizeIcon, int taskPrizeAmount, bool completed)
+            Sprite taskPrizeIcon, int taskPrizeAmount, bool completed,bool received)
         {
             _task = task;
             _taskPrizeIcon.sprite = taskPrizeIcon;
@@ -31,14 +31,25 @@ namespace UI
             _taskDescription.text = taskDescription;
             _taskProgress.text = $"{currentValue}/{maxValue}";
             _taskProgressImage.fillAmount = currentValue / maxValue;
-            SetValue(completed, false);
+            SetValue(completed, received);
         }
 
         public void CompleteTask()
         {
+            _task.ReceivePrize();
             SetValue(true, true);
-            _taskPrizeRecipient.ClaimPrize(_task.PrizeTask);
-            TaskCompleted?.Invoke();
+        }
+
+        public void CompleteTaskWithAds()
+        {
+            if (_ads == null)
+                return;
+            
+            _ads.ShowRewarded(() =>
+            {
+                _task.ReceivePrize();
+                SetValue(true, true);
+            });
         }
 
         private void SetValue(bool completed, bool received)

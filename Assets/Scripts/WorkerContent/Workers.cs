@@ -37,8 +37,6 @@ namespace WorkerContent
 
         private void Start()
         {
-            Debug.Log("работник " + PlayerPrefs.GetInt(Worker + WorkerType.Cleaner, 0));
-
             foreach (var worker in _workers)
                 worker.gameObject.SetActive(PlayerPrefs.GetInt(Worker + worker.WorkerType, 0) > 0);
         }

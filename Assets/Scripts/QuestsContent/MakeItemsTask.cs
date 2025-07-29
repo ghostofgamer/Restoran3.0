@@ -22,27 +22,33 @@ namespace QuestsContent
 
         protected override void Initialization()
         {
+            Debug.Log(" CurrentValue = Data.currentValue " + Data.currentValue);
             CurrentValue = 0;
+
+            Init();
+            TasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
+                CheckCompletion(), false);
+        }
+
+        public void Init()
+        {
             _assemblyBurger = TaskInitializer.Instance.AssemblyBurger;
             _assemblyFromDeepFry = TaskInitializer.Instance.AssemblyFromDeepFry;
-            // ChainTasksUI = TaskInitializer.Instance.ChainTaskUI;
             SubscribeToEvents();
-            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
-                CheckCompletion());
+            TasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
+                CheckCompletion(), false);
         }
 
         protected override void SubscribeToEvents()
         {
             _assemblyBurger.BurgerCreated += ChangeValue;
             _assemblyFromDeepFry.ItemCreated += ChangeValue;
-            ChainTasksUI.TaskCompleted += CloseTask;
         }
 
         protected override void UnsubscribeFromEvents()
         {
             _assemblyBurger.BurgerCreated -= ChangeValue;
             _assemblyFromDeepFry.ItemCreated -= ChangeValue;
-            ChainTasksUI.TaskCompleted -= CloseTask;
         }
 
         private void ChangeValue(Item item)
@@ -53,8 +59,12 @@ namespace QuestsContent
                     return;
 
                 CurrentValue++;
-                ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon,
-                    PrizeTask.Amount, CheckCompletion());
+
+                SaveProgress();
+
+                // SaveProgress();
+                TasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon,
+                    PrizeTask.Amount, CheckCompletion(), false);
 
                 if (CurrentValue >= _targetAmount)
                     CompleteTask();
@@ -65,11 +75,28 @@ namespace QuestsContent
             }
         }
 
+        public override void LoadProgress(string json)
+        {
+            base.LoadProgress(json);
+            Init();
+        }
+
+        public override void VirtualShowProgress()
+        {
+            base.VirtualShowProgress();
+
+            Debug.Log("метод VirtualShowProgress" + CurrentValue);
+            
+            TasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount, CheckCompletion(), IsReceived);
+        }
+
         public override void CompleteTask()
         {
-            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
-                CheckCompletion());
+            TasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
+                CheckCompletion(), false);
             base.CompleteTask();
+            SaveProgress();
         }
     }
 }
