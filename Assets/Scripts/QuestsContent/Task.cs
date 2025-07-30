@@ -20,7 +20,7 @@ namespace QuestsContent
         public event Action ProgressSaved ;
 
         public bool IsCompleted { get; protected set; }
-        public bool IsReceived { get; protected set; }
+        public bool IsReceived { get; protected set; } = false;
         
         public PrizeTask PrizeTask => _prizeTask;
         public int Index => _index;
@@ -36,7 +36,9 @@ namespace QuestsContent
 
         public virtual void StartTask()
         {
-            IsCompleted = false;
+            ResetTaskState();
+            /*IsReceived = false;
+            IsCompleted = false;*/
             Debug.Log("StartTask =>" + _index);
             Initialization();
 
@@ -59,6 +61,8 @@ namespace QuestsContent
         {
             UnsubscribeFromEvents();
             Debug.Log("ReceivePrize");
+            IsReceived = true;
+            SaveProgress();
             
             if (_isChainTask)
                 TasksActivator.Instance.NextTask();
@@ -77,9 +81,19 @@ namespace QuestsContent
 
         public virtual void LoadProgress(int currentValue,bool isCompleted, bool isReceived)
         {
+            ResetTaskState();
             CurrentValue = currentValue;
             IsCompleted = isCompleted;
             IsReceived = isReceived;
+        }
+        
+        [ContextMenu("Reset Task State")]
+        public void ResetTaskState()
+        {
+            IsCompleted = false;
+            IsReceived = false;
+            CurrentValue = 0;
+            Debug.Log($"Task {_taskID} state reset: IsReceived={IsReceived}, IsCompleted={IsCompleted}, CurrentValue={CurrentValue}");
         }
 
         protected abstract void Initialization();

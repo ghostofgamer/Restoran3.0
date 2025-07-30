@@ -10,6 +10,7 @@ namespace QuestsContent
     {
         [SerializeField] private List<Task> _chainTasks = new List<Task>();
         [SerializeField] private TaskUI _chainTaskUI;
+        [SerializeField] private GameObject _taskLock;
 
         [SerializeField] private TMP_Text _saveValueText;
         [SerializeField] private TMP_Text _loadValueText;
@@ -24,7 +25,12 @@ namespace QuestsContent
             _currentTask.ProgressSaved -= SaveProgress;
             Debug.Log("_currentTaskIndex " + _currentTaskIndex);
             _currentTaskIndex++;
+            PlayerPrefs.SetInt("CurrentChainTaskIndex", _currentTaskIndex);
             Debug.Log("NextTask " + _currentTaskIndex);
+            
+            if (CheckLockChainTasksValue())
+                return;
+            
             StartNextTask();
             // StartTask();
         }
@@ -34,30 +40,28 @@ namespace QuestsContent
             for (int i = 0; i < _chainTasks.Count; i++)
                 _chainTasks[i].SetIndex(i);
 
+            _currentTaskIndex = PlayerPrefs.GetInt("CurrentChainTaskIndex", _currentTaskIndex);
+            
+            if (CheckLockChainTasksValue())
+                return;
+
             ChainTasksSaveData saveData = LoadProgress();
 
-            if (_currentTaskIndex >= _chainTasks.Count)
-            {
-                Debug.Log("All tasks completed!");
-                return;
-            }
-
-            if (saveData == null)
+            if (saveData == null|| saveData.TaskIndex != _currentTaskIndex)
             {
                 Debug.Log("No progress data found. Starting from the beginning.");
-                _currentTaskIndex = 0;
+                
                 Task currentTask = _chainTasks[_currentTaskIndex];
                 _currentTask = currentTask;
                 _currentTask.ProgressSaved += SaveProgress;
                 Debug.Log("!!!_currentTask " + _currentTask.Index);
-                
                 currentTask.InitTaskUI(_chainTaskUI);
                 currentTask.StartTask();
             }
             else
             {
                 Debug.Log("!!!_currentTask LoadSaveData " + saveData.TaskIndex);
-                _currentTaskIndex = saveData.TaskIndex;
+
                 Task currentTask = _chainTasks[_currentTaskIndex];
                 _currentTask = currentTask;
                 _currentTask.ProgressSaved += SaveProgress;
@@ -68,18 +72,11 @@ namespace QuestsContent
 
         public void StartNextTask()
         {
-            if (_currentTaskIndex >= _chainTasks.Count)
-            {
-                Debug.Log("All tasks completed!");
-                return;
-            }
-            
             Debug.Log("No progress data found. Starting from the beginning.");
             Task currentTask = _chainTasks[_currentTaskIndex];
             _currentTask = currentTask;
             _currentTask.ProgressSaved += SaveProgress;
             Debug.Log("!!!_currentTask " + _currentTask.Index);
-                
             currentTask.InitTaskUI(_chainTaskUI);
             currentTask.StartTask();
         }
@@ -145,13 +142,26 @@ namespace QuestsContent
 
             return null;
         }
-        
-        
+
+        private bool CheckLockChainTasksValue()
+        {
+            if (_currentTaskIndex >= _chainTasks.Count)
+            {
+                Debug.Log("All tasks completed!");
+                _taskLock.SetActive(true);
+                return true;
+            }
+            
+            _taskLock.SetActive(false);
+            return false;
+        }
+
+
         [ContextMenu("Clear Progress")]
         public void ClearProgress()
         {
             string filePath = Path.Combine(Application.persistentDataPath, SaveFileName);
-            
+
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
