@@ -1,4 +1,5 @@
 using System;
+using ADSContent;
 using QuestsContent;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace UI
         [SerializeField] private GameObject _completeButton;
         [SerializeField] private GameObject _receiveImage;
         [SerializeField] private TaskPrizeRecipient _taskPrizeRecipient;
+        [SerializeField]private ADS _ads;
 
         public event Action TaskCompleted;
 
@@ -39,6 +41,16 @@ namespace UI
             SetValue(true, true);
             _taskPrizeRecipient.ClaimPrize(_task.PrizeTask);
             TaskCompleted?.Invoke();
+        }
+
+        public void CompleteTaskWithAds()
+        {
+            _ads.ShowRewarded((() =>
+            {
+                SetValue(true, true);
+                _taskPrizeRecipient.ClaimPrize(_task.PrizeTask);
+                TaskCompleted?.Invoke();
+            }));
         }
 
         private void SetValue(bool completed, bool received)
