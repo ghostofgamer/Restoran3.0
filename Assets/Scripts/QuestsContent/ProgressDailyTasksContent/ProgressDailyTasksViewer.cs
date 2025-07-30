@@ -17,7 +17,7 @@ namespace QuestsContent.ProgressDailyTasksContent
         public void ShowProgress(int completedTasks, int maxTasks, bool isReceived)
         {
             _progressText.text = $"{completedTasks}/{maxTasks}";
-            _progressImage.fillAmount = completedTasks / maxTasks;
+            _progressImage.fillAmount = (float)completedTasks / maxTasks;
             ChangePrizeState(completedTasks, maxTasks, isReceived);
         }
 

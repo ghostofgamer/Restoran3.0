@@ -33,7 +33,7 @@ namespace UI
             _taskDescription.text = taskDescription;
             _taskProgress.text = $"{currentValue}/{maxValue}";
             _taskProgressImage.fillAmount = currentValue / maxValue;
-            SetValue(completed, false);
+            SetValue(completed, _task.IsReceived);
         }
 
         public void CompleteTask()

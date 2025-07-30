@@ -18,7 +18,7 @@ namespace QuestsContent.ProgressDailyTasksContent
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private DailyGlobalTaskPrizeScreen _dailyGlobalTaskPrizeScreen;
 
-        private bool _isReceived = false;
+        public bool IsReceived { get; private set; } = false;
         private MysteryPrize _randomPrize;
         private List<MysteryPrize> _randomPrizes;
 
@@ -38,10 +38,10 @@ namespace QuestsContent.ProgressDailyTasksContent
 
         public void GetPrize()
         {
-            Debug.Log("_isReceived " + _isReceived);
+            Debug.Log("_isReceived " + IsReceived);
             Debug.Log("!_dailyTasksCounter.CheckCompletion() " + !_dailyTasksCounter.CheckCompletion());
             
-            if (_isReceived || !_dailyTasksCounter.CheckCompletion())
+            if (IsReceived || !_dailyTasksCounter.CheckCompletion())
             {
                 Debug.Log("MNOTNOT BOTBPBOTGetPrize");
                 return;
@@ -52,6 +52,7 @@ namespace QuestsContent.ProgressDailyTasksContent
             SetReceivedValue(true);
             _tasksActivator.ChangeValue();
             SelectRandomPrize();
+            _dailyTasksCounter.SaveProgress();
         }
 
         private void SelectRandomPrize()
@@ -94,7 +95,7 @@ namespace QuestsContent.ProgressDailyTasksContent
 
         private void ChangeValue(int completedTasks, int maxTasks)
         {
-            _progressDailyTasksViewer.ShowProgress(completedTasks, maxTasks, _isReceived);
+            _progressDailyTasksViewer.ShowProgress(completedTasks, maxTasks, IsReceived);
         }
 
         private void ClearValue()
@@ -102,9 +103,9 @@ namespace QuestsContent.ProgressDailyTasksContent
             SetReceivedValue(false);
         }
 
-        private void SetReceivedValue(bool value)
+        public void SetReceivedValue(bool value)
         {
-            _isReceived = value;
+            IsReceived = value;
         }
     }
 }
