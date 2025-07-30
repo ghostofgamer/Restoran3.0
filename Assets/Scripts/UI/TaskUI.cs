@@ -1,4 +1,3 @@
-using System;
 using ADSContent;
 using QuestsContent;
 using TMPro;
@@ -23,7 +22,7 @@ namespace UI
         private Task _task;
 
         public void ChangeValue(Task task, string taskDescription, float currentValue, float maxValue,
-            Sprite taskPrizeIcon, int taskPrizeAmount, bool completed,bool received)
+            Sprite taskPrizeIcon, int taskPrizeAmount, bool completed, bool received)
         {
             _task = task;
             _taskPrizeIcon.sprite = taskPrizeIcon;
@@ -36,27 +35,31 @@ namespace UI
 
         public void CompleteTask()
         {
+            Debug.Log("CompleteTask!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + " " + _task.TaskId);
             _task.ReceivePrize();
-            SetValue(true, true);
+            SetValue(_task.IsCompleted, _task.IsReceived);
         }
 
         public void CompleteTaskWithAds()
         {
             if (_ads == null)
                 return;
-            
+
             _ads.ShowRewarded(() =>
             {
                 _task.ReceivePrize();
-                SetValue(true, true);
+                SetValue(_task.IsCompleted, _task.IsReceived);
             });
         }
 
-        private void SetValue(bool completed, bool received)
+        public void SetValue(bool completed, bool received)
         {
+            Debug.Log("SetValue!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + completed + " " + _task.TaskId + received);
+            Debug.Log("_task.IsReceived!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + _task.TaskId + _task.IsReceived);
+
             _activeImage.SetActive(!completed && !received);
             _completeButton.SetActive(completed && !received);
-            _receiveImage.SetActive(received);
+            _receiveImage.SetActive(_task.IsReceived);
         }
     }
 }

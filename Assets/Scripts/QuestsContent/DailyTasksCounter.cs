@@ -32,10 +32,12 @@ namespace QuestsContent
 
         public void StartTasks()
         {
-            if (!LoadSavedTasks())
+            AssignRandomTasksToUI();
+            
+            /*if (!LoadSavedTasks())
             {
                 AssignRandomTasksToUI();
-            }
+            }*/
 
             if (_isTestMode)
                 _startTime = DateTime.UtcNow;

@@ -27,7 +27,7 @@ namespace QuestsContent
 
         private void Start()
         {
-             _chainTasksCounter.StartTask();
+            _chainTasksCounter.StartTask();
             _dailyTasksCounter.StartTasks();
         }
 

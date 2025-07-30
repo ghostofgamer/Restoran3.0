@@ -26,8 +26,6 @@ namespace QuestsContent
             CurrentValue = 0;
 
             Init();
-            TasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
-                CheckCompletion(), false);
         }
 
         public void Init()
@@ -37,6 +35,8 @@ namespace QuestsContent
             SubscribeToEvents();
             TasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
                 CheckCompletion(), false);
+
+            Debug.Log("ТУУУУУУУт " + TaskId + "  ???  " + CheckCompletion());
         }
 
         protected override void SubscribeToEvents()
@@ -62,7 +62,6 @@ namespace QuestsContent
 
                 SaveProgress();
 
-                // SaveProgress();
                 TasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon,
                     PrizeTask.Amount, CheckCompletion(), false);
 
@@ -86,7 +85,7 @@ namespace QuestsContent
             base.VirtualShowProgress();
 
             Debug.Log("метод VirtualShowProgress" + CurrentValue);
-            
+
             TasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount, CheckCompletion(), IsReceived);
         }

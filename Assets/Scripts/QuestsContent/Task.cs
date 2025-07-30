@@ -21,8 +21,9 @@ namespace QuestsContent
 
         public string TaskId => _taskId;
         public bool IsCompleted { get; protected set; }
-        public bool IsReceived { get; protected set; }
+        public bool IsReceived { get; protected set; } = false;
         public PrizeTask PrizeTask => _prizeTask;
+        public int Index => _index;
 
         public abstract bool CheckCompletion();
 
@@ -72,6 +73,7 @@ namespace QuestsContent
         {
             UnsubscribeFromEvents();
             Debug.Log("ReceivePrize");
+            
             if (_isChainTask)
                 TasksActivator.Instance.NextTask();
         }
@@ -102,7 +104,7 @@ namespace QuestsContent
                 _dailyTasksCounter.SaveCurrentTasks();
 
             if (_isChainTask && _chainTasksCounter != null)
-                _chainTasksCounter.SaveCurrentTask();
+                _chainTasksCounter.SaveCurrentTask(data);
 
             return JsonUtility.ToJson(data);
         }
@@ -116,6 +118,7 @@ namespace QuestsContent
             IsReceived = Data.isReceived;
             CurrentValue = Data.currentValue;
             Debug.Log("Load CurrentValue " + CurrentValue + " " + _taskId);
+            Debug.Log("Load IsReceived " + IsReceived );
         }
 
         public void ClearProgress()
@@ -136,6 +139,7 @@ namespace QuestsContent
     [System.Serializable]
     public class TaskData
     {
+        public int index;
         public string taskId;
         public bool isCompleted;
         public bool isReceived;
