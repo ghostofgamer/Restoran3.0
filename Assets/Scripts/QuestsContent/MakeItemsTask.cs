@@ -52,7 +52,7 @@ namespace QuestsContent
             ChainTasksUI.TaskCompleted += CloseTask;
         }
 
-        protected override void UnsubscribeFromEvents()
+        public override void UnsubscribeFromEvents()
         {
             _assemblyBurger.BurgerCreated -= ChangeValue;
             _assemblyFromDeepFry.ItemCreated -= ChangeValue;

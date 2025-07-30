@@ -98,6 +98,6 @@ namespace QuestsContent
 
         protected abstract void Initialization();
         protected abstract void SubscribeToEvents();
-        protected abstract void UnsubscribeFromEvents();
+        public abstract void UnsubscribeFromEvents();
     }
 }

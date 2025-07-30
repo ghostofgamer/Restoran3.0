@@ -23,7 +23,7 @@ namespace QuestsContent.TaskLinears
 
         }
 
-        protected override void UnsubscribeFromEvents()
+        public override void UnsubscribeFromEvents()
         {
         }
     }

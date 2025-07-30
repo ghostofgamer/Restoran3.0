@@ -17,8 +17,7 @@ namespace QuestsContent
         [SerializeField] private TMP_Text _timeText;
         [SerializeField] private bool _isTestMode = false;
         [SerializeField] private ProgressDailyTasks _progressDailyTasks;
-
-
+        
         [SerializeField] private TMP_Text _taskSavedProgressText;
         [SerializeField] private TMP_Text _taskLoadedProgressText;
 
@@ -38,6 +37,9 @@ namespace QuestsContent
         {
             foreach (var task in _dailyTasks)
                 task.ResetTaskState();
+            
+            foreach (var task in _dailyTasks)
+                task.UnsubscribeFromEvents();
 
 
             DailyTasksSaveData saveData = LoadProgress();
@@ -71,16 +73,6 @@ namespace QuestsContent
                             }
                         }
                     }
-
-
-                    /*foreach (var tasksSaveData in saveData.TasksData)
-                    {
-                        _taskLoadedProgressText.text =
-                            $"Loading Daily Tasks: tasksSaveData.TaskID = {tasksSaveData.TaskID} , tasksSaveData.TaskIndex = {tasksSaveData.TaskIndex}  tasksSaveData.CurrentValue = {tasksSaveData.CurrentValue}, tasksSaveData.IsCompleted = {tasksSaveData.IsCompleted}, tasksSaveData.IsReceived = {tasksSaveData.IsReceived}";
-
-                        Debug.Log(
-                            $"Loading Daily Tasks: tasksSaveData.TaskID = {tasksSaveData.TaskID} , tasksSaveData.TaskIndex = {tasksSaveData.TaskIndex}  tasksSaveData.CurrentValue = {tasksSaveData.CurrentValue}, tasksSaveData.IsCompleted = {tasksSaveData.IsCompleted}, tasksSaveData.IsReceived = {tasksSaveData.IsReceived}");
-                    }*/
                     
                     Debug.Log("Loading Received Prize " + saveData.IsReceivedGlobalDailyPrize);
 
@@ -173,8 +165,14 @@ namespace QuestsContent
         [ContextMenu("Update Daily Tasks")]
         private void UpdateDailyTasks()
         {
+            foreach (var task in _dailyTasks)
+                task.UnsubscribeFromEvents();
+            
             foreach (var currentTask in _currentTasks)
                 currentTask.ProgressSaved -= SaveProgress;
+            
+            foreach (var task in _dailyTasks)
+                task.ResetTaskState();
 
             // Здесь вы можете добавить логику для обновления ежедневных задач
             Debug.Log("Daily tasks updated!");
@@ -211,6 +209,9 @@ namespace QuestsContent
 
         private void AssignRandomTasksToUI()
         {
+            foreach (var task in _dailyTasks)
+                task.UnsubscribeFromEvents();
+            
             foreach (var task in _dailyTasks)
                 task.ResetTaskState();
 

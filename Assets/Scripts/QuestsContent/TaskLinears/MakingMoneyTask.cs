@@ -30,7 +30,7 @@ namespace QuestsContent.TaskLinears
             _wallet.IncomeChanged += ChangeValue;
         }
 
-        protected override void UnsubscribeFromEvents()
+        public override void UnsubscribeFromEvents()
         {
             Debug.Log("UnsubscribeFromEventsTask");
             _wallet.IncomeChanged -= ChangeValue;
