@@ -34,8 +34,6 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         {
             int value = PlayerPrefs.GetInt("CoffeeWellCups", 0);
 
-            Debug.Log("CoffeeWellCups " + value);
-
             if (value > 0)
                 LoadWellCups(value);
             
@@ -46,8 +44,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         {
             if (_isWorking || ItemContainer.GetActiveItemsValue() <= 0 || _fullnessCoffeeCounter.CurrentFullness < 10)
                 return;
-
-            Debug.Log("КОФЕ");
+            
             _isWorking = true;
 
             if (_coroutine != null)
@@ -82,8 +79,6 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
                 if (_restaurant.TryGetTrayDrinkOrder(ItemType.Coffee, out Tray tray))
                 {
                     _restaurant.SetDrinkOrder(tray, coffeeInstance);
-
-                    Debug.Log("TRUE");
                     Transform position = tray.GetFirstAvailablePosition();
 
                     sequence.Append(coffeeInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
@@ -100,8 +95,6 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
                 }
                 else
                 {
-                    Debug.Log("FALSE");
-
                     sequence.Append(coffeeInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
                     sequence.Append(coffeeInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
                     sequence.Append(coffeeInstance.transform.DOMove(availablePosition.position, 0.5f)

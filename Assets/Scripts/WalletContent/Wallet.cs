@@ -31,7 +31,6 @@ namespace WalletContent
         private void Start()
         {
             var localis = LocalizationManager.CurrentLanguage;
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!localis " + localis);
 
             LoadDollarValue();
             // DollarValue = new DollarValue(100, 10);

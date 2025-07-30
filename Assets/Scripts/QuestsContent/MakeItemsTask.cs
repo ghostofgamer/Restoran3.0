@@ -29,6 +29,20 @@ namespace QuestsContent
             SubscribeToEvents();
             ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
                 CheckCompletion());
+
+            SaveProgress();
+        }
+
+        public override void LoadProgress(int currentValue, bool isCompleted, bool isReceived)
+        {
+            base.LoadProgress(currentValue, isCompleted, isReceived);
+            _assemblyBurger = TaskInitializer.Instance.AssemblyBurger;
+            _assemblyFromDeepFry = TaskInitializer.Instance.AssemblyFromDeepFry;
+            SubscribeToEvents();
+            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
+                CheckCompletion());
+
+            SaveProgress();
         }
 
         protected override void SubscribeToEvents()
@@ -53,6 +67,8 @@ namespace QuestsContent
                     return;
 
                 CurrentValue++;
+                SaveProgress();
+
                 ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon,
                     PrizeTask.Amount, CheckCompletion());
 
@@ -70,6 +86,7 @@ namespace QuestsContent
             ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
                 CheckCompletion());
             base.CompleteTask();
+            SaveProgress();
         }
     }
 }

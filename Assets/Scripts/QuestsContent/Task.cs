@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework.Interfaces;
 using UI;
 using UnityEngine;
@@ -6,6 +7,7 @@ namespace QuestsContent
 {
     public abstract class Task : ScriptableObject
     {
+        [SerializeField] private string  _taskID;
         [SerializeField] private string _taskName;
         [TextArea] [SerializeField] protected string Description;
         [SerializeField] private PrizeTask _prizeTask;
@@ -15,8 +17,15 @@ namespace QuestsContent
         protected TaskUI ChainTasksUI;
         protected int CurrentValue;
 
+        public event Action ProgressSaved ;
+
         public bool IsCompleted { get; protected set; }
+        public bool IsReceived { get; protected set; }
+        
         public PrizeTask PrizeTask => _prizeTask;
+        public int Index => _index;
+        public string TaskID => _taskID;
+        public int CurrentValueTask => CurrentValue;
 
         public abstract bool CheckCompletion();
 
@@ -50,6 +59,7 @@ namespace QuestsContent
         {
             UnsubscribeFromEvents();
             Debug.Log("ReceivePrize");
+            
             if (_isChainTask)
                 TasksActivator.Instance.NextTask();
         }
@@ -58,6 +68,18 @@ namespace QuestsContent
         {
             _index = index;
             Debug.Log("Value Index " + _index + " " + _taskName);
+        }
+        
+        public void SaveProgress()
+        {
+            ProgressSaved?.Invoke();
+        }
+
+        public virtual void LoadProgress(int currentValue,bool isCompleted, bool isReceived)
+        {
+            CurrentValue = currentValue;
+            IsCompleted = isCompleted;
+            IsReceived = isReceived;
         }
 
         protected abstract void Initialization();

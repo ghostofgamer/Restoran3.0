@@ -207,7 +207,7 @@ namespace WrightAngle.Waypoint
                 else
                 {
                     // To help users understand why auto-activation didn't occur
-                    Debug.Log($"<b>[{gameObject.name}] WaypointUIManager:</b> Target '{target.gameObject.name}' has ActivateOnStart=true but is inactive in the hierarchy. It will not be auto-activated.", target.gameObject);
+                    // Debug.Log($"<b>[{gameObject.name}] WaypointUIManager:</b> Target '{target.gameObject.name}' has ActivateOnStart=true but is inactive in the hierarchy. It will not be auto-activated.", target.gameObject);
                 }
             }
             Debug.Log($"<b>[{gameObject.name}] WaypointUIManager:</b> Found {allTargets.Length} potential targets, activated {activationCount} marked 'ActivateOnStart'.");

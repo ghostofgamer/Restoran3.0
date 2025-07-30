@@ -22,7 +22,6 @@ namespace RestaurantContent.MenuContent
         
         private void Awake()
         {
-            Debug.Log("Awake");
             _itemsConfig.Initialize();
             _categoryDictionary = new Dictionary<ItemType, List<ItemType>>();
             CategorizeMenuItems();

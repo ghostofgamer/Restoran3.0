@@ -89,8 +89,6 @@ namespace FortuneContent
             
             _touchTaskFreeSpin.SetActive(!_isFreeButtonUsed);
             _spinFreeButton.gameObject.SetActive(!_isFreeButtonUsed);
-            
-            Debug.Log("_isFreeButtonUsed " + _isFreeButtonUsed);
 
             _dailyTimerFortune.UpdateInfo();
             filePath = Path.Combine(Application.persistentDataPath, "spinData.json");
@@ -199,7 +197,6 @@ namespace FortuneContent
 
         private void ActivateFreeSpinButton()
         {
-            Debug.Log("ActivateFreeSpinButton");
             DeactivationButtons();
             _spinFreeButton.SetActive(true);
         }
@@ -211,17 +208,14 @@ namespace FortuneContent
 
         private void ActiveOtherSpinButton()
         {
-            Debug.Log("ActiveOtherSpinButton");
             DeactivationButtons();
 
             if (_currentValueSpin <= 0)
             {
-                Debug.Log("_currentValueSpin " + _currentValueSpin);
                 _dailyTimerADSFortune.UpdateInfo();
             }
             else
             {
-                Debug.Log("_spinValueButton TRUE ");
                 _spinValueButton.SetActive(true);
             }
         }
@@ -234,8 +228,6 @@ namespace FortuneContent
 
         private void SetPrize(int index)
         {
-            Debug.Log(index);
-
             Prize prize = prizeMap[index];
             /*_backWinText.SetActive(true);
             _prizeText.text = $"You Win: + {prize.Value}  {prize.Type.ToString()}";*/
@@ -284,7 +276,6 @@ namespace FortuneContent
                 string json = File.ReadAllText(filePath);
                 SpinData data = JsonUtility.FromJson<SpinData>(json);
                 _currentValueSpin = data.currentValueSpin;
-                Debug.Log("Загрузка " + data.currentValueSpin);
             }
         }
         

@@ -31,9 +31,6 @@ namespace SaveContent
         {
             PlayerPrefs.SetInt("RawCutletTrayValue", valueRaw);
             PlayerPrefs.SetInt("WellCutletTrayValue", valueWell);
-
-            Debug.Log("RAwCutLetValue " + valueRaw);
-            Debug.Log("WellCutletGrill " + valueWell);
         }
 
         public void LoadData()
@@ -41,14 +38,8 @@ namespace SaveContent
             int rawValue = PlayerPrefs.GetInt("RawCutletTrayValue", 0);
             int wellValue = PlayerPrefs.GetInt("WellCutletTrayValue", 0);
 
-            Debug.Log("RAW " + rawValue);
-            Debug.Log("WELL " + wellValue);
-
-
             if (rawValue > 0 || wellValue > 0)
             {
-                Debug.Log("1 ");
-
                 if (rawValue > 0)
                     SetValue(ItemType.RawCutlet, rawValue);
 
@@ -57,7 +48,6 @@ namespace SaveContent
             }
             else
             {
-                Debug.Log("3 ");
                 _playerTray.SetActive(false);
                 _playerTray.SetCurrentItemType(ItemType.Empty);
                 gameObject.SetActive(false);

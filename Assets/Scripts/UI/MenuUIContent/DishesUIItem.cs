@@ -240,13 +240,11 @@ namespace UI.MenuUIContent
             
             if (_valuePriceState > _energy.EnergyValue)
             {
-                Debug.Log("тут должно стать красным");
                 _priceDifferenceText.color = Color.red;
                 _addMenuButton.interactable = false;
             }
             else
             {
-                Debug.Log("тут должно стать белым");
                 _priceDifferenceText.color = Color.white;
                 _addMenuButton.interactable = true;
             }
