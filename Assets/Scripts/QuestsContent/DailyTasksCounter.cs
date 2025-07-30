@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using QuestsContent.ProgressDailyTasksContent;
 using TMPro;
@@ -17,9 +16,7 @@ namespace QuestsContent
         [SerializeField] private TMP_Text _timeText;
         [SerializeField] private bool _isTestMode = false;
         [SerializeField] private ProgressDailyTasks _progressDailyTasks;
-        
-        [SerializeField] private TMP_Text _taskSavedProgressText;
-        [SerializeField] private TMP_Text _taskLoadedProgressText;
+        [SerializeField]private DailyTasksSaver _dailyTasksSaver;
 
         private DateTime _lastGlobalUpdateTime;
         private DateTime _startTime;
@@ -28,21 +25,20 @@ namespace QuestsContent
         private const int UpdateIntervalSeconds = 24;
         private List<Task> _currentTasks = new List<Task>();
 
-        private const string SaveFileName = "daily_tasks_save.json";
-
         public event Action<int, int> DailyTasksProgressChanged;
         public event Action DailyTasksUpdated;
+        
+        public List<Task> CurrentTasks => _currentTasks;
 
         public void StartTasks()
         {
-            foreach (var task in _dailyTasks)
+            /*foreach (var task in _dailyTasks)
+            {
                 task.ResetTaskState();
-            
-            foreach (var task in _dailyTasks)
                 task.UnsubscribeFromEvents();
-
-
-            DailyTasksSaveData saveData = LoadProgress();
+            }*/
+            
+            DailyTasksSaver.DailyTasksSaveData saveData = _dailyTasksSaver.LoadProgress();
 
             if (saveData != null)
             {
@@ -51,7 +47,6 @@ namespace QuestsContent
                     if (saveData.TasksData.Count == _taskUIList.Count)
                     {
                         _currentTasks.Clear();
-
                         int index = 0;
 
                         foreach (var taskSaveData in saveData.TasksData)
@@ -75,11 +70,10 @@ namespace QuestsContent
                     }
                     
                     Debug.Log("Loading Received Prize " + saveData.IsReceivedGlobalDailyPrize);
-
                     _progressDailyTasks.SetReceivedValue(saveData.IsReceivedGlobalDailyPrize);
 
                     foreach (var currentTask in _currentTasks)
-                        currentTask.ProgressSaved += SaveProgress;
+                        currentTask.ProgressSaved += _dailyTasksSaver.SaveProgress;
 
                     ChangeValue();
                 }
@@ -88,8 +82,7 @@ namespace QuestsContent
             {
                 AssignRandomTasksToUI();
             }
-
-
+            
             if (_isTestMode)
                 _startTime = DateTime.UtcNow;
             else
@@ -165,11 +158,17 @@ namespace QuestsContent
         [ContextMenu("Update Daily Tasks")]
         private void UpdateDailyTasks()
         {
-            foreach (var task in _dailyTasks)
-                task.UnsubscribeFromEvents();
+            foreach (var currentTask in _currentTasks)
+            {
+                currentTask.UnsubscribeFromEvents();
+                currentTask.ResetTaskState();
+            }
+            
+            /*foreach (var task in _dailyTasks)
+                task.UnsubscribeFromEvents();*/
             
             foreach (var currentTask in _currentTasks)
-                currentTask.ProgressSaved -= SaveProgress;
+                currentTask.ProgressSaved -= _dailyTasksSaver.SaveProgress;
             
             foreach (var task in _dailyTasks)
                 task.ResetTaskState();
@@ -210,10 +209,20 @@ namespace QuestsContent
         private void AssignRandomTasksToUI()
         {
             foreach (var task in _dailyTasks)
+                task.ResetTaskState();
+            
+            /*foreach (var task in _dailyTasks)
                 task.UnsubscribeFromEvents();
             
             foreach (var task in _dailyTasks)
-                task.ResetTaskState();
+                task.ResetTaskState();*/
+            
+            foreach (var currentTask in _currentTasks)
+            {
+                currentTask.UnsubscribeFromEvents();
+                currentTask.ResetTaskState();
+            }
+            
 
             _currentTasks.Clear();
             List<Task> tasksCopy = new List<Task>(_dailyTasks);
@@ -235,120 +244,12 @@ namespace QuestsContent
                 tasksCopy.RemoveAt(randomIndex);
             }
 
-            SaveProgress();
+            _dailyTasksSaver.SaveProgress();
 
             foreach (var currentTask in _currentTasks)
-                currentTask.ProgressSaved += SaveProgress;
+                currentTask.ProgressSaved += _dailyTasksSaver.SaveProgress;
 
             ChangeValue();
         }
-
-        public void SaveProgress()
-        {
-            DailyTasksSaveData saveData = new DailyTasksSaveData
-            {
-                TasksData = new List<ChainTasksSaveData>(),
-                IsReceivedGlobalDailyPrize = _progressDailyTasks.IsReceived
-            };
-
-            if (_currentTasks.Count != 4)
-                return;
-
-            foreach (Task task in _currentTasks)
-            {
-                if (task == null)
-                {
-                    Debug.LogWarning("Task is null, skipping save.");
-                    continue;
-                }
-
-                ChainTasksSaveData taskData = new ChainTasksSaveData
-                {
-                    TaskIndex = task.Index,
-                    TaskID = task.TaskID,
-                    CurrentValue = task.CurrentValueTask,
-                    IsCompleted = task.IsCompleted,
-                    IsReceived = task.IsReceived
-                };
-                saveData.TasksData.Add(taskData);
-
-                Debug.Log($"Saving Daily Task: TaskIndex={taskData.TaskIndex}, TaskID={taskData.TaskID}, " +
-                          $"CurrentValue={taskData.CurrentValue}, IsCompleted={taskData.IsCompleted}, " +
-                          $"IsReceived={taskData.IsReceived}");
-
-
-                _taskSavedProgressText.text =
-                    $"Saving Daily Task: TaskIndex={taskData.TaskIndex}, TaskID={taskData.TaskID}, " +
-                    $"CurrentValue={taskData.CurrentValue}, IsCompleted={taskData.IsCompleted}, " +
-                    $"IsReceived={taskData.IsReceived}";
-            }
-
-            try
-            {
-                string json = JsonUtility.ToJson(saveData, true);
-                string filePath = Path.Combine(Application.persistentDataPath, SaveFileName);
-                File.WriteAllText(filePath, json);
-                Debug.Log($"Daily tasks progress saved to {filePath}");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Failed to save daily tasks progress: {e.Message}");
-            }
-        }
-
-        public DailyTasksSaveData LoadProgress()
-        {
-            string filePath = Path.Combine(Application.persistentDataPath, SaveFileName);
-
-            if (File.Exists(filePath))
-            {
-                try
-                {
-                    string json = File.ReadAllText(filePath);
-                    DailyTasksSaveData saveData = JsonUtility.FromJson<DailyTasksSaveData>(json);
-
-                    _taskLoadedProgressText.text = $"Loading Daily Tasks: {saveData.TasksData.Count} tasks loaded.";
-                    Debug.Log($"Loading Daily Tasks: {saveData.TasksData.Count} tasks,");
-
-                    return saveData;
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError($"Failed to load daily tasks progress: {e.Message}");
-                    return null;
-                }
-            }
-
-            Debug.Log("No daily tasks save file found.");
-            _taskLoadedProgressText.text = "No daily tasks progress data available.";
-            return null;
-        }
-
-        [ContextMenu("Clear Daily Progress")]
-        public void ClearProgress()
-        {
-            string filePath = Path.Combine(Application.persistentDataPath, SaveFileName);
-
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-                Debug.Log("Daily tasks progress file deleted successfully.");
-                _taskSavedProgressText.text = "Daily tasks progress cleared.";
-                _taskLoadedProgressText.text = "No daily tasks progress data available after clearing.";
-            }
-            else
-            {
-                Debug.Log("No daily tasks save file found to delete.");
-                _taskSavedProgressText.text = "No daily tasks save file found to clear.";
-                _taskLoadedProgressText.text = "No daily tasks progress data available.";
-            }
-        }
-    }
-
-    [Serializable]
-    public class DailyTasksSaveData
-    {
-        public List<ChainTasksSaveData> TasksData = new List<ChainTasksSaveData>();
-        public bool IsReceivedGlobalDailyPrize;
     }
 }

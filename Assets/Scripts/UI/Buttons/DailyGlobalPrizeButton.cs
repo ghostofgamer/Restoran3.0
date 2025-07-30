@@ -20,7 +20,7 @@ namespace UI.Buttons
             {
                 _ads.ShowRewarded(() =>
                 {
-                    AppMetrica.ReportEvent("RewardAD", "{\"" + "DailyGlobalPrize" + "\":null}");
+                    AppMetrica.ReportEvent("RewardAD", "{\"" + "Daily_Prize_x2_ADS" + "\":null}");
                     _taskPrizeRecipient.ClaimGlobalDailyPrize(_dailyGlobalTaskPrizeScreen.RandomPrizes, true);
                     _dailyGlobalTaskPrizeScreen.CloseScreen();
                     _tasksScreen.CloseScreen();

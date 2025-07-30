@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Io.AppMetrica;
 using MysteryGiftContent;
 using PlayerContent.LevelContent;
 using SettingsContent.SoundContent;
@@ -17,6 +18,7 @@ namespace QuestsContent.ProgressDailyTasksContent
         [SerializeField] private List<MysteryPrize> prizes = new List<MysteryPrize>();
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private DailyGlobalTaskPrizeScreen _dailyGlobalTaskPrizeScreen;
+        [SerializeField] private DailyTasksSaver _dailyTasksSaver;
 
         public bool IsReceived { get; private set; } = false;
         private MysteryPrize _randomPrize;
@@ -47,12 +49,14 @@ namespace QuestsContent.ProgressDailyTasksContent
                 return;
             }
 
+            AppMetrica.ReportEvent("DailyTasks", "{\"" + "DailyTaskGlobalPrizeReceived\"" + "\":null}");
+            
             SoundPlayer.Instance.PlayTaskGlobalDailyPrizeShow();
             Debug.Log("GetPrize");
             SetReceivedValue(true);
             _tasksActivator.ChangeValue();
             SelectRandomPrize();
-            _dailyTasksCounter.SaveProgress();
+            _dailyTasksSaver.SaveProgress();
         }
 
         private void SelectRandomPrize()

@@ -1,5 +1,6 @@
 using System;
 using ADSContent;
+using Io.AppMetrica;
 using QuestsContent;
 using TMPro;
 using UnityEngine;
@@ -49,6 +50,7 @@ namespace UI
             {
                 SetValue(true, true);
                 _taskPrizeRecipient.ClaimPrize(_task.PrizeTask);
+                AppMetrica.ReportEvent("RewardAD", "{\"" + "Daily_task_ADS" + "\":null}");
                 TaskCompleted?.Invoke();
             }));
         }
