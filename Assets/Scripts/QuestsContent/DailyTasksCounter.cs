@@ -56,7 +56,7 @@ namespace QuestsContent
                             if (taskByIndex != null)
                             {
                                 taskByIndex.InitTaskUI(_taskUIList[index]);
-                                taskByIndex.LoadProgress(taskSaveData.CurrentValue, taskSaveData.IsCompleted,
+                                taskByIndex.LoadProgress(taskSaveData.CurrentValue,taskSaveData.TargetAmount, taskSaveData.IsCompleted,
                                     taskSaveData.IsReceived);
                                 _currentTasks.Add(taskByIndex);
                                 index++;

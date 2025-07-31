@@ -37,6 +37,7 @@ namespace QuestsContent
                     TaskIndex = task.Index,
                     TaskID = task.TaskID,
                     CurrentValue = task.CurrentValueTask,
+                    TargetAmount = task.TargetAmount,
                     IsCompleted = task.IsCompleted,
                     IsReceived = task.IsReceived
                 };

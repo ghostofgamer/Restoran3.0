@@ -7,21 +7,26 @@ namespace QuestsContent
 {
     public abstract class Task : ScriptableObject
     {
-        [SerializeField] private string  _taskID;
+        [SerializeField] private string _taskID;
         [SerializeField] private string _taskName;
         [TextArea] [SerializeField] protected string Description;
         [SerializeField] private PrizeTask _prizeTask;
         [SerializeField] private bool _isChainTask;
+        [SerializeField] private int _targetAmount;
 
         private int _index;
-        protected TaskUI ChainTasksUI;
+        protected string _localizationDescription;
+
+        protected TaskUI TasksUI;
         protected int CurrentValue;
 
-        public event Action ProgressSaved ;
+        public event Action ProgressSaved;
 
+        public int TargetAmount => _targetAmount;
+        public string LocalizationDescription => _localizationDescription;
         public bool IsCompleted { get; protected set; }
         public bool IsReceived { get; protected set; } = false;
-        
+
         public PrizeTask PrizeTask => _prizeTask;
         public int Index => _index;
         public string TaskID => _taskID;
@@ -31,7 +36,7 @@ namespace QuestsContent
 
         public virtual void InitTaskUI(TaskUI taskUI)
         {
-            ChainTasksUI = taskUI;
+            TasksUI = taskUI;
         }
 
         public virtual void StartTask()
@@ -63,7 +68,7 @@ namespace QuestsContent
             Debug.Log("ReceivePrize");
             IsReceived = true;
             SaveProgress();
-            
+
             if (_isChainTask)
                 TasksActivator.Instance.NextTask();
         }
@@ -73,27 +78,29 @@ namespace QuestsContent
             _index = index;
             Debug.Log("Value Index " + _index + " " + _taskName);
         }
-        
+
         public void SaveProgress()
         {
             ProgressSaved?.Invoke();
         }
 
-        public virtual void LoadProgress(int currentValue,bool isCompleted, bool isReceived)
+        public virtual void LoadProgress(int currentValue,int targetAmount, bool isCompleted, bool isReceived)
         {
             ResetTaskState();
             CurrentValue = currentValue;
+            _targetAmount = targetAmount;
             IsCompleted = isCompleted;
             IsReceived = isReceived;
         }
-        
+
         [ContextMenu("Reset Task State")]
         public void ResetTaskState()
         {
             IsCompleted = false;
             IsReceived = false;
             CurrentValue = 0;
-            Debug.Log($"Task {_taskID} state reset: IsReceived={IsReceived}, IsCompleted={IsCompleted}, CurrentValue={CurrentValue}");
+            Debug.Log(
+                $"Task {_taskID} state reset: IsReceived={IsReceived}, IsCompleted={IsCompleted}, CurrentValue={CurrentValue}");
         }
 
         protected abstract void Initialization();

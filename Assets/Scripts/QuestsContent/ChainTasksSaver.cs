@@ -22,6 +22,7 @@ namespace QuestsContent
                 TaskIndex = _chainTasksCounter.CurrentTask.Index,
                 TaskID = _chainTasksCounter.CurrentTask.TaskID,
                 CurrentValue = _chainTasksCounter.CurrentTask.CurrentValueTask,
+                TargetAmount = _chainTasksCounter.CurrentTask.TargetAmount,
                 IsCompleted = _chainTasksCounter.CurrentTask.IsCompleted,
                 IsReceived = _chainTasksCounter.CurrentTask.IsReceived
             };

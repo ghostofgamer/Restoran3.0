@@ -1,7 +1,9 @@
 using System;
 using ADSContent;
+using I2.Loc;
 using Io.AppMetrica;
 using QuestsContent;
+using SettingsContent;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +26,16 @@ namespace UI
         public event Action TaskCompleted;
 
         private Task _task;
+
+        private void OnEnable()
+        {
+            LanguageChanger.LanguageChanged += ChangeLocalization;
+        }
+
+        private void OnDisable()
+        {
+            
+        }
 
         public void ChangeValue(Task task, string taskDescription, float currentValue, float maxValue,
             Sprite taskPrizeIcon, int taskPrizeAmount, bool completed)
@@ -60,6 +72,11 @@ namespace UI
             _activeImage.SetActive(!completed && !received);
             _completeButton.SetActive(completed && !received);
             _receiveImage.SetActive(received);
+        }
+
+        private void ChangeLocalization()
+        {
+            
         }
     }
 }

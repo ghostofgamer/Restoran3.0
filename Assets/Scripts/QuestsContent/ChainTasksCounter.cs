@@ -62,7 +62,7 @@ namespace QuestsContent
                 CurrentTask = currentTask;
                 CurrentTask.ProgressSaved += _chainTasksSaver.SaveProgress;
                 CurrentTask.InitTaskUI(_chainTaskUI);
-                CurrentTask.LoadProgress(saveData.CurrentValue, saveData.IsCompleted, saveData.IsReceived);
+                CurrentTask.LoadProgress(saveData.CurrentValue,saveData.TargetAmount, saveData.IsCompleted, saveData.IsReceived);
             }
         }
 
@@ -97,6 +97,7 @@ namespace QuestsContent
         public int TaskIndex;
         public string TaskID;
         public int CurrentValue;
+        public int TargetAmount;
         public bool IsCompleted;
         public bool IsReceived;
     }

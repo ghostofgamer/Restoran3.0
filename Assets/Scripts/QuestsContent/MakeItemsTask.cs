@@ -1,6 +1,8 @@
 using AssemblyBurgerContent;
 using Enums;
+using I2.Loc;
 using KitchenEquipmentContent.FryerContent;
+using UI;
 using UnityEngine;
 
 namespace QuestsContent
@@ -14,6 +16,11 @@ namespace QuestsContent
         private AssemblyBurger _assemblyBurger;
         private AssemblyFromDeepFry _assemblyFromDeepFry;
 
+        public override void InitTaskUI(TaskUI taskUI)
+        {
+            base.InitTaskUI(taskUI);
+        }
+
         public override bool CheckCompletion()
         {
             Debug.Log("CheckCompletionTask " + (CurrentValue >= _targetAmount));
@@ -22,24 +29,35 @@ namespace QuestsContent
 
         protected override void Initialization()
         {
+            _targetAmount = Random.Range(10, 25);
+            _localizationDescription =
+                $"{LocalizationManager.GetTermTranslation(_itemType.ToString())} {LocalizationManager.GetTermTranslation(_itemType.ToString())} {_targetAmount}";
+            
+            
             CurrentValue = 0;
             _assemblyBurger = TaskInitializer.Instance.AssemblyBurger;
             _assemblyFromDeepFry = TaskInitializer.Instance.AssemblyFromDeepFry;
             // ChainTasksUI = TaskInitializer.Instance.ChainTaskUI;
             SubscribeToEvents();
-            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount,
                 CheckCompletion());
 
             SaveProgress();
         }
 
-        public override void LoadProgress(int currentValue, bool isCompleted, bool isReceived)
+        public override void LoadProgress(int currentValue, int targetAmount, bool isCompleted, bool isReceived)
         {
-            base.LoadProgress(currentValue, isCompleted, isReceived);
+            base.LoadProgress(currentValue, targetAmount, isCompleted, isReceived);
+            
+            _localizationDescription =
+                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemType.ToString())} {_targetAmount}";
+            
             _assemblyBurger = TaskInitializer.Instance.AssemblyBurger;
             _assemblyFromDeepFry = TaskInitializer.Instance.AssemblyFromDeepFry;
             SubscribeToEvents();
-            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount,
                 CheckCompletion());
 
             SaveProgress();
@@ -49,14 +67,14 @@ namespace QuestsContent
         {
             _assemblyBurger.BurgerCreated += ChangeValue;
             _assemblyFromDeepFry.ItemCreated += ChangeValue;
-            ChainTasksUI.TaskCompleted += CloseTask;
+            TasksUI.TaskCompleted += CloseTask;
         }
 
         public override void UnsubscribeFromEvents()
         {
             _assemblyBurger.BurgerCreated -= ChangeValue;
             _assemblyFromDeepFry.ItemCreated -= ChangeValue;
-            ChainTasksUI.TaskCompleted -= CloseTask;
+            TasksUI.TaskCompleted -= CloseTask;
         }
 
         private void ChangeValue(Item item)
@@ -69,7 +87,7 @@ namespace QuestsContent
                 CurrentValue++;
                 SaveProgress();
 
-                ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon,
+                TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                     PrizeTask.Amount, CheckCompletion());
 
                 if (CurrentValue >= _targetAmount)
@@ -83,7 +101,8 @@ namespace QuestsContent
 
         public override void CompleteTask()
         {
-            ChainTasksUI.ChangeValue(this, Description, CurrentValue, _targetAmount, PrizeTask.Icon, PrizeTask.Amount,
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount,
                 CheckCompletion());
             base.CompleteTask();
             SaveProgress();

@@ -1,3 +1,4 @@
+using UI;
 using UnityEngine;
 using WalletContent;
 
@@ -10,6 +11,11 @@ namespace QuestsContent.TaskLinears
 
         private Wallet _wallet;
         private int _currentValue;
+
+        public override void InitTaskUI(TaskUI taskUI)
+        {
+            base.InitTaskUI(taskUI);
+        }
 
         public override bool CheckCompletion()
         {
