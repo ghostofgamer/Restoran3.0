@@ -11,6 +11,7 @@ namespace EnergyContent
         public int EnergyValue { get; private set; }
 
         public event Action<int> EnergyValueChanged;
+        public event Action<int> EnergyValueIncreased;
 
         private void Start()
         {
@@ -24,6 +25,7 @@ namespace EnergyContent
             if (value <= 0)
                 return;
             
+            EnergyValueIncreased?.Invoke(value);
             _flyValue.ShowFly(value);
             EnergyValue += value;
             SaveEnergy();

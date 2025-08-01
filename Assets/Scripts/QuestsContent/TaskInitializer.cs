@@ -1,4 +1,5 @@
 using AssemblyBurgerContent;
+using EnergyContent;
 using KitchenEquipmentContent.FryerContent;
 using PlayerContent.LevelContent;
 using SettingsContent;
@@ -16,7 +17,9 @@ namespace QuestsContent
         [SerializeField] private AssemblyFromDeepFry _assemblyFromDeepFry;
         [SerializeField]private LanguageChanger _languageChanger;
         [SerializeField] private PlayerLevel _playerLevel;
-        
+        [SerializeField] private Energy _energy;
+
+        public Energy Energy => _energy;
         public PlayerLevel PlayerLevel=>_playerLevel;
         public Wallet Wallet => _wallet;
         public AssemblyBurger AssemblyBurger => _assemblyBurger;
