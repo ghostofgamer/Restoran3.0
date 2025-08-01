@@ -1,6 +1,5 @@
 using System;
 using ADSContent;
-using I2.Loc;
 using Io.AppMetrica;
 using QuestsContent;
 using SettingsContent;
@@ -21,26 +20,19 @@ namespace UI
         [SerializeField] private GameObject _completeButton;
         [SerializeField] private GameObject _receiveImage;
         [SerializeField] private TaskPrizeRecipient _taskPrizeRecipient;
-        [SerializeField]private ADS _ads;
+        [SerializeField] private ADS _ads;
 
         public event Action TaskCompleted;
 
         private Task _task;
 
-        private void OnEnable()
-        {
-            LanguageChanger.LanguageChanged += ChangeLocalization;
-        }
-
-        private void OnDisable()
-        {
-            
-        }
-
         public void ChangeValue(Task task, string taskDescription, float currentValue, float maxValue,
             Sprite taskPrizeIcon, int taskPrizeAmount, bool completed)
         {
             _task = task;
+            Debug.Log("ЕФЫЛЫ " + _task.TaskID + " " + _task.CurrentValueTask + " " + _task.TargetAmount);
+
+
             _taskPrizeIcon.sprite = taskPrizeIcon;
             _taskPrizeAmount.text = taskPrizeAmount.ToString();
             _taskDescription.text = taskDescription;
@@ -71,12 +63,8 @@ namespace UI
         {
             _activeImage.SetActive(!completed && !received);
             _completeButton.SetActive(completed && !received);
+            Debug.Log("SetValue ЕФЫЛГШ " + "task" + _task.TaskID + "rECEIVER " + received + "    " + completed);
             _receiveImage.SetActive(received);
-        }
-
-        private void ChangeLocalization()
-        {
-            
         }
     }
 }

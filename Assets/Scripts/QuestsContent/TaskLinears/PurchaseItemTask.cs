@@ -26,5 +26,10 @@ namespace QuestsContent.TaskLinears
         public override void UnsubscribeFromEvents()
         {
         }
+
+        public override void LocalizationChanged()
+        {
+            
+        }
     }
 }

@@ -1,9 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using AssemblyBurgerContent;
 using Enums;
 using I2.Loc;
+using ItemContent;
 using KitchenEquipmentContent.FryerContent;
-using UI;
+using PlayerContent.LevelContent;
+using SoContent;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace QuestsContent
 {
@@ -11,16 +17,14 @@ namespace QuestsContent
     public class MakeItemsTask : Task
     {
         [SerializeField] private ItemType _itemType;
-        [SerializeField] private int _targetAmount;
+        [SerializeField] private ItemMakeTask[] _itemMakeTaskInfos;
+        [SerializeField] private ItemsConfig _itemsConfig;
 
+        private PlayerLevel _playerLevel;
         private AssemblyBurger _assemblyBurger;
         private AssemblyFromDeepFry _assemblyFromDeepFry;
-
-        public override void InitTaskUI(TaskUI taskUI)
-        {
-            base.InitTaskUI(taskUI);
-        }
-
+        private Ingredient _ingredient;
+        
         public override bool CheckCompletion()
         {
             Debug.Log("CheckCompletionTask " + (CurrentValue >= _targetAmount));
@@ -29,15 +33,25 @@ namespace QuestsContent
 
         protected override void Initialization()
         {
-            _targetAmount = Random.Range(10, 25);
-            _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation(_itemType.ToString())} {LocalizationManager.GetTermTranslation(_itemType.ToString())} {_targetAmount}";
-            
-            
-            CurrentValue = 0;
+            _playerLevel = TaskInitializer.Instance.PlayerLevel;
+            _languageChanger = TaskInitializer.Instance.LanguageChanger;
             _assemblyBurger = TaskInitializer.Instance.AssemblyBurger;
             _assemblyFromDeepFry = TaskInitializer.Instance.AssemblyFromDeepFry;
-            // ChainTasksUI = TaskInitializer.Instance.ChainTaskUI;
+
+            if (!_isChainTask)
+            {
+                _targetAmount = Random.Range(1, 3);
+                _itemType = GetItemType();
+
+                PlayerPrefs.SetInt("MakeItemsTaskSaveItem",(int)_itemType);
+            }
+
+            _localizationDescription =
+                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} {_targetAmount}";
+
+            _languageChanger.LanguageChanged += LocalizationChanged;
+            CurrentValue = 0;
+            
             SubscribeToEvents();
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount,
@@ -49,10 +63,18 @@ namespace QuestsContent
         public override void LoadProgress(int currentValue, int targetAmount, bool isCompleted, bool isReceived)
         {
             base.LoadProgress(currentValue, targetAmount, isCompleted, isReceived);
+
+            if (!_isChainTask)
+            {
+                int savedItemType = PlayerPrefs.GetInt("MakeItemsTaskSaveItem", (int)ItemType.FinishSmallBurger);
+                _itemType = (ItemType)savedItemType;
+            }
             
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemType.ToString())} {_targetAmount}";
-            
+                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} {_targetAmount}";
+
+            _languageChanger = TaskInitializer.Instance.LanguageChanger;
+            _languageChanger.LanguageChanged += LocalizationChanged;
             _assemblyBurger = TaskInitializer.Instance.AssemblyBurger;
             _assemblyFromDeepFry = TaskInitializer.Instance.AssemblyFromDeepFry;
             SubscribeToEvents();
@@ -86,7 +108,6 @@ namespace QuestsContent
 
                 CurrentValue++;
                 SaveProgress();
-
                 TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                     PrizeTask.Amount, CheckCompletion());
 
@@ -107,5 +128,47 @@ namespace QuestsContent
             base.CompleteTask();
             SaveProgress();
         }
+
+        public override void LocalizationChanged()
+        {
+            _localizationDescription =
+                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} {_targetAmount}";
+
+            Debug.Log("_localizationDescription  LocalizationChanged " + _localizationDescription);
+
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount,
+                CheckCompletion());
+        }
+
+        private ItemType GetItemType()
+        {
+            List<ItemType> suitableItemTypes = _itemMakeTaskInfos
+                .Where(task => task.Level <= _playerLevel.CurrentLevel)
+                .Select(task => task.ItemType)
+                .ToList();
+            
+            if (suitableItemTypes.Count == 0)
+            {
+                throw new InvalidOperationException("Нет подходящих типов предметов для текущего уровня игрока.");
+            }
+            
+            Debug.Log("GetItemType " + suitableItemTypes.Count);
+
+            foreach (var typed in suitableItemTypes)
+            {
+                Debug.Log("typed " + typed);
+            }
+
+            int randomIndex = Random.Range(0, suitableItemTypes.Count);
+            return suitableItemTypes[randomIndex];
+        }
+    }
+
+    [Serializable]
+    public class ItemMakeTask
+    {
+        public int Level;
+        public ItemType ItemType;
     }
 }

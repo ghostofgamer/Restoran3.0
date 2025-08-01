@@ -1,4 +1,4 @@
-using UI;
+using I2.Loc;
 using UnityEngine;
 using WalletContent;
 
@@ -7,51 +7,126 @@ namespace QuestsContent.TaskLinears
     [CreateAssetMenu(fileName = "MakingMoneyTask", menuName = "QuestConfigs/MakingMoneyTaskConfig", order = 1)]
     public class MakingMoneyTask : Task
     {
-        [SerializeField] private int _targetValue;
-
         private Wallet _wallet;
-        private int _currentValue;
-
-        public override void InitTaskUI(TaskUI taskUI)
-        {
-            base.InitTaskUI(taskUI);
-        }
 
         public override bool CheckCompletion()
         {
             Debug.Log("CheckCompletionTask");
-            return false;
+            return CurrentValue >= _targetAmount;
         }
 
         protected override void Initialization()
         {
-            Debug.Log("InitializationTask");
+            Debug.Log("--------------------InitializationTask MAKIN MONEY");
             _wallet = TaskInitializer.Instance.Wallet;
-            _currentValue = 0;
+            _languageChanger = TaskInitializer.Instance.LanguageChanger;
+
+            _localizationDescription =
+                $"{LocalizationManager.GetTermTranslation("EarnMoney")} {_targetAmount}";
+
+
+            CurrentValue = 0;
+            _languageChanger.LanguageChanged += LocalizationChanged;
+
+            SubscribeToEvents();
+
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount,
+                CheckCompletion());
+
+            SaveProgress();
+        }
+
+        public override void LoadProgress(int currentValue, int targetAmount, bool isCompleted, bool isReceived)
+        {
+            _wallet = TaskInitializer.Instance.Wallet;
+            _languageChanger = TaskInitializer.Instance.LanguageChanger;
+
+            base.LoadProgress(currentValue, targetAmount, isCompleted, isReceived);
+
+            _localizationDescription =
+                $"{LocalizationManager.GetTermTranslation("EarnMoney")} {_targetAmount}";
+
+            _languageChanger.LanguageChanged += LocalizationChanged;
+            SubscribeToEvents();
+
+
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount,
+                CheckCompletion());
+
+            SaveProgress();
         }
 
         protected override void SubscribeToEvents()
         {
-            Debug.Log("SubscribeToEventsTask");
             _wallet.IncomeChanged += ChangeValue;
+            TasksUI.TaskCompleted += CloseTask;
         }
 
         public override void UnsubscribeFromEvents()
         {
-            Debug.Log("UnsubscribeFromEventsTask");
             _wallet.IncomeChanged -= ChangeValue;
+            TasksUI.TaskCompleted -= CloseTask;
+        }
+
+        public override void LocalizationChanged()
+        {
+            _localizationDescription =
+                $"{LocalizationManager.GetTermTranslation("EarnMoney")} {_targetAmount}";
+
+            Debug.Log("_localizationDescription  LocalizationChanged " + _localizationDescription);
+            Debug.Log("STRING       _localizationDescription  LocalizationChanged " +
+                      LocalizationManager.GetTermTranslation("BUY"));
+
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount,
+                CheckCompletion());
         }
 
         private void ChangeValue(int value)
         {
-            DollarValue walletValue = new DollarValue(0,0).FromTotalCents(value);
-            
-            _currentValue += walletValue.Dollars;
-            Debug.Log("ChangeValueTask " + _currentValue);
-            Debug.Log("_targetValue " + _targetValue);
+            Debug.Log("ChangeValue MONEY " + value);
 
-            if (_currentValue >= _targetValue)
+            DollarValue walletValue = new DollarValue(0, 0).FromTotalCents(value);
+
+            if (CurrentValue < _targetAmount)
+                CurrentValue += walletValue.Dollars;
+
+            SaveProgress();
+
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount, CheckCompletion());
+
+            if (CurrentValue >= _targetAmount)
+            {
+                Debug.Log("CompleteTaskMAkingMoney " + this.name);
                 CompleteTask();
+            }
+        }
+
+        public override void CompleteTask()
+        {
+            base.CompleteTask();
+
+            Debug.Log("!!!!!!!!!!!!!!    CompleteTaskMAkingMoney  " + this.name + "  !  " + CurrentValue + "  !  " +
+                      _targetAmount + "  !  " + CheckCompletion());
+
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount,
+                CheckCompletion());
+
+            SaveProgress();
+        }
+
+        public override void CloseTask()
+        {
+            base.CloseTask();
+            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount,
+                CheckCompletion());
+
+            SaveProgress();
         }
     }
 }

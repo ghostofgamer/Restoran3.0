@@ -90,7 +90,7 @@ public class UnityDictionary<TKey, TValue>
 
     public Dictionary<TKey, TValue> ToDictionary()
     {
-        Dictionary<TKey, TValue> result = new();
+        Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>();
         foreach (var element in keyValues)
         {
             if (result.ContainsKey(element.Key)) continue;

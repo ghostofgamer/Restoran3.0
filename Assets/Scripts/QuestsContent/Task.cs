@@ -1,5 +1,5 @@
 using System;
-using NUnit.Framework.Interfaces;
+using SettingsContent;
 using UI;
 using UnityEngine;
 
@@ -11,22 +11,23 @@ namespace QuestsContent
         [SerializeField] private string _taskName;
         [TextArea] [SerializeField] protected string Description;
         [SerializeField] private PrizeTask _prizeTask;
-        [SerializeField] private bool _isChainTask;
-        [SerializeField] private int _targetAmount;
+        [SerializeField] protected bool _isChainTask;
+        [SerializeField] protected int _targetAmount;
 
-        private int _index;
+
         protected string _localizationDescription;
-
+        protected LanguageChanger _languageChanger;
         protected TaskUI TasksUI;
         protected int CurrentValue;
 
+        private int _index;
+        
         public event Action ProgressSaved;
 
         public int TargetAmount => _targetAmount;
         public string LocalizationDescription => _localizationDescription;
         public bool IsCompleted { get; protected set; }
         public bool IsReceived { get; protected set; } = false;
-
         public PrizeTask PrizeTask => _prizeTask;
         public int Index => _index;
         public string TaskID => _taskID;
@@ -42,8 +43,7 @@ namespace QuestsContent
         public virtual void StartTask()
         {
             ResetTaskState();
-            /*IsReceived = false;
-            IsCompleted = false;*/
+
             Debug.Log("StartTask =>" + _index);
             Initialization();
 
@@ -55,19 +55,21 @@ namespace QuestsContent
 
         public virtual void CompleteTask()
         {
-            Debug.Log("CompleteTask");
+            Debug.Log("CompleteTask" + this._taskID);
             IsCompleted = true;
 
             if (!_isChainTask)
                 TasksActivator.Instance.ChangeValue();
         }
 
-        public void CloseTask()
+        public virtual void CloseTask()
         {
             UnsubscribeFromEvents();
-            Debug.Log("ReceivePrize");
             IsReceived = true;
+            Debug.Log("ReceivePrize " + _taskID);
+            
             SaveProgress();
+            _languageChanger.LanguageChanged -= LocalizationChanged;
 
             if (_isChainTask)
                 TasksActivator.Instance.NextTask();
@@ -84,7 +86,7 @@ namespace QuestsContent
             ProgressSaved?.Invoke();
         }
 
-        public virtual void LoadProgress(int currentValue,int targetAmount, bool isCompleted, bool isReceived)
+        public virtual void LoadProgress(int currentValue, int targetAmount, bool isCompleted, bool isReceived)
         {
             ResetTaskState();
             CurrentValue = currentValue;
@@ -99,6 +101,10 @@ namespace QuestsContent
             IsCompleted = false;
             IsReceived = false;
             CurrentValue = 0;
+
+            if (_languageChanger != null)
+                _languageChanger.LanguageChanged -= LocalizationChanged;
+
             Debug.Log(
                 $"Task {_taskID} state reset: IsReceived={IsReceived}, IsCompleted={IsCompleted}, CurrentValue={CurrentValue}");
         }
@@ -106,5 +112,6 @@ namespace QuestsContent
         protected abstract void Initialization();
         protected abstract void SubscribeToEvents();
         public abstract void UnsubscribeFromEvents();
+        public abstract void LocalizationChanged();
     }
 }
