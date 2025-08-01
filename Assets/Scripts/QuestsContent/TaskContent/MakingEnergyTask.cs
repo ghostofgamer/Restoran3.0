@@ -73,10 +73,6 @@ namespace QuestsContent.TaskContent
             _localizationDescription =
                 $"{LocalizationManager.GetTermTranslation("EarnMoney")} {_targetAmount}";
 
-            Debug.Log("_localizationDescription  LocalizationChanged " + _localizationDescription);
-            Debug.Log("STRING       _localizationDescription  LocalizationChanged " +
-                      LocalizationManager.GetTermTranslation("BUY"));
-
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount,
                 CheckCompletion());
