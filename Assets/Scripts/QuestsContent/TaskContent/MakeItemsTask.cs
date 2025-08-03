@@ -16,6 +16,8 @@ namespace QuestsContent
     [CreateAssetMenu(fileName = "MakeItems", menuName = "QuestConfigs/MakeItemsConfig", order = 1)]
     public class MakeItemsTask : Task
     {
+        [SerializeField] private int _minTargetValue;
+        [SerializeField] private int _maxTargetValue;
         [SerializeField] private ItemType _itemType;
         [SerializeField] private ItemMakeTask[] _itemMakeTaskInfos;
         [SerializeField] private ItemsConfig _itemsConfig;
@@ -40,7 +42,7 @@ namespace QuestsContent
 
             if (!_isChainTask)
             {
-                _targetAmount = Random.Range(1, 3);
+                _targetAmount = Random.Range(_minTargetValue, _maxTargetValue);
                 _itemType = GetItemType();
 
                 PlayerPrefs.SetInt("MakeItemsTaskSaveItem",(int)_itemType);
