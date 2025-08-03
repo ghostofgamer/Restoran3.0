@@ -63,6 +63,8 @@ namespace FortuneContent
 
         public event Action FreeSpinUsed;
 
+        public event Action SpinUsed;
+
         private void OnEnable()
         {
             _spinWheelController.PrizeCompleted += SetPrize;
@@ -193,6 +195,7 @@ namespace FortuneContent
             _backWinText.SetActive(false);
             _spinWheelController.TurnWheel();
             _dailyTimerFortune.UpdateInfo();
+            SpinUsed?.Invoke();
         }
 
         private void ActivateFreeSpinButton()

@@ -1,6 +1,10 @@
+using ADSContent;
 using AssemblyBurgerContent;
+using DayNightContent;
 using EnergyContent;
+using FortuneContent;
 using KitchenEquipmentContent.FryerContent;
+using OrdersContent;
 using PlayerContent.LevelContent;
 using SettingsContent;
 using UnityEngine;
@@ -18,7 +22,15 @@ namespace QuestsContent
         [SerializeField]private LanguageChanger _languageChanger;
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private Energy _energy;
+        [SerializeField] private DayNightCycle _dayNightCycle;
+        [SerializeField] private ADS _ads;
+        [SerializeField] private Fortune _fortune;
+        [SerializeField]private OrdersCounter _ordersCounter;
 
+        public OrdersCounter OrdersCounter => _ordersCounter;
+        public Fortune Fortune => _fortune;
+        public ADS ADS => _ads;
+        public DayNightCycle DayNightCycle => _dayNightCycle;
         public Energy Energy => _energy;
         public PlayerLevel PlayerLevel=>_playerLevel;
         public Wallet Wallet => _wallet;

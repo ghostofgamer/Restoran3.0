@@ -2,7 +2,7 @@ using I2.Loc;
 using UnityEngine;
 using WalletContent;
 
-namespace QuestsContent.TaskLinears
+namespace QuestsContent.TaskContent
 {
     [CreateAssetMenu(fileName = "MakingMoneyTask", menuName = "QuestConfigs/MakingMoneyTaskConfig", order = 1)]
     public class MakingMoneyTask : Task
@@ -20,9 +20,12 @@ namespace QuestsContent.TaskLinears
             Debug.Log("--------------------InitializationTask MAKIN MONEY");
             _wallet = TaskInitializer.Instance.Wallet;
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
+            
+            if (!_isChainTask)
+                _targetAmount = Random.Range(50, 300);
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("EarnMoney")} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("EarnMoney")} ({_targetAmount})";
 
 
             CurrentValue = 0;

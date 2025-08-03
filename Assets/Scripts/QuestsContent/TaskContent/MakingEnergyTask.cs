@@ -21,6 +21,9 @@ namespace QuestsContent.TaskContent
             _energy = TaskInitializer.Instance.Energy;
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
 
+            if (!_isChainTask)
+                _targetAmount = Random.Range(5, 25);      
+            
             _localizationDescription =
                 $"{LocalizationManager.GetTermTranslation("EarnEnergy")} ({_targetAmount})";
             

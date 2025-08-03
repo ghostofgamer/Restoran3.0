@@ -210,20 +210,13 @@ namespace QuestsContent
         {
             foreach (var task in _dailyTasks)
                 task.ResetTaskState();
-            
-            /*foreach (var task in _dailyTasks)
-                task.UnsubscribeFromEvents();
-            
-            foreach (var task in _dailyTasks)
-                task.ResetTaskState();*/
-            
+
             foreach (var currentTask in _currentTasks)
             {
                 currentTask.UnsubscribeFromEvents();
                 currentTask.ResetTaskState();
             }
             
-
             _currentTasks.Clear();
             List<Task> tasksCopy = new List<Task>(_dailyTasks);
 

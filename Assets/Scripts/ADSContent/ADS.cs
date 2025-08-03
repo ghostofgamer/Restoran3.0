@@ -38,6 +38,8 @@ namespace ADSContent
         public delegate void RewardCallback();
 
         public event Action _interHidden;
+        
+        public event Action AdsShowed;
 
         public event Action RemoveAdsScreenOpening;
 
@@ -406,6 +408,7 @@ namespace ADSContent
 
         private void OnInterstitialClosed(object sender, EventArgs e)
         {
+            AdsShowed?.Invoke();
             Debug.Log("Interstitial closed");
         }
 
@@ -448,6 +451,8 @@ namespace ADSContent
 // Called when rewarded video is viewed until the end
         private void OnRewardedVideoFinished(object sender, RewardedVideoFinishedEventArgs e)
         {
+            AdsShowed?.Invoke();
+            
             if (currentRewardCallback != null)
             {
                 currentRewardCallback();

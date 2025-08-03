@@ -21,6 +21,9 @@ namespace QuestsContent.TaskContent
             _playerLevel = TaskInitializer.Instance.PlayerLevel;
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
 
+            if (!_isChainTask)
+                _targetAmount = Random.Range(60, 350);            
+            
             _localizationDescription =
                 $"{LocalizationManager.GetTermTranslation("EarnEXP")} ({_targetAmount})";
             

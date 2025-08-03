@@ -137,6 +137,7 @@ namespace DayNightContent
 
         public void ResetDay()
         {
+            NewDayStarted?.Invoke();
             _energy.IncreaseEnergy(5);
             AppMetrica.ReportEvent("NewDaY");
             _playerLevel.AddExp(50);

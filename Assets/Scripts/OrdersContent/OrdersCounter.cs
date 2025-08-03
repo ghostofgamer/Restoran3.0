@@ -37,6 +37,8 @@ namespace OrdersContent
         public event Action OrderAdded;
         public event Action OrderCompleted;
 
+        public event Action OrderFinished;
+
         public List<Order> CurrentOrders => _currentOrders;
 
 
@@ -84,6 +86,8 @@ namespace OrdersContent
 
                 if (client != null)
                 {
+                    OrderFinished?.Invoke();
+                 
                     Debug.Log(" client иди за заказом " + client);
                     _activeOrderWaitClients.Remove(client);
                     client.OrderCompleted(tray);
@@ -94,17 +98,16 @@ namespace OrdersContent
                     Debug.LogError(" Не анходит клиента  которого заказ! ");
                 }
 
-                Debug.Log("_currentOrders " + _currentOrders.Count);
-
-                foreach (var currentOrder in _currentOrders)
+                /*foreach (var currentOrder in _currentOrders)
                 {
                     Debug.Log("CURRENT ORDER INDEX " + currentOrder.IndexTable + 1);
-                }
-
+                }*/
+                
                 UpdateOrders?.Invoke(_currentOrders.Count);
                 OrdersChanged?.Invoke(_currentOrders);
                 OrderCompleted?.Invoke();
-                Debug.Log("FFF ");
+
+                Debug.Log("FFFFFFFFFFFFFFFFFFFFFFFFF ");
                 // TryActivateOrder();
             }
             else
@@ -163,42 +166,6 @@ namespace OrdersContent
             }
             else
             {
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
-                Debug.LogError("Поднос Null у тебя");
                 Debug.LogError("Поднос Null у тебя");
             }
         }
