@@ -7,6 +7,7 @@ using KitchenEquipmentContent.FryerContent;
 using OrdersContent;
 using PlayerContent.LevelContent;
 using SettingsContent;
+using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
 using WalletContent;
 
@@ -26,7 +27,9 @@ namespace QuestsContent
         [SerializeField] private ADS _ads;
         [SerializeField] private Fortune _fortune;
         [SerializeField]private OrdersCounter _ordersCounter;
+        [SerializeField]private ItemCartScroll _itemCartScroll;
 
+        public ItemCartScroll ItemCartScroll => _itemCartScroll;
         public OrdersCounter OrdersCounter => _ordersCounter;
         public Fortune Fortune => _fortune;
         public ADS ADS => _ads;

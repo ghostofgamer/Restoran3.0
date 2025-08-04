@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DeliveryContent;
 using Enums;
@@ -30,6 +31,8 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 
         private List<ItemCart> _items = new List<ItemCart>();
         private DollarValue _totalPrice;
+
+        public event Action<List<ItemCart>> ItemsPurchased;
 
         public void AddItemCart(ItemType itemType, int amount, DollarValue pricePerUnit, DollarValue totalPrice,
             string name)
@@ -128,6 +131,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
             _playerLevel.AddExp(amountItems * 5);
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_totalPrice);
+            ItemsPurchased?.Invoke(_items);
             _delivery.AddItemsCart(_items);
             ClearItems();
             _shopScreen.CloseScreen();
