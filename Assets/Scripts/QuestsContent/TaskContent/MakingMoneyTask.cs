@@ -7,6 +7,9 @@ namespace QuestsContent.TaskContent
     [CreateAssetMenu(fileName = "MakingMoneyTask", menuName = "QuestConfigs/MakingMoneyTaskConfig", order = 1)]
     public class MakingMoneyTask : Task
     {
+        [SerializeField] private int _minTargetValue;
+        [SerializeField] private int _maxTargetValue;
+        
         private Wallet _wallet;
 
         public override bool CheckCompletion()
@@ -22,7 +25,7 @@ namespace QuestsContent.TaskContent
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
             
             if (!_isChainTask)
-                _targetAmount = Random.Range(50, 300);
+                _targetAmount = Random.Range(_minTargetValue, _maxTargetValue);
 
             _localizationDescription =
                 $"{LocalizationManager.GetTermTranslation("EarnMoney")} ({_targetAmount})";
@@ -48,7 +51,7 @@ namespace QuestsContent.TaskContent
             base.LoadProgress(currentValue, targetAmount, isCompleted, isReceived);
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("EarnMoney")} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("EarnMoney")} ({_targetAmount})";
 
             _languageChanger.LanguageChanged += LocalizationChanged;
             SubscribeToEvents();
@@ -76,7 +79,7 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("EarnMoney")} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("EarnMoney")} ({_targetAmount})";
             
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,

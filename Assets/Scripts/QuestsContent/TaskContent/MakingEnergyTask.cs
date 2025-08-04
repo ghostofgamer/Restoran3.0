@@ -7,6 +7,9 @@ namespace QuestsContent.TaskContent
     [CreateAssetMenu(fileName = "MakingEnergyTask", menuName = "QuestConfigs/MakingEnergyTaskConfig", order = 1)]
     public class MakingEnergyTask  : Task
     {
+        [SerializeField] private int _minTargetValue;
+        [SerializeField] private int _maxTargetValue;
+        
         private Energy _energy;
         
         public override bool CheckCompletion()
@@ -22,7 +25,7 @@ namespace QuestsContent.TaskContent
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
 
             if (!_isChainTask)
-                _targetAmount = Random.Range(5, 25);      
+                _targetAmount = Random.Range(_minTargetValue, _maxTargetValue);      
             
             _localizationDescription =
                 $"{LocalizationManager.GetTermTranslation("EarnEnergy")} ({_targetAmount})";
@@ -74,7 +77,7 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("EarnMoney")} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("EarnMoney")} ({_targetAmount})";
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount,

@@ -51,7 +51,7 @@ namespace QuestsContent.TaskContent
             base.LoadProgress(currentValue, targetAmount, isCompleted, isReceived);
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("SpinWheelFortune")} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("SpinWheelFortune")} ({_targetAmount})";
 
             _languageChanger.LanguageChanged += LocalizationChanged;
             SubscribeToEvents();
@@ -79,7 +79,7 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("SpinWheelFortune")} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("SpinWheelFortune")} ({_targetAmount})";
             
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount,

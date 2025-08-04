@@ -39,7 +39,7 @@ namespace QuestsContent.TaskContent
             base.LoadProgress(currentValue, targetAmount, isCompleted, isReceived);
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("GoGame")} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("GoGame")} ({_targetAmount})";
 
             _languageChanger.LanguageChanged += LocalizationChanged;
             SubscribeToEvents();
@@ -64,7 +64,7 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("GoGame")} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("GoGame")} ({_targetAmount})";
             
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,

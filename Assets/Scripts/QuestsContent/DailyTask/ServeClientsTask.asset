@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84be2c614a4719548a473db330e055dc, type: 3}
   m_Name: ServeClientsTask
   m_EditorClassIdentifier: 
-  _taskID: ServeClients
-  _taskName: ServeClients
-  Description: ServeClients
+  _taskID: ServeClientsDaily
+  _taskName: ServeClientsDailyTask
+  Description: ServeClientsDailyTaskDescription
   _prizeTask:
-    _icon: {fileID: 21300000, guid: 8c5fb1dc62034b64886009a6c6d17def, type: 3}
-    _taskPrizeType: 0
-    _amount: 100
+    _icon: {fileID: 21300000, guid: 45c369479ff1405419930ea4dfcc4c30, type: 3}
+    _taskPrizeType: 2
+    _amount: 1
   _isChainTask: 0
   _targetAmount: 3
-  _minTargerValue: 3
-  _maxTargerValue: 5
+  _levelTask: 0
+  _minTargerValue: 10
+  _maxTargerValue: 15

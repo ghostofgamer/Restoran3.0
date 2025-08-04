@@ -7,6 +7,9 @@ namespace QuestsContent.TaskContent
     [CreateAssetMenu(fileName = "MakingExpTask", menuName = "QuestConfigs/MakingExpTaskConfig", order = 1)]
     public class MakingExpTask : Task
     {
+        [SerializeField] private int _minTargetValue;
+        [SerializeField] private int _maxTargetValue;
+        
         private PlayerLevel _playerLevel;
 
         public override bool CheckCompletion()
@@ -22,7 +25,7 @@ namespace QuestsContent.TaskContent
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
 
             if (!_isChainTask)
-                _targetAmount = Random.Range(60, 350);            
+                _targetAmount = Random.Range(_minTargetValue, _maxTargetValue);            
             
             _localizationDescription =
                 $"{LocalizationManager.GetTermTranslation("EarnEXP")} ({_targetAmount})";
@@ -74,7 +77,7 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("EarnEXP")} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("EarnEXP")} ({_targetAmount})";
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount,

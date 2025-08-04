@@ -49,7 +49,7 @@ namespace QuestsContent
             }
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} ({_targetAmount})";
 
             _languageChanger.LanguageChanged += LocalizationChanged;
             CurrentValue = 0;
@@ -73,7 +73,7 @@ namespace QuestsContent
             }
             
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} ({_targetAmount})";
 
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
             _languageChanger.LanguageChanged += LocalizationChanged;
@@ -134,7 +134,7 @@ namespace QuestsContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} ({_targetAmount})";
 
             Debug.Log("_localizationDescription  LocalizationChanged " + _localizationDescription);
 

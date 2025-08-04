@@ -73,7 +73,7 @@ namespace QuestsContent.TaskContent
             }
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("SellDrinks")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemTypeDrink).Term)} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("SellDrinks")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemTypeDrink).Term)} ({_targetAmount})";
 
             _languageChanger.LanguageChanged += LocalizationChanged;
             SubscribeToEvents();
@@ -100,7 +100,7 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("SellDrinks")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemTypeDrink).Term)} {_targetAmount}";
+                $"{LocalizationManager.GetTermTranslation("SellDrinks")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemTypeDrink).Term)} ({_targetAmount})";
 
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
