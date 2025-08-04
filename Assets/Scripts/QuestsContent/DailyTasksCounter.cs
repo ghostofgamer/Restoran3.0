@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PlayerContent.LevelContent;
 using QuestsContent.ProgressDailyTasksContent;
 using TMPro;
 using UI;
@@ -17,6 +18,7 @@ namespace QuestsContent
         [SerializeField] private bool _isTestMode = false;
         [SerializeField] private ProgressDailyTasks _progressDailyTasks;
         [SerializeField]private DailyTasksSaver _dailyTasksSaver;
+        [SerializeField] private PlayerLevel _playerLevel;
 
         private DateTime _lastGlobalUpdateTime;
         private DateTime _startTime;
@@ -218,7 +220,14 @@ namespace QuestsContent
             }
             
             _currentTasks.Clear();
-            List<Task> tasksCopy = new List<Task>(_dailyTasks);
+            // List<Task> tasksCopy = new List<Task>(_dailyTasks);
+            
+            // List<Task> tasksCopy = _dailyTasks.Where(task => task.LevelTask <= _playerLevel.CurrentLevel).ToList();
+            
+            List<Task> tasksCopy = _dailyTasks
+                .Where(task => task.LevelTask <= _playerLevel.CurrentLevel && task.GetAdditionalConditions())
+                .ToList();
+            
 
             foreach (TaskUI taskUI in _taskUIList)
             {

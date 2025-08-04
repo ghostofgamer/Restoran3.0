@@ -19,9 +19,10 @@ namespace WorkerContent
         protected WorkerState CurrentState;
         protected float Efficiecy;
 
-        private int _maxLevel = 6;
+        public int MaxLevel{ get; private set; } = 6;
 
         public event Action StateChanged;
+        public event Action UpgradeLevelCompleted;
 
         public WorkerParametersConfig WorkerParametersConfig => _workerParametersConfig;
 
@@ -100,9 +101,10 @@ namespace WorkerContent
 
         public void NextLevel()
         {
-            if (Level >= _maxLevel)
+            if (Level >= MaxLevel)
                 return;
-
+            
+            UpgradeLevelCompleted?.Invoke();
             Level++;
             AppMetrica.ReportEvent(_workerType.ToString() + " Levels", "{\"" + Level.ToString() + "\":null}");
             PlayerPrefs.SetInt(_workerType + "LevelWorker", Level);

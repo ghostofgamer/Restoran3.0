@@ -1,3 +1,4 @@
+using System;
 using Enums;
 using SoContent;
 using UI.Screens;
@@ -17,6 +18,10 @@ namespace WorkerContent
         [SerializeField] private WorkersConfig _workersConfig;
         [SerializeField] private WorkersScreen _workersScreen;
 
+        public event Action UpgradeWorkerCompleted;
+
+        public Worker[] WorkersArray => _workers;
+        
         private void OnEnable()
         {
             foreach (var workerUIProduct in _workerUIProducts)
@@ -24,6 +29,9 @@ namespace WorkerContent
                 workerUIProduct.WorkerBuyed += ActivateWorker;
                 workerUIProduct.WorkerFired += DeactivateWorker;
             }
+
+            foreach (var worker in _workers)
+                worker.UpgradeLevelCompleted += UpgradeWorker;
         }
 
         private void OnDisable()
@@ -32,6 +40,9 @@ namespace WorkerContent
             {
                 workerUIProduct.WorkerBuyed -= ActivateWorker;
                 workerUIProduct.WorkerFired -= DeactivateWorker;
+                
+                foreach (var worker in _workers)
+                    worker.UpgradeLevelCompleted -= UpgradeWorker;
             }
         }
 
@@ -77,6 +88,11 @@ namespace WorkerContent
                 if (worker.gameObject.activeSelf)
                     _wallet.Subtract(_workersConfig.GetWorkerConfig(worker.WorkerType).Salary);
             }
+        }
+
+        private void UpgradeWorker()
+        {
+            UpgradeWorkerCompleted?.Invoke();
         }
     }
 }

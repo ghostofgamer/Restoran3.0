@@ -13,7 +13,7 @@ namespace QuestsContent
         [SerializeField] private PrizeTask _prizeTask;
         [SerializeField] protected bool _isChainTask;
         [SerializeField] protected int _targetAmount;
-
+        [SerializeField] private int _levelTask;
 
         protected string _localizationDescription;
         protected LanguageChanger _languageChanger;
@@ -24,6 +24,7 @@ namespace QuestsContent
         
         public event Action ProgressSaved;
 
+        public int LevelTask => _levelTask;
         public int TargetAmount => _targetAmount;
         public string LocalizationDescription => _localizationDescription;
         public bool IsCompleted { get; protected set; }
@@ -109,6 +110,10 @@ namespace QuestsContent
                 $"Task {_taskID} state reset: IsReceived={IsReceived}, IsCompleted={IsCompleted}, CurrentValue={CurrentValue}");
         }
 
+        public virtual bool GetAdditionalConditions()
+        {
+            return true;
+        }
         protected abstract void Initialization();
         protected abstract void SubscribeToEvents();
         public abstract void UnsubscribeFromEvents();
