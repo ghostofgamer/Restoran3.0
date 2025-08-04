@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Enums;
 using UI.Screens.ShopContent.ShopPages.PageContents.WorksPage;
@@ -13,6 +14,11 @@ namespace RestaurantContent.MenuContent
         [SerializeField] private MenuCounter _menuCounter;
 
         private List<ItemType> _menuList = new List<ItemType>();
+
+        private void Awake()
+        {
+            _menuScrollContent.Init();
+        }
 
         private void OnEnable()
         {

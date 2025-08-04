@@ -71,6 +71,7 @@ namespace UI.Screens.ShopContent
                 return;
             }
 
+            _placesScrollContent.PayPlace();
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
             _shopScreen.MakePurchase();

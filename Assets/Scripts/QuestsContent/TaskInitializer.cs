@@ -30,7 +30,9 @@ namespace QuestsContent
         [SerializeField] private OrdersCounter _ordersCounter;
         [SerializeField] private ItemCartScroll _itemCartScroll;
         [SerializeField] private Workers _workers;
+        [SerializeField] private PlacesScrollContent _placesScrollContent;
 
+        public PlacesScrollContent PlacesScrollContent => _placesScrollContent;
         public Workers Workers => _workers;
         public ItemCartScroll ItemCartScroll => _itemCartScroll;
         public OrdersCounter OrdersCounter => _ordersCounter;
@@ -68,6 +70,23 @@ namespace QuestsContent
                     value++;
             }
 
+            return value > 0;
+        }
+
+        public bool GetBuyPlacesPossibility()
+        {
+            int value = 0;
+
+            foreach (var placeUIProduct in _placesScrollContent.PlaceUIProductsPayPossibility)
+            {
+                if (!placeUIProduct.IsOwned)
+                {
+                    Debug.Log("!!!!!!!!!!!!!!!!!НЕКУЦПЛКЕНЕНЫЙ " + placeUIProduct.name);
+                    value++;
+                }
+            }
+
+            Debug.Log("!!!!!!!!!!!!!!!!!Столов не купленных " + value);
             return value > 0;
         }
     }

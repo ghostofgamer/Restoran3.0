@@ -114,6 +114,7 @@ namespace QuestsContent
         {
             return true;
         }
+        
         protected abstract void Initialization();
         protected abstract void SubscribeToEvents();
         public abstract void UnsubscribeFromEvents();
