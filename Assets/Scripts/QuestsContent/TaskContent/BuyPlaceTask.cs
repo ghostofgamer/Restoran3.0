@@ -8,7 +8,7 @@ namespace QuestsContent.TaskContent
     public class BuyPlaceTask : Task
     {
         private PlacesScrollContent _placesScrollContent;
-        
+
         public override bool CheckCompletion()
         {
             Debug.Log("CheckCompletionTask");
@@ -25,18 +25,21 @@ namespace QuestsContent.TaskContent
             Debug.Log("--------------------InitializationTask MAKIN MONEY");
             _placesScrollContent = TaskInitializer.Instance.PlacesScrollContent;
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
-            
-            /*if (!_isChainTask)
-                _targetAmount = Random.Range(50, 300);*/
 
             _localizationDescription =
                 $"{LocalizationManager.GetTermTranslation("BuyPlace")} ({_targetAmount})";
-
-
+            
             CurrentValue = 0;
             _languageChanger.LanguageChanged += LocalizationChanged;
 
             SubscribeToEvents();
+            
+            if (_isChainTask && !TaskInitializer.Instance.GetBuyPlacesPossibility())
+            {
+                CurrentValue = _targetAmount;
+                CompleteTask();
+                return;
+            }
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount,
@@ -44,7 +47,7 @@ namespace QuestsContent.TaskContent
 
             SaveProgress();
         }
-        
+
         public override void LoadProgress(int currentValue, int targetAmount, bool isCompleted, bool isReceived)
         {
             _placesScrollContent = TaskInitializer.Instance.PlacesScrollContent;
@@ -82,19 +85,18 @@ namespace QuestsContent.TaskContent
         {
             _localizationDescription =
                 $"{LocalizationManager.GetTermTranslation("BuyPlace")} ({_targetAmount})";
-            
+
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
-                PrizeTask.Amount,
-                CheckCompletion());
+                PrizeTask.Amount, CheckCompletion());
         }
-        
+
         private void ChangeValue()
         {
             Debug.Log("ChangeValue");
 
             if (CurrentValue < _targetAmount)
-                CurrentValue ++;
+                CurrentValue++;
 
             SaveProgress();
 
@@ -116,8 +118,7 @@ namespace QuestsContent.TaskContent
                       _targetAmount + "  !  " + CheckCompletion());
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
-                PrizeTask.Amount,
-                CheckCompletion());
+                PrizeTask.Amount, CheckCompletion());
 
             SaveProgress();
         }
@@ -125,9 +126,10 @@ namespace QuestsContent.TaskContent
         public override void CloseTask()
         {
             base.CloseTask();
-            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
-                PrizeTask.Amount,
-                CheckCompletion());
+
+            if (!_isChainTask)
+                TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                    PrizeTask.Amount, CheckCompletion());
 
             SaveProgress();
         }

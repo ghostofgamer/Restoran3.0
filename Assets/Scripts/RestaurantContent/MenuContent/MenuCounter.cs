@@ -19,6 +19,8 @@ namespace RestaurantContent.MenuContent
         private List<ItemType> _cachedExtras = new List<ItemType>();
 
         public event Action<List<ItemType>> ChangeMenuList;
+
+        public event Action<ItemType> ItemAdded;
         
         private void Awake()
         {
@@ -31,6 +33,7 @@ namespace RestaurantContent.MenuContent
         {
             if (!_menuList.Contains(itemType))
             {
+                ItemAdded?.Invoke(itemType);
                 _menuList.Add(itemType);
                 UpdateCachedListsForItem(itemType, true);
                 ChangeMenuList?.Invoke(_menuList);

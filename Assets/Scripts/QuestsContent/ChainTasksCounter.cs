@@ -85,7 +85,8 @@ namespace QuestsContent
                 _taskLock.SetActive(true);
                 return true;
             }
-
+            
+            Debug.Log("DONT All tasks completed! " + _currentTaskIndex +" ,,, " + _chainTasks.Count);
             _taskLock.SetActive(false);
             return false;
         }

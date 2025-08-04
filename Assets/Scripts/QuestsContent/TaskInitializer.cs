@@ -2,10 +2,12 @@ using ADSContent;
 using AssemblyBurgerContent;
 using DayNightContent;
 using EnergyContent;
+using Enums;
 using FortuneContent;
 using KitchenEquipmentContent.FryerContent;
 using OrdersContent;
 using PlayerContent.LevelContent;
+using RestaurantContent.MenuContent;
 using SettingsContent;
 using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
@@ -31,7 +33,9 @@ namespace QuestsContent
         [SerializeField] private ItemCartScroll _itemCartScroll;
         [SerializeField] private Workers _workers;
         [SerializeField] private PlacesScrollContent _placesScrollContent;
+        [SerializeField] private MenuCounter _menuCounter;
 
+        public MenuCounter MenuCounter => _menuCounter;
         public PlacesScrollContent PlacesScrollContent => _placesScrollContent;
         public Workers Workers => _workers;
         public ItemCartScroll ItemCartScroll => _itemCartScroll;
@@ -80,14 +84,23 @@ namespace QuestsContent
             foreach (var placeUIProduct in _placesScrollContent.PlaceUIProductsPayPossibility)
             {
                 if (!placeUIProduct.IsOwned)
-                {
-                    Debug.Log("!!!!!!!!!!!!!!!!!НЕКУЦПЛКЕНЕНЫЙ " + placeUIProduct.name);
                     value++;
-                }
             }
 
-            Debug.Log("!!!!!!!!!!!!!!!!!Столов не купленных " + value);
             return value > 0;
+        }
+
+        public bool GetItemToMenuUsing(ItemType itemType)
+        {
+            foreach (var itemTypeMenu in _menuCounter.MenuList)
+            {
+                Debug.Log("_menuCounter.MenuList " + itemTypeMenu);
+
+                if (itemType == itemTypeMenu)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

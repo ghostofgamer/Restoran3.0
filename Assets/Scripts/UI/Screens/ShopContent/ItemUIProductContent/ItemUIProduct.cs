@@ -74,7 +74,7 @@ namespace UI.Screens.ShopContent.ItemUIProductContent
         private void ChangeLocalization()
         {
             _nameItemUIProduct.text = LocalizationManager.GetTermTranslation(_ingredient.term);
-            Debug.Log("ItemTERM " + _ingredient.term);
+            
             _levelRequiredText.text =
                 $"{LocalizationManager.GetTermTranslation("Level to unlock")} {_minLevelToUnlock}";
         }
