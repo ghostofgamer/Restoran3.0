@@ -38,6 +38,7 @@ namespace OrdersContent
         public event Action OrderCompleted;
 
         public event Action OrderFinished;
+        public event Action<Order> CurrentOrderFinished;
 
         public List<Order> CurrentOrders => _currentOrders;
 
@@ -87,7 +88,8 @@ namespace OrdersContent
                 if (client != null)
                 {
                     OrderFinished?.Invoke();
-                 
+                    CurrentOrderFinished?.Invoke(order);
+                    
                     Debug.Log(" client иди за заказом " + client);
                     _activeOrderWaitClients.Remove(client);
                     client.OrderCompleted(tray);
