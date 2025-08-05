@@ -307,6 +307,23 @@ namespace ADSContent
 
         public void ShowRewarded(RewardCallback rewardCallback)
         {
+            if (_isTest)
+            {
+                currentRewardCallback = rewardCallback;
+                
+                AdsShowed?.Invoke();
+            
+                if (currentRewardCallback != null)
+                {
+                    currentRewardCallback();
+                    currentRewardCallback = null; //// Вызываем делегат
+                }
+                return;
+            }
+                
+            
+                
+            
             if (_isAppodeal)
             {
                 if (Appodeal.IsLoaded(AppodealAdType.RewardedVideo))

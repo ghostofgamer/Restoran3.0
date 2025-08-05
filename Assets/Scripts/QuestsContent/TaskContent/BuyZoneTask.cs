@@ -25,7 +25,7 @@ namespace QuestsContent.TaskContent
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("BUY")} {LocalizationManager.GetTermTranslation(_zoneType.ToString())} ({_targetAmount})";
+                $"{LocalizationManager.GetTermTranslation("BUY")} {LocalizationManager.GetTermTranslation(_zoneType.ToString())}";
             
             CurrentValue = 0;
             _languageChanger.LanguageChanged += LocalizationChanged;
@@ -54,7 +54,7 @@ namespace QuestsContent.TaskContent
             base.LoadProgress(currentValue, targetAmount, isCompleted, isReceived);
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("BUY")} {LocalizationManager.GetTermTranslation(_zoneType.ToString())} ({_targetAmount})";
+                $"{LocalizationManager.GetTermTranslation("BUY")} {LocalizationManager.GetTermTranslation(_zoneType.ToString())}";
 
             _languageChanger.LanguageChanged += LocalizationChanged;
             SubscribeToEvents();
@@ -82,7 +82,7 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("BUY")} {LocalizationManager.GetTermTranslation(_zoneType.ToString())} ({_targetAmount})";
+                $"{LocalizationManager.GetTermTranslation("BUY")} {LocalizationManager.GetTermTranslation(_zoneType.ToString())}";
 
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,

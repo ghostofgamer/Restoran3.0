@@ -7,6 +7,8 @@ namespace QuestsContent.TaskContent
     [CreateAssetMenu(fileName = "BuyPlaceTask", menuName = "QuestConfigs/BuyPlaceTaskConfig", order = 1)]
     public class BuyPlaceTask : Task
     {
+       [SerializeField] private int _index;
+
         private PlacesScrollContent _placesScrollContent;
 
         public override bool CheckCompletion()
@@ -17,7 +19,7 @@ namespace QuestsContent.TaskContent
 
         public override bool GetAdditionalConditions()
         {
-            return TaskInitializer.Instance.GetBuyPlacesPossibility(_targetAmount);
+            return TaskInitializer.Instance.GetBuyPlacesPossibility(_index);
         }
 
         protected override void Initialization()
@@ -27,14 +29,14 @@ namespace QuestsContent.TaskContent
             _languageChanger = TaskInitializer.Instance.LanguageChanger;
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("BuyPlace")} ({_targetAmount})";
-            
+                $"{LocalizationManager.GetTermTranslation("BuyPlace")} #{(_index + 1)}";
+
             CurrentValue = 0;
             _languageChanger.LanguageChanged += LocalizationChanged;
 
             SubscribeToEvents();
-            
-            if (_isChainTask && !TaskInitializer.Instance.GetBuyPlacesPossibility(_targetAmount))
+
+            if (_isChainTask && TaskInitializer.Instance.GetBuyPlacesPossibility(_index))
             {
                 CurrentValue = _targetAmount;
                 CompleteTask();
@@ -56,7 +58,7 @@ namespace QuestsContent.TaskContent
             base.LoadProgress(currentValue, targetAmount, isCompleted, isReceived);
 
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("BuyPlace")} ({_targetAmount})";
+                $"{LocalizationManager.GetTermTranslation("BuyPlace")} #{(_index + 1)}";
 
             _languageChanger.LanguageChanged += LocalizationChanged;
             SubscribeToEvents();
@@ -84,16 +86,22 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("BuyPlace")} ({_targetAmount})";
+                $"{LocalizationManager.GetTermTranslation("BuyPlace")} #{(_index + 1)}";
 
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount, CheckCompletion());
         }
 
-        private void ChangeValue()
+        private void ChangeValue(int index)
         {
             Debug.Log("ChangeValue");
+
+            if (index != _index)
+            {
+                Debug.Log("Неверное");
+                return;
+            }
 
             if (CurrentValue < _targetAmount)
                 CurrentValue++;

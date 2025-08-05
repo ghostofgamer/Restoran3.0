@@ -7,6 +7,7 @@ using FortuneContent;
 using KitchenEquipmentContent.FryerContent;
 using OrdersContent;
 using PlayerContent.LevelContent;
+using RestaurantContent;
 using RestaurantContent.MenuContent;
 using SettingsContent;
 using UI.Screens.ShopContent;
@@ -37,6 +38,7 @@ namespace QuestsContent
         [SerializeField] private MenuCounter _menuCounter;
         [SerializeField] private EquipmentScrollContent _equipmentScrollContent;
         [SerializeField] private ZonesScrollContent _zonesScrollContent;
+        [SerializeField] private PlaceTable[] _placeTables;
 
         [Space] [Header("Equipments")] [SerializeField]
         private GameObject _coffeTable;
@@ -91,17 +93,10 @@ namespace QuestsContent
             return value > 0;
         }
 
-        public bool GetBuyPlacesPossibility(int targetValue)
+        public bool GetBuyPlacesPossibility(int indexPlaceTable)
         {
-            int value = 0;
-
-            foreach (var placeUIProduct in _placesScrollContent.PlaceUIProductsPayPossibility)
-            {
-                if (!placeUIProduct.IsOwned)
-                    value++;
-            }
-
-            return value >= targetValue;
+            Debug.Log("СТОООООЛ " + _placeTables[indexPlaceTable].gameObject.name);
+            return _placeTables[indexPlaceTable].gameObject.activeSelf;
         }
         
         public bool GetCanBuyZone(ZoneType zoneType)

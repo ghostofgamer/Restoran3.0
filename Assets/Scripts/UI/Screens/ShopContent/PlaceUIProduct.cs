@@ -18,6 +18,7 @@ namespace UI.Screens.ShopContent
         [SerializeField] private ZoneUIProduct _zoneProduct;
         [SerializeField] private TMP_Text _requaredText;
         [SerializeField] private TMP_Text _priceText;
+        [SerializeField] private TMP_Text _indexText;
         [SerializeField] private ShopScreen _shopScreen;
         [SerializeField] private int _dollars;
         [SerializeField] private int _cents;
@@ -29,6 +30,7 @@ namespace UI.Screens.ShopContent
         [SerializeField] private PlacesScrollContent _placesScrollContent;
 
         private DollarValue _dollarValue;
+        private int _placeIndex;
 
         public bool IsOwned { get; private set; }
 
@@ -57,6 +59,12 @@ namespace UI.Screens.ShopContent
                 : _notActiveButtonColor;
         }
 
+        public void ShowIndexPosition(int index)
+        {
+            _placeIndex = index;
+            _indexText.text = $"{(index + 1).ToString()}.";
+        }
+
         public bool IsBuyed()
         {
             return PlayerPrefs.GetInt("Place" + _index, 0) > 0;
@@ -71,7 +79,7 @@ namespace UI.Screens.ShopContent
                 return;
             }
 
-            _placesScrollContent.PayPlace();
+            _placesScrollContent.PayPlace(_placeIndex);
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
             _shopScreen.MakePurchase();
