@@ -19,9 +19,10 @@ namespace WorkerContent
         [SerializeField] private WorkersScreen _workersScreen;
 
         public event Action UpgradeWorkerCompleted;
+        public event Action<WorkerType> WorkerPurchased;
 
         public Worker[] WorkersArray => _workers;
-        
+
         private void OnEnable()
         {
             foreach (var workerUIProduct in _workerUIProducts)
@@ -40,7 +41,7 @@ namespace WorkerContent
             {
                 workerUIProduct.WorkerBuyed -= ActivateWorker;
                 workerUIProduct.WorkerFired -= DeactivateWorker;
-                
+
                 foreach (var worker in _workers)
                     worker.UpgradeLevelCompleted -= UpgradeWorker;
             }
@@ -67,7 +68,10 @@ namespace WorkerContent
             var worker = System.Array.Find(_workers, w => w.WorkerType == type);
 
             if (worker != null)
+            {
+                WorkerPurchased?.Invoke(type);
                 worker.Activate();
+            }
         }
 
         private void DeactivateWorker(WorkerType type)

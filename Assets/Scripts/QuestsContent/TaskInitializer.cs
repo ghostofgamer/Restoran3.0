@@ -158,5 +158,16 @@ namespace QuestsContent
                     return false;
             }
         }
+
+        public bool GetWorkerHired(WorkerType workerType)
+        {
+            foreach (var worker in _workers.WorkersArray)
+            {
+                if (worker.WorkerType == workerType)
+                    return worker.gameObject.activeSelf;
+            }
+
+            return false;
+        }
     }
 }
