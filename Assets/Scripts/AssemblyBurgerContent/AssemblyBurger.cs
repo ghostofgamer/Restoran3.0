@@ -525,12 +525,11 @@ namespace AssemblyBurgerContent
             _burgersCounter.AddBurger(burgerInstance);
         }
 
-
-[ContextMenu("Create")]
-        public void CreateFreeBurgerTestCheat()
+        
+        public void CreateFreeBurgerTestCheat(ItemType itemType)
         {
             GameObject burgerPrefab =
-                _burgerPrefabPairs.FirstOrDefault(pair => pair.BurgerType == ItemType.FinishSmallBurger)?.BurgerPrefab;
+                _burgerPrefabPairs.FirstOrDefault(pair => pair.BurgerType == itemType)?.BurgerPrefab;
 
             if (burgerPrefab!=null)
             {
@@ -538,7 +537,7 @@ namespace AssemblyBurgerContent
 
                 if (availablePosition != null)
                 {
-                    Item burgerInstance = _burgerIngridientSpawner.SpawnItem(ItemType.FinishSmallBurger);
+                    Item burgerInstance = _burgerIngridientSpawner.SpawnItem(itemType);
                     burgerInstance.SetParenContainer(_burgerIngridientSpawner.transform);
                     burgerInstance.gameObject.SetActive(true);
                     burgerInstance.transform.position = _burgerBoard.CenterPosition.position;
@@ -548,7 +547,7 @@ namespace AssemblyBurgerContent
                     
                     Sequence sequence = DOTween.Sequence();
 
-                    if (_restaurant.TryGetTrayOrder(ItemType.FinishSmallBurger, out Tray tray))
+                    if (_restaurant.TryGetTrayOrder(itemType, out Tray tray))
                     {
                         _restaurant.SetBurgerOrder(tray, burgerInstance);
                         Transform position = tray.GetFirstAvailablePosition();

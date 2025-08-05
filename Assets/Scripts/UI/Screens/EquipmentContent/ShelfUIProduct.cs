@@ -49,7 +49,9 @@ namespace UI.Screens.EquipmentContent
                     Debug.Log("Не хватает денег ");
                     return;
                 }
-
+                
+                _equipmentScrollContent.PurchaseEquipment(_equipmentType);
+                
                 AppMetrica.ReportEvent("Equipment", "{\"" + "Shelf" + "\":null}");
                 SoundPlayer.Instance.PlayPayment();
                 _wallet.Subtract(CurrentPrice);

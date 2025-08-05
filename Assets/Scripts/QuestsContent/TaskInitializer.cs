@@ -34,7 +34,16 @@ namespace QuestsContent
         [SerializeField] private Workers _workers;
         [SerializeField] private PlacesScrollContent _placesScrollContent;
         [SerializeField] private MenuCounter _menuCounter;
+        [SerializeField] private EquipmentScrollContent _equipmentScrollContent;
 
+        [Space] [Header("Equipments")] [SerializeField]
+        private GameObject _coffeTable;
+
+        [SerializeField] private GameObject _sodaTable;
+        [SerializeField] private GameObject _deepFrierTable1;
+        [SerializeField] private GameObject[] _shelfs;
+
+        public EquipmentScrollContent EquipmentScrollContent => _equipmentScrollContent;
         public MenuCounter MenuCounter => _menuCounter;
         public PlacesScrollContent PlacesScrollContent => _placesScrollContent;
         public Workers Workers => _workers;
@@ -48,7 +57,6 @@ namespace QuestsContent
         public Wallet Wallet => _wallet;
         public AssemblyBurger AssemblyBurger => _assemblyBurger;
         public AssemblyFromDeepFry AssemblyFromDeepFry => _assemblyFromDeepFry;
-
         public LanguageChanger LanguageChanger => _languageChanger;
 
         void Awake()
@@ -94,13 +102,42 @@ namespace QuestsContent
         {
             foreach (var itemTypeMenu in _menuCounter.MenuList)
             {
-                Debug.Log("_menuCounter.MenuList " + itemTypeMenu);
-
                 if (itemType == itemTypeMenu)
                     return true;
             }
 
             return false;
+        }
+
+        public bool GetValueNotPurchasedEquipment(EquipmentType equipmentType)
+        {
+            switch (equipmentType)
+            {
+                case EquipmentType.CoffeeTable:
+                    return _coffeTable.activeSelf;
+                    break;
+
+                case EquipmentType.SodaTable:
+                    return _sodaTable.activeSelf;
+                    break;
+
+                case EquipmentType.Shelf:
+                    int value = 0;
+
+                    foreach (var shelf in _shelfs)
+                        if (!shelf.activeSelf)
+                            value++;
+
+                    return value <= 0;
+                    break;
+
+                case EquipmentType.DeepFryer1:
+                    return _deepFrierTable1.activeSelf;
+                    break;
+
+                default:
+                    return false;
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Enums;
 using I2.Loc;
 using Io.AppMetrica;
@@ -5,6 +6,7 @@ using SettingsContent;
 using SettingsContent.SoundContent;
 using TMPro;
 using UI.Screens.ShopContent;
+using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
 using UnityEngine.UI;
 using WalletContent;
@@ -33,9 +35,12 @@ namespace UI.Screens.EquipmentContent
         [SerializeField] private ZoneUIProduct _zoneUIProduct;
         [SerializeField] protected EquipmentType _equipmentType;
         [SerializeField] protected LanguageChanger _languageChanger;
+        [SerializeField] protected EquipmentScrollContent _equipmentScrollContent;
 
         protected bool IsOwned;
         protected DollarValue CurrentPrice;
+
+        public event Action<EquipmentType> EquipmentPurchased;
 
         private void OnEnable()
         {
@@ -66,8 +71,8 @@ namespace UI.Screens.EquipmentContent
                 Debug.Log("Не хватает денег ");
                 return;
             }
-
-
+            _equipmentScrollContent.PurchaseEquipment(_equipmentType);
+            
             AppMetrica.ReportEvent("Equipment", "{\"" + _equipmentType.ToString() + "\":null}");
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(CurrentPrice);

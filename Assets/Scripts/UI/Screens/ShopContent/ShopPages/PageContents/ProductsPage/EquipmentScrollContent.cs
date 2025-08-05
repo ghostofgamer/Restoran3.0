@@ -1,3 +1,5 @@
+using System;
+using Enums;
 using PlayerContent.LevelContent;
 using UI.Screens.EquipmentContent;
 using UnityEngine;
@@ -8,6 +10,8 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
     {
         [SerializeField] private EquipmentUIProduct[] _equipmentUIProducts;
         [SerializeField] private PlayerLevel _playerLevel;
+
+        public event Action<EquipmentType> BuyEquipmentCompleted;
         
         private void OnEnable()
         {
@@ -29,6 +33,11 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         {
             foreach (var equipmentUIProduct in _equipmentUIProducts)
                 equipmentUIProduct.Init(level);
+        }
+
+        public void PurchaseEquipment(EquipmentType equipmentType)
+        {
+            BuyEquipmentCompleted?.Invoke(equipmentType);
         }
     }
 }
