@@ -24,7 +24,7 @@ namespace QuestsContent
         private DateTime _startTime;
         private const string LastGlobalUpdateTimeKey = "LastGlobalUpdateTime";
         private const int UpdateIntervalHours = 24;
-        private const int UpdateIntervalSeconds = 24;
+        private const int UpdateIntervalSeconds = 130;
         private List<Task> _currentTasks = new List<Task>();
 
         public event Action<int, int> DailyTasksProgressChanged;

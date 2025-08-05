@@ -121,9 +121,9 @@ namespace QuestsContent.TaskContent
         {
             base.CloseTask();
             
-            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
-                PrizeTask.Amount,
-                CheckCompletion());
+            if (!_isChainTask)
+                TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                    PrizeTask.Amount, CheckCompletion());
 
             SaveProgress();
         }

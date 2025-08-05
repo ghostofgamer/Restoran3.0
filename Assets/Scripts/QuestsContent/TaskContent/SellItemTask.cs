@@ -114,21 +114,21 @@ namespace QuestsContent.TaskContent
 
             int value = 0;
 
-            if (order.DrinkItemOrder != null || order.DrinkItemOrder == _itemType)
+            if (order.DrinkItemOrder != null && order.DrinkItemOrder == _itemType)
             {
-                Debug.Log("Напиток ВЕРНЫЙ ");
+                Debug.Log("Напиток ВЕРНЫЙ " + _itemType);
                 value++;
             }
 
-            if (order.ExtraItemOrder != null || order.ExtraItemOrder == _itemType)
+            if (order.ExtraItemOrder != null && order.ExtraItemOrder == _itemType)
             {
-                Debug.Log("Напиток ВЕРНЫЙ ");
+                Debug.Log("ЕКСТРА ВЕРНЫЙ " + _itemType);
                 value++;
             }
 
-            if (order.BurgerItemOrder != null || order.BurgerItemOrder == _itemType)
+            if (order.BurgerItemOrder != null && order.BurgerItemOrder == _itemType)
             {
-                Debug.Log("Напиток ВЕРНЫЙ ");
+                Debug.Log("Бургер ВЕРНЫЙ " + _itemType);
                 value++;
             }
 
@@ -171,9 +171,10 @@ namespace QuestsContent.TaskContent
         public override void CloseTask()
         {
             base.CloseTask();
-            TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
-                PrizeTask.Amount,
-                CheckCompletion());
+
+            if (!_isChainTask)
+                TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
+                    PrizeTask.Amount, CheckCompletion());
 
             SaveProgress();
         }

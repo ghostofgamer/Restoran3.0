@@ -408,7 +408,6 @@ namespace ADSContent
 
         private void OnInterstitialClosed(object sender, EventArgs e)
         {
-            AdsShowed?.Invoke();
             Debug.Log("Interstitial closed");
         }
 

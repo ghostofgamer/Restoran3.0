@@ -85,7 +85,7 @@ namespace QuestsContent
             return value > 0;
         }
 
-        public bool GetBuyPlacesPossibility()
+        public bool GetBuyPlacesPossibility(int targetValue)
         {
             int value = 0;
 
@@ -95,7 +95,7 @@ namespace QuestsContent
                     value++;
             }
 
-            return value > 0;
+            return value >= targetValue;
         }
 
         public bool GetItemToMenuUsing(ItemType itemType)

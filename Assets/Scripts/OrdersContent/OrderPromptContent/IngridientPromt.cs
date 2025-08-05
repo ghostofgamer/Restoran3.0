@@ -130,7 +130,7 @@ public class IngridientPromt : MonoBehaviour
 
             if (i >= stackItems.Count)
             {
-                Debug.LogError($"{i}). Индекс выходит за пределы стека");
+                // Debug.Log($"{i}). Индекс выходит за пределы стека");
                 continue;
             }
 

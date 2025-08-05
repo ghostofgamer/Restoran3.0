@@ -17,7 +17,7 @@ namespace QuestsContent.TaskContent
 
         public override bool GetAdditionalConditions()
         {
-            return TaskInitializer.Instance.GetBuyPlacesPossibility();
+            return TaskInitializer.Instance.GetBuyPlacesPossibility(_targetAmount);
         }
 
         protected override void Initialization()
@@ -34,7 +34,7 @@ namespace QuestsContent.TaskContent
 
             SubscribeToEvents();
             
-            if (_isChainTask && !TaskInitializer.Instance.GetBuyPlacesPossibility())
+            if (_isChainTask && !TaskInitializer.Instance.GetBuyPlacesPossibility(_targetAmount))
             {
                 CurrentValue = _targetAmount;
                 CompleteTask();
