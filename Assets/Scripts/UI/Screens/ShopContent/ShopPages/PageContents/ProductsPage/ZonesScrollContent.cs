@@ -1,4 +1,5 @@
 using System;
+using Enums;
 using PlayerContent.LevelContent;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         [SerializeField] private ZoneUIProduct[] _zoneUIProducts;
         [SerializeField] private PlayerLevel _playerLevel;
 
+        public event Action<ZoneType> ZonePurchased;
+        
         private void OnEnable()
         {
             _playerLevel.LevelChanged += Initialization;
@@ -29,6 +32,11 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         {
             foreach (var zoneUIProduct in _zoneUIProducts)
                 zoneUIProduct.Init(level);
+        }
+
+        public void PurchaseZone(ZoneType zoneType)
+        {
+            ZonePurchased?.Invoke(zoneType);
         }
     }
 }

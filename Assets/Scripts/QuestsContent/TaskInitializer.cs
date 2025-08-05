@@ -9,6 +9,7 @@ using OrdersContent;
 using PlayerContent.LevelContent;
 using RestaurantContent.MenuContent;
 using SettingsContent;
+using UI.Screens.ShopContent;
 using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using UnityEngine;
 using WalletContent;
@@ -35,6 +36,7 @@ namespace QuestsContent
         [SerializeField] private PlacesScrollContent _placesScrollContent;
         [SerializeField] private MenuCounter _menuCounter;
         [SerializeField] private EquipmentScrollContent _equipmentScrollContent;
+        [SerializeField] private ZonesScrollContent _zonesScrollContent;
 
         [Space] [Header("Equipments")] [SerializeField]
         private GameObject _coffeTable;
@@ -42,7 +44,11 @@ namespace QuestsContent
         [SerializeField] private GameObject _sodaTable;
         [SerializeField] private GameObject _deepFrierTable1;
         [SerializeField] private GameObject[] _shelfs;
-
+        
+        [Space] [Header("Zones")] [SerializeField]
+        private ZoneUIProduct[] _zoneUIProducts;
+        
+        public ZonesScrollContent ZonesScrollContent => _zonesScrollContent;
         public EquipmentScrollContent EquipmentScrollContent => _equipmentScrollContent;
         public MenuCounter MenuCounter => _menuCounter;
         public PlacesScrollContent PlacesScrollContent => _placesScrollContent;
@@ -96,6 +102,19 @@ namespace QuestsContent
             }
 
             return value >= targetValue;
+        }
+        
+        public bool GetCanBuyZone(ZoneType zoneType)
+        {
+            int value = 0;
+
+            foreach (var zoneUIProduct in _zoneUIProducts)
+            {
+                if (zoneUIProduct.ZoneType == zoneType)
+                    return zoneUIProduct.IsOwned;
+            }
+
+            return false;
         }
 
         public bool GetItemToMenuUsing(ItemType itemType)

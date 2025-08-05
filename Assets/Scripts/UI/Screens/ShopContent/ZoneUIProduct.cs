@@ -5,6 +5,7 @@ using RestaurantContent;
 using SettingsContent;
 using SettingsContent.SoundContent;
 using TMPro;
+using UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,10 +33,13 @@ namespace UI.Screens.ShopContent
         [SerializeField] private Image _buyButtonImage;
         [SerializeField] private ZoneType _zoneType;
         [SerializeField] private LanguageChanger _languageChanger;
+        [SerializeField] private ZonesScrollContent _zonesScrollContent;
         
         private DollarValue _dollarValue;
         
         public bool IsOwned { get; private set; }
+
+        public ZoneType ZoneType => _zoneType;
 
         private void OnEnable()
         {
@@ -87,6 +91,7 @@ namespace UI.Screens.ShopContent
                 return;
             }
             
+            _zonesScrollContent.PurchaseZone(_zoneType);
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
             _shopScreen.MakePurchase();
