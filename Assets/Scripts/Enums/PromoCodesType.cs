@@ -9,5 +9,6 @@ namespace Enums
         Coffee2025, 
         Cashier2025,
         SuperBurger,
+        Rewards50,
     }
 }

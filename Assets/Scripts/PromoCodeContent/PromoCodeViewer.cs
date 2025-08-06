@@ -19,7 +19,7 @@ namespace PromoCodeContent
         public void AcceptPromoCode()
         {
             string enteredCode = _promoCodeInputField.text.Trim().ToUpper();
-            PromoCodesType currentPromoCode = PromoCodesType.SuperBurger;
+            PromoCodesType currentPromoCode = PromoCodesType.Rewards50;
 
             string activePromoCode = currentPromoCode.ToString().ToUpper();
 
