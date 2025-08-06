@@ -44,6 +44,11 @@ namespace QuestsContent
                     _energy.IncreaseEnergy(prizeTask.Amount);
                     ShowTaskPrize(prizeTask.Icon);
                     break;
+                
+                case TaskPrizeType.Delivery:
+                    _delivery.SpawnPrize(prizeTask.ItemType, prizeTask.Amount);
+                    ShowTaskPrize(prizeTask.Icon);
+                    break;
             }
         }
 

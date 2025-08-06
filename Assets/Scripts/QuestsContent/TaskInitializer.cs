@@ -38,6 +38,8 @@ namespace QuestsContent
         [SerializeField] private MenuCounter _menuCounter;
         [SerializeField] private EquipmentScrollContent _equipmentScrollContent;
         [SerializeField] private ZonesScrollContent _zonesScrollContent;
+        
+        [Space] [Header("Tables")]
         [SerializeField] private PlaceTable[] _placeTables;
 
         [Space] [Header("Equipments")] [SerializeField]

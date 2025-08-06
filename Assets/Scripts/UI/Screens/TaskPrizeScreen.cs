@@ -10,9 +10,9 @@ namespace UI.Screens
     {
         [SerializeField] private Image[] rewardImages;
         [SerializeField] private float jumpHeight = 50f;
-        [SerializeField] private float jumpDuration = 0.3f;
+        [SerializeField] private float jumpDuration = 0.15f;
         [SerializeField] private int jumpCount = 3;
-        [SerializeField] private float flyUpDuration = 0.5f;
+        [SerializeField] private float flyUpDuration = 0.3f;
         [SerializeField] private float flyUpDistance = 500f;
 
         private Vector2[] _initialPositions;

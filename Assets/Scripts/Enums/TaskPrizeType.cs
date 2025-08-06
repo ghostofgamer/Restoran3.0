@@ -6,5 +6,6 @@ namespace Enums
         XP,
         Spin,
         Energy,
+        Delivery,
     }
 }
