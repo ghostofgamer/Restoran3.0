@@ -77,7 +77,7 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("EarnMoney")} ({_targetAmount})";
+                $"{LocalizationManager.GetTermTranslation("EarnEnergy")} ({_targetAmount})";
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount,

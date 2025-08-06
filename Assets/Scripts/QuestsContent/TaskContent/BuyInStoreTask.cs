@@ -131,7 +131,7 @@ namespace QuestsContent.TaskContent
         public override void LocalizationChanged()
         {
             _localizationDescription =
-                $"{LocalizationManager.GetTermTranslation("Cook")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} ({_targetAmount})";
+                $"{LocalizationManager.GetTermTranslation("BuyInStore")} {LocalizationManager.GetTermTranslation(_itemsConfig.GetItemConfig(_itemType).Term)} ({_targetAmount})";
 
             Debug.Log("_localizationDescription  LocalizationChanged " + _localizationDescription);
 
