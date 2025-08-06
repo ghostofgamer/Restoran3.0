@@ -25,6 +25,8 @@ namespace QuestsContent.ProgressDailyTasksContent
         private List<MysteryPrize> _randomPrizes;
 
         public event Action<List<MysteryPrize>> DailyTasksProgressChanged;
+        
+        public event Action DailyProgressTasksChanged;
 
         private void OnEnable()
         {
@@ -100,6 +102,7 @@ namespace QuestsContent.ProgressDailyTasksContent
         private void ChangeValue(int completedTasks, int maxTasks)
         {
             _progressDailyTasksViewer.ShowProgress(completedTasks, maxTasks, IsReceived);
+            DailyProgressTasksChanged?.Invoke();
         }
 
         private void ClearValue()

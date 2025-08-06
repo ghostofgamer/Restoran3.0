@@ -1,11 +1,13 @@
 using System;
 using PlayerContent.LevelContent;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 {
     public class PlacesScrollContent : PageScrollContent
     {
+        [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private PlaceUIProduct[] _placeUIProducts;
         [SerializeField] private PlayerLevel _playerLevel;
 
@@ -13,6 +15,12 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         public event Action<int> PayPlaceCompleted;
 
         public PlaceUIProduct[] PlaceUIProductsPayPossibility => _placeTaskUIProductsPurchasingPossibility;
+
+        private void OnEnable()
+        {
+            if (_scrollRect != null)
+                _scrollRect.normalizedPosition = new Vector2(0, 1);
+        }
 
         public override void Init()
         {

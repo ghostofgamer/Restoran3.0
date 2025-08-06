@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
+using I2.Loc;
 using Io.AppMetrica;
+using SettingsContent;
+using TMPro;
 using UI;
 using UnityEngine;
 
@@ -11,15 +15,29 @@ namespace QuestsContent
         [SerializeField] private TaskUI _chainTaskUI;
         [SerializeField] private GameObject _taskLock;
         [SerializeField] private ChainTasksSaver _chainTasksSaver;
+        [SerializeField] private TMP_Text _chainValueText;
+        [SerializeField] private LanguageChanger _languageChanger;
 
         private int _currentTaskIndex = 0;
         public Task CurrentTask { get; private set; }
+
+        public event Action CurrentTaskChanged;
+
+        private void OnEnable()
+        {
+            _languageChanger.LanguageChanged += ShowChainIndex;
+        }
+
+        private void OnDisable()
+        {
+            _languageChanger.LanguageChanged -= ShowChainIndex;
+        }
 
         public void NextTask()
         {
             CurrentTask.ProgressSaved -= _chainTasksSaver.SaveProgress;
             Debug.Log("_currentTaskIndex " + _currentTaskIndex);
-            
+
             AppMetrica.ReportEvent("ChainTaskCompleted", "{\"" + _currentTaskIndex + "\":null}");
             _currentTaskIndex++;
             PlayerPrefs.SetInt("CurrentChainTaskIndex", _currentTaskIndex);
@@ -37,6 +55,8 @@ namespace QuestsContent
                 _chainTasks[i].SetIndex(i);
 
             _currentTaskIndex = PlayerPrefs.GetInt("CurrentChainTaskIndex", _currentTaskIndex);
+
+            ShowChainIndex();
 
             if (CheckLockChainTasksValue())
                 return;
@@ -62,12 +82,16 @@ namespace QuestsContent
                 CurrentTask = currentTask;
                 CurrentTask.ProgressSaved += _chainTasksSaver.SaveProgress;
                 CurrentTask.InitTaskUI(_chainTaskUI);
-                CurrentTask.LoadProgress(saveData.CurrentValue,saveData.TargetAmount, saveData.IsCompleted, saveData.IsReceived);
+                CurrentTask.LoadProgress(saveData.CurrentValue, saveData.TargetAmount, saveData.IsCompleted,
+                    saveData.IsReceived);
             }
+
+            CurrentTaskChanged?.Invoke();
         }
 
         public void StartNextTask()
         {
+            ShowChainIndex();
             Debug.Log("No progress data found. Starting from the beginning.");
             Task currentTask = _chainTasks[_currentTaskIndex];
             CurrentTask = currentTask;
@@ -75,6 +99,7 @@ namespace QuestsContent
             Debug.Log("!!!_currentTask " + CurrentTask.Index);
             currentTask.InitTaskUI(_chainTaskUI);
             currentTask.StartTask();
+            CurrentTaskChanged?.Invoke();
         }
 
         private bool CheckLockChainTasksValue()
@@ -85,10 +110,16 @@ namespace QuestsContent
                 _taskLock.SetActive(true);
                 return true;
             }
-            
-            Debug.Log("DONT All tasks completed! " + _currentTaskIndex +" ,,, " + _chainTasks.Count);
+
+            Debug.Log("DONT All tasks completed! " + _currentTaskIndex + " ,,, " + _chainTasks.Count);
             _taskLock.SetActive(false);
             return false;
+        }
+
+        private void ShowChainIndex()
+        {
+            _chainValueText.text =
+                $"{LocalizationManager.GetTermTranslation("Task")} № {(_currentTaskIndex + 1).ToString()}";
         }
     }
 

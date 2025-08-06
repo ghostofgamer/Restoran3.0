@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DeliveryContent;
 using EnergyContent;
@@ -21,8 +22,12 @@ namespace QuestsContent
         [SerializeField] private Delivery _delivery;
         [SerializeField] private TaskPrizeScreen _taskPrizeScreen;
 
+        public event Action PrizeClaimed;
+
         public void ClaimPrize(PrizeTask prizeTask)
         {
+            PrizeClaimed?.Invoke();
+            
             switch (prizeTask.TaskPrizeType)
             {
                 case TaskPrizeType.Money:
@@ -55,6 +60,7 @@ namespace QuestsContent
         public void ClaimGlobalDailyPrize(List<MysteryPrize> prizes, bool isAdsShowed)
         {
             int value = 0;
+            PrizeClaimed?.Invoke();
 
             foreach (var prize in prizes)
             {

@@ -4,6 +4,7 @@ using Io.AppMetrica;
 using QuestsContent;
 using SettingsContent;
 using TMPro;
+using UI.Screens;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ namespace UI
         [SerializeField] private GameObject _receiveImage;
         [SerializeField] private TaskPrizeRecipient _taskPrizeRecipient;
         [SerializeField] private ADS _ads;
+        [SerializeField] private TasksScreen _tasksScreen;
 
         public event Action TaskCompleted;
 
@@ -65,6 +67,11 @@ namespace UI
             _completeButton.SetActive(completed && !received);
             Debug.Log("SetValue ЕФЫЛГШ " + "task" + _task.TaskID + "rECEIVER " + received + "    " + completed);
             _receiveImage.SetActive(received);
+        }
+
+        public void CloseScreen()
+        {
+            _tasksScreen.CloseScreen();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace QuestsContent
 
         [SerializeField] private ChainTasksCounter _chainTasksCounter;
 
+        public event Action ProgressChainTaskSaved;
+
         public void SaveProgress()
         {
             if (_chainTasksCounter.CurrentTask == null)
@@ -16,6 +19,8 @@ namespace QuestsContent
                 Debug.LogWarning("No current task to save.");
                 return;
             }
+            
+            ProgressChainTaskSaved?.Invoke();
 
             ChainTasksSaveData saveData = new ChainTasksSaveData
             {

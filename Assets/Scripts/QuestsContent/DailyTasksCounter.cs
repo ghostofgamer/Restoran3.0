@@ -24,22 +24,17 @@ namespace QuestsContent
         private DateTime _startTime;
         private const string LastGlobalUpdateTimeKey = "LastGlobalUpdateTime";
         private const int UpdateIntervalHours = 24;
-        private const int UpdateIntervalSeconds = 130;
+        private const int UpdateIntervalSeconds = 600;
         private List<Task> _currentTasks = new List<Task>();
 
         public event Action<int, int> DailyTasksProgressChanged;
         public event Action DailyTasksUpdated;
+        public event Action CurrentTasksChanged;
         
         public List<Task> CurrentTasks => _currentTasks;
 
         public void StartTasks()
         {
-            /*foreach (var task in _dailyTasks)
-            {
-                task.ResetTaskState();
-                task.UnsubscribeFromEvents();
-            }*/
-            
             DailyTasksSaver.DailyTasksSaveData saveData = _dailyTasksSaver.LoadProgress();
 
             if (saveData != null)
@@ -192,6 +187,7 @@ namespace QuestsContent
             }
 
             DailyTasksProgressChanged?.Invoke(value, _currentTasks.Count);
+            CurrentTasksChanged?.Invoke();
             Debug.Log("Value " + value);
         }
 
