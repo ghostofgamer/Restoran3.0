@@ -53,4 +53,9 @@ public class CreateTestBurger : AbstractButton
         _itemType = _itemTypes[prevIndex];
         _nameItemType.text = _itemType.ToString();
     }
+
+    public void TestCodeium()
+    {
+        int value = 0;
+    }
 }

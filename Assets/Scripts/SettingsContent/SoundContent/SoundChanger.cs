@@ -13,6 +13,8 @@ namespace SettingsContent.SoundContent
         [SerializeField] private Image _backgroundImageSound;
         [SerializeField] private Color _activeColor;
         [SerializeField] private Color _inactiveColor;
+        [SerializeField] private GameObject[] _soundValueTexts;
+        [SerializeField] private GameObject[] _musicValueTexts;
 
         private void OnEnable()
         {
@@ -60,6 +62,8 @@ namespace SettingsContent.SoundContent
         {
             _backgroundImageSFX.color = sfx ? _activeColor : _inactiveColor;
             _sfxToggleSwitch1.isOn = sfx;
+            _soundValueTexts[0].SetActive(sfx);
+            _soundValueTexts[1].SetActive(!sfx);
             _soundImages[0].SetActive(sfx);
             _soundImages[1].SetActive(!sfx);
         }
@@ -68,6 +72,8 @@ namespace SettingsContent.SoundContent
         {
             _backgroundImageSound.color = sound ? _activeColor : _inactiveColor;
             _soundToggleSwitch1.isOn = sound;
+            _musicValueTexts[0].SetActive(sound);
+            _musicValueTexts[1].SetActive(!sound);
             _musicImages[0].SetActive(sound);
             _musicImages[1].SetActive(!sound);
         }
