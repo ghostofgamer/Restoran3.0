@@ -40,6 +40,7 @@ namespace FortuneContent
         [SerializeField] private Button _openFortuneButton;
         [SerializeField] private GameObject _touchTaskFreeSpin;
         [SerializeField] private Energy _energy;
+        [SerializeField] private GameObject _attentionImage;
 
         private int _currentValueSpin = 1;
         private string filePath;
@@ -86,16 +87,17 @@ namespace FortuneContent
         private void Start()
         {
             ActivateOpenFortuneButton(_playerLevel.CurrentLevel);
-            
+
             _isFreeButtonUsed = PlayerPrefs.GetInt("FreeSpinUsed", 0) > 0;
-            
+
             _touchTaskFreeSpin.SetActive(!_isFreeButtonUsed);
             _spinFreeButton.gameObject.SetActive(!_isFreeButtonUsed);
 
             _dailyTimerFortune.UpdateInfo();
             filePath = Path.Combine(Application.persistentDataPath, "spinData.json");
             LoadSpinData();
-            _spinValueText.text=$"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
+            _spinValueText.text =
+                $"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
             AnimateButton();
         }
 
@@ -104,7 +106,8 @@ namespace FortuneContent
             _currentValueSpin += value;
             _dailyTimerFortune.UpdateInfo();
             // _spinValueText.text = $"BALANCE: {_currentValueSpin.ToString()}";
-            _spinValueText.text=$"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
+            _spinValueText.text =
+                $"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
             _spinValueButton.SetActive(_currentValueSpin > 0);
             SaveSpinData();
         }
@@ -118,10 +121,11 @@ namespace FortuneContent
                 PlayerPrefs.SetInt("FreeSpinUsed", 1);
                 _isFreeButtonUsed = true;
             }
-            
+
             _fortuneScreen.OpenScreen();
             _spinValueButton.SetActive(_currentValueSpin > 0);
-            _spinValueText.text=$"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
+            _spinValueText.text =
+                $"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
         }
 
         public void SpinWheel()
@@ -131,26 +135,27 @@ namespace FortuneContent
 
             if (_spinWheelController.IsStarted)
                 return;
-            
+
             _touchTaskFreeSpin.SetActive(false);
             SoundPlayer.Instance.PlayButtonClick();
             _currentValueSpin--;
             SaveSpinData();
             Spin();
-            _spinValueText.text=$"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
+            _spinValueText.text =
+                $"{LocalizationManager.GetTermTranslation("BALANCE")}: {_currentValueSpin.ToString()}";
         }
 
         public void SpinFree()
         {
             SpinWheel();
-            
+
             /*if (!_isFreeButtonUsed)
             {
                 AppMetrica.ReportEvent("TaskFortuna");
                 FreeSpinUsed?.Invoke();
                 PlayerPrefs.SetInt("FreeSpinUsed", 1);
             }*/
-            
+
             _touchTaskFreeSpin.SetActive(false);
             _spinFreeButton.gameObject.SetActive(false);
             _spinValueButton.SetActive(_currentValueSpin > 0);
@@ -160,7 +165,7 @@ namespace FortuneContent
         {
             if (_spinWheelController.IsStarted)
                 return;
-            
+
             /*if (!_isFreeButtonUsed)
             {
                 AppMetrica.ReportEvent("TaskFortuna");
@@ -179,13 +184,15 @@ namespace FortuneContent
 
         private void AnimateButton()
         {
-            if (_spinFreeButton.activeSelf)
+            if (_spinFreeButton.activeSelf || _currentValueSpin > 0)
             {
-                _fortuneButton.enabled = true;
+                // _fortuneButton.enabled = true;
+                _attentionImage.SetActive(true);
             }
             else
             {
-                _fortuneButton.enabled = false;
+                _attentionImage.SetActive(false);
+                // _fortuneButton.enabled = false;
                 _fortuneButton.transform.localScale = Vector3.one;
             }
         }
@@ -206,7 +213,8 @@ namespace FortuneContent
 
         private void ActivateOpenFortuneButton(int playerLevel)
         {
-            _openFortuneButton.interactable = playerLevel >= 3;
+            // _openFortuneButton.interactable = playerLevel >= 3;
+            _openFortuneButton.gameObject.SetActive(playerLevel >= 3);
         }
 
         private void ActiveOtherSpinButton()
@@ -257,7 +265,7 @@ namespace FortuneContent
                 case PrizesFortune.Spin:
                     AddSpins(prize.Value);
                     break;
-                
+
                 case PrizesFortune.Energy:
                     _energy.IncreaseEnergy(prize.Value);
                     break;
@@ -281,7 +289,7 @@ namespace FortuneContent
                 _currentValueSpin = data.currentValueSpin;
             }
         }
-        
+
         [ContextMenu("DeleteSpinData")]
         private void DeleteSpinData()
         {

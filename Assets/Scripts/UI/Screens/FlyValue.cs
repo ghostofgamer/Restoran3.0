@@ -7,6 +7,7 @@ namespace UI
     public class FlyValue : MonoBehaviour
     {
         [SerializeField] private TMP_Text _text;
+        [SerializeField] private bool _isEnergy;
 
         private Color _color;
 
@@ -14,7 +15,9 @@ namespace UI
         {
             gameObject.SetActive(false);
             gameObject.SetActive(true);
-            _text.color = profitValue ? Color.green : Color.red;
+            // _text.color = profitValue ? Color.green : Color.red;
+            _text.color = _isEnergy ? (profitValue ? Color.yellow : Color.red) : (profitValue ? Color.green : Color.red);
+
             _text.text = dollarValue.ToString();
         }
 
@@ -23,7 +26,8 @@ namespace UI
             gameObject.SetActive(false);
             gameObject.SetActive(true);
             
-            _text.color = value >= 0 ? Color.green : Color.red;
+            // _text.color = value >= 0 ? Color.green : Color.red;
+            _text.color = _isEnergy ? (value >= 0 ? Color.yellow : Color.red) : (value >= 0 ? Color.green : Color.red);
             _text.text = value >= 0 ? $"+{value.ToString()}" : $"{value.ToString()}";
         }
     }

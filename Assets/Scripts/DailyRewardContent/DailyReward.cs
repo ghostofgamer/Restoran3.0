@@ -21,6 +21,7 @@ namespace DailyRewardContent
         [SerializeField] private Color _lastDayDefaultSprite;
         [SerializeField] private Animator _openButtonAnimation;
         [SerializeField] private GameObject[] _prizes;
+        [SerializeField] private GameObject _attentionImage;
 
         private int _currentDayIndex;
         private bool _rewardClaimedToday;
@@ -123,10 +124,12 @@ namespace DailyRewardContent
         private void AnimateOpenScreenButton()
         {
             if (_currentDayIndex < _dayButtons.Length && !_rewardClaimedToday)
-                _openButtonAnimation.enabled = true;
+                _attentionImage.SetActive(true);
+            // _openButtonAnimation.enabled = true;
             else
             {
-                _openButtonAnimation.enabled = false;
+                // _openButtonAnimation.enabled = false;
+                _attentionImage.SetActive(false);
                 _openButtonAnimation.transform.localScale = Vector3.one;
             }
         }

@@ -364,7 +364,9 @@ namespace TutorialContent
         private void SetValueButtonTopUI(bool value)
         {
             _shopButton.interactable = value;
-            _dailyReward.interactable = value;
+            _dailyReward.gameObject.SetActive(value);
+            
+            // _dailyReward.interactable = value;
             // _fortune.interactable = value;
         }
     }

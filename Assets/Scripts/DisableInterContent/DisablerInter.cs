@@ -18,6 +18,7 @@ namespace DisableInterContent
         [SerializeField] private DisablerInterTimer _disablerInterTimer;
         [SerializeField] private DisableInterViewer _disableInterViewer;
         [SerializeField] private Animator _animator;
+        [SerializeField] private GameObject _attentionImage;
 
         private int _currentValueShowReward = 0;
         private bool _isActivateDisableInter = false;
@@ -113,7 +114,8 @@ namespace DisableInterContent
 
         private void SetAnimButton(bool value)
         {
-            _animator.enabled = value;
+            // _animator.enabled = value;
+            _attentionImage.SetActive(value);
 
             if (!value)
                 _buttonOpenDisableInterScreen.transform.localScale = Vector3.one;
