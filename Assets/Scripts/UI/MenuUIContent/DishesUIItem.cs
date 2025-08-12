@@ -66,42 +66,32 @@ namespace UI.MenuUIContent
 
         private void InitVisual()
         {
-            int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
-            _purchasedValuePriceState = PlayerPrefs.GetInt("PurchasedValuePriceStateDishes" + ItemType, 0);
+            Debug.Log("DISHES");
 
-            if (_valuePriceState <= _purchasedValuePriceState)
-                _valuePriceState = 0;
-
-            _priceDifferenceText.text = _valuePriceState.ToString();
-
-            /*if (_valuePriceState > _energy.EnergyValue)
+            if (ItemConfig != null)
             {
-                Debug.Log("тут должно стать красным");
-                _priceDifferenceText.color = Color.red;
-            }
-            else
-            {
-                Debug.Log("тут должно стать белым");
-                _priceDifferenceText.color = Color.white;
-            }*/
+                int totalCents = PlayerPrefs.GetInt(CurrentPriceKey + ItemConfig.ItemType, 0);
+                _purchasedValuePriceState = PlayerPrefs.GetInt("PurchasedValuePriceStateDishes" + ItemType, 0);
 
-            if (totalCents > 0)
-            {
-                _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
-                UpdateProfitText();
+                if (_valuePriceState <= _purchasedValuePriceState)
+                    _valuePriceState = 0;
 
-                /*Color color = _currentPrice.ToTotalCents() <= _recommendedPrice.ToTotalCents()
-                    ? _colorGreen
-                    : _colorRed;*/
+                _priceDifferenceText.text = _valuePriceState.ToString();
 
-                ChangeCurrentPrice?.Invoke(_currentPrice, _colorGreen);
-
-                if (ItemConfig != null)
+                if (totalCents > 0)
                 {
-                    _levelOpened = ItemConfig.LevelOpened;
-                    _purchasePrice = ItemConfig.PurchasePrice;
-                    InitCompleted?.Invoke($"{LocalizationManager.GetTermTranslation("Required")} {_levelOpened}",
-                        _purchasePrice);
+                    _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
+                    UpdateProfitText();
+
+                    ChangeCurrentPrice?.Invoke(_currentPrice, _colorGreen);
+
+                    if (ItemConfig != null)
+                    {
+                        _levelOpened = ItemConfig.LevelOpened;
+                        _purchasePrice = ItemConfig.PurchasePrice;
+                        InitCompleted?.Invoke($"{LocalizationManager.GetTermTranslation("Required")} {_levelOpened}",
+                            _purchasePrice);
+                    }
                 }
             }
         }
@@ -237,7 +227,7 @@ namespace UI.MenuUIContent
                 _valuePriceState = 0;
 
             _priceDifferenceText.text = _valuePriceState.ToString();
-            
+
             if (_valuePriceState > _energy.EnergyValue)
             {
                 _priceDifferenceText.color = Color.red;

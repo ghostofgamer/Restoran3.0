@@ -61,11 +61,11 @@ namespace ADSContent
             }
         }
 
-        private void OnApplicationPause(bool pauseStatus)
+        /*private void OnApplicationPause(bool pauseStatus)
         {
             _isPaused = pauseStatus;
             Time.timeScale = pauseStatus ? 0 : 1;
-        }
+        }*/
 
         public void SetValue(bool value)
         {

@@ -75,7 +75,8 @@ namespace TutorialContent
             {
                 TutorialType nextType = GetNextTutorialType(CurrentType);
 
-                AppMetrica.ReportEvent(completedType.ToString());
+                // AppMetrica.ReportEvent("Tutorial"completedType.ToString());
+                AppMetrica.ReportEvent("Tutorial", "{\"" + completedType.ToString() + "\":null}");
 
                 if (nextType != CurrentType)
                 {
