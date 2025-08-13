@@ -74,7 +74,7 @@ namespace RestaurantContent
             else
             {
                 // _text.text = "CLOSE";
-                _text.text = LocalizationManager.GetTermTranslation("CLOSE");
+                _text.text = LocalizationManager.GetTermTranslation("CLOSED");
                 _text.color = _closeColor;
                 _colorObject.material = _closeMaterial;
             }
@@ -85,7 +85,7 @@ namespace RestaurantContent
             if (IsOpened)
                 _text.text = LocalizationManager.GetTermTranslation("OPEN");
             else
-                _text.text = LocalizationManager.GetTermTranslation("CLOSE");
+                _text.text = LocalizationManager.GetTermTranslation("CLOSED");
         }
     }
 }
