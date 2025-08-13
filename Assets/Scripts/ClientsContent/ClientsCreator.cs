@@ -8,9 +8,11 @@ using RestaurantContent;
 using RestaurantContent.CashRegisterContent;
 using RestaurantContent.MenuContent;
 using RestaurantContent.TableContent;
+using SoContent;
 using SpawnContent;
 using TutorialContent;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace ClientsContent
@@ -42,6 +44,8 @@ namespace ClientsContent
         [SerializeField] private PriceOrderCounter _priceOrderCounter;
         [SerializeField] private OpenCloseRestaurant _openCloseRestaurant;
         [SerializeField] private ClientsCounter _clientsCounter;
+
+        [SerializeField] private ItemsConfig _itemsConfig;
 
         private float _elapsedTime;
         private float _nextSpawnTime = 0f;
@@ -156,7 +160,7 @@ namespace ClientsContent
                 table.SetBusyValue(true);
                 Client client = _clientsSpawner.SpawnRandomClient();
                 client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                    _queueCashRegister, _priceOrderCounter, _clientsCounter);
+                    _queueCashRegister, _priceOrderCounter, _clientsCounter,_itemsConfig);
                 ClientCreated?.Invoke();
                 _queueCashRegister.AddClientQueue(client);
                 _clients.Add(client);
@@ -184,7 +188,7 @@ namespace ClientsContent
             table.SetBusyValue(true);
             Client client = _clientsSpawner.SpawnRandomClient();
             client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                _queueCashRegister, _priceOrderCounter, _clientsCounter);
+                _queueCashRegister, _priceOrderCounter, _clientsCounter,_itemsConfig);
             ClientCreated?.Invoke();
             _queueCashRegister.AddClientToQueue(client);
         }

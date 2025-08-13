@@ -6,6 +6,7 @@ using RestaurantContent;
 using RestaurantContent.CashRegisterContent;
 using RestaurantContent.TableContent;
 using RestaurantContent.TrayContent;
+using SoContent;
 using UnityEngine;
 using UnityEngine.AI;
 using WalletContent;
@@ -47,8 +48,10 @@ namespace ClientsContent
 
         public void Init(Order order, Restaurant restaurant, Table table, Transform exitPosition,
             CashRegister cashRegister, QueueCashRegister queueCashRegister, PriceOrderCounter priceOrderCounter,
-            ClientsCounter clientsCounter)
+            ClientsCounter clientsCounter,ItemsConfig itemsConfig)
         {
+            _ideaOrderClient.gameObject.SetActive(false);
+            
             _indexQueue = -1;
             Order = order;
             PriceOrder = priceOrderCounter.GetPriceOrder(Order);
@@ -61,6 +64,8 @@ namespace ClientsContent
             _queueCashRegister = queueCashRegister;
             _clientsCounter = clientsCounter;
             _clientsCounter.AddClient(this);
+            
+            _ideaOrderClient.Init(Order,itemsConfig);
             // _clientCar = null;
 
 

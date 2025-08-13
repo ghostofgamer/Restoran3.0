@@ -21,9 +21,9 @@ public class ScrollRectChanger : MonoBehaviour
             _scrollRect.normalizedPosition = new Vector2(0, 1);
     }
 
-    private void OnRectTransformDimensionsChange()
+    /*private void OnRectTransformDimensionsChange()
     {
         if (_scrollRect != null)
             _scrollRect.normalizedPosition = new Vector2(0, 1);
-    }
+    }*/
 }
