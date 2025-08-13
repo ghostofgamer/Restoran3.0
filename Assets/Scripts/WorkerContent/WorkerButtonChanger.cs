@@ -44,7 +44,7 @@ namespace WorkerContent
         private void ChangeValue(bool value)
         {
             _icon.SetActive(value);
-            _animator.enabled = value;
+            // _animator.enabled = value;
         }
     }
 }

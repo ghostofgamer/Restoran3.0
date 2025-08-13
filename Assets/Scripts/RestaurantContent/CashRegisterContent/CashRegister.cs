@@ -12,7 +12,9 @@ using PlayerContent;
 using PlayerContent.LevelContent;
 using SettingsContent.SoundContent;
 using TutorialContent;
+using UI.Screens.AssemblyScreens;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WalletContent;
 using WorkerContent;
 
@@ -32,6 +34,7 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private PriceOrderCounter _priceOrderCounter;
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private Transform _cashierPosition;
+        [FormerlySerializedAs("_testCashierScreen")] [SerializeField] private CashierScreen cashierScreen;
 
         private Coroutine _coroutine;
         private DollarValue _currentGivingValue;
@@ -74,9 +77,17 @@ namespace RestaurantContent.CashRegisterContent
             SetCanvasActive(CurrentClient != null);
             _currentChangeValue = _priceOrderCounter.GetChange(client.PriceOrder, client.Cash);
 
+            if (PlayerOnSite)
+            {
+                // _testCashierScreen.CloseScreen();
+                CashRegisterAssemblyBeginig?.Invoke(CurrentClient.IsCard);
+                _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
+                _currentGivingValue = new DollarValue(0, 0);
+                _cashRegisterViewer.Init(CurrentClient, _currentGivingValue);
+            }
+
             if (_cashier != null)
                 _cashier.FindClient();
-            // _canvas.SetActive(_currentClient != null);
         }
 
         private void ShowAssemblyCashRegisterOrder(PlayerInteraction playerInteraction)
@@ -91,13 +102,13 @@ namespace RestaurantContent.CashRegisterContent
                 return;
             }
 
-            if (CurrentClient == null)
+            /*if (CurrentClient == null)
             {
                 AttentionHintActivator.Instance.ShowHint(
                     LocalizationManager.GetTermTranslation("There's no one in line"));
 
                 return;
-            }
+            }*/
 
             if (CashierOnSite)
             {
@@ -108,10 +119,24 @@ namespace RestaurantContent.CashRegisterContent
 
             SetPlayerValue(true);
 
-            CashRegisterAssemblyBeginig?.Invoke(CurrentClient.IsCard);
+            if (CurrentClient != null)
+            {
+                cashierScreen.OpenScreen();
+                CashRegisterAssemblyBeginig?.Invoke(CurrentClient.IsCard);
+                _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
+                _currentGivingValue = new DollarValue(0, 0);
+                _cashRegisterViewer.Init(CurrentClient, _currentGivingValue);
+
+                return;
+            }
+
+
+            cashierScreen.OpenScreen();
+
+            // CashRegisterAssemblyBeginig?.Invoke(CurrentClient.IsCard);
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
-            _currentGivingValue = new DollarValue(0, 0);
-            _cashRegisterViewer.Init(CurrentClient, _currentGivingValue);
+            // _currentGivingValue = new DollarValue(0, 0);
+            // _cashRegisterViewer.Init(CurrentClient, _currentGivingValue);
         }
 
         public void SetCanvasActive(bool value)
@@ -161,7 +186,7 @@ namespace RestaurantContent.CashRegisterContent
             _playerLevel.AddExp(5);
             SoundPlayer.Instance.PlayCashRegister();
 
-            SetPlayerValue(false);
+            // SetPlayerValue(false);
 
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();
@@ -184,7 +209,7 @@ namespace RestaurantContent.CashRegisterContent
             _playerLevel.AddExp(5);
             SoundPlayer.Instance.PlayCashRegister();
 
-            SetPlayerValue(false);
+            // SetPlayerValue(false);
 
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();

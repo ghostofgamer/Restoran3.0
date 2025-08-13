@@ -6,6 +6,7 @@ using RestaurantContent.CashRegisterContent;
 using UI.Screens.AssemblyScreens;
 using UI.Screens.NewLevelContent;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UI.Screens
 {
@@ -26,6 +27,7 @@ namespace UI.Screens
         [SerializeField] private MysteryBoxScreen _mysteryBoxScreen;
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private NewLevelUpScreen _newLevelUpScreen;
+        [FormerlySerializedAs("_testCashierScreen")] [SerializeField] private CashierScreen cashierScreen;
 
         private void OnEnable()
         {
@@ -34,6 +36,7 @@ namespace UI.Screens
             _assemblySodaTable.DrinkAssemblyBeginig += OpenAssemblySodaScreen;
             _cashRegister.CashRegisterAssemblyBeginig += OpenCashRegisterOrderScreen;
             _cashRegister.CashRegisterOrderCompleted += CloseCashRegisterScreen;
+            cashierScreen.CloseCashierScreens += CloseCashRegisterScreen;
             _assemblyFryerTable.FriersAssemblyBeginig += OpenAssemblyFryerScreen;
             _mysteryGift.BoxActivation += OpenMysteryBoxScreen;
             _playerLevel.LevelAdded += OpenNewLevelScreen;
@@ -46,6 +49,7 @@ namespace UI.Screens
             _assemblySodaTable.DrinkAssemblyBeginig -= OpenAssemblySodaScreen;
             _cashRegister.CashRegisterAssemblyBeginig -= OpenCashRegisterOrderScreen;
             _cashRegister.CashRegisterOrderCompleted -= CloseCashRegisterScreen;
+            cashierScreen.CloseCashierScreens -= CloseCashRegisterScreen;
             _assemblyFryerTable.FriersAssemblyBeginig -= OpenAssemblyFryerScreen;
             _mysteryGift.BoxActivation -= OpenMysteryBoxScreen;
             _playerLevel.LevelAdded -= OpenNewLevelScreen;
@@ -68,6 +72,8 @@ namespace UI.Screens
 
         private void OpenCashRegisterOrderScreen(bool isCard)
         {
+            CloseCashRegisterScreen();
+            
             if (!isCard)
                 _assemblyCashRegisterOrderScreen.OpenScreen();
             else

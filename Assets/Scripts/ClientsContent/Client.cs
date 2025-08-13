@@ -21,6 +21,7 @@ namespace ClientsContent
         [SerializeField] private CashRegister _cashRegister;
         [SerializeField] private Transform _trayPositionHand;
         [SerializeField] private Collider _clientCollider;
+        [SerializeField] private IdeaOrderClient _ideaOrderClient;
 
         private PriceOrderCounter _priceOrderCounter;
         private Restaurant _restaurant;
@@ -98,6 +99,9 @@ namespace ClientsContent
                 {
                     _cashRegister.SetClient(this);
                     _navMeshAgent.enabled = false;
+                    
+                    _ideaOrderClient.gameObject.SetActive(true);
+                    
                     // _meshObstacle.enabled = false;
                 });
             }
@@ -230,6 +234,9 @@ namespace ClientsContent
         {
             _currentState = ClientState.WaitingForOrder;
             _navMeshAgent.enabled = true;
+            
+            _ideaOrderClient.gameObject.SetActive(false);
+            
             // _meshObstacle.enabled = true;
 
             /*_navMeshAgent.SetDestination(_exitPosition.position);
