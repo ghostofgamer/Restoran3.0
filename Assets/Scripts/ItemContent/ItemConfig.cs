@@ -11,6 +11,7 @@ public class ItemConfig
     public string ItemName;
     public Sprite Sprite;
     public Sprite SpriteNotBackground;
+    public Sprite SpriteOutline;
     public int LevelOpened;
     public DollarValue PurchasePrice;
     public DollarValue MaxPrice;

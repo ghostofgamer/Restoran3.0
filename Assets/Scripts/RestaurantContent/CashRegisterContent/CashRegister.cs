@@ -14,7 +14,6 @@ using SettingsContent.SoundContent;
 using TutorialContent;
 using UI.Screens.AssemblyScreens;
 using UnityEngine;
-using UnityEngine.Serialization;
 using WalletContent;
 using WorkerContent;
 
@@ -26,7 +25,6 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private Transform _clientPosition;
-        [SerializeField] private GameObject _canvas;
         [SerializeField] private CameraPositionChanger _cameraPositionChanger;
         [SerializeField] private Transform _cameraCurrentPosition;
         [SerializeField] private CashRegisterViewer _cashRegisterViewer;
@@ -34,7 +32,8 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private PriceOrderCounter _priceOrderCounter;
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private Transform _cashierPosition;
-        [FormerlySerializedAs("_testCashierScreen")] [SerializeField] private CashierScreen cashierScreen;
+        [SerializeField] private CashierScreen cashierScreen;
+        [SerializeField] private GameObject _canvas;
 
         private Coroutine _coroutine;
         private DollarValue _currentGivingValue;
@@ -79,7 +78,6 @@ namespace RestaurantContent.CashRegisterContent
 
             if (PlayerOnSite)
             {
-                // _testCashierScreen.CloseScreen();
                 CashRegisterAssemblyBeginig?.Invoke(CurrentClient.IsCard);
                 _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
                 _currentGivingValue = new DollarValue(0, 0);
@@ -102,14 +100,6 @@ namespace RestaurantContent.CashRegisterContent
                 return;
             }
 
-            /*if (CurrentClient == null)
-            {
-                AttentionHintActivator.Instance.ShowHint(
-                    LocalizationManager.GetTermTranslation("There's no one in line"));
-
-                return;
-            }*/
-
             if (CashierOnSite)
             {
                 AttentionHintActivator.Instance.ShowHint(
@@ -130,18 +120,13 @@ namespace RestaurantContent.CashRegisterContent
                 return;
             }
 
-
             cashierScreen.OpenScreen();
-
-            // CashRegisterAssemblyBeginig?.Invoke(CurrentClient.IsCard);
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
-            // _currentGivingValue = new DollarValue(0, 0);
-            // _cashRegisterViewer.Init(CurrentClient, _currentGivingValue);
         }
 
         public void SetCanvasActive(bool value)
         {
-            _canvas.SetActive(value);
+            // _canvas.SetActive(value);
         }
 
         public void SetCashierValue(bool value)
@@ -162,6 +147,7 @@ namespace RestaurantContent.CashRegisterContent
         public void SetPlayerValue(bool value)
         {
             PlayerOnSite = value;
+            _cashRegisterViewer.SetOpenCloseCashierTable(value);
 
             if (value == false)
                 PlayerOnSiteDisabled?.Invoke();
@@ -187,7 +173,9 @@ namespace RestaurantContent.CashRegisterContent
             SoundPlayer.Instance.PlayCashRegister();
 
             // SetPlayerValue(false);
-
+            
+            _cashRegisterViewer.WaitingNewOrder();
+            
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();
             _wallet.Add(CurrentClient.PriceOrder);
@@ -210,7 +198,9 @@ namespace RestaurantContent.CashRegisterContent
             SoundPlayer.Instance.PlayCashRegister();
 
             // SetPlayerValue(false);
-
+            
+            _cashRegisterViewer.WaitingNewOrder();
+            
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();
             _wallet.Add(CurrentClient.PriceOrder);

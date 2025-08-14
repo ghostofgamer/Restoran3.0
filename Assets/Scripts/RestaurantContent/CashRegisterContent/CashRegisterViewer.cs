@@ -15,6 +15,7 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private TMP_Text _givingText;
         [SerializeField] private PriceOrderCounter _priceOrderCounter;
         [SerializeField] private GameObject _panelOrder;
+        [SerializeField] private GameObject _waitingPanel;
         [SerializeField] private GameObject _panelGivingChange;
         [SerializeField] private CashRegister _cashRegister;
         [SerializeField] private GameObject _panelCardPaymentGiving;
@@ -33,15 +34,30 @@ namespace RestaurantContent.CashRegisterContent
             _cashRegister.GivingValueChanged -= ShowGivingValueText;
         }
 
-        public void SetValuePanels(bool value)
+        public void SetOpenCloseCashierTable(bool value)
         {
             _panelOrder.SetActive(!value);
+            _waitingPanel.SetActive(value);
+        }
+
+        public void WaitingNewOrder()
+        {
+            _waitingPanel.SetActive(true);
+            _panelGivingChange.SetActive(false);
+            _panelCardPaymentGiving.SetActive(false);
+        }
+
+        public void SetValuePanels(bool value)
+        {
+            // _panelOrder.SetActive(!value);
+            _waitingPanel.SetActive(!value);
             _panelGivingChange.SetActive(value);
         }
 
         public void SetCardPaymentSetValuePanels(bool value)
         {
-            _panelOrder.SetActive(!value);
+            // _panelOrder.SetActive(!value);
+            _waitingPanel.SetActive(!value);
             _panelCardPaymentGiving.SetActive(value);
         }
 

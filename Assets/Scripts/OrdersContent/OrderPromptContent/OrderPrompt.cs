@@ -66,7 +66,7 @@ namespace OrdersContent.OrderPromptContent
             if (itemType != ItemType.Empty)
             {
                 image.gameObject.SetActive(true);
-                image.sprite = _itemsConfig.GetItemConfig(itemType).SpriteNotBackground;
+                image.sprite = _itemsConfig.GetItemConfig(itemType).SpriteOutline;
                 blackCompletedImage.sprite = image.sprite;
             }
             else

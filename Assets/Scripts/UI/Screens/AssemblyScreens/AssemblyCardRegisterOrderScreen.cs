@@ -21,11 +21,8 @@ namespace UI.Screens.AssemblyScreens
 
         public override void CloseScreen()
         {
-            // _cameraPositionChanger.ReturnDefaultPosition();
             base.CloseScreen();
-            // _input.SetActive(true);
             _cashRegisterViewer.SetCardPaymentSetValuePanels(false);
-            // _cashRegister.SetPlayerValue(false);
         }
     }
 }

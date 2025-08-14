@@ -33,9 +33,9 @@ namespace ClientsContent
             {
                 ItemConfig itemConfig = itemsConfig.GetItemConfig(itemType);
                 
-                if (itemConfig != null && itemConfig.Sprite != null)
+                if (itemConfig != null && itemConfig.SpriteOutline != null)
                 {
-                    _images[imageIndex].sprite = itemConfig.SpriteNotBackground;
+                    _images[imageIndex].sprite = itemConfig.SpriteOutline;
                     _images[imageIndex].gameObject.SetActive(true);
                     imageIndex++;
                 }
