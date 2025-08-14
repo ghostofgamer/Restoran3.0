@@ -47,7 +47,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
             _shopTutorialChanger.EnableBuyItems(itemUIProduct.ItemType);
         }
 
-        private void UpdateRequiredLevelProducts(int level)
+        public void UpdateRequiredLevelProducts(int level)
         {
             foreach (var product in _products)
                 product.CheckUnlocked(level);

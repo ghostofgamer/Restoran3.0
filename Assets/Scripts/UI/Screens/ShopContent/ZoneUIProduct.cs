@@ -91,16 +91,16 @@ namespace UI.Screens.ShopContent
                 return;
             }
             
-            _zonesScrollContent.PurchaseZone(_zoneType);
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
             _shopScreen.MakePurchase();
+            _zonesScrollContent.PurchaseZone(_zoneType);
             IsOwned = true;
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);
             // _wallZone.gameObject.SetActive(false);
             PlayerPrefs.SetInt("Zona" + _zoneType, 1);
-            _shopScreen.CloseScreen();
+            // _shopScreen.CloseScreen();
             _zoneWall.Activate();
         }
 

@@ -71,12 +71,12 @@ namespace UI.Screens.EquipmentContent
                 Debug.Log("Не хватает денег ");
                 return;
             }
-            _equipmentScrollContent.PurchaseEquipment(_equipmentType);
             
             AppMetrica.ReportEvent("Equipment", "{\"" + _equipmentType.ToString() + "\":null}");
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(CurrentPrice);
             _shopScreen.MakePurchase();
+            _equipmentScrollContent.PurchaseEquipment(_equipmentType);
             IsOwned = true;
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);

@@ -11,7 +11,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         [SerializeField] private PlayerLevel _playerLevel;
 
         public event Action<ZoneType> ZonePurchased;
-        
+
         private void OnEnable()
         {
             _playerLevel.LevelChanged += Initialization;
@@ -36,6 +36,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 
         public void PurchaseZone(ZoneType zoneType)
         {
+            Initialization(_playerLevel.CurrentLevel);
             ZonePurchased?.Invoke(zoneType);
         }
     }

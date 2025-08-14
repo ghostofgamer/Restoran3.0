@@ -37,6 +37,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 
         public void PurchaseEquipment(EquipmentType equipmentType)
         {
+            Initialization(_playerLevel.CurrentLevel);
             BuyEquipmentCompleted?.Invoke(equipmentType);
         }
     }

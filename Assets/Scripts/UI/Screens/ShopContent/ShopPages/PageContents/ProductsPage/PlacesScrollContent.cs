@@ -38,6 +38,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
 
         public void PayPlace(int placeTableIndex)
         {
+            Init();
             PayPlaceCompleted?.Invoke(placeTableIndex);
         }
     }

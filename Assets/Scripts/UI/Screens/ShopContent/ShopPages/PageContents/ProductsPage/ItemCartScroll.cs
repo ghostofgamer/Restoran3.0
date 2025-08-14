@@ -28,6 +28,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
         [SerializeField] private Tutorial _tutorial;
         [SerializeField] private ShopTutorialChanger _shopTutorialChanger;
         [SerializeField] private LanguageChanger _languageChanger;
+        [SerializeField]private ProductsScrollContent _productsScrollContent;
 
         private List<ItemCart> _items = new List<ItemCart>();
         private DollarValue _totalPrice;
@@ -125,16 +126,19 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.ProductsPage
             {
                 _shopTutorialChanger.ResetProducts();
                 _tutorial.SetCurrentTutorialStage(TutorialType.OrderBurgerPatties);
+                _shopScreen.CloseScreen();
             }
-
-
+            
             _playerLevel.AddExp(amountItems * 5);
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_totalPrice);
+            _productsScrollContent.UpdateRequiredLevelProducts(_playerLevel.CurrentLevel);
             ItemsPurchased?.Invoke(_items);
             _delivery.AddItemsCart(_items);
             ClearItems();
-            _shopScreen.CloseScreen();
+            
+            // _shopScreen.CloseScreen();
+            
             Debug.Log("тебе хватает денег ");
         }
 

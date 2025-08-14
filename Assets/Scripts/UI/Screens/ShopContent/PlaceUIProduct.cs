@@ -79,16 +79,18 @@ namespace UI.Screens.ShopContent
                 return;
             }
 
-            _placesScrollContent.PayPlace(_placeIndex);
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
+            _placesScrollContent.PayPlace(_placeIndex);
             _shopScreen.MakePurchase();
             IsOwned = true;
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);
             // _wallZone.gameObject.SetActive(false);
             PlayerPrefs.SetInt("Place" + _index, 1);
-            _shopScreen.CloseScreen();
+            // _shopScreen.CloseScreen();
+            
+            
             _placeTable.Activate();
         }
 

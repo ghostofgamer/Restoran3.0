@@ -21,17 +21,20 @@ namespace UI.Screens.ShopContent
         [SerializeField] private PlayerLevel _playerLevel;
         [SerializeField] private Tutorial _tutorial;
         [SerializeField] private Button _closeButton;
+        [SerializeField] private GameObject _leftUITopElements;
 
         public override void OpenScreen()
         {
             base.OpenScreen();
             ActivateShopButton(0);
             OpenPage(0);
+            _leftUITopElements.SetActive(false);
         }
 
         public override void CloseScreen()
         {
             base.CloseScreen();
+            _leftUITopElements.SetActive(true);
         }
 
         public virtual void OpenPage(int index)
