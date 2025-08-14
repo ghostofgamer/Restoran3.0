@@ -5,6 +5,7 @@ using InputContent;
 using ItemContent;
 using SoContent;
 using UI.Screens;
+using UI.Screens.AssemblyScreens;
 using UI.Screens.TutorialScreens;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,6 +40,7 @@ namespace TutorialContent
         [SerializeField] private GameObject _blackScreen;
         [SerializeField] private ActionButtonActivator _actionButtonActivator;
         [SerializeField] private PlayerRotator _playerRotator;
+        [SerializeField] private CashierScreen _cashierScreen;
 
         [Header("Guidance Lines")] [SerializeField]
         private GuidanceLine.GuidanceLine _guidanceLine;
@@ -316,10 +318,10 @@ namespace TutorialContent
         public void TakeFirstOrder()
         {
             SetValueButtonTopUI(false);
-            
+
             foreach (var closeCashRegister in _closeCashRegisters)
                 closeCashRegister.interactable = false;
-            
+
             // _closeCashRegister.interactable = false;
             _openCloseRest.DeactivateTutorPoint();
             _cashRegister.ActivateTutorPoint();
@@ -332,10 +334,10 @@ namespace TutorialContent
             SetValueButtonTopUI(false);
             _cashRegister.DeactivateTutorPoint();
             _tableFirstClient.ActivateTutorPoint();
-            
+
             foreach (var closeCashRegister in _closeCashRegisters)
                 closeCashRegister.interactable = true;
-            
+
             // _closeCashRegister.interactable = true;
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _playerRotator.RotateToTarget(_tableFirstClient.transform);
@@ -344,10 +346,11 @@ namespace TutorialContent
         public void TutorCompleted()
         {
             _cashRegister.DeactivateTutorPoint();
-            
+            // _cashierScreen.SetCloseButtonValue(true);
+
             foreach (var closeCashRegister in _closeCashRegisters)
                 closeCashRegister.interactable = true;
-            
+
             SetValueButtonTopUI(true);
             // _tableFirstClient.DeactivateTutorPoint();
             _tutorDescriptionUI.StartCompleted(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
@@ -358,14 +361,14 @@ namespace TutorialContent
             TutorialDescription.Description description =
                 System.Array.Find(_tutorialDescription.descriptions, d => d.type == currentType);
             // return description != null ? description.text : string.Empty;
-            return description != null ?  description.type.ToString() : string.Empty;
+            return description != null ? description.type.ToString() : string.Empty;
         }
 
         private void SetValueButtonTopUI(bool value)
         {
             _shopButton.interactable = value;
             _dailyReward.gameObject.SetActive(value);
-            
+
             // _dailyReward.interactable = value;
             // _fortune.interactable = value;
         }

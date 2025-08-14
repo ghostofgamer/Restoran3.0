@@ -34,6 +34,7 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private Transform _cashierPosition;
         [SerializeField] private CashierScreen cashierScreen;
         [SerializeField] private GameObject _canvas;
+        [SerializeField] private GameObject _UIElements;
 
         private Coroutine _coroutine;
         private DollarValue _currentGivingValue;
@@ -41,6 +42,7 @@ namespace RestaurantContent.CashRegisterContent
         private Stack<int> _changeHistory = new Stack<int>();
         private const int MaxHistorySize = 100;
         private Cashier _cashier;
+        private int _currentTutorOrderCompleteValue = 0;
 
         public event Action<bool> CashRegisterAssemblyBeginig;
 
@@ -147,6 +149,7 @@ namespace RestaurantContent.CashRegisterContent
         public void SetPlayerValue(bool value)
         {
             PlayerOnSite = value;
+            _UIElements.SetActive(!value);
             _cashRegisterViewer.SetOpenCloseCashierTable(value);
 
             if (value == false)
@@ -167,15 +170,20 @@ namespace RestaurantContent.CashRegisterContent
             }
 
             if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
-                _tutorial.SetCurrentTutorialStage(TutorialType.TakeFirstOrder);
+            {
+                _currentTutorOrderCompleteValue++;
+
+                if (_currentTutorOrderCompleteValue >= 3)
+                    cashierScreen.SetCloseButtonValue(true);
+            }
 
             _playerLevel.AddExp(5);
             SoundPlayer.Instance.PlayCashRegister();
 
             // SetPlayerValue(false);
-            
+
             _cashRegisterViewer.WaitingNewOrder();
-            
+
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();
             _wallet.Add(CurrentClient.PriceOrder);
@@ -192,15 +200,20 @@ namespace RestaurantContent.CashRegisterContent
                 return;
 
             if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
-                _tutorial.SetCurrentTutorialStage(TutorialType.TakeFirstOrder);
+            {
+                _currentTutorOrderCompleteValue++;
+
+                if (_currentTutorOrderCompleteValue >= 3)
+                    cashierScreen.SetCloseButtonValue(true);
+            }
 
             _playerLevel.AddExp(5);
             SoundPlayer.Instance.PlayCashRegister();
 
             // SetPlayerValue(false);
-            
+
             _cashRegisterViewer.WaitingNewOrder();
-            
+
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();
             _wallet.Add(CurrentClient.PriceOrder);
