@@ -94,7 +94,6 @@ namespace UI.Screens.ShopContent
             SoundPlayer.Instance.PlayPayment();
             _wallet.Subtract(_dollarValue);
             _shopScreen.MakePurchase();
-            _zonesScrollContent.PurchaseZone(_zoneType);
             IsOwned = true;
             _ownedObjectInfo.SetActive(true);
             _buyObjectInfo.SetActive(false);
@@ -102,6 +101,7 @@ namespace UI.Screens.ShopContent
             PlayerPrefs.SetInt("Zona" + _zoneType, 1);
             // _shopScreen.CloseScreen();
             _zoneWall.Activate();
+            _zonesScrollContent.PurchaseZone(_zoneType);
         }
 
         private void SetValue(bool requaredObjectValue, bool ownedObjectValue, bool buyObjectValue)
