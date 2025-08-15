@@ -28,23 +28,18 @@ namespace ClientsContent
         [SerializeField] private Transform _exitPosition;
         [SerializeField] private CashRegister _cashRegister;
         [SerializeField] private MenuCounter _menuCounter;
-
         [SerializeField] private ClientCar _clientCar;
         [SerializeField] private ClientCar[] _clientCars;
         [SerializeField] private Transform _carSpawnPosition;
         [SerializeField] private Transform _carParkingPosition;
         [SerializeField] private Parking _parking;
-
         [SerializeField] private bool _isWork = true;
         [SerializeField] private float _minTimeSpawn;
         [SerializeField] private float _maxTimeSpawn;
-
         [SerializeField] private Transform _exitCarPosition;
-
         [SerializeField] private PriceOrderCounter _priceOrderCounter;
         [SerializeField] private OpenCloseRestaurant _openCloseRestaurant;
         [SerializeField] private ClientsCounter _clientsCounter;
-
         [SerializeField] private ItemsConfig _itemsConfig;
 
         private float _elapsedTime;
@@ -70,10 +65,7 @@ namespace ClientsContent
                 if (_elapsedTime >= _nextSpawnTime)
                 {
                     _elapsedTime = 0;
-
-
                     _nextSpawnTime = Random.Range(_minTimeSpawn, _maxTimeSpawn);
-
                     CreateClients();
                 }
             }
@@ -160,7 +152,7 @@ namespace ClientsContent
                 table.SetBusyValue(true);
                 Client client = _clientsSpawner.SpawnRandomClient();
                 client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                    _queueCashRegister, _priceOrderCounter, _clientsCounter,_itemsConfig);
+                    _queueCashRegister, _priceOrderCounter, _clientsCounter, _itemsConfig, ChoosePayment());
                 ClientCreated?.Invoke();
                 _queueCashRegister.AddClientQueue(client);
                 _clients.Add(client);
@@ -188,9 +180,36 @@ namespace ClientsContent
             table.SetBusyValue(true);
             Client client = _clientsSpawner.SpawnRandomClient();
             client.Init(_orderCreator.CreateOrder(), _restaurant, table, _exitPosition, _cashRegister,
-                _queueCashRegister, _priceOrderCounter, _clientsCounter,_itemsConfig);
+                _queueCashRegister, _priceOrderCounter, _clientsCounter, _itemsConfig, ChoosePayment());
             ClientCreated?.Invoke();
             _queueCashRegister.AddClientToQueue(client);
+        }
+
+        private float _cardProbality = 0.5f;
+        private const float _probabilityDecrement = 0.1f;
+        private bool _lastWasCard = false;
+
+        private bool ChoosePayment()
+        {
+            bool isCard = Random.value < _cardProbality;
+
+            if (isCard)
+            {
+                if (_lastWasCard != isCard)
+                    _cardProbality = 0.5f;
+
+                _cardProbality = Mathf.Max(0.1f, _cardProbality - _probabilityDecrement);
+            }
+            else
+            {
+                if (_lastWasCard != isCard)
+                    _cardProbality = 0.5f;
+
+                _cardProbality = Mathf.Min(0.9f, _cardProbality + _probabilityDecrement);
+            }
+
+            _lastWasCard = isCard;
+            return isCard;
         }
     }
 }

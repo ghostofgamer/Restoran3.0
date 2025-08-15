@@ -118,6 +118,7 @@ namespace IAP
             AppMetrica.ReportEvent("In_App", "{\"" + "StarterPack" + "\":null}");
             _delivery.SpawnPrize(ItemType.Bun, 3);
             _delivery.SpawnPrize(ItemType.RawCutlet, 3);
+            _energy.IncreaseEnergy(50);
 
             Debug.Log("On Purchase StarterPack Completed");
 

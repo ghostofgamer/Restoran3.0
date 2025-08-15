@@ -13,6 +13,7 @@ using PlayerContent.LevelContent;
 using SettingsContent.SoundContent;
 using TutorialContent;
 using UI.Screens.AssemblyScreens;
+using UI.Screens.ShopContent.WorkersContent;
 using UnityEngine;
 using WalletContent;
 using WorkerContent;
@@ -35,6 +36,7 @@ namespace RestaurantContent.CashRegisterContent
         [SerializeField] private CashierScreen cashierScreen;
         [SerializeField] private GameObject _canvas;
         [SerializeField] private GameObject _UIElements;
+        [SerializeField] private WorkerUIProduct _workerUIProduct;
 
         private Coroutine _coroutine;
         private DollarValue _currentGivingValue;
@@ -65,11 +67,13 @@ namespace RestaurantContent.CashRegisterContent
         private void OnEnable()
         {
             _interactableObject.OnAction += ShowAssemblyCashRegisterOrder;
+            _workerUIProduct.WorkerFired+= OnWorkerFired;
         }
 
         private void OnDisable()
         {
             _interactableObject.OnAction -= ShowAssemblyCashRegisterOrder;
+            _workerUIProduct.WorkerFired-= OnWorkerFired;
         }
 
         public void SetClient(Client client)
@@ -124,6 +128,15 @@ namespace RestaurantContent.CashRegisterContent
 
             cashierScreen.OpenScreen();
             _cameraPositionChanger.ChangePosition(_cameraCurrentPosition);
+        }
+
+        private void OnWorkerFired(WorkerType worker)
+        {
+            if (worker == WorkerType.Cashier)
+            {
+                SetCashierValue(false);
+                CleanCashier();
+            }
         }
 
         public void SetCanvasActive(bool value)

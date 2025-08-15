@@ -28,9 +28,9 @@ namespace UI.Screens.EquipmentContent
         [SerializeField] private int _centPrice;
         [SerializeField] protected ShopScreen _shopScreen;
         [SerializeField] protected Wallet _wallet;
-        [SerializeField] private Color _activeButtonColor;
-        [SerializeField] private Color _notActiveButtonColor;
-        [SerializeField] private Image _buyButtonImage;
+        [SerializeField] protected Color _activeButtonColor;
+        [SerializeField] protected Color _notActiveButtonColor;
+        [SerializeField] protected Image _buyButtonImage;
         [SerializeField] private bool _dependsOnZone;
         [SerializeField] private ZoneUIProduct _zoneUIProduct;
         [SerializeField] protected EquipmentType _equipmentType;
@@ -82,7 +82,7 @@ namespace UI.Screens.EquipmentContent
             _buyObjectInfo.SetActive(false);
             _equipment.gameObject.SetActive(true);
             PlayerPrefs.SetInt(Equipment + _levelOpened, 1);
-            _shopScreen.CloseScreen();
+            // _shopScreen.CloseScreen();
         }
 
         public virtual bool IsBuyed()

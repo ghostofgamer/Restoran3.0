@@ -48,7 +48,7 @@ namespace ClientsContent
 
         public void Init(Order order, Restaurant restaurant, Table table, Transform exitPosition,
             CashRegister cashRegister, QueueCashRegister queueCashRegister, PriceOrderCounter priceOrderCounter,
-            ClientsCounter clientsCounter,ItemsConfig itemsConfig)
+            ClientsCounter clientsCounter,ItemsConfig itemsConfig,bool isCard)
         {
             _ideaOrderClient.gameObject.SetActive(false);
             
@@ -70,7 +70,8 @@ namespace ClientsContent
 
 
             Random random = new Random();
-            IsCard = random.Next(2) == 1;
+            // IsCard = random.Next(2) == 1;
+            IsCard = isCard;
 
             Cash = new DollarValue(0, 0);
             Cash = priceOrderCounter.GetCash(PriceOrder);

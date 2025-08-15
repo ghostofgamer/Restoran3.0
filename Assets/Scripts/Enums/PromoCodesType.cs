@@ -10,5 +10,6 @@ namespace Enums
         Cashier2025,
         SuperBurger,
         Rewards50,
+        NewStyle,
     }
 }

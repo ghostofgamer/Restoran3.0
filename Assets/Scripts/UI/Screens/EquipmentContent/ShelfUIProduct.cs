@@ -34,6 +34,10 @@ namespace UI.Screens.EquipmentContent
         {
             _currentBuyShelfIndex = PlayerPrefs.GetInt("ShelfBuyed" + _equipmentType, -1);
             Initialization(levelPlayer);
+            
+            _buyButtonImage.color = _wallet.DollarValue.ToTotalCents() >= CurrentPrice.ToTotalCents()
+                ? _activeButtonColor
+                : _notActiveButtonColor;
         }
 
         public override void Buy()
@@ -50,16 +54,16 @@ namespace UI.Screens.EquipmentContent
                     return;
                 }
                 
-                _equipmentScrollContent.PurchaseEquipment(_equipmentType);
                 
                 AppMetrica.ReportEvent("Equipment", "{\"" + "Shelf" + "\":null}");
                 SoundPlayer.Instance.PlayPayment();
                 _wallet.Subtract(CurrentPrice);
                 _shopScreen.MakePurchase();
+                _equipmentScrollContent.PurchaseEquipment(_equipmentType);
                 _currentBuyShelfIndex = nextShelfIndex;
                 PlayerPrefs.SetInt("ShelfBuyed" + _equipmentType, _currentBuyShelfIndex);
                 ActivateShelf(_currentBuyShelfIndex);
-                _shopScreen.CloseScreen();
+                // _shopScreen.CloseScreen();
                 Initialization(_currentBuyShelfIndex);
             }
             else
