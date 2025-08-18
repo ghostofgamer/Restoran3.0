@@ -1,4 +1,5 @@
 using System;
+using AttentionHintContent;
 using Enums;
 using I2.Loc;
 using InteractableContent;
@@ -48,7 +49,11 @@ namespace RestaurantContent
         private void SetValue(PlayerInteraction playerInteraction)
         {
             if ((int)_tutorial.CurrentType < (int)TutorialType.OpenRestaurant)
+            {
+                AttentionHintActivator.Instance.ShowHint(
+                    LocalizationManager.GetTermTranslation("You are not ready to open yet!"));
                 return;
+            }
 
             if (_tutorial.CurrentType == TutorialType.OpenRestaurant)
                 _tutorial.SetCurrentTutorialStage(TutorialType.OpenRestaurant);
