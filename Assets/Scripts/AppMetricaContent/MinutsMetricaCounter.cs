@@ -49,7 +49,7 @@ namespace AppMetricaContent
 
         private void SendReport()
         {
-            AppMetrica.ReportEvent("Minutes", "{\"" + _minutesPlay + "}");
+            AppMetrica.ReportEvent("Minutes", "{\"" + _minutesPlay + "\":null}");
         }
     }
 }
