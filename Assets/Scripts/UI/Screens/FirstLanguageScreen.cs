@@ -1,3 +1,4 @@
+using I2.Loc;
 using UnityEngine;
 
 namespace UI.Screens
@@ -12,6 +13,9 @@ namespace UI.Screens
 
             if (_isFirstTime)
             {
+                /*string currentLanguage = LocalizationManager.GetCurrentDeviceLanguage();
+                            LocalizationManager.CurrentLanguage = currentLanguage;*/
+
                 OpenScreen();
                 PlayerPrefs.SetInt("IsFirstLanguageChange", 1);
             }
