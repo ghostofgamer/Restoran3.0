@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Enums;
+using TutorialContent;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,6 +11,9 @@ namespace MysteryGiftContent
     {
         [SerializeField] private List<Transform> _positions;
         [SerializeField] private MysteryGift _mysteryGift;
+        [SerializeField] private float _activationDuration = 180f;
+        [SerializeField] private float _deactivationDuration = 60f;
+        [SerializeField] private Tutorial _tutorial;
 
         private float _elapsedTime;
         private float _duration = 10f;
@@ -16,27 +21,33 @@ namespace MysteryGiftContent
         private bool _isPaused = false;
         private Coroutine _coroutine;
         private WaitForSeconds _waitForSeconds = new WaitForSeconds(10f);
-        private float _activationDuration = 180f;
-        private float _deactivationDuration = 60f;
-        
+
         private void Start()
         {
-            if(_coroutine!=null)
-                StopCoroutine(_coroutine);
-            
-            _coroutine = StartCoroutine(ActivateObjectPeriodically());
+            if ((int)_tutorial.CurrentType >= (int)TutorialType.TutorCompleted)
+                StartTiming();
         }
 
         private void OnEnable()
         {
             _mysteryGift.BoxActivation += ActivatePaused;
             _mysteryGift.BoxDeactivation += DeactivatePaused;
+            _tutorial.TutorCompleted += StartTiming;
         }
 
         private void OnDisable()
         {
             _mysteryGift.BoxActivation -= ActivatePaused;
             _mysteryGift.BoxDeactivation -= DeactivatePaused;
+            _tutorial.TutorCompleted -= StartTiming;
+        }
+
+        private void StartTiming()
+        {
+            if (_coroutine != null)
+                StopCoroutine(_coroutine);
+
+            _coroutine = StartCoroutine(ActivateObjectPeriodically());
         }
 
         private IEnumerator ActivateObjectPeriodically()
@@ -46,7 +57,7 @@ namespace MysteryGiftContent
                 if (!_isPaused)
                 {
                     yield return new WaitForSeconds(_activationDuration);
-                    
+
                     if (!_isStopped && !_isPaused)
                     {
                         int posIndex = Random.Range(0, _positions.Count);
@@ -66,20 +77,20 @@ namespace MysteryGiftContent
                 }
             }
         }
-        
+
         public void SetStopped(bool value)
         {
             _isStopped = value;
-            
+
             if (_isStopped && _coroutine != null)
                 StopCoroutine(_coroutine);
         }
-        
+
         private void ActivatePaused()
         {
             _isPaused = true;
         }
-        
+
         private void DeactivatePaused()
         {
             _isPaused = false;

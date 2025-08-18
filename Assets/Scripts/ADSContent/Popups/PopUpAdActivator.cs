@@ -1,4 +1,6 @@
 using System.Collections;
+using Enums;
+using TutorialContent;
 using UnityEngine;
 
 namespace ADSContent.Popups
@@ -7,14 +9,27 @@ namespace ADSContent.Popups
     {
         [SerializeField] private AddMoneyAdButton _popUpButton;
         [SerializeField] private float _duration;
-
+        [SerializeField] private Tutorial _tutorial;
+        
         private WaitForSeconds _waitForSeconds;
         private Coroutine _coroutine;
 
+        private void OnEnable()
+        {
+            _tutorial.TutorCompleted += StartTiming;
+        }
+
+        private void OnDisable()
+        {
+            _tutorial.TutorCompleted -= StartTiming;
+        }
+        
         private void Start()
         {
             _waitForSeconds = new WaitForSeconds(_duration);
-            StartTiming();
+            
+            if ((int)_tutorial.CurrentType >= (int)TutorialType.TutorCompleted)
+                StartTiming();
         }
 
         public void StartTiming()
