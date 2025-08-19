@@ -1,3 +1,4 @@
+using System;
 using Enums;
 using I2.Loc;
 using TMPro;
@@ -16,7 +17,7 @@ namespace PromoCodeContent
         [SerializeField] private PromoCodeScreen _promoCodeScreen;
         [SerializeField] private PromoCodeActivator _promoCodeActivator;
 
-        public void AcceptPromoCode()
+        /*public void AcceptPromoCode()
         {
             string enteredCode = _promoCodeInputField.text.Trim().ToUpper();
             PromoCodesType currentPromoCode = PromoCodesType.NewStyle;
@@ -53,6 +54,38 @@ namespace PromoCodeContent
                 _failTextBackground.SetActive(true);
             }
             
+            _promoCodeInputField.text = "";
+        }*/
+        
+        public void AcceptPromoCode()
+        {
+            string enteredCode = _promoCodeInputField.text.Trim().ToUpper();
+
+            if (Enum.TryParse(enteredCode, ignoreCase: true, out PromoCodesType promoCodeType))
+            {
+                if (PlayerPrefs.GetInt("AcceptedCode" + promoCodeType, 0) == 1)
+                {
+                    Debug.Log("Этот промо-код уже был куплен.");
+                    _messageFailedText.text = LocalizationManager.GetTermTranslation("This promo code has already been purchased.");
+                    _failTextBackground.SetActive(true);
+                }
+                else
+                {
+                    _promoCodeActivator.ActivatePrizePromo(promoCodeType);
+                    PlayerPrefs.SetInt("AcceptedCode" + promoCodeType, 1);
+                    PlayerPrefs.Save();
+                    _promoCodeInputField.text = "";
+                    _messageWellDoneText.text = LocalizationManager.GetTermTranslation("Right! Get prizes in the delivery area!");
+                    _WellDoneTextBackground.SetActive(true);
+                }
+            }
+            else
+            {
+                Debug.Log("Неверный промо-код.");
+                _messageFailedText.text = LocalizationManager.GetTermTranslation("Invalid promo code.");
+                _failTextBackground.SetActive(true);
+            }
+
             _promoCodeInputField.text = "";
         }
     }
