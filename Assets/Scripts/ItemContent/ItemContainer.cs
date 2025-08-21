@@ -244,6 +244,8 @@ namespace InteractableContent
             int secondItemsAmountValue = _itemsAdditionalArray[1].Where(p => p.gameObject.activeSelf).Count();
 
             ItemsAdditionalActiveCountChanged?.Invoke(firstItemsAmountValue, secondItemsAmountValue);
+            ValueChanged?.Invoke(firstItemsAmountValue + secondItemsAmountValue,
+                _items.Length + _additionalItems.Length);
         }
 
         private void DeactivateAllItem()

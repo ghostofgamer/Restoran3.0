@@ -12,6 +12,8 @@ namespace InteractableContent
         [SerializeField] private HighlightEffect[] _highlightEffects;
 
         public event Action<PlayerInteraction> OnAction;
+        
+        public event Action<bool> ObjectLooked;
 
         public void EnableOutline()
         {
@@ -39,6 +41,11 @@ namespace InteractableContent
         {
             Debug.Log("Interactable to mey " + gameObject.name);
             OnAction?.Invoke(playerInteraction);
+        }
+
+        public void LookObject(bool value)
+        {
+            ObjectLooked?.Invoke(value);
         }
     }
 }

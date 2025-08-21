@@ -34,6 +34,7 @@ namespace PlayerContent
                         
                         _currentInteractable = interactable;
                         _currentInteractable.EnableOutline();
+                        _currentInteractable.LookObject(true);
                         _playerInteraction.SetCurrentInteractableObject(_currentInteractable);
                     }
                 }
@@ -54,6 +55,7 @@ namespace PlayerContent
         {
             if (_currentInteractable != null)
             {
+                _currentInteractable.LookObject(false);
                 _currentInteractable.DisableOutline();
                 _currentInteractable = null;
                 _playerInteraction.SetCurrentInteractableObject(null);

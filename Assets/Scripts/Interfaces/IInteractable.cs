@@ -1,3 +1,4 @@
+using System;
 using PlayerContent;
 
 namespace Interfaces
@@ -9,5 +10,7 @@ namespace Interfaces
         void DisableOutline();
         
         void Action(PlayerInteraction playerInteraction);
+
+        void LookObject(bool value);
     }
 }

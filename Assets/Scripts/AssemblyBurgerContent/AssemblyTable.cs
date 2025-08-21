@@ -8,6 +8,7 @@ using CameraContent;
 using Enums;
 using I2.Loc;
 using InteractableContent;
+using ItemContent;
 using PlayerContent;
 using SaveContent;
 using SettingsContent.SoundContent;
@@ -24,7 +25,7 @@ public class AssemblyTable : MonoBehaviour
     [SerializeField] private Collider[] _containerColliders;
     [SerializeField] private AssemblyBurger _assemblyBurger;
     [SerializeField] private TutorialAssemblyBurger _tutorialAssemblyBurger;
-
+    [SerializeField] private ItemContainerViewer[] _itemContainerViewers;
     [SerializeField] private Transform _cameraCurrentPosition;
     [SerializeField] private CameraPositionChanger _cameraPositionChanger;
     [SerializeField] private BurgersSaver _burgersSaver;
@@ -46,11 +47,13 @@ public class AssemblyTable : MonoBehaviour
     private void OnEnable()
     {
         _interactableObject.OnAction += HandlePlayerInteraction;
+        _interactableObject.ObjectLooked += SetActiveItemViewers;
     }
 
     private void OnDisable()
     {
         _interactableObject.OnAction -= HandlePlayerInteraction;
+        _interactableObject.ObjectLooked -= SetActiveItemViewers;
     }
 
     private void Start()
@@ -234,14 +237,17 @@ public class AssemblyTable : MonoBehaviour
             containerCollidder.enabled = !value;
             Debug.Log("value " + !value);
         }
+        
+        foreach (var itemContainerViewer in _itemContainerViewers)
+            itemContainerViewer.SetAssemblyMode(!value);
+        
+        SetActiveItemViewers(!value);
     }
 
     private ItemContainer GetContainerForItemType(ItemType itemType)
     {
         if (_containersByItemType.TryGetValue(itemType, out var container))
-        {
             return container;
-        }
 
         return null;
     }
@@ -256,17 +262,12 @@ public class AssemblyTable : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         for (int i = 0; i < value; i++)
-        {
             _assemblyBurger.SimpleCreateStartBurgers(itemType[i]);
+    }
 
-            /*
-            Transform availablePosition = _wellPositions.FirstOrDefault(position => position.childCount == 0);
-            Item sodaInstance = _burgerIngridientSpawner.SpawnItem(itemType[i]);
-            sodaInstance.gameObject.SetActive(true);
-            sodaInstance.transform.SetParent(availablePosition);
-            sodaInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(itemType[i]);
-            sodaInstance.transform.position = availablePosition.position;
-            _sodaCounter.AddSoda(sodaInstance);*/
-        }
+    private void SetActiveItemViewers(bool value)
+    {
+        foreach (var itemContainerViewer in _itemContainerViewers)
+            itemContainerViewer.SetActive(value);
     }
 }

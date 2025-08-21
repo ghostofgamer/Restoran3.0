@@ -9,6 +9,7 @@ public class AssemblyCoffeeScreen : AbstractScreen
     [SerializeField] private CameraPositionChanger _cameraPositionChanger;
     [SerializeField] private AssemblyDrinkTable _assemblyTable;
     [SerializeField] private GameObject _buttonsContentTopUI;
+    [SerializeField] private GameObject[] _deactivateContent;
     
     public override void OpenScreen()
     {
@@ -16,6 +17,7 @@ public class AssemblyCoffeeScreen : AbstractScreen
         base.OpenScreen();
         _input.SetActive(false);
         _buttonsContentTopUI.SetActive(false);
+        SetValue(false);
     }
 
     public override void CloseScreen()
@@ -25,5 +27,12 @@ public class AssemblyCoffeeScreen : AbstractScreen
         _assemblyTable.SetValueCollider(true);
         _input.SetActive(true);
         _buttonsContentTopUI.SetActive(true);
+        SetValue(true);
+    }
+    
+    private void SetValue(bool value)
+    {
+        foreach (var deactivateObject in _deactivateContent)
+            deactivateObject.SetActive(value);
     }
 }
