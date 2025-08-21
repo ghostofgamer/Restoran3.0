@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AttentionHintContent;
 using DG.Tweening;
 using Enums;
+using I2.Loc;
 using ItemContent;
 using KitchenEquipmentContent.AssemblyTables.SodaTableContent;
 using PlayerContent.LevelContent;
@@ -11,7 +13,6 @@ using RestaurantContent.TrayContent;
 using SaveContent;
 using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
-using UI.Screens;
 using UI.Screens.EquipmentContent;
 using UnityEngine;
 
@@ -24,40 +25,49 @@ namespace KitchenEquipmentContent
         [SerializeField] private SodaCounter _sodaCounter;
         [SerializeField] private AssemblyBurgerItemConfig _assemblyBurgerItemConfig;
         [SerializeField] private PlayerLevel _playerLevel;
-        
-        // [SerializeField] private CoffeeCounter _coffeeCounter;
+
         [SerializeField] private List<Transform> _wellPositions;
         [SerializeField] private Restaurant _restaurant;
         [SerializeField] private SodaFullnessCounter[] _sodaFullnessCounters;
         [SerializeField] private EquipmentUIProduct _equipmentUIProduct;
         [SerializeField] private SodaSaver _sodaSaver;
-        
+
         private Coroutine _coroutine;
         private bool _isWorking = false;
 
         private void Start()
         {
             List<ItemType> itemTypes = _sodaSaver.LoadItemTypesFromIndices();
-            
+
             if (itemTypes.Count > 0)
-                LoadWellCups(itemTypes.Count,itemTypes);
-            
+                LoadWellCups(itemTypes.Count, itemTypes);
+
             gameObject.SetActive(_equipmentUIProduct.IsBuyed());
         }
-        
+
         public void PourSoda(ItemType itemType, int index)
         {
             Debug.Log("НАЛИВАЕМ лимонад " + itemType);
-            
-            if (_isWorking || ItemContainer.GetActiveItemsValue() <= 0)
+
+            if (_isWorking)
                 return;
-            
+
+            if (ItemContainer.GetActiveItemsValue() <= 0)
+            {
+                AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("NoEmptyCups"));
+                return;
+            }
+
             SodaFullnessCounter sodaFullnessCounter = GetSodaFullnessCounter(itemType);
             int value = sodaFullnessCounter.CurrentFullness;
 
             if (value < 10)
             {
                 Debug.Log("Соды мало тут  " + value);
+                string term =
+                    $"{LocalizationManager.GetTermTranslation("NotEnoughSodas")} {LocalizationManager.GetTermTranslation(itemType.ToString())}";
+
+                AttentionHintActivator.Instance.ShowHint(term);
                 return;
             }
 
@@ -88,9 +98,9 @@ namespace KitchenEquipmentContent
                 sodaInstance.transform.position = _emptyCups[index].transform.position;
                 sodaInstance.transform.rotation = Quaternion.identity;
                 sodaInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(itemType);
-                
+
                 _playerLevel.AddExp(5);
-                
+
                 Sequence sequence = DOTween.Sequence();
 
                 if (_restaurant.TryGetTrayDrinkOrder(itemType, out Tray tray))
@@ -135,7 +145,7 @@ namespace KitchenEquipmentContent
                 {
                     Debug.Log("Позиций нету но есть заказ же ");
                     Transform position = tray.GetFirstAvailablePosition();
-                    
+
                     ItemContainer.DeactivateItems(1);
                     _emptyCups[index].SetActive(true);
                     sodaFullnessCounter.UseSoda();
@@ -148,13 +158,13 @@ namespace KitchenEquipmentContent
                     sodaInstance.transform.position = _emptyCups[index].transform.position;
                     sodaInstance.transform.rotation = Quaternion.identity;
                     sodaInstance.transform.localScale = _assemblyBurgerItemConfig.GetScale(itemType);
-                    
+
                     _playerLevel.AddExp(5);
-                    
+
                     _restaurant.SetSodaOrder(tray, sodaInstance);
-                    
+
                     Sequence sequence = DOTween.Sequence();
-                    
+
                     sequence.Append(sodaInstance.transform.DOScale(1.15f, 0.3f).SetEase(Ease.InOutQuad));
                     sequence.Append(sodaInstance.transform.DOScale(1.0f, 0.3f).SetEase(Ease.InOutQuad));
                     sequence.Append(sodaInstance.transform.DOMove(position.position, 1f)
@@ -167,10 +177,10 @@ namespace KitchenEquipmentContent
                             .SetEase(Ease.Linear))
                         .OnComplete(() => tray.TryCompletedOrder());
                 }
-                
+
                 Debug.Log("нету пустых позиций");
             }
-            
+
             yield return new WaitForSeconds(1f);
             _isWorking = false;
         }
@@ -189,13 +199,13 @@ namespace KitchenEquipmentContent
         {
             return _sodaFullnessCounters.FirstOrDefault(counter => counter.ItemType == itemType);
         }
-        
-        private void LoadWellCups(int value,List<ItemType> itemType)
+
+        private void LoadWellCups(int value, List<ItemType> itemType)
         {
-            StartCoroutine(StartLoad(value,itemType));
+            StartCoroutine(StartLoad(value, itemType));
         }
 
-        private IEnumerator StartLoad(int value,List<ItemType> itemType)
+        private IEnumerator StartLoad(int value, List<ItemType> itemType)
         {
             yield return new WaitForSeconds(1f);
 

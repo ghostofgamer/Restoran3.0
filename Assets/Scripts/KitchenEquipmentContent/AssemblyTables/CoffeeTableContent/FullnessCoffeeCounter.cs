@@ -1,4 +1,6 @@
 using System;
+using AttentionHintContent;
+using I2.Loc;
 using ItemContent;
 using SettingsContent.SoundContent;
 using UnityEngine;
@@ -34,6 +36,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
             else
             {
                 Debug.Log("Недостаточно кофе в кофемашине.");
+                // AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("NotEnoughCoffee"));
             }
         }
 

@@ -56,7 +56,6 @@ namespace DeliveryContent
                 if (RemainingTime <= 0)
                 {
                     SpawnItem();
-
                     TimeChanged?.Invoke(0);
 
                     if (_items.Count > 0)
@@ -99,8 +98,7 @@ namespace DeliveryContent
 
             TimeSpan elapsedTime = currentTime - _exitTime;
             double secondsElapsed = elapsedTime.TotalSeconds;
-
-
+            
             if (secondsElapsed < RemainingTime)
             {
                 RemainingTime -= (float)secondsElapsed;
@@ -120,7 +118,7 @@ namespace DeliveryContent
                     remainingSeconds = _deliveryConfig.MinValueTimer - secondsElapsed;
 
                 int actualDeliveriesToSpawn = Math.Min(deliveriesToSpawn, CurrentItems.Count);
-
+                
                 for (int i = 0; i < actualDeliveriesToSpawn; i++)
                 {
                     SpawnItem();
@@ -202,9 +200,7 @@ namespace DeliveryContent
                 }
 
                 item.Amount--;
-
                 SoundPlayer.Instance.PlayDostavka();
-
                 UpdateAmountDeliveries();
 
                 if (_tutorial.CurrentType == TutorialType.SkipDelivery)

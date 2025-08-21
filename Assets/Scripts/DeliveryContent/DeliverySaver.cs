@@ -14,6 +14,8 @@ namespace DeliveryContent
     
         [SerializeField] private DeliveryViewer _deliveryViewer;
         [SerializeField] private Delivery _delivery;
+
+        private bool _isWork = false;
         
         private void OnApplicationQuit()
         {
@@ -24,6 +26,8 @@ namespace DeliveryContent
         
         private void OnApplicationFocus(bool hasFocus)
         {
+            if(!_isWork) return; 
+            
             if (hasFocus)
             {
                 LoadDeliveryData();
@@ -80,8 +84,9 @@ namespace DeliveryContent
             catch
             {
                 _delivery.SetItemsList(new List<ItemDeliveryInfo>());
-               
             }
+
+            _isWork = true;
         }
     
         private List<ItemDeliveryInfo> ConvertFromSaveData(DeliverySaveData saveData)

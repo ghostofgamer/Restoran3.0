@@ -4,6 +4,7 @@ using Enums;
 using I2.Loc;
 using InteractableContent;
 using PlayerContent;
+using RestaurantContent.MenuContent;
 using SettingsContent;
 using SettingsContent.SoundContent;
 using TMPro;
@@ -24,6 +25,8 @@ namespace RestaurantContent
         [SerializeField] private Color _openColor;
         [SerializeField] private Color _closeColor;
         [SerializeField] private LanguageChanger _languageChanger;
+        [SerializeField] private MenuCounter _menuCounter;
+        [SerializeField] private GameObject _pointer;
 
         public bool IsOpened { get; private set; }
 
@@ -33,17 +36,34 @@ namespace RestaurantContent
         {
             _interactableObject.OnAction += SetValue;
             _languageChanger.LanguageChanged += ChangeLanguage;
+            _tutorial.TutorCompleted += ActivatePointer;
         }
 
         private void OnDisable()
         {
             _interactableObject.OnAction -= SetValue;
             _languageChanger.LanguageChanged += ChangeLanguage;
+            _tutorial.TutorCompleted -= ActivatePointer;
         }
 
         private void Start()
         {
             Show();
+            SetValuePointer(true);
+        }
+
+        private void ActivatePointer()
+        {
+            if (!IsOpened)
+                _pointer.SetActive(true);
+        }
+
+        private void SetValuePointer(bool value)
+        {
+            Debug.Log("!!!!SetValuePointer " + value);
+
+            if (_tutorial.CurrentType >= TutorialType.TutorCompleted)
+                _pointer.SetActive(value);
         }
 
         private void SetValue(PlayerInteraction playerInteraction)
@@ -58,27 +78,30 @@ namespace RestaurantContent
             if (_tutorial.CurrentType == TutorialType.OpenRestaurant)
                 _tutorial.SetCurrentTutorialStage(TutorialType.OpenRestaurant);
 
+            if (_menuCounter.MenuList.Count <= 0)
+            {
+                AttentionHintActivator.Instance.ShowHint(
+                    LocalizationManager.GetTermTranslation("MenuEmpty"));
+                return;
+            }
+
             SoundPlayer.Instance.PlayButtonClick();
             IsOpened = !IsOpened;
+            SetValuePointer(!IsOpened);
             OpenedChanged?.Invoke(IsOpened);
             Show();
         }
 
         private void Show()
         {
-            /*foreach (var text in _texts)
-                text.text = IsOpened ? "Open" : "Close";*/
-
             if (IsOpened)
             {
-                // _text.text = "OPEN";
                 _text.text = LocalizationManager.GetTermTranslation("OPEN");
                 _text.color = _openColor;
                 _colorObject.material = _openMaterial;
             }
             else
             {
-                // _text.text = "CLOSE";
                 _text.text = LocalizationManager.GetTermTranslation("CLOSED");
                 _text.color = _closeColor;
                 _colorObject.material = _closeMaterial;

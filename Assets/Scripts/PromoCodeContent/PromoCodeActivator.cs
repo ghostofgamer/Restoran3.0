@@ -26,10 +26,9 @@ namespace PromoCodeContent
             _delivery.SpawnPrize(ItemType.Coffee, 2);
         }*/
         
-        
         public void ActivatePrizePromo(PromoCodesType promoCodeType)
         {
-            AppMetrica.ReportEvent("ActivatePrizePromo");
+            AppMetrica.ReportEvent("ActivatePrizePromo", "{\"" + promoCodeType.ToString() + "\":null}");
 
             foreach (var prize in _promoCodePrizes)
             {

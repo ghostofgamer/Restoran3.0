@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AttentionHintContent;
 using DG.Tweening;
 using Enums;
+using I2.Loc;
 using ItemContent;
 using PlayerContent.LevelContent;
 using RestaurantContent;
 using RestaurantContent.TrayContent;
 using SettingsContent.SoundContent;
 using SoContent.AssemblyBurger;
-using UI.Screens;
 using UI.Screens.EquipmentContent;
 using UnityEngine;
 
@@ -36,15 +37,28 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
 
             if (value > 0)
                 LoadWellCups(value);
-            
+
             gameObject.SetActive(_equipmentUIProduct.IsBuyed());
         }
 
         public void PourCoffee()
         {
-            if (_isWorking || ItemContainer.GetActiveItemsValue() <= 0 || _fullnessCoffeeCounter.CurrentFullness < 10)
+            if (_isWorking )
                 return;
+
+            if (_fullnessCoffeeCounter.CurrentFullness < 10)
+            {
+                AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("NotEnoughCoffee"));
+                return;
+            }
             
+            if (ItemContainer.GetActiveItemsValue() <= 0)
+            {
+                AttentionHintActivator.Instance.ShowHint(LocalizationManager.GetTermTranslation("NoEmptyCups"));
+                return;
+            }
+            
+
             _isWorking = true;
 
             if (_coroutine != null)
@@ -112,7 +126,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
             {
                 Debug.Log("нету пустых позиций");
             }
-            
+
             yield return new WaitForSeconds(1f);
             _isWorking = false;
         }
@@ -142,9 +156,7 @@ namespace KitchenEquipmentContent.AssemblyTables.CoffeeTableContent
         public override void FillDrinkMachine(ItemDrinkPackage itemDrinkPackage)
         {
             if (itemDrinkPackage.CurrentFullness > 0)
-            {
                 _fullnessCoffeeCounter.RefillCoffee(itemDrinkPackage);
-            }
         }
     }
 }

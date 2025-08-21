@@ -11,6 +11,8 @@ namespace Enums
         SuperBurger,
         Rewards50,
         NewStyle,
-        SHKREK300
+        SHKREK300,
+        WELCOME,
+        FASTFOOD,
     }
 }
