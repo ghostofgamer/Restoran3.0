@@ -10,8 +10,9 @@ namespace UI.Screens.AssemblyScreens
         [SerializeField] private CameraPositionChanger _cameraPositionChanger;
         [SerializeField] private AssemblyFryerTable _assemblyTable;
         [SerializeField] private GameObject _buttonsContentTopUI;
+
         [SerializeField] private GameObject[] _deactivateContent;
-        
+
         public override void OpenScreen()
         {
             Debug.Log("OPENASSEMBLYSCREEN");
@@ -24,13 +25,14 @@ namespace UI.Screens.AssemblyScreens
         public override void CloseScreen()
         {
             _cameraPositionChanger.ReturnDefaultPosition();
+            
             base.CloseScreen();
             _assemblyTable.SetValueCollider(true);
             _input.SetActive(true);
             _buttonsContentTopUI.SetActive(true);
             SetValue(true);
         }
-        
+
         private void SetValue(bool value)
         {
             foreach (var deactivateObject in _deactivateContent)

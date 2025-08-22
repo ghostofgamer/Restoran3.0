@@ -26,8 +26,8 @@ namespace UI.Screens.AssemblyScreens
             base.OpenScreen();
             _input.SetActive(false);
 
-            if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
-                SetCloseButtonValue(false);
+            /*if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
+                SetCloseButtonValue(false);*/
         }
 
         public override void CloseScreen()
@@ -38,11 +38,11 @@ namespace UI.Screens.AssemblyScreens
             _input.SetActive(true);
             _cashRegister.SetPlayerValue(false);
 
-            if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
+            /*if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
             {
                 _tutorTouchAnim.SetActive(false);
                 _tutorial.SetCurrentTutorialStage(TutorialType.TakeFirstOrder);
-            }
+            }*/
         }
 
         public void SetCloseButtonValue(bool value)

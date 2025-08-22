@@ -60,8 +60,6 @@ namespace RestaurantContent
 
         private void SetValuePointer(bool value)
         {
-            Debug.Log("!!!!SetValuePointer " + value);
-
             if (_tutorial.CurrentType >= TutorialType.TutorCompleted)
                 _pointer.SetActive(value);
         }

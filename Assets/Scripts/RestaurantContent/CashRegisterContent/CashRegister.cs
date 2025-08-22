@@ -182,21 +182,13 @@ namespace RestaurantContent.CashRegisterContent
                 return;
             }
 
-            if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
-            {
-                _currentTutorOrderCompleteValue++;
-
-                if (_currentTutorOrderCompleteValue >= 3)
-                    cashierScreen.SetCloseButtonValue(true);
-            }
-
             _playerLevel.AddExp(5);
             SoundPlayer.Instance.PlayCashRegister();
 
+
             // SetPlayerValue(false);
-
+            
             _cashRegisterViewer.WaitingNewOrder();
-
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();
             _wallet.Add(CurrentClient.PriceOrder);
@@ -205,6 +197,16 @@ namespace RestaurantContent.CashRegisterContent
             SetCanvasActive(CurrentClient != null);
             _restaurant.AcceptOrder(client.Order, client);
             ClearGivingValue();
+            
+            if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
+            {
+                _tutorial.SetCurrentTutorialStage(TutorialType.TakeFirstOrder);
+                
+                /*_currentTutorOrderCompleteValue++;
+
+                if (_currentTutorOrderCompleteValue >= 3)
+                    cashierScreen.SetCloseButtonValue(true);*/
+            }
         }
 
         public void AcceptCardOrder()
@@ -212,21 +214,12 @@ namespace RestaurantContent.CashRegisterContent
             if (CurrentClient == null)
                 return;
 
-            if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
-            {
-                _currentTutorOrderCompleteValue++;
-
-                if (_currentTutorOrderCompleteValue >= 3)
-                    cashierScreen.SetCloseButtonValue(true);
-            }
-
             _playerLevel.AddExp(5);
             SoundPlayer.Instance.PlayCashRegister();
-
+            
             // SetPlayerValue(false);
-
+            
             _cashRegisterViewer.WaitingNewOrder();
-
             CashRegisterOrderCompleted?.Invoke();
             CurrentClient.Paid();
             _wallet.Add(CurrentClient.PriceOrder);
@@ -235,6 +228,16 @@ namespace RestaurantContent.CashRegisterContent
             SetCanvasActive(CurrentClient != null);
             _restaurant.AcceptOrder(client.Order, client);
             ClearGivingValue();
+            
+            if (_tutorial.CurrentType == TutorialType.TakeFirstOrder)
+            {
+                _tutorial.SetCurrentTutorialStage(TutorialType.TakeFirstOrder);
+                
+                /*_currentTutorOrderCompleteValue++;
+
+                if (_currentTutorOrderCompleteValue >= 3)
+                    cashierScreen.SetCloseButtonValue(true);*/
+            }
         }
 
         public void AcceptCashierOrder()

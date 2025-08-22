@@ -66,7 +66,6 @@ namespace QuestsContent
                         }
                     }
                     
-                    Debug.Log("Loading Received Prize " + saveData.IsReceivedGlobalDailyPrize);
                     _progressDailyTasks.SetReceivedValue(saveData.IsReceivedGlobalDailyPrize);
 
                     foreach (var currentTask in _currentTasks)
@@ -188,7 +187,6 @@ namespace QuestsContent
 
             DailyTasksProgressChanged?.Invoke(value, _currentTasks.Count);
             CurrentTasksChanged?.Invoke();
-            Debug.Log("Value " + value);
         }
 
         public bool CheckCompletion()

@@ -58,7 +58,6 @@ namespace QuestsContent
         {
             if (GetCompleteDailyTasks() || GetProgressGlobalPrize() || GetProgressChainTask())
             {
-                Debug.Log("Changed True");
                 SetValue(true);
                 return;
             }
@@ -80,8 +79,7 @@ namespace QuestsContent
                 if (task.IsCompleted && !task.IsReceived)
                     value++;
             }
-
-            Debug.Log("CheckCompleteDailyTasks " + value);
+            
             return value > 0;
         }
 
@@ -94,8 +92,7 @@ namespace QuestsContent
                 if (task.IsCompleted)
                     value++;
             }
-
-            Debug.Log("CheckProgressGlobalPrize " + value);
+            
             return (value >= _dailyTasksCounter.CurrentTasks.Count && !_progressDailyTasks.IsReceived);
         }
 

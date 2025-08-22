@@ -5,7 +5,7 @@ namespace UI.Screens
 {
     public class FirstLanguageScreen : AbstractScreen
     {
-        private bool _isFirstTime;
+        /*private bool _isFirstTime;
 
         private void Start()
         {
@@ -17,9 +17,12 @@ namespace UI.Screens
                 string currentLanguage = LocalizationManager.GetCurrentDeviceLanguage();
                 LocalizationManager.CurrentLanguage = currentLanguage;
                 PlayerPrefs.SetInt("IsFirstLanguageChange", 1);
+                
+                Debug.Log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; " + LocalizationManager.CurrentLanguage);
+                CloseScreen();
             }
             else
                 CloseScreen();
-        }
+        }*/
     }
 }

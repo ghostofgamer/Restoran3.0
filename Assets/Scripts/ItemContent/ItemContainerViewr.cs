@@ -18,7 +18,6 @@ namespace ItemContent
         private void Awake()
         {
             _defaultRotation = _containerObject.transform.rotation;
-            Debug.Log("Default rotation: " + _defaultRotation.eulerAngles);
         }
 
         private void OnEnable()

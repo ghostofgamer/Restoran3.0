@@ -319,10 +319,11 @@ namespace TutorialContent
         {
             SetValueButtonTopUI(false);
 
-            foreach (var closeCashRegister in _closeCashRegisters)
-                closeCashRegister.interactable = false;
+            /*foreach (var closeCashRegister in _closeCashRegisters)
+                closeCashRegister.interactable = false;*/
 
             // _closeCashRegister.interactable = false;
+            
             _openCloseRest.DeactivateTutorPoint();
             _cashRegister.ActivateTutorPoint();
             _playerRotator.RotateToTarget(_cashRegister.transform);
@@ -347,9 +348,10 @@ namespace TutorialContent
         {
             _cashRegister.DeactivateTutorPoint();
             // _cashierScreen.SetCloseButtonValue(true);
-
-            foreach (var closeCashRegister in _closeCashRegisters)
-                closeCashRegister.interactable = true;
+            _cashierScreen.CloseScreen();
+            
+            /*foreach (var closeCashRegister in _closeCashRegisters)
+                closeCashRegister.interactable = true;*/
 
             SetValueButtonTopUI(true);
             // _tableFirstClient.DeactivateTutorPoint();

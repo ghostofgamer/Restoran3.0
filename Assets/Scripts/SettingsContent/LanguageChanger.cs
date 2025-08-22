@@ -52,5 +52,18 @@ namespace SettingsContent
             PlayerPrefs.SetInt("LanguageIndex", currentIndex);
             PlayerPrefs.Save();
         }
+        
+        public void SetLanguageByName(string languageName)
+        {
+            int index = _languages.IndexOf(languageName);
+            
+            if (index >= 0)
+            {
+                currentIndex = index;
+                UpdateLanguageText();
+                SaveIndex();
+                LanguageChanged?.Invoke();
+            }
+        }
     }
 }

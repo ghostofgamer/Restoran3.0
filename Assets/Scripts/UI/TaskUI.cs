@@ -32,9 +32,6 @@ namespace UI
             Sprite taskPrizeIcon, int taskPrizeAmount, bool completed)
         {
             _task = task;
-            Debug.Log("ЕФЫЛЫ " + _task.TaskID + " " + _task.CurrentValueTask + " " + _task.TargetAmount);
-
-
             _taskPrizeIcon.sprite = taskPrizeIcon;
             _taskPrizeAmount.text = taskPrizeAmount.ToString();
             _taskDescription.text = taskDescription;
@@ -65,7 +62,6 @@ namespace UI
         {
             _activeImage.SetActive(!completed && !received);
             _completeButton.SetActive(completed && !received);
-            Debug.Log("SetValue ЕФЫЛГШ " + "task" + _task.TaskID + "rECEIVER " + received + "    " + completed);
             _receiveImage.SetActive(received);
         }
 

@@ -79,7 +79,6 @@ namespace QuestsContent
         public void SetIndex(int index)
         {
             _index = index;
-            Debug.Log("Value Index " + _index + " " + _taskName);
         }
 
         public void SaveProgress()
