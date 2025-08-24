@@ -60,8 +60,9 @@ namespace TutorialContent
         public void ActivateNameRestaurant()
         {
             _counter++;
-            SetValueButtonTopUI(false);
-            _nameRestaurantScreen.OpenScreen();
+            _tutorial.SetCurrentTutorialStage(TutorialType.NameRestaurant);
+            /*SetValueButtonTopUI(false);
+            _nameRestaurantScreen.OpenScreen();*/
         }
 
         public void ActivateLookAround()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Enums;
 using ShelfContent;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace ItemContent
         private int _maxFullnes = 100;
         
         public Shelf Shelf { get; private set; }
+        public ShelfPosition ShelfPosition { get; private set; }
         
         public int CurrentFullness { get; private set; }
 
@@ -61,9 +63,18 @@ namespace ItemContent
             _imageFullness.fillAmount = (float)CurrentFullness / _maxFullnes;
         }
         
-        public void SetShelf(Shelf shelf)
+        public void SetShelf(Shelf shelf,ShelfPosition shelfPosition)
         {
             Shelf = shelf;
+            ShelfPosition = shelfPosition;
+            
+            StartCoroutine(SetActiveValueItemsShelfPosition());
+        }
+        
+        private IEnumerator SetActiveValueItemsShelfPosition()
+        {
+            yield return new WaitForSeconds(0.5f);
+            ShelfPosition.SetActiveValue(CurrentFullness);
         }
 
         public void SetFullness(int fullness)
@@ -80,6 +91,12 @@ namespace ItemContent
             {
                 Shelf.RemoveDrinkPackage(this);
                 Shelf = null;
+            }
+            
+            if (ShelfPosition != null)
+            {
+                ShelfPosition.Clear();
+                ShelfPosition = null;
             }
 
             _canvasFullness.gameObject.SetActive(true);

@@ -36,7 +36,7 @@ namespace PlayerContent
         {
             if ((int)_tutorial.CurrentType < (int)_tutorialType)
             {
-                Debug.Log("(int)_tutorial.CurrentType < (int)_tutorialType");
+                Debug.Log("(int)_tutorial.CurrentType < (int)_tutorialType" + (int)_tutorial.CurrentType + " " + (int)_tutorialType);
                 return;
             }
 

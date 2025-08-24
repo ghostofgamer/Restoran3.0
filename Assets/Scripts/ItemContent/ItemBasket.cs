@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -23,7 +24,8 @@ public class ItemBasket : MonoBehaviour
     [SerializeField] private Transform[] _positions;
 
     public Shelf Shelf { get; private set; }
-    
+    public ShelfPosition ShelfPosition { get; private set; }
+
     public Transform[] Positions => _positions;
 
     public ItemType ItemType => _itemType;
@@ -55,7 +57,7 @@ public class ItemBasket : MonoBehaviour
     {
         if (!_firstLoad)
             return;
-        
+
         _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
         _itemsActivityAdditionalArray = new ActivityItem[][] { _itemsActivity, _additionalItemsActivity };
         DeactivateItems();
@@ -84,7 +86,7 @@ public class ItemBasket : MonoBehaviour
     public int[] GetActiveValueArrayItems()
     {
         int[] activeCounts = new int[_itemsActivityAdditionalArray.Length];
-   
+
         for (int i = 0; i < _itemsActivityAdditionalArray.Length; i++)
         {
             int rowActiveCount = 0;
@@ -99,7 +101,7 @@ public class ItemBasket : MonoBehaviour
             activeCounts[i] = rowActiveCount;
             // Debug.Log("ActiveCount in row " + i + ": " + rowActiveCount);
         }
-     
+
         // Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
         return activeCounts;
 
@@ -242,11 +244,17 @@ public class ItemBasket : MonoBehaviour
     private void ActivateItems()
     {
         SetActiveValue(true);
-        
+
         if (Shelf != null)
         {
             Shelf.Remove(this);
             Shelf = null;
+        }
+
+        if (ShelfPosition != null)
+        {
+            ShelfPosition.Clear();
+            ShelfPosition = null;
         }
     }
 
@@ -255,7 +263,7 @@ public class ItemBasket : MonoBehaviour
         SetActiveValue(false);
     }
 
-    public void LoadItems(bool additional , int amountItems, List<int> additionalAmountItems)
+    public void LoadItems(bool additional, int amountItems, List<int> additionalAmountItems)
     {
         if (!additional)
         {
@@ -271,33 +279,56 @@ public class ItemBasket : MonoBehaviour
             _itemsAdditionalArray = new Item[][] { _items, _additionalItems };
             _itemsActivityAdditionalArray = new ActivityItem[][] { _itemsActivity, _additionalItemsActivity };
             DeactivateItems();
-            
+
             foreach (var row in _itemsActivityAdditionalArray)
             {
                 foreach (var item in row)
                     item.SetValue(false);
             }
-           
-            
+
+
             for (int i = 0; i < additionalAmountItems.Count; i++)
             {
                 if (i < _itemsActivityAdditionalArray.Length)
                 {
                     int count = additionalAmountItems[i];
-                    
+
                     for (int j = 0; j < count && j < _itemsActivityAdditionalArray[i].Length; j++)
                     {
                         _itemsActivityAdditionalArray[i][j].SetValue(true);
                     }
                 }
             }
-            
+
             DeactivateItems();
         }
     }
 
-    public void SetShelf(Shelf shelf)
+    public void SetShelf(Shelf shelf, ShelfPosition shelfPosition)
     {
         Shelf = shelf;
+        ShelfPosition = shelfPosition;
+
+        StartCoroutine(SetActiveValueItemsShelfPosition());
+    }
+
+    private IEnumerator SetActiveValueItemsShelfPosition()
+    {
+        yield return new WaitForSeconds(0.5f);
+        
+        if (IsAdditionalItemsBasket)
+        {
+            int[] arrayInts = GetActiveValueArrayItems();
+            int value = 0;
+
+            foreach (var intValue in arrayInts)
+                value += intValue;
+
+            ShelfPosition.SetActiveValue(value);
+        }
+        else
+        {
+            ShelfPosition.SetActiveValue(GetActiveValueItems());
+        }
     }
 }

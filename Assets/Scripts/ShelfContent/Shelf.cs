@@ -16,8 +16,10 @@ namespace ShelfContent
     {
         [SerializeField] private InteractableObject _interactableObject;
         [SerializeField] private Transform[] _positions;
+        [SerializeField] private ShelfPosition[] _shelfPositions;
         [SerializeField] private DeliveryConfig _deliveryConfig;
         [SerializeField] private BoxesCounter _boxesCounter;
+        [SerializeField] private IngredientsConfig _ingredientsConfig;
         
         private List<ItemBasket> _itemBaskets = new List<ItemBasket>();
         private List<ItemDrinkPackage> _itemDrinkPackages = new List<ItemDrinkPackage>();
@@ -62,14 +64,17 @@ namespace ShelfContent
                     if (basket != null)
                     {
                         _itemBaskets.Add(basket);
-                        basket.SetShelf(this);
+                        basket.SetShelf(this,position.GetComponent<ShelfPosition>());
 
                         _boxesCounter.RemoveBox(basket.gameObject);
                         
                         playerInteraction.PutItemShelf();
                         basket.transform.SetParent(position);
-
+                        
                         ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
+                        
+                        Ingredient ingredient = _ingredientsConfig.GetIngredient(basket.ItemType);
+                        position.GetComponent<ShelfPosition>().Init(ingredient.shopItemSprite,basket.GetActiveValueItems());
 
                         sequence.Append(basket.transform.DOMove(position.position, 0.3f)
                             .SetEase(Ease.InOutQuad));
@@ -81,13 +86,16 @@ namespace ShelfContent
                     if (drinkPackage != null)
                     {
                         _itemDrinkPackages.Add(drinkPackage);
-                        drinkPackage.SetShelf(this);
+                        drinkPackage.SetShelf(this,position.GetComponent<ShelfPosition>());
                         playerInteraction.PutItemShelf();
                         drinkPackage.transform.SetParent(position);
                         
                         _boxesCounter.RemoveBox(drinkPackage.gameObject);
                         
+                        
                         ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
+                        Ingredient ingredient = _ingredientsConfig.GetIngredient(drinkPackage.ItemType);
+                        position.GetComponent<ShelfPosition>().Init(ingredient.shopItemSprite,drinkPackage.CurrentFullness);
 
                         sequence.Append(drinkPackage.transform.DOMove(position.position, 0.3f)
                             .SetEase(Ease.InOutQuad));
@@ -130,7 +138,6 @@ namespace ShelfContent
         public void Remove(ItemBasket itemBasket)
         {
             _itemBaskets.Remove(itemBasket);
-            
             _boxesCounter.AddBox(itemBasket.gameObject);
             
             ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
@@ -139,7 +146,6 @@ namespace ShelfContent
         public void RemoveDrinkPackage(ItemDrinkPackage drinkPackage)
         {
             _itemDrinkPackages.Remove(drinkPackage);
-            
             _boxesCounter.AddBox(drinkPackage.gameObject);
             
             ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
@@ -164,23 +170,27 @@ namespace ShelfContent
                     if (basket != null)
                     {
                         _itemBaskets.Add(basket);
-                        basket.SetShelf(this);
                         basket.transform.SetParent(position);
+                        basket.SetShelf(this, position.GetComponent<ShelfPosition>());
+                        
+                        Ingredient ingredient = _ingredientsConfig.GetIngredient(basket.ItemType);
+                        position.GetComponent<ShelfPosition>().Init(ingredient.shopItemSprite,basket.GetActiveValueItems());
+                        
                         ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
                         basket.GetComponent<Rigidbody>().isKinematic = true;
-                        /*basket.transform.position = position.position;
-                        basket.transform.rotation = quaternion.identity;*/
                     }
 
                     if (drinkPackage != null)
                     {
                         _itemDrinkPackages.Add(drinkPackage);
-                        drinkPackage.SetShelf(this);
+                        drinkPackage.SetShelf(this,position.GetComponent<ShelfPosition>());
                         drinkPackage.transform.SetParent(position);
+                        
+                        Ingredient ingredient = _ingredientsConfig.GetIngredient(drinkPackage.ItemType);
+                        position.GetComponent<ShelfPosition>().Init(ingredient.shopItemSprite,drinkPackage.CurrentFullness);
+                        
                         ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
                         drinkPackage.GetComponent<Rigidbody>().isKinematic = true;
-                        /*drinkPackage.transform.position = position.position;
-                        drinkPackage.transform.rotation = quaternion.identity;*/
                     }
                 }
             }
