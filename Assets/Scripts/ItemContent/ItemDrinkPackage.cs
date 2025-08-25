@@ -83,7 +83,7 @@ namespace ItemContent
 
         public void SetFullness(int fullness)
         {
-            Debug.Log("SETFULLNES");
+            Debug.Log("SETFULLNES " + fullness);
             _firstFullness = false;
             CurrentFullness = fullness;
             UpdateFullUI();

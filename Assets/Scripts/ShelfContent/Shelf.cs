@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using AttentionHintContent;
 using DG.Tweening;
@@ -7,6 +8,7 @@ using I2.Loc;
 using InteractableContent;
 using ItemContent;
 using PlayerContent;
+using SaveContent;
 using SoContent;
 using UnityEngine;
 
@@ -20,7 +22,7 @@ namespace ShelfContent
         [SerializeField] private DeliveryConfig _deliveryConfig;
         [SerializeField] private BoxesCounter _boxesCounter;
         [SerializeField] private IngredientsConfig _ingredientsConfig;
-        
+
         private List<ItemBasket> _itemBaskets = new List<ItemBasket>();
         private List<ItemDrinkPackage> _itemDrinkPackages = new List<ItemDrinkPackage>();
 
@@ -64,17 +66,18 @@ namespace ShelfContent
                     if (basket != null)
                     {
                         _itemBaskets.Add(basket);
-                        basket.SetShelf(this,position.GetComponent<ShelfPosition>());
+                        basket.SetShelf(this, position.GetComponent<ShelfPosition>());
 
                         _boxesCounter.RemoveBox(basket.gameObject);
-                        
+
                         playerInteraction.PutItemShelf();
                         basket.transform.SetParent(position);
-                        
+
                         ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
-                        
+
                         Ingredient ingredient = _ingredientsConfig.GetIngredient(basket.ItemType);
-                        position.GetComponent<ShelfPosition>().Init(ingredient.shopItemSprite,basket.GetActiveValueItems());
+                        position.GetComponent<ShelfPosition>()
+                            .Init(ingredient.shopItemSprite, basket.GetActiveValueItems());
 
                         sequence.Append(basket.transform.DOMove(position.position, 0.3f)
                             .SetEase(Ease.InOutQuad));
@@ -86,16 +89,17 @@ namespace ShelfContent
                     if (drinkPackage != null)
                     {
                         _itemDrinkPackages.Add(drinkPackage);
-                        drinkPackage.SetShelf(this,position.GetComponent<ShelfPosition>());
+                        drinkPackage.SetShelf(this, position.GetComponent<ShelfPosition>());
                         playerInteraction.PutItemShelf();
                         drinkPackage.transform.SetParent(position);
-                        
+
                         _boxesCounter.RemoveBox(drinkPackage.gameObject);
-                        
-                        
+
+
                         ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
                         Ingredient ingredient = _ingredientsConfig.GetIngredient(drinkPackage.ItemType);
-                        position.GetComponent<ShelfPosition>().Init(ingredient.shopItemSprite,drinkPackage.CurrentFullness);
+                        position.GetComponent<ShelfPosition>()
+                            .Init(ingredient.shopItemSprite, drinkPackage.CurrentFullness);
 
                         sequence.Append(drinkPackage.transform.DOMove(position.position, 0.3f)
                             .SetEase(Ease.InOutQuad));
@@ -139,7 +143,7 @@ namespace ShelfContent
         {
             _itemBaskets.Remove(itemBasket);
             _boxesCounter.AddBox(itemBasket.gameObject);
-            
+
             ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
         }
 
@@ -147,11 +151,11 @@ namespace ShelfContent
         {
             _itemDrinkPackages.Remove(drinkPackage);
             _boxesCounter.AddBox(drinkPackage.gameObject);
-            
+
             ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
         }
 
-        public void Initialization(List<ItemType> itemTypes)
+        /*public void Initialization(List<ItemType> itemTypes)
         {
             foreach (var itemType in itemTypes)
             {
@@ -166,16 +170,16 @@ namespace ShelfContent
                     GameObject instance = Instantiate(prefab, position.position, Quaternion.identity);
                     ItemBasket basket = instance.GetComponent<ItemBasket>();
                     ItemDrinkPackage drinkPackage = instance.GetComponent<ItemDrinkPackage>();
-                    
+
                     if (basket != null)
                     {
                         _itemBaskets.Add(basket);
                         basket.transform.SetParent(position);
                         basket.SetShelf(this, position.GetComponent<ShelfPosition>());
-                        
+
                         Ingredient ingredient = _ingredientsConfig.GetIngredient(basket.ItemType);
                         position.GetComponent<ShelfPosition>().Init(ingredient.shopItemSprite,basket.GetActiveValueItems());
-                        
+
                         ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
                         basket.GetComponent<Rigidbody>().isKinematic = true;
                     }
@@ -185,15 +189,169 @@ namespace ShelfContent
                         _itemDrinkPackages.Add(drinkPackage);
                         drinkPackage.SetShelf(this,position.GetComponent<ShelfPosition>());
                         drinkPackage.transform.SetParent(position);
-                        
+
                         Ingredient ingredient = _ingredientsConfig.GetIngredient(drinkPackage.ItemType);
                         position.GetComponent<ShelfPosition>().Init(ingredient.shopItemSprite,drinkPackage.CurrentFullness);
-                        
+
                         ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
                         drinkPackage.GetComponent<Rigidbody>().isKinematic = true;
                     }
                 }
             }
+        }*/
+
+        /*public void Initialization(List<ShelfSaver.ShelfItemData> shelfItemDataList)
+        {
+            foreach (var shelfItemData in shelfItemDataList)
+            {
+                Transform position = GetFreePosition();
+                if (position == null)
+                {
+                    Debug.LogWarning("No free position on the shelf!");
+                    return;
+                }
+
+                // Получаем префаб по типу предмета
+                GameObject prefab = _deliveryConfig.GetPrefabByItemType((ItemType)shelfItemData.itemType);
+                if (prefab == null)
+                {
+                    Debug.LogWarning($"Prefab for item type {(ItemType)shelfItemData.itemType} not found!");
+                    continue;
+                }
+
+                // Создаём экземпляр предмета
+                GameObject instance = Instantiate(prefab, position.position, Quaternion.identity);
+
+                // Получаем компоненты
+                ItemBasket basket = instance.GetComponent<ItemBasket>();
+                ItemDrinkPackage drinkPackage = instance.GetComponent<ItemDrinkPackage>();
+
+                if (basket != null)
+                {
+                    _itemBaskets.Add(basket);
+                    basket.transform.SetParent(position);
+
+                    // Устанавливаем ссылку на шкаф и позицию
+                    basket.SetShelf(this, position.GetComponent<ShelfPosition>());
+
+                    // Восстанавливаем количество предметов
+                    basket.SetActiveValueItems(shelfItemData.amount);
+
+                    // Если есть дополнительные предметы, восстанавливаем их
+                    if (shelfItemData.additional && shelfItemData.additionalAmountItems != null)
+                    {
+                        basket.SetAdditionalItems(shelfItemData.additionalAmountItems);
+                    }
+
+                    // Инициализируем позицию на шкафу
+                    Ingredient ingredient = _ingredientsConfig.GetIngredient(basket.ItemType);
+                    position.GetComponent<ShelfPosition>()
+                        .Init(ingredient.shopItemSprite, basket.GetActiveValueItems());
+
+                    // Вызываем событие изменения списка
+                    ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
+
+                    // Отключаем физику
+                    basket.GetComponent<Rigidbody>().isKinematic = true;
+                }
+                else if (drinkPackage != null)
+                {
+                    _itemDrinkPackages.Add(drinkPackage);
+                    drinkPackage.SetShelf(this, position.GetComponent<ShelfPosition>());
+                    drinkPackage.transform.SetParent(position);
+
+                    // Восстанавливаем количество напитков
+                    drinkPackage.SetCurrentFullness(shelfItemData.amount);
+
+                    // Инициализируем позицию на шкафу
+                    Ingredient ingredient = _ingredientsConfig.GetIngredient(drinkPackage.ItemType);
+                    position.GetComponent<ShelfPosition>()
+                        .Init(ingredient.shopItemSprite, drinkPackage.CurrentFullness);
+
+                    // Вызываем событие изменения списка
+                    ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
+
+                    // Отключаем физику
+                    drinkPackage.GetComponent<Rigidbody>().isKinematic = true;
+                }
+            }
+        }*/
+
+        public void Initialization(List<ShelfSaver.ShelfItemData> shelfItemDataList)
+        {
+            StartCoroutine(StartInitShelf(shelfItemDataList));
+        }
+
+        private IEnumerator StartInitShelf(List<ShelfSaver.ShelfItemData> shelfItemDataList)
+        {
+            yield return new WaitForSeconds(1f);
+
+            foreach (var shelfItemData in shelfItemDataList)
+            {
+                Transform position = GetFreePosition();
+                
+                if (position == null)
+                {
+                    Debug.LogWarning("No free position on the shelf!");
+                    yield break;
+                }
+
+                // Получаем префаб по типу предмета
+                GameObject prefab = _deliveryConfig.GetPrefabByItemType((ItemType)shelfItemData.itemType);
+                if (prefab == null)
+                {
+                    Debug.LogWarning($"Prefab for item type {(ItemType)shelfItemData.itemType} not found!");
+                    continue;
+                }
+
+                // Создаём экземпляр предмета
+                GameObject instance = Instantiate(prefab, position.position, Quaternion.identity);
+
+                // Инициализируем предмет в зависимости от его типа
+                if (instance.TryGetComponent(out ItemBasket basket))
+                {
+                    _itemBaskets.Add(basket);
+                    basket.transform.SetParent(position);
+                    basket.SetShelf(this, position.GetComponent<ShelfPosition>());
+
+                    // Восстанавливаем состояние корзины
+                    if (shelfItemData.isAdditional && shelfItemData.additionalAmountItems != null)
+                    {
+                        basket.LoadItems(true, shelfItemData.amount, shelfItemData.additionalAmountItems);
+                    }
+                    else
+                    {
+                        basket.LoadItems(false, shelfItemData.amount, null);
+                    }
+
+                    // Инициализируем позицию на шкафу
+                    Ingredient ingredient = _ingredientsConfig.GetIngredient(basket.ItemType);
+                    position.GetComponent<ShelfPosition>()
+                        .Init(ingredient.shopItemSprite, basket.GetActiveValueItems());
+
+                    // Отключаем физику
+                    basket.GetComponent<Rigidbody>().isKinematic = true;
+                }
+                else if (instance.TryGetComponent(out ItemDrinkPackage drinkPackage))
+                {
+                    _itemDrinkPackages.Add(drinkPackage);
+                    drinkPackage.SetShelf(this, position.GetComponent<ShelfPosition>());
+                    drinkPackage.transform.SetParent(position);
+
+                    // Восстанавливаем состояние упаковки напитков
+                    drinkPackage.SetFullness(shelfItemData.amount);
+
+                    // Инициализируем позицию на шкафу
+                    Ingredient ingredient = _ingredientsConfig.GetIngredient(drinkPackage.ItemType);
+                    position.GetComponent<ShelfPosition>()
+                        .Init(ingredient.shopItemSprite, drinkPackage.CurrentFullness);
+
+                    // Отключаем физику
+                    drinkPackage.GetComponent<Rigidbody>().isKinematic = true;
+                }
+            }
+
+            ListItemChanged?.Invoke(_itemBaskets, _itemDrinkPackages);
         }
     }
 }

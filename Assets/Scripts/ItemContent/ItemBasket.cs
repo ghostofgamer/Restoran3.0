@@ -99,10 +99,8 @@ public class ItemBasket : MonoBehaviour
             }
 
             activeCounts[i] = rowActiveCount;
-            // Debug.Log("ActiveCount in row " + i + ": " + rowActiveCount);
         }
-
-        // Debug.Log("Total ActiveCounts: " + string.Join(", ", activeCounts));
+        
         return activeCounts;
 
         /*int[] activeCounts = new int[_itemsAdditionalArray.Length];
