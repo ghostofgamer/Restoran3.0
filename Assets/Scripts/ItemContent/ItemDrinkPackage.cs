@@ -74,7 +74,11 @@ namespace ItemContent
         private IEnumerator SetActiveValueItemsShelfPosition()
         {
             yield return new WaitForSeconds(0.5f);
-            ShelfPosition.SetActiveValue(CurrentFullness);
+
+            if (CurrentFullness > 0)
+               ShelfPosition.SetActiveValue(CurrentFullness/10); 
+            else
+                ShelfPosition.SetActiveValue(0); 
         }
 
         public void SetFullness(int fullness)

@@ -98,6 +98,7 @@ namespace ItemContent
             {
                 _itemDrinkPackages.Add(itemDrinkPackage);
                 itemDrinkPackage.SetFullness(boxData.amount);
+                Debug.Log("!!!!!!!!!!!!!!!!!!!!!!LoadBoxCounter  " + boxData.amount);
             }
         }
 
