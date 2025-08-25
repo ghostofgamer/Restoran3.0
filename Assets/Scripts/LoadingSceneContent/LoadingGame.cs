@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using I2.Loc;
 using SettingsContent;
@@ -16,6 +17,8 @@ namespace LoadingSceneContent
         
         private bool _isFirstTime;
         
+        public event Action OnLoadingComplete;
+        
         private void Start()
         {
             StartCoroutine(LoadAsync());
@@ -33,7 +36,9 @@ namespace LoadingSceneContent
                 _loadingBar.fillAmount = fillAmount;
                 yield return null;
             }
-
+            
+            yield return null;
+            
             _isFirstTime = PlayerPrefs.GetInt("IsFirstLanguageChange", 0) == 0;
 
             if (_isFirstTime)
@@ -47,6 +52,7 @@ namespace LoadingSceneContent
 
             _playButton.SetActive(true);
             _sliderLoader.gameObject.SetActive(false);
+            OnLoadingComplete?.Invoke();
         }
     }
 }
