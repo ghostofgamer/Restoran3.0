@@ -39,7 +39,7 @@ namespace WalletContent
 
         public void AddTest()
         {
-            Add(new DollarValue(100, 65));
+            Add(new DollarValue(1000, 00));
         }
 
         public void SubtractTest()

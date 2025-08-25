@@ -61,18 +61,15 @@ namespace RestaurantContent.MenuContent
         private void UpdateCachedList(List<ItemType> cachedList, ItemType itemType, bool isAdding)
         {
             if (isAdding)
-            {
                 cachedList.Add(itemType);
-            }
             else
-            {
                 cachedList.Remove(itemType);
-            }
         }
         
         private void UpdateCachedListsForItem(ItemType itemType, bool isAdding)
         {
             var itemConfig = _itemsConfig.GetItemConfig(itemType);
+            
             if (itemConfig != null)
             {
                 switch (itemConfig.Category)
