@@ -6,6 +6,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
     implementation 'androidx.annotation:annotation:1.7.1' // Packages/io.appmetrica.analytics/Editor/AppMetricaDependencies.xml:5
+    implementation 'com.android.support:appcompat-v7:25.3.1' // Facebook.Unity.Editor.AndroidSupportLibraryResolver.addSupportLibraryDependency
+    implementation 'com.android.support:cardview-v7:25.3.1' // Facebook.Unity.Editor.AndroidSupportLibraryResolver.addSupportLibraryDependency
+    implementation 'com.android.support:customtabs:25.3.1' // Facebook.Unity.Editor.AndroidSupportLibraryResolver.addSupportLibraryDependency
+    implementation 'com.android.support:support-v4:25.3.1' // Facebook.Unity.Editor.AndroidSupportLibraryResolver.addSupportLibraryDependency
     implementation 'com.applovin.mediation:amazon-tam-adapter:11.0.0.0' // Assets/Appodeal/Editor/Dependencies/AppodealDependencies.xml:103
     implementation 'com.applovin.mediation:bidmachine-adapter:3.3.0.0' // Assets/Appodeal/Editor/Dependencies/AppodealDependencies.xml:104
     implementation 'com.applovin.mediation:bidon-adapter:0.9.0.0' // Assets/Appodeal/Editor/Dependencies/AppodealDependencies.xml:105
@@ -47,6 +51,12 @@ dependencies {
     implementation 'com.appodeal.ads.sdk.services:firebase:3.8.1.0' // Assets/Appodeal/Editor/Dependencies/AppodealDependencies.xml:72
     implementation 'com.appodeal.ads.sdk.services:sentry_analytics:3.8.1.0' // Assets/Appodeal/Editor/Dependencies/AppodealDependencies.xml:81
     implementation 'com.appodeal.ads.sdk:core:3.8.1' // Assets/Appodeal/Editor/Dependencies/AppodealDependencies.xml:61
+    implementation 'com.facebook.android:facebook-applinks:[14.1, 15)' // Assets/FacebookSDK/Plugins/Editor/Dependencies.xml:6
+    implementation 'com.facebook.android:facebook-core:[14.1, 15)' // Assets/FacebookSDK/Plugins/Editor/Dependencies.xml:5
+    implementation 'com.facebook.android:facebook-gamingservices:[14.1, 15)' // Assets/FacebookSDK/Plugins/Editor/Dependencies.xml:9
+    implementation 'com.facebook.android:facebook-login:[14.1, 15)' // Assets/FacebookSDK/Plugins/Editor/Dependencies.xml:7
+    implementation 'com.facebook.android:facebook-share:[14.1, 15)' // Assets/FacebookSDK/Plugins/Editor/Dependencies.xml:8
+    implementation 'com.parse.bolts:bolts-android:1.4.0' // Assets/FacebookSDK/Plugins/Editor/Dependencies.xml:4
     implementation 'io.appmetrica.analytics:analytics:7.7.0' // Packages/io.appmetrica.analytics/Editor/AppMetricaDependencies.xml:4
     implementation 'io.bidmachine:ads.networks.amazon:3.3.0.17' // Assets/Appodeal/Editor/Dependencies/AppodealDependencies.xml:85
     implementation 'io.bidmachine:ads.networks.meta_audience:3.3.0.17' // Assets/Appodeal/Editor/Dependencies/AppodealDependencies.xml:86
