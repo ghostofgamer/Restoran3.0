@@ -76,7 +76,7 @@ namespace RestaurantContent
             if (_tutorial.CurrentType == TutorialType.OpenRestaurant)
                 _tutorial.SetCurrentTutorialStage(TutorialType.OpenRestaurant);
 
-            if (_menuCounter.MenuList.Count <= 0)
+            if (_menuCounter.MenuList.Count <= 0 && !IsOpened)
             {
                 AttentionHintActivator.Instance.ShowHint(
                     LocalizationManager.GetTermTranslation("MenuEmpty"));

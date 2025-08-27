@@ -308,7 +308,7 @@ namespace TutorialContent
         public void OpenRestaurant()
         {
             _blackScreen.SetActive(false);
-            SetValueButtonTopUI(false);
+            SetValueButtonTopUI(true);
             _tutorDescriptionUI.StartStage(GetDescriptionText(_tutorial.CurrentType), (int)_tutorial.CurrentType);
             _lookAroundEventTrigger.gameObject.SetActive(true);
             _joystick.SetActive(true);
@@ -318,7 +318,7 @@ namespace TutorialContent
 
         public void TakeFirstOrder()
         {
-            SetValueButtonTopUI(false);
+            SetValueButtonTopUI(true);
 
             /*foreach (var closeCashRegister in _closeCashRegisters)
                 closeCashRegister.interactable = false;*/

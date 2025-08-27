@@ -14,5 +14,6 @@ namespace Enums
         SHKREK300,
         WELCOME,
         FASTFOOD,
+        EXPANSION,
     }
 }

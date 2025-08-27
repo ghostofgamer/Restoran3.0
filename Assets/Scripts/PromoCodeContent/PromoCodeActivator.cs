@@ -18,6 +18,8 @@ namespace PromoCodeContent
         [SerializeField] private Delivery _delivery;
         [SerializeField] private Energy _energy;
 
+        public PromoCodePrize[] PromoCodePrizes => _promoCodePrizes;
+        
         /*public void ActivatePrizePromo()
         {
             AppMetrica.ReportEvent("ActivatePrizePromo");
