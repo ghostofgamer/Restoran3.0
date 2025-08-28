@@ -1,11 +1,7 @@
 using System;
 using System.Collections;
 using Io.AppMetrica;
-using JetBrains.Annotations;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ADSContent
 {
@@ -186,8 +182,6 @@ namespace ADSContent
                 return;
             
             TakeTop.Master.Ads.ShowInterstitial();
-            
-            
 
             /*if (_isAppodeal)
             {
