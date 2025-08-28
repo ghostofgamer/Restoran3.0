@@ -184,8 +184,12 @@ namespace ADSContent
 
             if (!_showInter)
                 return;
+            
+            TakeTop.Master.Ads.ShowInterstitial();
+            
+            
 
-            if (_isAppodeal)
+            /*if (_isAppodeal)
             {
                 /*if (Appodeal.IsLoaded(AppodealAdType.Interstitial))
                 {
@@ -198,7 +202,7 @@ namespace ADSContent
                         RemoveAdsScreenOpening?.Invoke();
                         _adShowCount = 0;
                     }
-                }*/
+                }#1#
             }
             else
             {
@@ -219,7 +223,7 @@ namespace ADSContent
                 {
                     LoadInterstitial();
                 }
-            }
+            }*/
         }
 
         private IEnumerator ReloadInterstitialAfterDelay(float delay)
@@ -321,16 +325,36 @@ namespace ADSContent
                 return;
             }
                 
-            
+            TakeTop.Master.Ads.ShowRewarded(result =>
+            {
+                if(result)
+                {
+                    // Реклама просмотрена полностью, выдаём награду
+                    Debug.Log("Пользователь получил награду!");
+                    currentRewardCallback = rewardCallback;
+                    
+                    if (currentRewardCallback != null)
+                    {
+                        currentRewardCallback();
+                        currentRewardCallback = null; //// Вызываем делегат
+                    }
+                    
+                }
+                else
+                {
+                    // Пользователь не досмотрел рекламу или произошла ошибка
+                    Debug.Log("Реклама не завершена или ошибка.");
+                }
+            });
                 
             
-            if (_isAppodeal)
+            /*if (_isAppodeal)
             {
                 /*if (Appodeal.IsLoaded(AppodealAdType.RewardedVideo))
                 {
                     currentRewardCallback = rewardCallback;
                     Appodeal.Show(AppodealShowStyle.RewardedVideo);
-                }*/
+                }#1#
             }
             else
             {
@@ -339,7 +363,7 @@ namespace ADSContent
                     currentRewardCallback = rewardCallback;
                     MaxSdk.ShowRewardedAd(RewardedKey);
                 }
-            }
+            }*/
         }
 
 

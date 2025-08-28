@@ -21,7 +21,6 @@ namespace NotificationContent
 
         public void ActivateNotification()
         {
-            
         }
     }
 }
