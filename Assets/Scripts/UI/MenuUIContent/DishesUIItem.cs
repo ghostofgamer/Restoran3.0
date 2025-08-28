@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EnergyContent;
 using Enums;
 using I2.Loc;
+using RestaurantContent;
 using SettingsContent;
 using SoContent;
 using TMPro;
@@ -22,6 +23,7 @@ namespace UI.MenuUIContent
         [SerializeField] private ShopTutorialChanger _shopTutorialChanger;
         [SerializeField] private GameObject _openedContent;
         [SerializeField] private GameObject _closedContent;
+        [SerializeField] private GameObject _availableContent;
         [SerializeField] private Slider _slider;
         [SerializeField] private Color _colorRed;
         [SerializeField] private Color _colorGreen;
@@ -29,6 +31,7 @@ namespace UI.MenuUIContent
         [SerializeField] private TMP_Text _priceDifferenceText;
         [SerializeField] private Energy _energy;
         [SerializeField] private Button _addMenuButton;
+        [SerializeField] private MenuItemAvailabilityChecker _menuItemAvailabilityChecker;
 
         private bool _isFirstCall = true;
         private int _levelOpened;
@@ -40,13 +43,12 @@ namespace UI.MenuUIContent
         private int _valuePriceState = 0;
 
         private int _purchasedValuePriceState = 0;
-        //
-        // private List<bool> _purchasedPoints = new List<bool>();
 
         public event Action<DollarValue, Color> ChangeCurrentPrice;
         public event Action<DollarValue> ChangeProfitPrice;
 
         public event Action<string, DollarValue> InitCompleted;
+        public event Action<string, DollarValue> InitAvailableCompleted;
 
         private void OnEnable()
         {
@@ -173,8 +175,12 @@ namespace UI.MenuUIContent
 
         public void SetValue(int levelPlayer)
         {
-            _openedContent.SetActive(levelPlayer >= _levelOpened);
-            _closedContent.SetActive(levelPlayer < _levelOpened);
+            bool available = _menuItemAvailabilityChecker.GetEquipmentAvailable();
+            Debug.Log("!!!!!!!!!!!!!!!!!available " + available + "   " + _menuItemAvailabilityChecker.EquipmentType);
+
+            _openedContent.SetActive(levelPlayer >= _levelOpened && available);
+            _closedContent.SetActive(levelPlayer < _levelOpened && available);
+            _availableContent.SetActive(!available);
         }
 
         private void UpdateProfitText()
@@ -194,7 +200,6 @@ namespace UI.MenuUIContent
             }
 
             _isFirstCall = false;
-
 
             int totalCents = _minPrice.ToTotalCents() + (int)value;
             _currentPrice = new DollarValue(0, 0).FromTotalCents(totalCents);
@@ -221,8 +226,6 @@ namespace UI.MenuUIContent
 
             _valuePriceState = points;
 
-            /*Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!_purchasedValuePriceState" + _purchasedValuePriceState);
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!_valuePriceState" + _valuePriceState);*/
             if (_valuePriceState <= _purchasedValuePriceState)
                 _valuePriceState = 0;
 

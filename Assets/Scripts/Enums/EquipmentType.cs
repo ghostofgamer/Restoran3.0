@@ -6,5 +6,6 @@ namespace Enums
         SodaTable,
         CoffeeTable,
         DeepFryer1,
+        Empty,
     }
 }

@@ -1,4 +1,5 @@
 using I2.Loc;
+using RestaurantContent;
 using SettingsContent;
 using TMPro;
 using UnityEngine;
@@ -9,11 +10,13 @@ namespace UI.MenuUIContent
     public class DishesViewer : MonoBehaviour
     {
         [SerializeField] private TMP_Text _requiredText;
+        [SerializeField] private TMP_Text _availableText;
         [SerializeField] private TMP_Text _costText;
         [SerializeField] private TMP_Text _profitText;
         [SerializeField] private TMP_Text _priceText;
         [SerializeField] private DishesUIItem _dishesUIItem;
         [SerializeField] private LanguageChanger _languageChanger;
+        [SerializeField] private MenuItemAvailabilityChecker _menuItemAvailabilityChecker;
 
         private DollarValue _valueProfit;
         private DollarValue _valuePrice;
@@ -53,6 +56,10 @@ namespace UI.MenuUIContent
             _valueCost = costValue;
             _requiredText.text = requiredInfo;
             _costText.text = $"{LocalizationManager.GetTermTranslation("Cost")}:{costValue}";
+
+            if (_menuItemAvailabilityChecker.EquipmentObject != null)
+                _availableText.text =
+                    $"{LocalizationManager.GetTermTranslation("BuyEquipment")}:\n{LocalizationManager.GetTermTranslation(_menuItemAvailabilityChecker.EquipmentType.ToString())}";
         }
 
         private void ChangeLocalization()
