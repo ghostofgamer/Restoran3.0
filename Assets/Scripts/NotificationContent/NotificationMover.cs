@@ -57,7 +57,8 @@ namespace NotificationContent
             Sequence seq = DOTween.Sequence();
 
             // 1. Прилет в центр
-            seq.Append(_rect.DOAnchorPos(_centerPos, _flyDuration).SetEase(Ease.OutCubic));
+            // seq.Append(_rect.DOAnchorPos(_centerPos, _flyDuration).SetEase(Ease.OutCubic));
+            seq.Append(_rect.DOAnchorPos(_centerPos, _flyDuration).SetEase(Ease.OutBack));
 
             // 2. Торможение + squash/stretch
             seq.Append(_rect.DOAnchorPosX(_centerPos.x + _overshootDistance, 0.1f));

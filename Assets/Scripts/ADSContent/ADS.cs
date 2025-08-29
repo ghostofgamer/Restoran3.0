@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Io.AppMetrica;
 using UnityEngine;
+using AdType = TakeTop.Master.AdType;
 
 namespace ADSContent
 {
@@ -318,28 +319,34 @@ namespace ADSContent
                 }
                 return;
             }
-                
-            TakeTop.Master.Ads.ShowRewarded(result =>
+
+
+            if (TakeTop.Master.Ads.IsAdReady(AdType.Rewarded))
             {
-                if(result)
+                Debug.Log("№№№№№№№№№№№№№№№№№№№№TakeTop.Master.Ads.IsAdReady(AdType.Rewarded) " + TakeTop.Master.Ads.IsAdReady(AdType.Rewarded)) ;
+                
+                
+                TakeTop.Master.Ads.ShowRewarded(result =>
                 {
-                    // Реклама просмотрена полностью, выдаём награду
-                    Debug.Log("Пользователь получил награду!");
-                    currentRewardCallback = rewardCallback;
-                    
-                    if (currentRewardCallback != null)
+                    if (result)
                     {
-                        currentRewardCallback();
-                        currentRewardCallback = null; //// Вызываем делегат
+                        Debug.Log("Пользователь получил награду!");
+                        currentRewardCallback = rewardCallback;
+
+                        if (currentRewardCallback != null)
+                        {
+                            currentRewardCallback();
+                            currentRewardCallback = null; //// Вызываем делегат
+                        }
                     }
-                    
-                }
-                else
-                {
-                    // Пользователь не досмотрел рекламу или произошла ошибка
-                    Debug.Log("Реклама не завершена или ошибка.");
-                }
-            });
+                    else
+                    {
+                        // Пользователь не досмотрел рекламу или произошла ошибка
+                        Debug.Log("Реклама не завершена или ошибка.");
+                    }
+                });
+            }  
+            
                 
             
             /*if (_isAppodeal)
