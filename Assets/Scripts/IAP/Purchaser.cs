@@ -5,8 +5,8 @@ using Enums;
 using Io.AppMetrica;
 using RestaurantContent;
 using SoContent;
+using TakeTop.Master;
 using UI.Screens.AdsScreens;
-using Unity.VisualScripting;
 using UnityEngine;
 using WalletContent;
 using Product = UnityEngine.Purchasing.Product;
@@ -32,72 +32,75 @@ namespace IAP
 
         public void OnPurchaseCompleted(Product product)
         {
+            Debug.Log("product " + product);
+            
             switch (product.definition.id)
             {
                 case "com.serbull.iaptutorial.money100":
-                    AddMoney(100);
+                    AddMoney(100,product);
                     break;
 
                 case "com.serbull.iaptutorial.removeads":
-                    RemoveAds();
+                    RemoveAds(product);
                     break;
 
                 case "com.serbull.iaptutorial.money500":
-                    AddMoney(500);
+                    AddMoney(500,product);
                     break;
 
                 case "com.serbull.iaptutorial.money1100":
-                    AddMoney(1100);
+                    AddMoney(1100,product);
                     break;
 
                 case "com.serbull.iaptutorial.money2750":
-                    AddMoney(2750);
+                    AddMoney(2750,product);
                     break;
 
                 case "com.serbull.iaptutorial.money8000":
-                    AddMoney(8000);
+                    AddMoney(8000,product);
                     break;
 
                 case "com.serbull.iaptutorial.money20000":
-                    AddMoney(20000);
+                    AddMoney(20000,product);
                     break;
 
                 case "com.serbull.iaptutorial.starterpack":
-                    StarterPack();
+                    StarterPack(product);
                     break;
 
                 case "com.serbull.iaptutorial.energy30":
-                    AddEnergy(30);
+                    AddEnergy(30,product);
                     break;
 
                 case "com.serbull.iaptutorial.energy150":
-                    AddEnergy(150);
+                    AddEnergy(150,product);
                     break;
 
                 case "com.serbull.iaptutorial.energy450":
-                    AddEnergy(450);
+                    AddEnergy(450,product);
                     break;
 
                 case "com.serbull.iaptutorial.energy1850":
-                    AddEnergy(1850);
+                    AddEnergy(1850,product);
                     break;
 
                 case "com.serbull.iaptutorial.energy5000":
-                    AddEnergy(5000);
+                    AddEnergy(5000,product);
                     break;
 
                 case "com.serbull.iaptutorial.storagepack":
-                    PayStoragePack();
+                    PayStoragePack(product);
                     break;
             }
         }
 
-        private void RemoveAds()
+        [ContextMenu("RemoveAds")]
+        private void RemoveAds(Product product)
         {
             PlayerPrefs.SetInt("removeADS", 1);
             Debug.Log("On Purchase RemoveAds Completed");
             AppMetrica.ReportEvent("In_App", "{\"" + "RemoveADS" + "\":null}");
-            
+
             if (_interstitialTimer != null)
                 _interstitialTimer.SetValue(false);
 
@@ -109,12 +112,14 @@ namespace IAP
 
             if (_removeAdScreen != null)
                 _removeAdScreen.CloseScreen();
+            
+            SendIapRevenue(product);
         }
 
-        private void StarterPack()
+        private void StarterPack(Product product)
         {
             PlayerPrefs.SetInt("StarterPack", 1);
-            AddMoney(150);
+            _wallet.Add(new DollarValue(150, 0));
             AppMetrica.ReportEvent("In_App", "{\"" + "StarterPack" + "\":null}");
             _delivery.SpawnPrize(ItemType.Bun, 3);
             _delivery.SpawnPrize(ItemType.RawCutlet, 3);
@@ -127,25 +132,29 @@ namespace IAP
 
             if (_starterPackButton != null)
                 _starterPackButton.SetActive(false);
+
+            SendIapRevenue(product);
         }
 
-        private void AddMoney(int value)
+        private void AddMoney(int value, Product product)
         {
             _wallet.Add(new DollarValue(value, 0));
             Debug.Log("On Purchase AddMoney Completed");
+            SendIapRevenue(product);
         }
 
-        private void AddEnergy(int value)
+        private void AddEnergy(int value, Product product)
         {
             _energy.IncreaseEnergy(value);
             Debug.Log("On Purchase AddEnergy Completed");
+            SendIapRevenue(product);
         }
 
-        public void PayStoragePack()
+        public void PayStoragePack( Product product)
         {
             PlayerPrefs.SetInt("StoragePack", 1);
             AppMetrica.ReportEvent("In_App", "{\"" + "StoragePack" + "\":null}");
-            AddMoney(300);
+            _wallet.Add(new DollarValue(300, 0));
 
             _delivery.SpawnPrize(ItemType.Bun, 4);
             _delivery.SpawnPrize(ItemType.RawCutlet, 4);
@@ -187,14 +196,36 @@ namespace IAP
             }
 
             Debug.Log("@ amountPrice " + amountPrice);
-
-            AddMoney(amountPrice.Dollars);
-
+            
+            _wallet.Add(new DollarValue(amountPrice.Dollars, 0));
+            
             if (_storagePackScreen != null)
                 _storagePackScreen.CloseScreen();
 
             if (_storagePackButton != null)
                 _storagePackButton.SetActive(false);
+            
+            
+            SendIapRevenue(product);
+        }
+
+
+        private void SendIapRevenue(Product product)
+        {
+            IapRevenueData iapRevenueData = new IapRevenueData()
+            {
+                ProductID = product.definition.id,
+                CurrencyCode = product.metadata.isoCurrencyCode,
+                LocalizedPrice = (decimal)product.metadata.localizedPrice,
+                ProductType = product.definition.type,
+            };
+            
+            Debug.Log("ProductID " + product.definition.id);
+            Debug.Log("CurrencyCode " + product.metadata.isoCurrencyCode);
+            Debug.Log("LocalizedPrice " + product.metadata.localizedPrice);
+            Debug.Log("product.definition.type " + product.definition.type);
+            
+            TakeTop.Master.Analytics.SendIapRevenue(AnalyticsProviderType.AppMetrica, "payment_succeed", iapRevenueData);
         }
     }
 }

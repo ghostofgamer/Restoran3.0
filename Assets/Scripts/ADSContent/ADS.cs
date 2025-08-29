@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Io.AppMetrica;
+using TakeTop.Master;
 using UnityEngine;
 using AdType = TakeTop.Master.AdType;
 
@@ -33,7 +35,7 @@ namespace ADSContent
         public delegate void RewardCallback();
 
         public event Action _interHidden;
-        
+
         public event Action AdsShowed;
 
         public event Action RemoveAdsScreenOpening;
@@ -181,8 +183,9 @@ namespace ADSContent
 
             if (!_showInter)
                 return;
-            
-            TakeTop.Master.Ads.ShowInterstitial();
+
+            if (Ads.IsAdReady(AdType.Interstitial))
+                Ads.ShowInterstitial();
 
             /*if (_isAppodeal)
             {
@@ -309,32 +312,30 @@ namespace ADSContent
             if (_isTest)
             {
                 currentRewardCallback = rewardCallback;
-                
+
                 AdsShowed?.Invoke();
-            
+
                 if (currentRewardCallback != null)
                 {
                     currentRewardCallback();
                     currentRewardCallback = null; //// Вызываем делегат
                 }
+
                 return;
             }
 
 
             if (TakeTop.Master.Ads.IsAdReady(AdType.Rewarded))
             {
-                Debug.Log("№№№№№№№№№№№№№№№№№№№№TakeTop.Master.Ads.IsAdReady(AdType.Rewarded) " + TakeTop.Master.Ads.IsAdReady(AdType.Rewarded)) ;
-                
-                
                 TakeTop.Master.Ads.ShowRewarded(result =>
                 {
                     if (result)
                     {
-                        Debug.Log("Пользователь получил награду!");
                         currentRewardCallback = rewardCallback;
 
                         if (currentRewardCallback != null)
                         {
+                            Debug.Log("Пользователь получил награду!");
                             currentRewardCallback();
                             currentRewardCallback = null; //// Вызываем делегат
                         }
@@ -345,10 +346,9 @@ namespace ADSContent
                         Debug.Log("Реклама не завершена или ошибка.");
                     }
                 });
-            }  
-            
-                
-            
+            }
+
+
             /*if (_isAppodeal)
             {
                 /*if (Appodeal.IsLoaded(AppodealAdType.RewardedVideo))
@@ -493,7 +493,7 @@ namespace ADSContent
         private void OnRewardedVideoFinished(object sender, RewardedVideoFinishedEventArgs e)
         {
             AdsShowed?.Invoke();
-            
+
             if (currentRewardCallback != null)
             {
                 currentRewardCallback();
