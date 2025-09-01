@@ -28,8 +28,8 @@ namespace ADSContent
         private bool _isInterstitialLoading = false;
         private bool _isAdPreloading = false;
         private int _interstitialRetryAttempt = 0;
-        private bool _showInter = true;
-        private bool _temporaryStopInters = false;
+        public bool IsCanShowInter { get; private set; } = true;
+        public bool IsTemporaryStopInters { get; private set; } = false;
         private int _adShowCount = 0;
 
         public delegate void RewardCallback();
@@ -83,12 +83,12 @@ namespace ADSContent
 
         public void SetValue(bool value)
         {
-            _showInter = value;
+            IsCanShowInter = value;
         }
 
         public void SetTemporaryIntersValue(bool value)
         {
-            _temporaryStopInters = value;
+            IsTemporaryStopInters = value;
         }
 
         public void InitializeInterstitialAds()
@@ -178,10 +178,10 @@ namespace ADSContent
             if (_isTest)
                 return;
 
-            if (_temporaryStopInters)
+            if (IsTemporaryStopInters)
                 return;
 
-            if (!_showInter)
+            if (!IsCanShowInter)
                 return;
 
             if (Ads.IsAdReady(AdType.Interstitial))

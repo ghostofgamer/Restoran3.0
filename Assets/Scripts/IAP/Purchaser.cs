@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using ADSContent;
 using DeliveryContent;
 using EnergyContent;
@@ -30,6 +32,9 @@ namespace IAP
         [SerializeField] private ShelfConfigs _shelfConfigs;
         [SerializeField] private GameObject[] _shelfes;
 
+        private string ReceiptsFilePath => Path.Combine(Application.persistentDataPath, "processed_receipts.json");
+
+        
         public void OnPurchaseCompleted(Product product)
         {
             Debug.Log("product " + product);
@@ -113,7 +118,19 @@ namespace IAP
             if (_removeAdScreen != null)
                 _removeAdScreen.CloseScreen();
             
-            SendIapRevenue(product);
+            bool isRestore = CheckReceiptInLocalJSON(product.receipt);
+            
+            if (!isRestore)
+            {
+                Debug.Log("!isRestore  / PurchsedComplitedFirst ");
+                SaveReceiptInLocalJSON(product.receipt);
+                SendIapRevenue(product);
+            }
+            else
+            {
+                Debug.Log("Restore detected — revenue not sent");
+            }
+            // SendIapRevenue(product);
         }
 
         private void StarterPack(Product product)
@@ -133,7 +150,19 @@ namespace IAP
             if (_starterPackButton != null)
                 _starterPackButton.SetActive(false);
 
-            SendIapRevenue(product);
+            bool isRestore = CheckReceiptInLocalJSON(product.receipt);
+            
+            if (!isRestore)
+            {
+                Debug.Log("!isRestore  / PurchsedComplitedFirst ");
+                SaveReceiptInLocalJSON(product.receipt);
+                SendIapRevenue(product);
+            }
+            else
+            {
+                Debug.Log("Restore detected — revenue not sent");
+            }
+            // SendIapRevenue(product);
         }
 
         private void AddMoney(int value, Product product)
@@ -205,11 +234,21 @@ namespace IAP
             if (_storagePackButton != null)
                 _storagePackButton.SetActive(false);
             
+            bool isRestore = CheckReceiptInLocalJSON(product.receipt);
             
-            SendIapRevenue(product);
+            if (!isRestore)
+            {
+                Debug.Log("!isRestore  / PurchsedComplitedFirst ");
+                SaveReceiptInLocalJSON(product.receipt);
+                SendIapRevenue(product);
+            }
+            else
+            {
+                Debug.Log("Restore detected — revenue not sent");
+            }
+            // SendIapRevenue(product);
         }
-
-
+        
         private void SendIapRevenue(Product product)
         {
             IapRevenueData iapRevenueData = new IapRevenueData()
@@ -222,10 +261,53 @@ namespace IAP
             
             Debug.Log("ProductID " + product.definition.id);
             Debug.Log("CurrencyCode " + product.metadata.isoCurrencyCode);
-            Debug.Log("LocalizedPrice " + product.metadata.localizedPrice);
+            Debug.Log("LocalizedPrice " + (decimal)product.metadata.localizedPrice);
             Debug.Log("product.definition.type " + product.definition.type);
             
             TakeTop.Master.Analytics.SendIapRevenue(AnalyticsProviderType.AppMetrica, "payment_succeed", iapRevenueData);
         }
+        
+        private ProcessedReceiptsData LoadReceipts()
+        {
+            if (!File.Exists(ReceiptsFilePath))
+                return new ProcessedReceiptsData(); // пустой список
+
+            string json = File.ReadAllText(ReceiptsFilePath);
+            return JsonUtility.FromJson<ProcessedReceiptsData>(json);
+        }
+        
+        private void SaveReceipts(ProcessedReceiptsData data)
+        {
+            string json = JsonUtility.ToJson(data);
+            File.WriteAllText(ReceiptsFilePath, json);
+        }
+        
+        private bool CheckReceiptInLocalJSON(string receipt)
+        {
+            if (string.IsNullOrEmpty(receipt))
+                return false;
+
+            ProcessedReceiptsData data = LoadReceipts();
+            return data.receipts.Contains(receipt);
+        }
+        
+        private void SaveReceiptInLocalJSON(string receipt)
+        {
+            if (string.IsNullOrEmpty(receipt))
+                return;
+
+            ProcessedReceiptsData data = LoadReceipts();
+            if (!data.receipts.Contains(receipt))
+            {
+                data.receipts.Add(receipt);
+                SaveReceipts(data);
+            }
+        }
+    }
+    
+    [System.Serializable]
+    public class ProcessedReceiptsData
+    {
+        public List<string> receipts = new List<string>();
     }
 }

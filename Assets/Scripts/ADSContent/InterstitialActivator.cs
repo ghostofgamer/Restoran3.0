@@ -90,6 +90,12 @@ namespace ADSContent
 
         public void ShowAd()
         {
+            if (!_ads.IsCanShowInter || _ads.IsTemporaryStopInters)
+            {
+                Debug.Log("Реклама не показывается или куплена отключение ");
+                return;
+            }
+            
             if (CanShowAd())
             {
                 _ads.ShowInterstitial();
