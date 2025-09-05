@@ -76,7 +76,15 @@ namespace TutorialContent
                 TutorialType nextType = GetNextTutorialType(CurrentType);
 
                 // AppMetrica.ReportEvent("Tutorial"completedType.ToString());
-                AppMetrica.ReportEvent("Tutorial", "{\"" + completedType.ToString() + "\":null}");
+                // AppMetrica.ReportEvent("Tutorial", "{\"" + completedType.ToString() + "\":null}");
+
+                var json = "{ \"" + ((int)completedType) + "). " + completedType.ToString() + "\":null }";
+                AppMetrica.ReportEvent("Tutorial", json);
+                
+                /*AppMetrica.ReportEvent(
+                    "Tutorial", 
+                    "{ \"stageIndex\": " + ((int)completedType) + ", \"stageName\": \"" + completedType.ToString() + "\" }"
+                );*/
 
                 if (nextType != CurrentType)
                 {

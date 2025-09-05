@@ -1,4 +1,6 @@
 using InteractableContent;
+using Io.AppMetrica;
+using MetricsContent;
 using PlayerContent;
 using UI.Screens;
 using UnityEngine;
@@ -22,6 +24,7 @@ namespace OurGamesContent
 
         private void Action(PlayerInteraction playerInteraction)
         {
+            OurGamesMetrics.ReportClickPicture();
             _ourGamesScreen.OpenScreen();
         }
     }

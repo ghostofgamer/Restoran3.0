@@ -1,4 +1,6 @@
 using System;
+using Enums;
+using TutorialContent;
 using UnityEngine;
 
 namespace ADSContent
@@ -11,6 +13,7 @@ namespace ADSContent
         
         [SerializeField] private ADS _ads;
         [SerializeField] private float _duration; 
+        [SerializeField]private Tutorial _tutorial;
         
         private TimeSpan adCooldown;
         private DateTime _sessionStartTime;
@@ -48,37 +51,6 @@ namespace ADSContent
 
             adCooldown = TimeSpan.FromMinutes(_duration);
         }
-        
-        /*public static InterstitialActivator Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    GameObject obj = new GameObject("AdManager");
-                    _instance = obj.AddComponent<InterstitialActivator>();
-                    DontDestroyOnLoad(obj);
-                }
-
-                return _instance;
-            }
-        }
-
-        void Awake()
-        {
-            adCooldown = TimeSpan.FromMinutes(_duration);
-            
-            if (_instance == null)
-            {
-                _instance = this;
-                DontDestroyOnLoad(gameObject);
-                InitializeSession();
-            }
-            else if (_instance != this)
-            {
-                Destroy(gameObject);
-            }
-        }*/
 
         private void InitializeSession()
         {
@@ -90,6 +62,14 @@ namespace ADSContent
 
         public void ShowAd()
         {
+            if (_tutorial.CurrentType < TutorialType.TutorCompleted)
+            {
+                Debug.Log("Тутор пройди сначала");
+                Debug.Log("currentTime - firstLaunchTime) < adCooldown");
+                
+                return;
+            }
+            
             if (!_ads.IsCanShowInter || _ads.IsTemporaryStopInters)
             {
                 Debug.Log("Реклама не показывается или куплена отключение ");
@@ -98,6 +78,7 @@ namespace ADSContent
             
             if (CanShowAd())
             {
+                Debug.Log("!!!!Реклама!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 _ads.ShowInterstitial();
                 // Debug.Log("$$$Showing Ad");
                 PlayerPrefs.SetString(LastADKey, DateTime.UtcNow.Ticks.ToString());
