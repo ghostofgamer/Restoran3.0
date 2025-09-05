@@ -1,4 +1,5 @@
 using System.Collections;
+using DayNightContent;
 using Enums;
 using PlayerContent.LevelContent;
 using TutorialContent;
@@ -23,19 +24,47 @@ namespace ADSContent.Popups
 
         private void OnEnable()
         {
-            _tutorial.TutorCompleted += ShowStarterPack;
+            // _tutorial.TutorCompleted += ShowStarterPack;
             _playerLevel.LevelChanged += ChangeValue;
             _ads.RemoveAdsScreenOpening += RemoveAdsScreenOpen;
         }
 
         private void OnDisable()
         {
-            _tutorial.TutorCompleted -= ShowStarterPack;
+            // _tutorial.TutorCompleted -= ShowStarterPack;
             _playerLevel.LevelChanged -= ChangeValue;
             _ads.RemoveAdsScreenOpening -= RemoveAdsScreenOpen;
         }
 
         private void Start()
+        {
+            if ((int)_tutorial.CurrentType >= (int)TutorialType.TutorCompleted)
+            {
+                if (_playerLevel.CurrentLevel < 4)
+                {
+                    // ShowStarterPack();
+                    int value = PlayerPrefs.GetInt("StarterPack", 0);
+
+                    if (value > 0)
+                        return;
+
+                    _starterPackButton.SetActive(true);
+                }
+
+                if (_playerLevel.CurrentLevel >= 4)
+                {
+                    int value = PlayerPrefs.GetInt("StoragePack", 0);
+
+                    if (value > 0)
+                        return;
+
+                    _storagePackButton.SetActive(true);
+                    // ShowStoragePack();
+                }
+            }
+        }
+
+        public void ShowPacks()
         {
             if ((int)_tutorial.CurrentType >= (int)TutorialType.TutorCompleted)
             {
@@ -48,6 +77,7 @@ namespace ADSContent.Popups
 
         private void ShowStarterPack()
         {
+            Debug.Log("ShowStarterPack");
             int value = PlayerPrefs.GetInt("StarterPack", 0);
 
             if (value > 0)
@@ -67,14 +97,16 @@ namespace ADSContent.Popups
                 return;
 
             _storagePackScreen.OpenScreen();
-            _storagePackButton.SetActive(true);
+            // _storagePackButton.SetActive(true);
         }
 
         private IEnumerator StarterPack()
         {
+            Debug.Log("ShowStarterPack 1");
             yield return _waitForSecondsStarterPack;
+            Debug.Log("ShowStarterPack 3 ");
             _starterPackScreen.OpenScreen();
-            _starterPackButton.SetActive(true);
+            // _starterPackButton.SetActive(true);
         }
 
         private void ChangeValue(int level)
