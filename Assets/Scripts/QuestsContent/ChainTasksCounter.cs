@@ -124,7 +124,7 @@ namespace QuestsContent
         
         public void TestCompletedCurrentTask()
         {
-            CurrentTask.CompleteTask();
+            CurrentTask.tESTcOMPLETED();
             CurrentTask.CloseTask();
         }
     }

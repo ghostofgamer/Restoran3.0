@@ -1,4 +1,5 @@
 using System.Collections;
+using LoadingSceneContent;
 using QuestsContent.ProgressDailyTasksContent;
 using UnityEngine;
 
@@ -98,6 +99,17 @@ namespace QuestsContent
 
         private bool GetProgressChainTask()
         {
+
+            if (_chainTasksCounter.CurrentTask == null)
+            {
+                Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Nullllll" );
+                return false;
+            }
+            
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " );
+            Debug.Log("_chainTasksCounter.CurrentTask.IsCompleted " + _chainTasksCounter.CurrentTask.IsCompleted);
+            Debug.Log("!_chainTasksCounter.CurrentTask.IsReceived " + !_chainTasksCounter.CurrentTask.IsReceived);
+            
             return (_chainTasksCounter.CurrentTask.IsCompleted && !_chainTasksCounter.CurrentTask.IsReceived);
         }
     }

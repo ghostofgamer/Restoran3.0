@@ -13,6 +13,11 @@ namespace QuestsContent.TaskLinears
             throw new System.NotImplementedException();
         }
 
+        public override void tESTcOMPLETED()
+        {
+            
+        }
+
         protected override void Initialization()
         {
             

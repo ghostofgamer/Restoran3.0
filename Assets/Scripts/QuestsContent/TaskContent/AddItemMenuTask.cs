@@ -40,7 +40,7 @@ namespace QuestsContent.TaskContent
                 CompleteTask();
                 return;
             }
-            
+
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
                 PrizeTask.Amount,
                 CheckCompletion());
@@ -120,9 +120,16 @@ namespace QuestsContent.TaskContent
                       _targetAmount + "  !  " + CheckCompletion());
 
             TasksUI.ChangeValue(this, _localizationDescription, CurrentValue, _targetAmount, PrizeTask.Icon,
-                PrizeTask.Amount,
-                CheckCompletion());
+                PrizeTask.Amount, CheckCompletion());
 
+            SaveProgress();
+        }
+
+        public override void tESTcOMPLETED()
+        {
+            base.CompleteTask();
+            TasksUI.ChangeValue(this, _localizationDescription, _targetAmount, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount, true);
             SaveProgress();
         }
 

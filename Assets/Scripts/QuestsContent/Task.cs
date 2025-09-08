@@ -63,6 +63,8 @@ namespace QuestsContent
                 TasksActivator.Instance.ChangeValue();
         }
 
+        public abstract void tESTcOMPLETED();
+
         public virtual void CloseTask()
         {
             UnsubscribeFromEvents();

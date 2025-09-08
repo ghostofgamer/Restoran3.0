@@ -148,6 +148,14 @@ namespace QuestsContent.TaskContent
             SaveProgress();
         }
 
+        public override void tESTcOMPLETED()
+        {
+            base.CompleteTask();
+            TasksUI.ChangeValue(this, _localizationDescription, _targetAmount, _targetAmount, PrizeTask.Icon,
+                PrizeTask.Amount, true);
+            SaveProgress();
+        }
+
         public override void CloseTask()
         {
             base.CloseTask();
