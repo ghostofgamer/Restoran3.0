@@ -47,12 +47,12 @@ namespace ADSContent
             bool removeAds = PlayerPrefs.GetInt("removeADS") == 1;
             SetValue(!removeAds);
 
-            if (_isAppodeal)
+            /*if (_isAppodeal)
             {
                 // Initialize(_keyAppodeal);
             }
             else
-                Init();
+                Init();*/
         }
 
 

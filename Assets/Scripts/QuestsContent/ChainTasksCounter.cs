@@ -121,6 +121,12 @@ namespace QuestsContent
             _chainValueText.text =
                 $"{LocalizationManager.GetTermTranslation("Task")} № {(_currentTaskIndex + 1).ToString()}";
         }
+        
+        public void TestCompletedCurrentTask()
+        {
+            CurrentTask.CompleteTask();
+            CurrentTask.CloseTask();
+        }
     }
 
     [System.Serializable]
