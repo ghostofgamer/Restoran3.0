@@ -9,18 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93e96edfdf82a4040817581ba083939f, type: 3}
-  m_Name: Quest50(BuyPlace)
+  m_Script: {fileID: 11500000, guid: 9fec959c5d0a04b40907bf84497323da, type: 3}
+  m_Name: Quest62(SellItem)
   m_EditorClassIdentifier: 
-  _taskID: ChainQuest50
-  _taskName: BuyPlaceTask
-  Description: BuyPlaceTask
+  _taskID: ChainQuest62
+  _taskName: SellItemTask
+  Description: SellItemTask
   _prizeTask:
     _icon: {fileID: 21300000, guid: f20554888bbd3ab4fa7ff2aa45e64b2e, type: 3}
     _taskPrizeType: 1
-    _amount: 300
+    _amount: 200
     _itemType: 0
   _isChainTask: 1
-  _targetAmount: 1
+  _targetAmount: 10
   _levelTask: 0
-  _indexTable: 12
+  _minTargerValue: 0
+  _maxTargerValue: 0
+  _itemType: 24
+  _itemMakeTaskInfos: []
+  _itemsConfig: {fileID: 11400000, guid: d2dffcdae68112c46af2d1412a8c5a89, type: 2}
