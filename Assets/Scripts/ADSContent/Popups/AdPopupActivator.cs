@@ -82,11 +82,13 @@ namespace ADSContent.Popups
 
             if (value > 0)
                 return;
+            
+            _starterPackScreen.OpenScreen();
 
-            if (_starterPackCoroutine != null)
+            /*if (_starterPackCoroutine != null)
                 StopCoroutine(_starterPackCoroutine);
 
-            _starterPackCoroutine = StartCoroutine(StarterPack());
+            _starterPackCoroutine = StartCoroutine(StarterPack());*/
         }
 
         private void ShowStoragePack()
