@@ -15,5 +15,6 @@ namespace Enums
         WELCOME,
         FASTFOOD,
         EXPANSION,
+        YUMYUM,
     }
 }
