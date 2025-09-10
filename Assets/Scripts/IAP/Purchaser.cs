@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ADSContent;
 using DeliveryContent;
 using EnergyContent;
@@ -10,6 +11,7 @@ using SoContent;
 using TakeTop.Master;
 using UI.Screens.AdsScreens;
 using UnityEngine;
+using UnityEngine.Purchasing;
 using WalletContent;
 using Product = UnityEngine.Purchasing.Product;
 
@@ -17,32 +19,83 @@ namespace IAP
 {
     public class Purchaser : MonoBehaviour
     {
+        private StoreController _storeController;
+
+        private readonly List<ProductDefinition> _productsToFetch = new List<ProductDefinition>
+        {
+            new ProductDefinition(IapIds.GetId(IapProductType.Money100), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Money500), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Money1100), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Money2750), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Money8000), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Money20000), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.RemoveAds), ProductType.NonConsumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.StarterPack), ProductType.NonConsumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Energy30), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Energy150), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Energy450), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Energy1850), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.Energy5000), ProductType.Consumable),
+            new ProductDefinition(IapIds.GetId(IapProductType.StoragePack), ProductType.NonConsumable),
+        };
+
         [SerializeField] private UIInfo _uiInfo;
+
         [SerializeField] private Wallet _wallet;
+
         [SerializeField] private InterstitialTimer _interstitialTimer;
+
         [SerializeField] private Delivery _delivery;
+
         [SerializeField] private RemoveAdScreen _removeAdScreen;
+
         [SerializeField] private StarterPackScreen _starterPackScreen;
+
         [SerializeField] private StoragePackScreen _storagePackScreen;
+
         [SerializeField] private GameObject _starterPackButton;
+
         [SerializeField] private GameObject _storagePackButton;
+
         [SerializeField] private Energy _energy;
+
         [SerializeField] private ADS _ads;
+
         [SerializeField] private ZoneWall _storageZoneWall;
+
         [SerializeField] private ShelfConfigs _shelfConfigs;
+
         [SerializeField] private GameObject[] _shelfes;
 
         private string ReceiptsFilePath => Path.Combine(Application.persistentDataPath, "processed_receipts.json");
 
-        
+        private void Awake()
+        {
+            InitializeIAP();
+        }
+
+        public void RestorePurchases()
+        {
+#if  UNITY_ANDROID
+            // Для Android и других платформ просто вызываем FetchPurchases()
+            if (_storeController != null)
+            {
+                _storeController.FetchPurchases();
+                Debug.Log("Android/Other Restore triggered via FetchPurchases()");
+            }
+#endif
+        }
+
         public void OnPurchaseCompleted(Product product)
         {
-            Debug.Log("product " + product);
+            if (product == null) return;
+            
+            Debug.Log("!!!!!!!!!!!!!!!!product " + product);
             
             switch (product.definition.id)
             {
                 case "com.serbull.iaptutorial.money100":
-                    AddMoney(100,product);
+                    AddMoney(100, product);
                     break;
 
                 case "com.serbull.iaptutorial.removeads":
@@ -50,23 +103,23 @@ namespace IAP
                     break;
 
                 case "com.serbull.iaptutorial.money500":
-                    AddMoney(500,product);
+                    AddMoney(500, product);
                     break;
 
                 case "com.serbull.iaptutorial.money1100":
-                    AddMoney(1100,product);
+                    AddMoney(1100, product);
                     break;
 
                 case "com.serbull.iaptutorial.money2750":
-                    AddMoney(2750,product);
+                    AddMoney(2750, product);
                     break;
 
                 case "com.serbull.iaptutorial.money8000":
-                    AddMoney(8000,product);
+                    AddMoney(8000, product);
                     break;
 
                 case "com.serbull.iaptutorial.money20000":
-                    AddMoney(20000,product);
+                    AddMoney(20000, product);
                     break;
 
                 case "com.serbull.iaptutorial.starterpack":
@@ -74,23 +127,23 @@ namespace IAP
                     break;
 
                 case "com.serbull.iaptutorial.energy30":
-                    AddEnergy(30,product);
+                    AddEnergy(30, product);
                     break;
 
                 case "com.serbull.iaptutorial.energy150":
-                    AddEnergy(150,product);
+                    AddEnergy(150, product);
                     break;
 
                 case "com.serbull.iaptutorial.energy450":
-                    AddEnergy(450,product);
+                    AddEnergy(450, product);
                     break;
 
                 case "com.serbull.iaptutorial.energy1850":
-                    AddEnergy(1850,product);
+                    AddEnergy(1850, product);
                     break;
 
                 case "com.serbull.iaptutorial.energy5000":
-                    AddEnergy(5000,product);
+                    AddEnergy(5000, product);
                     break;
 
                 case "com.serbull.iaptutorial.storagepack":
@@ -117,9 +170,9 @@ namespace IAP
 
             if (_removeAdScreen != null)
                 _removeAdScreen.CloseScreen();
-            
+
             bool isRestore = CheckReceiptInLocalJSON(product.receipt);
-            
+
             if (!isRestore)
             {
                 Debug.Log("!isRestore  / PurchsedComplitedFirst ");
@@ -151,7 +204,7 @@ namespace IAP
                 _starterPackButton.SetActive(false);
 
             bool isRestore = CheckReceiptInLocalJSON(product.receipt);
-            
+
             if (!isRestore)
             {
                 Debug.Log("!isRestore  / PurchsedComplitedFirst ");
@@ -179,7 +232,7 @@ namespace IAP
             SendIapRevenue(product);
         }
 
-        public void PayStoragePack( Product product)
+        public void PayStoragePack(Product product)
         {
             PlayerPrefs.SetInt("StoragePack", 1);
             AppMetrica.ReportEvent("In_App", "{\"" + "StoragePack" + "\":null}");
@@ -225,17 +278,17 @@ namespace IAP
             }
 
             Debug.Log("@ amountPrice " + amountPrice);
-            
+
             _wallet.Add(new DollarValue(amountPrice.Dollars, 0));
-            
+
             if (_storagePackScreen != null)
                 _storagePackScreen.CloseScreen();
 
             if (_storagePackButton != null)
                 _storagePackButton.SetActive(false);
-            
+
             bool isRestore = CheckReceiptInLocalJSON(product.receipt);
-            
+
             if (!isRestore)
             {
                 Debug.Log("!isRestore  / PurchsedComplitedFirst ");
@@ -248,7 +301,7 @@ namespace IAP
             }
             // SendIapRevenue(product);
         }
-        
+
         private void SendIapRevenue(Product product)
         {
             IapRevenueData iapRevenueData = new IapRevenueData()
@@ -258,53 +311,148 @@ namespace IAP
                 LocalizedPrice = (decimal)product.metadata.localizedPrice,
                 ProductType = product.definition.type,
             };
-            
+
             Debug.Log("ProductID " + product.definition.id);
             Debug.Log("CurrencyCode " + product.metadata.isoCurrencyCode);
             Debug.Log("LocalizedPrice " + (decimal)product.metadata.localizedPrice);
             Debug.Log("product.definition.type " + product.definition.type);
-            
-            TakeTop.Master.Analytics.SendIapRevenue(AnalyticsProviderType.AppMetrica, "payment_succeed", iapRevenueData);
+
+            TakeTop.Master.Analytics.SendIapRevenue(AnalyticsProviderType.AppMetrica, "payment_succeed",
+                iapRevenueData);
         }
-        
+
         private ProcessedReceiptsData LoadReceipts()
         {
-            if (!File.Exists(ReceiptsFilePath))
-                return new ProcessedReceiptsData(); // пустой список
-
+            if (!File.Exists(ReceiptsFilePath)) return new ProcessedReceiptsData();
             string json = File.ReadAllText(ReceiptsFilePath);
             return JsonUtility.FromJson<ProcessedReceiptsData>(json);
         }
-        
+
         private void SaveReceipts(ProcessedReceiptsData data)
         {
-            string json = JsonUtility.ToJson(data);
-            File.WriteAllText(ReceiptsFilePath, json);
+            File.WriteAllText(ReceiptsFilePath, JsonUtility.ToJson(data));
         }
-        
+
         private bool CheckReceiptInLocalJSON(string receipt)
         {
-            if (string.IsNullOrEmpty(receipt))
-                return false;
-
-            ProcessedReceiptsData data = LoadReceipts();
-            return data.receipts.Contains(receipt);
+            if (string.IsNullOrEmpty(receipt)) return false;
+            return LoadReceipts().receipts.Contains(receipt);
         }
-        
+
         private void SaveReceiptInLocalJSON(string receipt)
         {
-            if (string.IsNullOrEmpty(receipt))
-                return;
-
-            ProcessedReceiptsData data = LoadReceipts();
+            if (string.IsNullOrEmpty(receipt)) return;
+            var data = LoadReceipts();
             if (!data.receipts.Contains(receipt))
             {
                 data.receipts.Add(receipt);
                 SaveReceipts(data);
             }
         }
+        
+        private async void InitializeIAP()
+        {
+            _storeController = UnityIAPServices.StoreController();
+
+            _storeController.OnPurchasePending += OnPurchasePending;
+            _storeController.OnPurchaseConfirmed += OnPurchaseConfirmed;
+            _storeController.OnPurchaseFailed += OnPurchaseFailed;
+            _storeController.OnStoreDisconnected += OnStoreDisconnected;
+            _storeController.OnProductsFetched += OnProductsFetched;
+            _storeController.OnProductsFetchFailed += OnProductsFetchedFailed;
+
+            Debug.Log("Connecting to store...");
+            await _storeController.Connect();
+
+            _storeController.FetchProducts(_productsToFetch);
+        }
+
+        public void BuyProduct(IapProductType productType)
+        {
+            string productId = IapIds.GetId(productType);
+            if (_storeController != null)
+                _storeController.PurchaseProduct(productId);
+            else
+                Debug.LogWarning("StoreController is not initialized yet.");
+        }
+
+        private void OnPurchasePending(PendingOrder order)
+        {
+            var product = order.CartOrdered.Items().FirstOrDefault()?.Product;
+            if (product == null) return;
+
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!Purchase pending: " + product.definition.id);
+
+            OnPurchaseCompleted(product);
+            _storeController.ConfirmPurchase(order);
+        }
+
+        void OnPurchaseConfirmed(Order order)
+        {
+            switch (order)
+            {
+                case ConfirmedOrder confirmedOrder:
+                    OnPurchaseConfirmed(confirmedOrder);
+                    break;
+                case FailedOrder failedOrder:
+                    OnPurchaseConfirmationFailed(failedOrder);
+                    break;
+                default:
+                    Debug.Log("Unknown OnPurchaseConfirmed result.");
+                    break;
+            }
+        }
+
+        void OnPurchaseConfirmationFailed(FailedOrder order)
+        {
+            var product = GetFirstProductInOrder(order);
+            if (product == null)
+            {
+                Debug.Log("Could not find product in failed confirmation.");
+            }
+
+            Debug.Log($"Confirmation failed - Product: '{product?.definition.id}'," +
+                      $"PurchaseFailureReason: {order.FailureReason.ToString()},"
+                      + $"Confirmation Failure Details: {order.Details}");
+        }
+
+        void OnPurchaseConfirmed(ConfirmedOrder order)
+        {
+            var product = GetFirstProductInOrder(order);
+            Debug.Log($"Purchase confirmed (for log only) - Product: {product?.definition.id}");
+            // Здесь больше **не начисляем**, только логируем и при необходимости аналитика
+        }
+
+        Product GetFirstProductInOrder(Order order)
+        {
+            return order.CartOrdered.Items().First()?.Product;
+        }
+
+
+        private void OnPurchaseFailed(FailedOrder order)
+        {
+            var product = order.CartOrdered.Items().FirstOrDefault()?.Product;
+            Debug.LogWarning(
+                $"Purchase failed: {product?.definition.id}, Reason: {order.FailureReason}, Details: {order.Details}");
+        }
+
+        private void OnProductsFetched(List<Product> products)
+        {
+            Debug.Log($"Products fetched successfully: {products.Count}");
+        }
+
+        private void OnProductsFetchedFailed(ProductFetchFailed failure)
+        {
+            Debug.LogWarning(
+                $"Products fetch failed: {failure.FailedFetchProducts.Count} items, Reason: {failure.FailureReason}");
+        }
+
+        private void OnStoreDisconnected(StoreConnectionFailureDescription description)
+        {
+            Debug.LogWarning("Store disconnected: " + description.message);
+        }
     }
-    
+
     [System.Serializable]
     public class ProcessedReceiptsData
     {
