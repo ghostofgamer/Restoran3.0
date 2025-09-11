@@ -1,6 +1,6 @@
 using System;
-using System.Text;
 using ADSContent;
+using IAP;
 using Io.AppMetrica;
 using PlayerContent.LevelContent;
 using UI.Buttons;
@@ -19,7 +19,8 @@ namespace DisableInterContent
         [SerializeField] private DisableInterViewer _disableInterViewer;
         [SerializeField] private Animator _animator;
         [SerializeField] private GameObject _attentionImage;
-
+        [SerializeField] private Purchaser _purchaser;
+        
         private int _currentValueShowReward = 0;
         private bool _isActivateDisableInter = false;
 
@@ -31,16 +32,30 @@ namespace DisableInterContent
         {
             _playerLevel.LevelChanged += SetValue;
             _disablerInterTimer.TimerCompleted += Reset;
+            _purchaser.RemoveADSPurchased += Deactivate;
         }
 
         private void OnDisable()
         {
             _playerLevel.LevelChanged -= SetValue;
             _disablerInterTimer.TimerCompleted -= Reset;
+            _purchaser.RemoveADSPurchased -= Deactivate;
         }
 
         private void Start()
         {
+            bool removeAds = PlayerPrefs.GetInt("removeADS") == 1;
+
+            Debug.Log("Init DisableInter" + removeAds);
+
+            if (removeAds)
+            {
+                Deactivate();
+                return;
+            }
+
+            Debug.Log("Init DisableInter");
+            
             Load();
         }
 
@@ -48,6 +63,14 @@ namespace DisableInterContent
         {
             Save();
             PlayerPrefs.Save();
+        }
+        
+        private void Deactivate()
+        {
+            if (_disableInterScreen.gameObject.activeSelf)
+                _disableInterScreen.CloseScreen();
+            
+            _buttonOpenDisableInterScreen.SetActive(false);
         }
 
         public void GetReward()
@@ -87,6 +110,11 @@ namespace DisableInterContent
 
         private void SetValue(int level)
         {
+            bool removeAds = PlayerPrefs.GetInt("removeADS") == 1;
+
+            if (removeAds)
+                return;
+            
             _buttonOpenDisableInterScreen.SetActive(level >= 2);
         }
 

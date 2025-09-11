@@ -320,6 +320,20 @@ namespace ClientsContent
             _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", false);
             callback.Invoke();
         }
+        
+        private void SetMoving(bool canMove)
+        {
+            if (canMove)
+            {
+                _meshObstacle.enabled = false;
+                _navMeshAgent.enabled = true;
+            }
+            else
+            {
+                _navMeshAgent.enabled = false;
+                _meshObstacle.enabled = true;
+            }
+        }
 
         public bool CanInteractWithCashier()
         {

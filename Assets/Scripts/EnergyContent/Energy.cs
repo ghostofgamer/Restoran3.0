@@ -15,7 +15,7 @@ namespace EnergyContent
 
         private void Start()
         {
-            EnergyValue = PlayerPrefs.GetInt("EnergyValue", 10);
+            EnergyValue = PlayerPrefs.GetInt("EnergyValue", 0);
             SaveEnergy();
             EnergyValueChanged?.Invoke(EnergyValue);
         }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Enums;
 using Io.AppMetrica;
 using UnityEngine;
@@ -10,6 +12,8 @@ namespace TutorialContent
         [SerializeField] private TutorialData _tutorialData;
         [SerializeField] private TutorialActivator _tutorialActivator;
         [SerializeField] private TutorDescriptionUI _tutorialDescriptionUI;
+        [SerializeField] private TutorialNotification _tutorialNotification;
+        [SerializeField] private TutorialPrizeStage _tutorialPrizeStage;
 
         [SerializeField] private bool _isCheatCodeTutorCompleted;
 
@@ -19,6 +23,9 @@ namespace TutorialContent
 
         private void Awake()
         {
+            for (int i = 0; i < _tutorialPrizeStage.PrizeStage.Count; i++)
+                _tutorialPrizeStage.PrizeStage[i].IndexStage = i;
+            
             int value = PlayerPrefs.GetInt("TutorCompleted", 0);
 
             if (_isCheatCodeTutorCompleted)
@@ -73,6 +80,9 @@ namespace TutorialContent
         {
             if (completedType == CurrentType)
             {
+                if ((int)completedType >= (int)TutorialType.LookAround)
+                    _tutorialNotification.ShowNotification(_tutorialPrizeStage.GetPrizeByIndex((int)completedType));
+
                 TutorialType nextType = GetNextTutorialType(CurrentType);
 
                 // AppMetrica.ReportEvent("Tutorial"completedType.ToString());
@@ -80,9 +90,9 @@ namespace TutorialContent
 
                 var json = "{ \"" + ((int)completedType) + "). " + completedType.ToString() + "\":null }";
                 AppMetrica.ReportEvent("Tutorial", json);
-                
+
                 /*AppMetrica.ReportEvent(
-                    "Tutorial", 
+                    "Tutorial",
                     "{ \"stageIndex\": " + ((int)completedType) + ", \"stageName\": \"" + completedType.ToString() + "\" }"
                 );*/
 
@@ -267,4 +277,32 @@ namespace TutorialContent
             }
         }
     }
+}
+
+[Serializable]
+public class TutorialPrizeStage
+{
+    public List<TutorialPrize> PrizeStage = new List<TutorialPrize>();
+
+    public TutorialPrize GetPrizeByIndex(int index)
+    {
+        Debug.Log("!!!!!!!!!!!!!!!!PRIZE INDEX" + index);
+
+        if (index < 0 || index >= PrizeStage.Count)
+        {
+            Debug.LogWarning($"Prize with index {index} not found!");
+            return null; // или можно вернуть новый пустой TutorialPrize()
+        }
+
+        return PrizeStage[index];
+    }
+}
+
+[Serializable]
+public class TutorialPrize
+{
+    public Sprite Sprite;
+    public int Value;
+    public int IndexStage;
+    public TaskPrizeType PrizeType;
 }

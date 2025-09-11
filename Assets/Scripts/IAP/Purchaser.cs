@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,6 +67,8 @@ namespace IAP
         [SerializeField] private ShelfConfigs _shelfConfigs;
 
         [SerializeField] private GameObject[] _shelfes;
+        
+        public event Action RemoveADSPurchased;
 
         private string ReceiptsFilePath => Path.Combine(Application.persistentDataPath, "processed_receipts.json");
 
@@ -158,7 +161,9 @@ namespace IAP
             PlayerPrefs.SetInt("removeADS", 1);
             Debug.Log("On Purchase RemoveAds Completed");
             AppMetrica.ReportEvent("In_App", "{\"" + "RemoveADS" + "\":null}");
-
+            
+            RemoveADSPurchased?.Invoke();
+            
             if (_interstitialTimer != null)
                 _interstitialTimer.SetValue(false);
 
