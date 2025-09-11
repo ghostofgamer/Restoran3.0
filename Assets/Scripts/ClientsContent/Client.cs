@@ -90,7 +90,7 @@ namespace ClientsContent
 
         public void GoToQueuePosition(Vector3 position, int index)
         {
-            _navMeshAgent.enabled = true;
+            // _navMeshAgent.enabled = true;
             // _meshObstacle.enabled = true;
             if (_indexQueue == index)
                 return;
@@ -104,7 +104,7 @@ namespace ClientsContent
                 SetDestination(_cashRegister.ClientPosition.position, () =>
                 {
                     _cashRegister.SetClient(this);
-                    _navMeshAgent.enabled = false;
+                    // _navMeshAgent.enabled = false;
                     
                     _ideaOrderClient.gameObject.SetActive(true);
                     
@@ -115,7 +115,7 @@ namespace ClientsContent
             {
                 SetDestination(position, () =>
                 {
-                    _navMeshAgent.enabled = false;
+                    // _navMeshAgent.enabled = false;
                     // _meshObstacle.enabled = false;
                 });
             }
@@ -146,11 +146,11 @@ namespace ClientsContent
             {
                 _restaurant.RemoveClientTray(tray);
                 _currentState = ClientState.Eat;
-                _navMeshAgent.enabled = true;
+                // _navMeshAgent.enabled = true;
 
                 SetDestination(Table.ClientStandPosition.transform.position, () =>
                 {
-                    _navMeshAgent.enabled = false;
+                    // _navMeshAgent.enabled = false;
                     transform.position = Table.ClientSitPosition.transform.position;
                     transform.rotation = Table.ClientSitPosition.transform.rotation;
                     _animator.SetBool("Sit", true);
@@ -239,7 +239,7 @@ namespace ClientsContent
         public void Paid()
         {
             _currentState = ClientState.WaitingForOrder;
-            _navMeshAgent.enabled = true;
+            // _navMeshAgent.enabled = true;
             
             _ideaOrderClient.gameObject.SetActive(false);
             
@@ -290,14 +290,15 @@ namespace ClientsContent
         {
             // _meshObstacle.enabled = true;
             _meshObstacle.enabled = false;
+            _navMeshAgent.enabled = true;
             yield return null;
 
-            if (!_navMeshAgent.enabled)
+            /*if (!_navMeshAgent.enabled)
             {
                 _navMeshAgent.enabled = true;
                 transform.position = Table.ClientStandPosition.position;
                 transform.rotation = Table.ClientStandPosition.rotation;
-            }
+            }*/
 
             if (_animator.GetBool("Sit"))
                 _animator.SetBool("Sit", false);
@@ -314,25 +315,11 @@ namespace ClientsContent
                 yield return null;
 
             // _meshObstacle.enabled = false;
-            _meshObstacle.enabled = true;
             _navMeshAgent.enabled = false;
+            _meshObstacle.enabled = true;
 
             _animator.SetBool(_currentState == ClientState.Eat ? "WalkTray" : "Walking", false);
             callback.Invoke();
-        }
-        
-        private void SetMoving(bool canMove)
-        {
-            if (canMove)
-            {
-                _meshObstacle.enabled = false;
-                _navMeshAgent.enabled = true;
-            }
-            else
-            {
-                _navMeshAgent.enabled = false;
-                _meshObstacle.enabled = true;
-            }
         }
 
         public bool CanInteractWithCashier()

@@ -4,6 +4,7 @@ using System.Linq;
 using Enums;
 using Io.AppMetrica;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TutorialContent
 {
@@ -12,7 +13,7 @@ namespace TutorialContent
         [SerializeField] private TutorialData _tutorialData;
         [SerializeField] private TutorialActivator _tutorialActivator;
         [SerializeField] private TutorDescriptionUI _tutorialDescriptionUI;
-        [SerializeField] private TutorialNotification _tutorialNotification;
+        [SerializeField] private TutorialNotificationActivator tutorialNotificationActivator;
         [SerializeField] private TutorialPrizeStage _tutorialPrizeStage;
 
         [SerializeField] private bool _isCheatCodeTutorCompleted;
@@ -25,7 +26,7 @@ namespace TutorialContent
         {
             for (int i = 0; i < _tutorialPrizeStage.PrizeStage.Count; i++)
                 _tutorialPrizeStage.PrizeStage[i].IndexStage = i;
-            
+
             int value = PlayerPrefs.GetInt("TutorCompleted", 0);
 
             if (_isCheatCodeTutorCompleted)
@@ -81,7 +82,8 @@ namespace TutorialContent
             if (completedType == CurrentType)
             {
                 if ((int)completedType >= (int)TutorialType.LookAround)
-                    _tutorialNotification.ShowNotification(_tutorialPrizeStage.GetPrizeByIndex((int)completedType));
+                    tutorialNotificationActivator.ShowNotification(
+                        _tutorialPrizeStage.GetPrizeByIndex((int)completedType));
 
                 TutorialType nextType = GetNextTutorialType(CurrentType);
 

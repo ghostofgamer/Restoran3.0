@@ -37,8 +37,9 @@ namespace NotificationContent
                 AnimatePlashka();
         }
 
-        public void AnimatePlashka()
+        /*public void AnimatePlashka()
         {
+            _rect.DOKill();
             _isAnimating = true;
 
             // стартовая позиция справа за экраном
@@ -77,6 +78,45 @@ namespace NotificationContent
             seq.Append(_rect.DOAnchorPos(_endPos, _exitDuration).SetEase(Ease.InBack));
 
             seq.OnComplete(() => _isAnimating = false);
+        }*/
+        
+        private Sequence _seq;
+
+        public void AnimatePlashka()
+        {
+            // Прерываем текущую Sequence, если есть
+            if (_seq != null && _seq.IsActive())
+                _seq.Kill(false);
+
+            // Убиваем все твины на этом rect
+            _rect.DOKill(true);
+
+            _isAnimating = true;
+
+            // Сбрасываем позицию и масштаб
+            _startPos = new Vector2(_canvasRect.rect.width / 2 + _rect.rect.width,
+                _canvasRect.rect.height / 2 + _offsetY);
+            _rect.anchoredPosition = _startPos;
+            _rect.localScale = Vector3.one;
+
+            // пересчитываем центр и конец
+            _centerPos = new Vector2(0, _canvasRect.rect.height / 2 + _offsetY);
+            _endPos = new Vector2(-_canvasRect.rect.width / 2 - _rect.rect.width,
+                _canvasRect.rect.height / 2 + _offsetY);
+
+            Canvas.ForceUpdateCanvases(); // важно если есть LayoutGroup
+
+            _seq = DOTween.Sequence();
+            _seq.Append(_rect.DOAnchorPos(_centerPos, _flyDuration).SetEase(Ease.OutBack));
+            _seq.Append(_rect.DOAnchorPosX(_centerPos.x + _overshootDistance, 0.1f));
+            _seq.Join(_rect.DOScale(new Vector3(1.1f, 0.85f, 1f), 0.15f));
+            _seq.Append(_rect.DOAnchorPosX(_centerPos.x - _overshootDistance * 0.5f, 0.1f));
+            _seq.Join(_rect.DOScale(new Vector3(0.95f, 1.1f, 1f), 0.1f));
+            _seq.Append(_rect.DOAnchorPosX(_centerPos.x, 0.1f));
+            _seq.Join(_rect.DOScale(Vector3.one, 0.1f));
+            _seq.AppendInterval(_pauseDuration);
+            _seq.Append(_rect.DOAnchorPos(_endPos, _exitDuration).SetEase(Ease.InBack));
+            _seq.OnComplete(() => _isAnimating = false);
         }
     }
 }

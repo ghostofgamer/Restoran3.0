@@ -6,7 +6,7 @@ using WalletContent;
 
 namespace TutorialContent
 {
-    public class TutorialNotification : MonoBehaviour
+    public class TutorialNotificationActivator : MonoBehaviour
     {
         [SerializeField] private Wallet _wallet;
         [SerializeField] private Energy _energy;

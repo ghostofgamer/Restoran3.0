@@ -1,3 +1,4 @@
+using I2.Loc;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +15,8 @@ namespace NotificationContent
         public override void Init(TutorialPrize data)
         {
             _icon.sprite = data.Sprite;
-            _description.text = $"Task {data.IndexStage} Completed";
+            _description.text = $" {LocalizationManager.GetTermTranslation("Task")}#{data.IndexStage}. {LocalizationManager.GetTermTranslation("CompletedTutorStage")}";
+            // _description.text = $"Task {data.IndexStage} Completed";
             _valueText.text = data.Value.ToString();
             _notificationMover.AnimatePlashka();
         }
