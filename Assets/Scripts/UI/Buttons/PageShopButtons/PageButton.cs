@@ -1,5 +1,4 @@
 using SettingsContent.SoundContent;
-using UI.Screens;
 using UI.Screens.ShopContent.ShopPages;
 using UnityEngine;
 
