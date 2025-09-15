@@ -17,7 +17,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage
         public void ChangeStyleScrollPage(int index)
         {
             DeactivationStylePages();
-            _scrollStylePages[index].Activate();
+            _scrollStylePages[index].OpenScreen();
             _scrollStylePages[index].Init();
             _colorStyleButtonChangers[index].Activate();
         }
@@ -25,7 +25,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage
         private void DeactivationStylePages()
         {
             foreach (var scrollStylePage in _scrollStylePages)
-                scrollStylePage.Deactivate();
+                scrollStylePage.CloseScreen();
             
             foreach (var colorStyleButtonChanger in _colorStyleButtonChangers)
                 colorStyleButtonChanger.Deactivate();
