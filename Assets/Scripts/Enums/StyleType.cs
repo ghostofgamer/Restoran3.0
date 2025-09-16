@@ -8,6 +8,8 @@ namespace Enums
         Floor,
         Kitchen,
         Visor,
-        
+        SofaFurniture,
+        TableFurniture,
+        ChairFurniture,
     }
 }
