@@ -11,5 +11,10 @@ namespace Enums
         SofaFurniture,
         TableFurniture,
         ChairFurniture,
+        Plants,
+        Paintings,
+        Stickers,
+        Shelves,
+        Others,
     }
 }

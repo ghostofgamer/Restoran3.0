@@ -7,6 +7,7 @@ namespace CustomizationContent
     {
         [SerializeField] private StyleCustomization _styleCustomization;
         [SerializeField] private FurnitureCustomization _furnitureCustomization;
+        [SerializeField]private DecorCustomization _decorCustomization;
 
         public void ChangeStyle(StyleType styleType, int index)
         {
@@ -42,6 +43,26 @@ namespace CustomizationContent
                 
                 case StyleType.ChairFurniture:
                     _furnitureCustomization.ChangeChairMaterial(index);
+                    break;
+                
+                case StyleType.Plants:
+                    _decorCustomization.ChangeActivityPlants(index);
+                    break;
+                
+                case StyleType.Paintings:
+                    _decorCustomization.ChangeActivityPaintings(index);
+                    break;
+                
+                case StyleType.Stickers:
+                    _decorCustomization.ChangeActivityStickers(index);
+                    break;
+                
+                case StyleType.Shelves:
+                    _decorCustomization.ChangeActivityShelves(index);
+                    break;
+                
+                case StyleType.Others:
+                    _decorCustomization.ChangeActivityOthers(index);
                     break;
             }
         }
