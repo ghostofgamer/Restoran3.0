@@ -307,6 +307,18 @@ MonoBehaviour:
   _styleType: 0
   StyleScrollPageContent: {fileID: 0}
   Index: 0
+  _payButton: {fileID: 8044478584526111672}
+  _rewardButton: {fileID: 5940587555326172307}
+  _requiredText: {fileID: 8241941977467887865}
+  _activeImage: {fileID: 189235528096003533}
+  _payButtonImage: {fileID: 5088931102231362722}
+  _priceText: {fileID: 4084902784495209084}
+  _activeSprites:
+  - {fileID: 21300000, guid: 29ee61f588e5bf94482af2715ae5b4b2, type: 3}
+  - {fileID: 21300000, guid: c338df5085d6ec44988b35a26285e010, type: 3}
+  _payButtonColors:
+  - {r: 0.6901961, g: 0.8745098, b: 0.34509805, a: 1}
+  - {r: 0.90588236, g: 0.31764707, b: 0.23529412, a: 1}
 --- !u!1 &3604916725703980746
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,7 +576,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2130186696243276250}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2554120941400115313}
+        m_TargetAssemblyTypeName: UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemContent.StyleContent.StyleUIElement,
+          Assembly-CSharp
+        m_MethodName: RewardStyle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4913075977452072207
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,8 +926,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280575823
-  m_fontColor: {r: 0.30980393, g: 0.4039216, b: 0.14117648, a: 1}
+    rgba: 3271557120
+  m_fontColor: {r: 0, g: 0, b: 0, a: 0.7647059}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1083,4 +1108,17 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5088931102231362722}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2554120941400115313}
+        m_TargetAssemblyTypeName: UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemContent.StyleContent.StyleUIElement,
+          Assembly-CSharp
+        m_MethodName: Pay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
