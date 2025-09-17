@@ -5,6 +5,7 @@ using PlayerContent.LevelContent;
 using SoContent.ShopStyleSOContent;
 using UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemContent.StyleContent;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WalletContent;
 
 namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.StyleScrollPageContents
@@ -18,11 +19,13 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.StyleScrollPag
         [SerializeField]private ADS _ads;
         [SerializeField]private PlayerLevel _playerLevel;
         [SerializeField]private StyleSoConfig _styleSoConfig;
+        [SerializeField] private GameObject[] _zonesRestaurant;
         
         public Wallet Wallet => _wallet;
         public ADS Ads => _ads;
         public PlayerLevel PlayerLevel => _playerLevel;
         public StyleSoConfig StyleSoConfig => _styleSoConfig;
+        public GameObject[] ZonesRestaurant => _zonesRestaurant;
 
         public override void Init()
         {
