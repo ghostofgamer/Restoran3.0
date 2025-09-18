@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 
 namespace SaveSystemContent
@@ -23,6 +24,22 @@ namespace SaveSystemContent
         {
             int defaultInt = defaultValue ? 1 : 0;
             return PlayerPrefs.GetInt(key, defaultInt) == 1;
+        }
+        
+        private static string GetPath(string fileName)
+        {
+            return Path.Combine(Application.persistentDataPath, fileName + ".json");
+        }
+        
+        public static T LoadJson<T>(string fileName)
+        {
+            string path = GetPath(fileName);
+            if (!File.Exists(path))
+            {
+                return default;
+            }
+            string json = File.ReadAllText(path);
+            return JsonUtility.FromJson<T>(json);
         }
     }
 }

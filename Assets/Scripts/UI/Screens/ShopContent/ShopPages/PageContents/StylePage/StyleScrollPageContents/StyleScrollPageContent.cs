@@ -20,6 +20,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.StyleScrollPag
         [SerializeField]private PlayerLevel _playerLevel;
         [SerializeField]private StyleSoConfig _styleSoConfig;
         [SerializeField] private GameObject[] _zonesRestaurant;
+        [SerializeField]private StyleType _styleType;
         
         public Wallet Wallet => _wallet;
         public ADS Ads => _ads;

@@ -1,3 +1,4 @@
+using SaveSystemContent;
 using SoContent.ShopStyleSOContent;
 using TMPro;
 using UnityEngine;
@@ -43,6 +44,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
                 return;
             }
 
+            Load();
             InitializationConfig(styleSoConfig);
             SetRequiredText();
             SetColorPrice();
@@ -81,18 +83,21 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
         public void Purchase()
         {
             IsOwned = true;
+            Save();
         }
 
         public void Activate()
         {
             IsActive = true;
             _activeImage.sprite = _activeSprites[0];
+            Save();
         }
 
         public void Deactivate()
         {
             IsActive = false;
             _activeImage.sprite = _activeSprites[1];
+            Save();
         }
 
         private void Change()
@@ -111,7 +116,8 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
                                                 _openLevel <= StyleScrollPageContent.PlayerLevel.CurrentLevel);
                 _rewardButton.gameObject.SetActive(_isReward && !IsOwned &&
                                                    _openLevel <= StyleScrollPageContent.PlayerLevel.CurrentLevel);
-                _requiredText.gameObject.SetActive(_openLevel > StyleScrollPageContent.PlayerLevel.CurrentLevel);
+                _requiredText.gameObject.SetActive(_openLevel > StyleScrollPageContent.PlayerLevel.CurrentLevel &&
+                                                   !IsOwned);
                 _activeImage.gameObject.SetActive(IsOwned || _openStart);
             }
 
@@ -141,13 +147,55 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
                 return;
             }
 
+            Save();
+
             StyleScrollPageContent.Wallet.Subtract(_price);
             StyleScrollPageContent.PayStyle(Index);
         }
 
         public void RewardStyle()
         {
-            StyleScrollPageContent.Ads.ShowRewarded(() => { StyleScrollPageContent.PayStyle(Index); });
+            StyleScrollPageContent.Ads.ShowRewarded(() => OpenStyle());
         }
+
+        public void OpenStyle()
+        {
+            IsOwned = true;
+        }
+
+        public void Save()
+        {
+            var save = new StyleSaveData
+            {
+                IsOwnedInfo = IsOwned,
+                IsActiveInfo = IsActive,
+                IndexInfo = Index,
+                StyleTypeInfo = StyleType.ToString()
+            };
+
+            SaveDataGame.SaveJson(StyleType.ToString() + Index, save);
+        }
+
+        public void Load()
+        {
+            StyleSaveData data = LoadDataGame.LoadJson<StyleSaveData>(StyleType.ToString() + Index);
+
+            if (data != null)
+            {
+                /*Debug.Log(
+                    $"Loaded Style {data.StyleTypeInfo}, Index {data.IndexInfo}, Owned={data.IsOwnedInfo} , Active={data.IsActiveInfo}");*/
+                IsOwned = data.IsOwnedInfo;
+                IsActive = data.IsActiveInfo;
+            }
+        }
+    }
+
+    [System.Serializable]
+    public class StyleSaveData
+    {
+        public bool IsOwnedInfo;
+        public bool IsActiveInfo;
+        public int IndexInfo;
+        public string StyleTypeInfo;
     }
 }

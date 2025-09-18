@@ -1,3 +1,5 @@
+using System;
+using CustomizationContent.SavesCustomization;
 using Enums;
 using UnityEngine;
 
@@ -8,6 +10,16 @@ namespace CustomizationContent
         [SerializeField] private StyleCustomization _styleCustomization;
         [SerializeField] private FurnitureCustomization _furnitureCustomization;
         [SerializeField]private DecorCustomization _decorCustomization;
+        [SerializeField]private SaveStyleCustomization _saveStyleCustomization;
+        [SerializeField]private SaveFurnitureCustomization _saveFurnitureCustomization;
+        [SerializeField]private SaveDecorCustomization _saveDecorCustomization;
+
+        private void Start()
+        {
+            _saveStyleCustomization.Load();
+            _saveFurnitureCustomization.Load();
+            _saveDecorCustomization.Load();
+        }
 
         public void ChangeStyle(StyleType styleType, int index)
         {

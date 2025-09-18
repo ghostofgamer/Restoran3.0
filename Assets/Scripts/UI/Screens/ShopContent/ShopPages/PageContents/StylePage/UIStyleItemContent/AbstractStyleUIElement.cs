@@ -12,6 +12,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
         [SerializeField] protected int Index;
         
         public StyleType StyleType => _styleType;
+        public int IndexElement=> Index;
         
         public abstract void Init();
 

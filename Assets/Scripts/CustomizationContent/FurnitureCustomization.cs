@@ -1,10 +1,12 @@
 using System;
+using CustomizationContent.SavesCustomization;
 using UnityEngine;
 
 namespace CustomizationContent
 {
     public class FurnitureCustomization : MonoBehaviour
     {
+        [SerializeField]private SaveFurnitureCustomization _saveFurnitureCustomization;
         [SerializeField] private Material[] _placeMaterials;
         [SerializeField] private Material[] _tableMaterials;
         [SerializeField] private Material[] _chairMaterials;
@@ -49,16 +51,19 @@ namespace CustomizationContent
         public void ChangeSofaMaterial(int index)
         {
             ChangeMaterialsColor(_placeMaterials, _placeColorDataSofas, index);
+            _saveFurnitureCustomization.SetSofa(index);
         }
 
         public void ChangeTableMaterial(int index)
         {
             ChangeMaterialsColor(_tableMaterials, _placeColorDataTables, index);
+            _saveFurnitureCustomization.SetTable(index);
         }
 
         public void ChangeChairMaterial(int index)
         {
             ChangeMaterialsColor(_chairMaterials, _placeColorDataChairs, index);
+            _saveFurnitureCustomization.SetChair(index);
         }
     }
 }

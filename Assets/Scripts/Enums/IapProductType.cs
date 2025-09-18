@@ -15,6 +15,7 @@ namespace Enums
         Energy450,
         Energy1850,
         Energy5000,
-        StoragePack
+        StoragePack,
+        StylePack,
     }
 }

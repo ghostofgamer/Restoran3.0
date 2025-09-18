@@ -11,6 +11,7 @@ using RestaurantContent;
 using SoContent;
 using TakeTop.Master;
 using UI.Screens.AdsScreens;
+using UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemContent.StyleContent;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using WalletContent;
@@ -41,32 +42,20 @@ namespace IAP
         };
 
         [SerializeField] private UIInfo _uiInfo;
-
         [SerializeField] private Wallet _wallet;
-
         [SerializeField] private InterstitialTimer _interstitialTimer;
-
         [SerializeField] private Delivery _delivery;
-
         [SerializeField] private RemoveAdScreen _removeAdScreen;
-
         [SerializeField] private StarterPackScreen _starterPackScreen;
-
         [SerializeField] private StoragePackScreen _storagePackScreen;
-
         [SerializeField] private GameObject _starterPackButton;
-
         [SerializeField] private GameObject _storagePackButton;
-
         [SerializeField] private Energy _energy;
-
         [SerializeField] private ADS _ads;
-
         [SerializeField] private ZoneWall _storageZoneWall;
-
         [SerializeField] private ShelfConfigs _shelfConfigs;
-
         [SerializeField] private GameObject[] _shelfes;
+        [SerializeField]private StyleUIElement[] _styleUIElements;
         
         public event Action RemoveADSPurchased;
 
@@ -152,6 +141,13 @@ namespace IAP
                 case "com.serbull.iaptutorial.storagepack":
                     PayStoragePack(product);
                     break;
+
+                case "com.serbull.iaptutorial.stylePack":
+                {
+                    Debug.Log("On Purchase StylePack Completed");
+                    StylePack(product);
+                }
+                    break;
             }
         }
 
@@ -221,6 +217,23 @@ namespace IAP
                 Debug.Log("Restore detected — revenue not sent");
             }
             // SendIapRevenue(product);
+        }
+        
+        private void StylePack(Product product)
+        {
+            PlayerPrefs.SetInt("StylePack", 1);
+            AppMetrica.ReportEvent("In_App", "{\"" + "StylePack" + "\":null}");
+
+            Debug.Log("On Purchase StylePack Completed");
+
+            int value = 0;
+            foreach (var styleUIElement in _styleUIElements)
+            {
+                styleUIElement.Purchase();
+                
+                Debug.Log("value" + value);
+                value++;
+            }
         }
 
         private void AddMoney(int value, Product product)

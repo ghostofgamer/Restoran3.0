@@ -1,9 +1,11 @@
+using CustomizationContent.SavesCustomization;
 using UnityEngine;
 
 namespace CustomizationContent
 {
     public class StyleCustomization : MonoBehaviour
     {
+        [SerializeField]private SaveStyleCustomization _saveStyleCustomization;
         [SerializeField] private Texture[] _floorTextures;
         [SerializeField] private Texture[] _outsideWallTextures;
         [SerializeField] private Texture[] _insideWallTextures;
@@ -15,22 +17,35 @@ namespace CustomizationContent
         [SerializeField] private Material _kitchenMaterial;
         [SerializeField] private Material _visorMaterial;
 
-        public void ChangeFloorTexture(int index) =>
+        public void ChangeFloorTexture(int index)
+        {
             ApplyTexture(_floorTextures, _floorMaterial, index);
+            _saveStyleCustomization.SetFloor(index);
+        }
 
-        public void ChangeOutsideWallTexture(int index) =>
+        public void ChangeOutsideWallTexture(int index)
+        {
             ApplyTexture(_outsideWallTextures, _outsideWallMaterial, index);
+            _saveStyleCustomization.SetOutsideWall(index);
+        }
 
-        public void ChangeInsideWallTexture(int index) =>
+        public void ChangeInsideWallTexture(int index)
+        {
             ApplyTexture(_insideWallTextures, _insideWallMaterial, index);
+            _saveStyleCustomization.SetInsideWall(index);
+        }
 
-        public void ChangeKitchenTexture(int index) =>
+        public void ChangeKitchenTexture(int index)
+        {
             ApplyTexture(_kitchenTextures, _kitchenMaterial, index);
+            _saveStyleCustomization.SetKitchen(index);
+        }
 
         public void ChangeVisorTexture(int index)
         {
             _visorMaterial.mainTexture = _visorOptions[index].texture != null ? _visorOptions[index].texture : null;
             _visorMaterial.color = _visorOptions[index].color;
+            _saveStyleCustomization.SetVisor(index);
         }
 
         private void ApplyTexture(Texture[] textures, Material material, int index)

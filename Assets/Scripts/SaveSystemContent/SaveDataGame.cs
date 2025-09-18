@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 
 namespace SaveSystemContent
@@ -26,6 +27,17 @@ namespace SaveSystemContent
         {
             PlayerPrefs.SetInt(key, value ? 1 : 0);
             PlayerPrefs.Save();
+        }
+        
+        private static string GetPath(string fileName)
+        {
+            return Path.Combine(Application.persistentDataPath, fileName + ".json");
+        }
+        
+        public static void SaveJson<T>(string fileName, T data)
+        {
+            string json = JsonUtility.ToJson(data, true);
+            File.WriteAllText(GetPath(fileName), json);
         }
     }
 }
