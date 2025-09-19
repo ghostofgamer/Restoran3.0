@@ -1,3 +1,4 @@
+using Io.AppMetrica;
 using SaveSystemContent;
 using SoContent.ShopStyleSOContent;
 using TMPro;
@@ -83,6 +84,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
 
         public void Purchase()
         {
+            AppMetrica.ReportEvent("CustomBye", "{\"" + StyleType + Index + "\":null}");
             IsOwned = true;
             Save();
         }
@@ -182,7 +184,11 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
 
         public void RewardStyle()
         {
-            StyleScrollPageContent.Ads.ShowRewarded(() => OpenStyle());
+            StyleScrollPageContent.Ads.ShowRewarded(() =>
+            {
+                AppMetrica.ReportEvent("StyleRewardADS", "{\"" + StyleType + Index + "\":null}");
+                OpenStyle();
+            });
         }
 
         public void OpenStyle()
