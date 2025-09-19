@@ -17,6 +17,7 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
         [SerializeField] private TMP_Text _priceText;
         [SerializeField] private Sprite[] _activeSprites;
         [SerializeField] private Color[] _payButtonColors;
+        [SerializeField]private string _keyInap;
 
         private bool _openStart;
         private bool _isReward;
@@ -110,6 +111,28 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
 
         private void SetValue()
         {
+            int value = PlayerPrefs.GetInt(_keyInap, 0);
+            
+            if (value > 0)
+            {
+                IsOwned = true;
+                _payButton.gameObject.SetActive(false);
+                _rewardButton.gameObject.SetActive(false);
+                _requiredText.gameObject.SetActive(false);
+                _activeImage.gameObject.SetActive(true);
+                return;
+            }
+            
+            if (IsOwned || _openStart)
+            {
+                _payButton.gameObject.SetActive(false);
+                _rewardButton.gameObject.SetActive(false);
+                _requiredText.gameObject.SetActive(false);
+                _activeImage.gameObject.SetActive(true);
+                return;
+            }
+            
+            
             if (!_requiresZoneUnlock)
             {
                 _payButton.gameObject.SetActive(!IsOwned && !_openStart && !_isReward &&
@@ -129,8 +152,12 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
                 _rewardButton.gameObject.SetActive(_isReward && !IsOwned &&
                                                    _openLevel <= StyleScrollPageContent.PlayerLevel.CurrentLevel &&
                                                    !StyleScrollPageContent.ZonesRestaurant[_zoneIndex].activeSelf);
-                _requiredText.gameObject.SetActive(_openLevel > StyleScrollPageContent.PlayerLevel.CurrentLevel ||
-                                                   StyleScrollPageContent.ZonesRestaurant[_zoneIndex].activeSelf);
+                _requiredText.gameObject.SetActive(
+                    !IsOwned && (
+                        _openLevel > StyleScrollPageContent.PlayerLevel.CurrentLevel ||
+                        StyleScrollPageContent.ZonesRestaurant[_zoneIndex].activeSelf
+                    )
+                );
                 _activeImage.gameObject.SetActive(IsOwned || _openStart);
             }
         }
@@ -182,11 +209,24 @@ namespace UI.Screens.ShopContent.ShopPages.PageContents.StylePage.UIStyleItemCon
 
             if (data != null)
             {
-                /*Debug.Log(
-                    $"Loaded Style {data.StyleTypeInfo}, Index {data.IndexInfo}, Owned={data.IsOwnedInfo} , Active={data.IsActiveInfo}");*/
                 IsOwned = data.IsOwnedInfo;
                 IsActive = data.IsActiveInfo;
             }
+            else
+            {
+                IsOwned = false;
+                IsActive = false;
+            }
+        }
+
+        public void DeleteSave()
+        {
+            string key = StyleType.ToString() + Index;
+            SaveDataGame.DeleteJson(key);
+            Debug.Log($"Deleted save for: {key}");
+            IsOwned = false;
+            IsActive = false;
+            Init();
         }
     }
 

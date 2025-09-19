@@ -16,5 +16,6 @@ namespace Enums
         FASTFOOD,
         EXPANSION,
         YUMYUM,
+        CUSTOM,
     }
 }

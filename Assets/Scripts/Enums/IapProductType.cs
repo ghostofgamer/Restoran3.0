@@ -17,5 +17,7 @@ namespace Enums
         Energy5000,
         StoragePack,
         StylePack,
+        StyleFurniturePack,
+        StyleDecorPack,
     }
 }

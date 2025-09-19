@@ -21,7 +21,9 @@ namespace IAP
             { IapProductType.Energy1850, "com.serbull.iaptutorial.energy1850" },
             { IapProductType.Energy5000, "com.serbull.iaptutorial.energy5000" },
             { IapProductType.StoragePack, "com.serbull.iaptutorial.storagepack" },
-            { IapProductType.StylePack, "com.serbull.iaptutorial.stylePack" }
+            { IapProductType.StylePack, "com.serbull.iaptutorial.stylepack" },
+            { IapProductType.StyleFurniturePack, "com.serbull.iaptutorial.stylefurniturepack" },
+            { IapProductType.StyleDecorPack, "com.serbull.iaptutorial.styledecorpack" },
         };
 
         public static string GetId(IapProductType type) => _ids[type];

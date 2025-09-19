@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ADSContent;
+using CustomizationContent.InapButtonContent;
 using DeliveryContent;
 using EnergyContent;
 using Enums;
@@ -55,8 +56,13 @@ namespace IAP
         [SerializeField] private ZoneWall _storageZoneWall;
         [SerializeField] private ShelfConfigs _shelfConfigs;
         [SerializeField] private GameObject[] _shelfes;
-        [SerializeField]private StyleUIElement[] _styleUIElements;
-        
+        [SerializeField] private StyleUIElement[] _styleUIElements;
+        [SerializeField] private StyleUIElement[] _styleFurnitureUIElements;
+        [SerializeField] private StyleUIElement[] _styleDecorUIElements;
+        [SerializeField] private StyleInapElements[] _styleInapElements;
+        [SerializeField] private StyleInapElements[] _styleFurnitureInapElements;
+        [SerializeField] private StyleInapElements[] _styleDecorInapElements;
+
         public event Action RemoveADSPurchased;
 
         private string ReceiptsFilePath => Path.Combine(Application.persistentDataPath, "processed_receipts.json");
@@ -68,7 +74,7 @@ namespace IAP
 
         public void RestorePurchases()
         {
-#if  UNITY_ANDROID
+#if UNITY_ANDROID
             // Для Android и других платформ просто вызываем FetchPurchases()
             if (_storeController != null)
             {
@@ -81,9 +87,9 @@ namespace IAP
         public void OnPurchaseCompleted(Product product)
         {
             if (product == null) return;
-            
+
             Debug.Log("!!!!!!!!!!!!!!!!product " + product);
-            
+
             switch (product.definition.id)
             {
                 case "com.serbull.iaptutorial.money100":
@@ -142,10 +148,24 @@ namespace IAP
                     PayStoragePack(product);
                     break;
 
-                case "com.serbull.iaptutorial.stylePack":
+                case "com.serbull.iaptutorial.stylepack":
                 {
                     Debug.Log("On Purchase StylePack Completed");
                     StylePack(product);
+                }
+                    break;
+
+                case "com.serbull.iaptutorial.stylefurniturepack":
+                {
+                    Debug.Log("On Purchase StyleFurniturePack Completed");
+                    StyleFurniturePack(product);
+                }
+                    break;
+
+                case "com.serbull.iaptutorial.styledecorpack":
+                {
+                    Debug.Log("On Purchase StyleFurniturePack Completed");
+                    StyleDecorPack(product);
                 }
                     break;
             }
@@ -157,9 +177,9 @@ namespace IAP
             PlayerPrefs.SetInt("removeADS", 1);
             Debug.Log("On Purchase RemoveAds Completed");
             AppMetrica.ReportEvent("In_App", "{\"" + "RemoveADS" + "\":null}");
-            
+
             RemoveADSPurchased?.Invoke();
-            
+
             if (_interstitialTimer != null)
                 _interstitialTimer.SetValue(false);
 
@@ -218,7 +238,7 @@ namespace IAP
             }
             // SendIapRevenue(product);
         }
-        
+
         private void StylePack(Product product)
         {
             PlayerPrefs.SetInt("StylePack", 1);
@@ -230,10 +250,53 @@ namespace IAP
             foreach (var styleUIElement in _styleUIElements)
             {
                 styleUIElement.Purchase();
-                
+
                 Debug.Log("value" + value);
                 value++;
             }
+
+            foreach (var styleInapElements in _styleInapElements)
+                styleInapElements.Deactivate();
+        }
+
+        private void StyleFurniturePack(Product product)
+        {
+            PlayerPrefs.SetInt("StyleFurniturePack", 1);
+            AppMetrica.ReportEvent("In_App", "{\"" + "StyleFurniturePack" + "\":null}");
+
+            Debug.Log("On Purchase StyleFurniturePack Completed");
+
+            int value = 0;
+            foreach (var styleUIElement in _styleFurnitureUIElements)
+            {
+                styleUIElement.Purchase();
+
+                Debug.Log("value" + value);
+                value++;
+            }
+
+            foreach (var styleInapElements in _styleFurnitureInapElements)
+                styleInapElements.Deactivate();
+        }
+
+        private void StyleDecorPack(Product product)
+        {
+            PlayerPrefs.SetInt("StyleDecorPack", 1);
+            AppMetrica.ReportEvent("In_App", "{\"" + "StyleDecorPack" + "\":null}");
+
+            Debug.Log("On Purchase StyleDecorPack Completed");
+
+            int value = 0;
+            foreach (var styleUIElement in _styleDecorUIElements)
+            {
+                styleUIElement.Purchase();
+
+                Debug.Log("value" + value);
+                value++;
+            }
+
+            foreach (var styleInapElements in _styleDecorInapElements)
+                styleInapElements.Deactivate();
         }
 
         private void AddMoney(int value, Product product)
@@ -367,7 +430,7 @@ namespace IAP
                 SaveReceipts(data);
             }
         }
-        
+
         private async void InitializeIAP()
         {
             _storeController = UnityIAPServices.StoreController();

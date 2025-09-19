@@ -39,5 +39,24 @@ namespace SaveSystemContent
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(GetPath(fileName), json);
         }
+        
+        public static void Delete(string key)
+        {
+            if (PlayerPrefs.HasKey(key))
+            {
+                PlayerPrefs.DeleteKey(key);
+                PlayerPrefs.Save();
+            }
+        }
+        
+        public static void DeleteJson(string fileName)
+        {
+            string path = GetPath(fileName);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                Debug.Log($"Deleted JSON save: {path}");
+            }
+        }
     }
 }
